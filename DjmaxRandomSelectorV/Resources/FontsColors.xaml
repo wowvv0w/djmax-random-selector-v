@@ -1,0 +1,116 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--Fonts-->
+    <FontFamily x:Key="Light">pack://application:,,,/Fonts/#Lato Light</FontFamily>
+    <FontFamily x:Key="Standard">pack://application:,,,/Fonts/#Lato</FontFamily>
+    <FontFamily x:Key="Black">pack://application:,,,/Fonts/#Lato Black</FontFamily>
+    
+    <!--Text Colors-->
+    <SolidColorBrush x:Key="Default" Color="#7F7F7F"/>
+    <SolidColorBrush x:Key="Highlight" Color="#FFBE00"/>
+    
+    <!--Panel Colors-->
+    <SolidColorBrush x:Key="Nav" Color="#9E000000"/>
+    <SolidColorBrush x:Key="Widget" Color="#33000000"/>
+    
+    <!--Button Colors-->
+    <SolidColorBrush x:Key="Unchecked" Color="#5E5E5E"/>
+    <SolidColorBrush x:Key="CategoryUnchecked" Color="#56000000"/>
+
+    <SolidColorBrush x:Key="DifficultyChecked" Color="#242526"/>
+    <Color x:Key="Normal">#FFCC25</Color>
+    <Color x:Key="Hard">#FE7724</Color>
+    <Color x:Key="Maximum">#F91C55</Color>
+    <Color x:Key="SC">#FF11E6</Color>
+
+    <SolidColorBrush x:Key="Dark_RP" Color="#594713"/>
+    <SolidColorBrush x:Key="Dark_P1" Color="#0E6677"/>
+    <SolidColorBrush x:Key="Dark_P2" Color="#761A3f"/>
+    <SolidColorBrush x:Key="Dark_P3" Color="#563914"/>
+    <SolidColorBrush x:Key="Dark_TR" Color="#3A4175"/>
+    <SolidColorBrush x:Key="Dark_CE" Color="#747475"/>
+    <SolidColorBrush x:Key="Dark_BS" Color="#5B1010"/>
+    <SolidColorBrush x:Key="Dark_VE" Color="#5E321A"/>
+    <SolidColorBrush x:Key="Dark_ES" Color="#20541D"/>
+    <SolidColorBrush x:Key="Dark_T1" Color="#5E275B"/>
+    <SolidColorBrush x:Key="Dark_T2" Color="#5E2B13"/>
+    <SolidColorBrush x:Key="Dark_T3" Color="#1D365E"/>
+
+    <LinearGradientBrush x:Key="Gradient_RP" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#F96775" Offset="0.1"/>
+        <GradientStop Color="#F0B405" Offset="0.9"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Gradient_P1" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#AA45F9" Offset="0"/>
+        <GradientStop Color="#00B3D2" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Gradient_P2" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#FF37AF" Offset="0"/>
+        <GradientStop Color="#FF1E46" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Gradient_P3" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#FCAC00" Offset="0.0625"/>
+        <GradientStop Color="#E7931F" Offset="0.0643116"/>
+        <GradientStop Color="#E7931F" Offset="0.14221"/>
+        <GradientStop Color="#D1750D" Offset="0.143116"/>
+        <GradientStop Color="#D1750D" Offset="0.480072"/>
+        <GradientStop Color="#BA5605" Offset="0.873188"/>
+        <GradientStop Color="#D1750D" Offset="0.874094"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Gradient_TR" StartPoint="0,0.4" EndPoint="1,0.5">
+        <GradientStop Color="#68E1FF"/>
+        <GradientStop Color="#4A7AFF" Offset="0.78"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Gradient_CE" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#FFFFFF" Offset="0.777"/>
+        <GradientStop Color="#F5D84F" Offset="0.783"/>
+        <GradientStop Color="#F5D84F" Offset="0.847"/>
+        <GradientStop Color="#A97D1F" Offset="0.853"/>
+        <GradientStop Color="#A97D1F" Offset="0.892"/>
+        <GradientStop Color="#CB9531" Offset="0.898"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Gradient_BS" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#EC0043" Offset="0.25"/>
+        <GradientStop Color="#7F1721" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Gradient_VE" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#FF6F1B" Offset="0.25"/>
+        <GradientStop Color="#E9712C" Offset="0.5"/>
+        <GradientStop Color="#2C8AC1" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Gradient_ES" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#0C82CC"/>
+        <GradientStop Color="#2FD43A" Offset="0.5"/>
+        <GradientStop Color="#35DF26" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Gradient_T1" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#FF0095" Offset="0.1"/>
+        <GradientStop Color="#7E63EA" Offset="0.9"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Gradient_T2" StartPoint="0,0.4" EndPoint="1,0.6">
+        <GradientStop Color="#FF08D2"/>
+        <GradientStop Color="#FF6F00" Offset="0.16485"/>
+        <GradientStop Color="#FF8000" Offset="0.311989"/>
+        <GradientStop Color="#FFC001" Offset="0.468665"/>
+        <GradientStop Color="#FFC401" Offset="0.626703"/>
+        <GradientStop Color="#62DC62" Offset="0.791962"/>
+        <GradientStop Color="#00D0FF" Offset="0.940898"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="Gradient_T3" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#5131F0"/>
+        <GradientStop Color="#6520E4" Offset="0.276827"/>
+        <GradientStop Color="#3F42FF" Offset="0.286936"/>
+        <GradientStop Color="#0C79FF" Offset="1"/>
+    </LinearGradientBrush>
+
+    <Color x:Key="GG">#D83E0E</Color>
+    <Color x:Key="GC">#51EEFE</Color>
+    <Color x:Key="DM">#99E5D8</Color>
+    <Color x:Key="CY">#EE1538</Color>
+    <Color x:Key="GF">#FDB426</Color>
+    <Color x:Key="CHU">#FFD700</Color>
+    <Color x:Key="ESTI">#E6CE99</Color>
+    <Color x:Key="NEXON">Transparent</Color>
+    <!--Images-->
+
+</ResourceDictionary>

@@ -7,7 +7,13 @@ using System.Threading.Tasks;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    internal class MainViewModel : Screen
+    public class MainViewModel : Conductor<object>
     {
+        public FilterViewModel FilterViewModel { get; set; }
+
+        public MainViewModel()
+        {
+            this.FilterViewModel = new FilterViewModel();
+        }
     }
 }

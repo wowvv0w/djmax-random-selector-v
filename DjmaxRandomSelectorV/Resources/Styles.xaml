@@ -1,0 +1,207 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!--WindowButton-->
+    <Style x:Key="WindowButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}">
+                        <ContentPresenter />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="Border" Value="#3D3E3F"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!--TabButton-->
+    <Style x:Key="TabButton" TargetType="ToggleButton" >
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource Default}"/>
+        <Setter Property="FontSize" Value="17"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!--ButtonTunesButton-->
+    
+    
+    
+    <!--BorderedButton-->
+    <Style x:Key="BorderedButton" TargetType="ToggleButton">
+        <Style.Resources>
+            <SolidColorBrush x:Key="Color"/>
+        </Style.Resources>
+        <Setter Property="Background" Value="{DynamicResource Color}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Color}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Color}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="FontFamily" Value="{StaticResource Black}"/>
+        <Setter Property="FontSize" Value="13"/>
+    </Style>
+    
+    <!--DifficultyButton-->
+    <Style x:Key="DifficultyButton" TargetType="ToggleButton"
+           BasedOn="{StaticResource BorderedButton}">
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="Border"
+                            Background="Transparent"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background" TargetName="Border"
+                                    Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Setter Property="Foreground"
+                                    Value="{StaticResource DifficultyChecked}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!--CollabButton-->
+    <Style x:Key="CollabButton" TargetType="ToggleButton"
+           BasedOn="{StaticResource BorderedButton}">
+        <Setter Property="Background" Value="{StaticResource CategoryUnchecked}"/>
+        <Setter Property="Width" Value="120"/>
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid>
+                        <TextBlock x:Name="asdf" Foreground="{StaticResource Unchecked}"/>
+                        <Border x:Name="Border"
+                            Background="Transparent"
+                            BorderBrush="{StaticResource Unchecked}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background" TargetName="Border"
+                                    Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Setter Property="Foreground"
+                                    Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Setter Property="BorderBrush" TargetName="Border"
+                                    Value="{Binding BorderBrush, RelativeSource={RelativeSource TemplatedParent}}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!--CategoryButton-->
+    <Style x:Key="CategoryButton" TargetType="ToggleButton">
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="FontFamily" Value="{StaticResource Black}"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid>
+                        <Rectangle x:Name="Rectangle" Fill="{StaticResource CategoryUnchecked}"/>
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Fill" TargetName="Rectangle"
+                                    Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!--Categories-->
+    <Style x:Key="Respect" TargetType="ToggleButton"
+           BasedOn="{StaticResource CategoryButton}">
+        <Setter Property="Background" Value="{StaticResource Gradient_RP}"/>
+        <Setter Property="Foreground" Value="{StaticResource Dark_RP}"/>
+    </Style>
+    <Style x:Key="Portable1" TargetType="ToggleButton"
+           BasedOn="{StaticResource CategoryButton}">
+        <Setter Property="Background" Value="{StaticResource Gradient_P1}"/>
+        <Setter Property="Foreground" Value="{StaticResource Dark_P1}"/>
+    </Style>
+    <Style x:Key="Portable2" TargetType="ToggleButton"
+           BasedOn="{StaticResource CategoryButton}">
+        <Setter Property="Background" Value="{StaticResource Gradient_P2}"/>
+        <Setter Property="Foreground" Value="{StaticResource Dark_P2}"/>
+    </Style>
+    <Style x:Key="Portable3" TargetType="ToggleButton"
+           BasedOn="{StaticResource CategoryButton}">
+        <Setter Property="Background" Value="{StaticResource Gradient_P3}"/>
+        <Setter Property="Foreground" Value="{StaticResource Dark_P3}"/>
+    </Style>
+    <Style x:Key="Trilogy" TargetType="ToggleButton"
+           BasedOn="{StaticResource CategoryButton}">
+        <Setter Property="Background" Value="{StaticResource Gradient_TR}"/>
+        <Setter Property="Foreground" Value="{StaticResource Dark_TR}"/>
+    </Style>
+    <Style x:Key="Clazziquai" TargetType="ToggleButton"
+           BasedOn="{StaticResource CategoryButton}">
+        <Setter Property="Background" Value="{StaticResource Gradient_CE}"/>
+        <Setter Property="Foreground" Value="{StaticResource Dark_CE}"/>
+    </Style>
+    <Style x:Key="BlackSquare" TargetType="ToggleButton"
+           BasedOn="{StaticResource CategoryButton}">
+        <Setter Property="Background" Value="{StaticResource Gradient_BS}"/>
+        <Setter Property="Foreground" Value="{StaticResource Dark_BS}"/>
+    </Style>
+    <Style x:Key="VExtension" TargetType="ToggleButton"
+           BasedOn="{StaticResource CategoryButton}">
+        <Setter Property="Background" Value="{StaticResource Gradient_VE}"/>
+        <Setter Property="Foreground" Value="{StaticResource Dark_VE}"/>
+    </Style>
+    <Style x:Key="EmotionalS" TargetType="ToggleButton"
+           BasedOn="{StaticResource CategoryButton}">
+        <Setter Property="Background" Value="{StaticResource Gradient_ES}"/>
+        <Setter Property="Foreground" Value="{StaticResource Dark_ES}"/>
+    </Style>
+    <Style x:Key="Technika1" TargetType="ToggleButton"
+           BasedOn="{StaticResource CategoryButton}">
+        <Setter Property="Background" Value="{StaticResource Gradient_T1}"/>
+        <Setter Property="Foreground" Value="{StaticResource Dark_T1}"/>
+    </Style>
+    <Style x:Key="Technika2" TargetType="ToggleButton"
+           BasedOn="{StaticResource CategoryButton}">
+        <Setter Property="Background" Value="{StaticResource Gradient_T2}"/>
+        <Setter Property="Foreground" Value="{StaticResource Dark_T2}"/>
+    </Style>
+    <Style x:Key="Technika3" TargetType="ToggleButton"
+           BasedOn="{StaticResource CategoryButton}">
+        <Setter Property="Background" Value="{StaticResource Gradient_T3}"/>
+        <Setter Property="Foreground" Value="{StaticResource Dark_T3}"/>
+    </Style>
+    
+</ResourceDictionary>

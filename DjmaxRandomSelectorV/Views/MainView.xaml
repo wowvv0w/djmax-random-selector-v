@@ -5,8 +5,78 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
         mc:Ignorable="d"
-        Title="MainView" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="DJMAX Random Selector V" Width="740" Height="540"
+        WindowStyle="None" FontFamily="{StaticResource Black}">
+    <Window.Background>
+        <LinearGradientBrush StartPoint="0.993,0.007" EndPoint="1,0" SpreadMethod="Repeat">
+            <GradientStop Color="#2D2E2F" Offset="0.4"/>
+            <GradientStop Color="#2A2B2C" Offset="0.475"/>
+            <GradientStop Color="#2A2B2C" Offset="0.525"/>
+            <GradientStop Color="#2D2E2F" Offset="0.6"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <DockPanel>
+        <!-- Top Bar -->
+        <Grid Height="40" DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="DJMAX Random Selector V" Foreground="#989999"
+                       FontSize="15" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                       
+            <Button Width="60" Grid.Column="2"
+                    Style="{StaticResource WindowButton}">
+                <Image Width="16" Height="16"
+                       Source="pack://application:,,,/Images/Minimize.png"/>
+            </Button>
+            <Button Width="60" Grid.Column="3"
+                    Style="{StaticResource WindowButton}">
+                <Image Width="16" Height="16"
+                       Source="pack://application:,,,/Images/Close.png"/>
+            </Button>
+        </Grid>
+        <!-- Menu Bar -->
+        <Grid Height="40" DockPanel.Dock="Top"
+                    Background="{StaticResource Nav}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="FILTER" Foreground="{StaticResource Highlight}"
+                       FontFamily="{StaticResource Light}" FontSize="23"
+                       Grid.Column="1" VerticalAlignment="Center"/>
+            <ToggleButton Grid.Column="3" Style="{StaticResource TabButton}"
+                          Content="FILTER"/>
+            <ToggleButton Grid.Column="4" Style="{StaticResource TabButton}"
+                          Content="ADVANCED" Margin="30,0,0,0"/>
+        </Grid>
+        <!-- Bottom Bar -->
+        <Grid Height="60" DockPanel.Dock="Bottom" Background="{StaticResource Nav}">
+            <TextBlock Text="Press F7 to Start Random Selector" Foreground="{StaticResource Default}"
+                       FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+
+        <!-- Center -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="10"/>
+            </Grid.RowDefinitions>
+            <ContentControl Grid.Row="1" Grid.Column="1"
+                            x:Name="FilterViewModel"/>
+        </Grid>
+    </DockPanel>
 </Window>
