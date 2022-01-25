@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
         mc:Ignorable="d"
-        Title="DJMAX Random Selector V" Width="740" Height="540"
-        WindowStyle="None" FontFamily="{StaticResource Black}">
+        Title="DJMAX Random Selector V" Width="740" Height="500"
+        WindowStyle="None" FontFamily="{StaticResource Black}"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.Background>
         <LinearGradientBrush StartPoint="0.993,0.007" EndPoint="1,0" SpreadMethod="Repeat">
             <GradientStop Color="#2D2E2F" Offset="0.4"/>
@@ -17,9 +18,8 @@
     </Window.Background>
     <DockPanel>
         <!-- Top Bar -->
-        <Grid Height="40" DockPanel.Dock="Top">
+        <Grid Height="40" DockPanel.Dock="Top" MouseDown="MoveWindow">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -27,12 +27,12 @@
             <TextBlock Text="DJMAX Random Selector V" Foreground="#989999"
                        FontSize="15" VerticalAlignment="Center" Margin="10,0,0,0"/>
                        
-            <Button Width="60" Grid.Column="2"
+            <Button Width="60" Grid.Column="1"
                     Style="{StaticResource WindowButton}">
                 <Image Width="16" Height="16"
                        Source="pack://application:,,,/Images/Minimize.png"/>
             </Button>
-            <Button Width="60" Grid.Column="3"
+            <Button Width="60" Grid.Column="2"
                     Style="{StaticResource WindowButton}">
                 <Image Width="16" Height="16"
                        Source="pack://application:,,,/Images/Close.png"/>
@@ -58,9 +58,9 @@
                           Content="ADVANCED" Margin="30,0,0,0"/>
         </Grid>
         <!-- Bottom Bar -->
-        <Grid Height="60" DockPanel.Dock="Bottom" Background="{StaticResource Nav}">
+        <Grid Height="50" DockPanel.Dock="Bottom" Background="{StaticResource Nav}">
             <TextBlock Text="Press F7 to Start Random Selector" Foreground="{StaticResource Default}"
-                       FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                       FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
 
         <!-- Center -->
@@ -75,8 +75,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="10"/>
             </Grid.RowDefinitions>
-            <ContentControl Grid.Row="1" Grid.Column="1"
-                            x:Name="FilterViewModel"/>
+            <local:FilterView Grid.Row="1" Grid.Column="1"/>
         </Grid>
     </DockPanel>
 </Window>

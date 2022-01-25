@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="380" d:DesignWidth="680">
+             d:DesignHeight="340" d:DesignWidth="680">
     <Grid>
         <Grid.Resources>
             <Style TargetType="GroupBox">
@@ -90,40 +90,46 @@
                            Grid.Column="1"
                            Grid.ColumnSpan="4"
                            Margin="0,0,0,10"/>
-                <ToggleButton Grid.Row="1" Grid.Column="1"
-                              Content="NORMAL" Margin="0,0,9,0"
+                <ToggleButton Content="NORMAL"
+                              Grid.Row="1" Grid.Column="1"
+                              Margin="0,0,9,0"
                               Style="{StaticResource DifficultyButton}">
                     <ToggleButton.Resources>
-                        <SolidColorBrush x:Key="Color" Color="{StaticResource Normal}"/>
+                        <SolidColorBrush x:Key="Color" Color="#FFCC25"/>
                     </ToggleButton.Resources>
                 </ToggleButton>
-                <ToggleButton Grid.Row="1" Grid.Column="2"
-                              Content="HARD" Margin="3,0,6,0"
+                <ToggleButton Content="HARD"
+                              Grid.Row="1" Grid.Column="2"
+                              Margin="3,0,6,0"
                               Style="{StaticResource DifficultyButton}">
                     <ToggleButton.Resources>
-                        <SolidColorBrush x:Key="Color" Color="{StaticResource Hard}"/>
+                        <SolidColorBrush x:Key="Color" Color="#FE7724"/>
                     </ToggleButton.Resources>
                 </ToggleButton>
-                <ToggleButton Grid.Row="1" Grid.Column="3"
-                              Content="MAXIMUM" Margin="6,0,3,0"
+                <ToggleButton Content="MAXIMUM"
+                              Grid.Row="1" Grid.Column="3"
+                              Margin="6,0,3,0"
                               Style="{StaticResource DifficultyButton}">
                     <ToggleButton.Resources>
-                        <SolidColorBrush x:Key="Color" Color="{StaticResource Maximum}"/>
+                        <SolidColorBrush x:Key="Color" Color="#F91C55"/>
                     </ToggleButton.Resources>
                 </ToggleButton>
-                <ToggleButton Grid.Row="1" Grid.Column="4"
-                              Content="SC" Margin="9,0,0,0"
+                <ToggleButton Content="SC"
+                              Grid.Row="1" Grid.Column="4"
+                              Margin="9,0,0,0"
                               Style="{StaticResource DifficultyButton}">
                     <ToggleButton.Resources>
-                        <SolidColorBrush x:Key="Color" Color="{StaticResource SC}"/>
+                        <SolidColorBrush x:Key="Color" Color="#FF11E6"/>
                     </ToggleButton.Resources>
                 </ToggleButton>
 
                 <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4"
                             Orientation="Horizontal" Margin="0, 10">
-                    
+                    <Image Source="pack://application:,,,/Images/d_ylw.png" Width="18"/>
                 </StackPanel>
-                <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
+                <Grid Grid.Row="3" Grid.Column="1"
+                      Grid.ColumnSpan="2"
+                      Margin="0,0,4.5,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -141,7 +147,9 @@
                         <Button Grid.Column="2"/>
                     </Grid>
                 </Grid>
-                <Grid Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="2">
+                <Grid Grid.Row="3" Grid.Column="3"
+                      Grid.ColumnSpan="2"
+                      Margin="4.5,0,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -181,45 +189,222 @@
                 <UniformGrid Grid.Row="1" Grid.Column="1"
                              Columns="5">
                     <ToggleButton Content="RESPECT"
-                                  Style="{StaticResource Respect}"/>
+                                  Style="{StaticResource CategoryButton}">
+                        <ToggleButton.Resources>
+                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
+                                <GradientStop Color="#F96775" Offset="0.1"/>
+                                <GradientStop Color="#F0B405" Offset="0.9"/>
+                            </LinearGradientBrush>
+                            <SolidColorBrush x:Key="Foreground" Color="#594713"/>
+                        </ToggleButton.Resources>
+                    </ToggleButton>
                     <ToggleButton Content="PORTABLE 1"
-                                  Style="{StaticResource Portable1}"/>
+                                  Style="{StaticResource CategoryButton}">
+                        <ToggleButton.Resources>
+                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
+                                <GradientStop Color="#AA45F9" Offset="0"/>
+                                <GradientStop Color="#00B3D2" Offset="1"/>
+                            </LinearGradientBrush>
+                            <SolidColorBrush x:Key="Foreground" Color="#0E6677"/>
+                        </ToggleButton.Resources>
+                    </ToggleButton>
                     <ToggleButton Content="PORTABLE 2"
-                                  Style="{StaticResource Portable2}"/>
+                                  Style="{StaticResource CategoryButton}">
+                        <ToggleButton.Resources>
+                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
+                                <GradientStop Color="#FF37AF" Offset="0"/>
+                                <GradientStop Color="#FF1E46" Offset="1"/>
+                            </LinearGradientBrush>
+                            <SolidColorBrush x:Key="Foreground" Color="#761A3f"/>
+                        </ToggleButton.Resources>
+                    </ToggleButton>
                     <ToggleButton Content="PORTABLE 3"
-                                  Style="{StaticResource Portable3}"/>
+                                  Style="{StaticResource CategoryButton}">
+                        <ToggleButton.Resources>
+                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
+                                <GradientStop Color="#FCAC00" Offset="0.0625"/>
+                                <GradientStop Color="#E7931F" Offset="0.0643116"/>
+                                <GradientStop Color="#E7931F" Offset="0.14221"/>
+                                <GradientStop Color="#D1750D" Offset="0.143116"/>
+                                <GradientStop Color="#D1750D" Offset="0.480072"/>
+                                <GradientStop Color="#BA5605" Offset="0.873188"/>
+                                <GradientStop Color="#D1750D" Offset="0.874094"/>
+                            </LinearGradientBrush>
+                            <SolidColorBrush x:Key="Foreground" Color="#563914"/>
+                        </ToggleButton.Resources>
+                    </ToggleButton>
                     <ToggleButton Content="TRILOGY"
-                                  Style="{StaticResource Trilogy}"/>
+                                  Style="{StaticResource CategoryButton}">
+                        <ToggleButton.Resources>
+                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.4" EndPoint="1,0.5">
+                                <GradientStop Color="#68E1FF"/>
+                                <GradientStop Color="#4A7AFF" Offset="0.78"/>
+                            </LinearGradientBrush>
+                            <SolidColorBrush x:Key="Foreground" Color="#3A4175"/>
+                        </ToggleButton.Resources>
+                    </ToggleButton>
                     <ToggleButton Content="CLAZZIQUAI"
-                                  Style="{StaticResource Clazziquai}"/>
+                                  Style="{StaticResource CategoryButton}">
+                        <ToggleButton.Resources>
+                            <LinearGradientBrush x:Key="Background" StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#FFFFFF" Offset="0.777"/>
+                                <GradientStop Color="#F5D84F" Offset="0.783"/>
+                                <GradientStop Color="#F5D84F" Offset="0.847"/>
+                                <GradientStop Color="#A97D1F" Offset="0.853"/>
+                                <GradientStop Color="#A97D1F" Offset="0.892"/>
+                                <GradientStop Color="#CB9531" Offset="0.898"/>
+                            </LinearGradientBrush>
+                            <SolidColorBrush x:Key="Foreground" Color="#747475"/>
+                        </ToggleButton.Resources>
+                    </ToggleButton>
                     <ToggleButton Content="BLACK SQUARE"
-                                  Style="{StaticResource BlackSquare}"/>
+                                  Style="{StaticResource CategoryButton}">
+                        <ToggleButton.Resources>
+                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
+                                <GradientStop Color="#EC0043" Offset="0.25"/>
+                                <GradientStop Color="#7F1721" Offset="1"/>
+                            </LinearGradientBrush>
+                            <SolidColorBrush x:Key="Foreground" Color="#5B1010"/>
+                        </ToggleButton.Resources>
+                    </ToggleButton>
                     <ToggleButton Content="V EXTENSION"
-                                  Style="{StaticResource VExtension}"/>
+                                  Style="{StaticResource CategoryButton}">
+                        <ToggleButton.Resources>
+                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
+                                <GradientStop Color="#FF6F1B" Offset="0.25"/>
+                                <GradientStop Color="#E9712C" Offset="0.5"/>
+                                <GradientStop Color="#2C8AC1" Offset="1"/>
+                            </LinearGradientBrush>
+                            <SolidColorBrush x:Key="Foreground" Color="#5E321A"/>
+                        </ToggleButton.Resources>
+                    </ToggleButton>
+                    <ToggleButton Content="V EXTENSION 2"
+                                  Style="{StaticResource CategoryButton}">
+                        <ToggleButton.Resources>
+                            <SolidColorBrush x:Key="Background" Color="Wheat"/>
+                            <SolidColorBrush x:Key="Foreground" Color="DarkCyan"/>
+                        </ToggleButton.Resources>
+                    </ToggleButton>
                     <ToggleButton Content="EMOTIONAL S."
-                                  Style="{StaticResource EmotionalS}"/>
+                                  Style="{StaticResource CategoryButton}">
+                        <ToggleButton.Resources>
+                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
+                                <GradientStop Color="#0C82CC"/>
+                                <GradientStop Color="#2FD43A" Offset="0.5"/>
+                                <GradientStop Color="#35DF26" Offset="1"/>
+                            </LinearGradientBrush>
+                            <SolidColorBrush x:Key="Foreground" Color="#20541D"/>
+                        </ToggleButton.Resources>
+                    </ToggleButton>
                     <ToggleButton Content="TECHNIKA 1"
-                                  Style="{StaticResource Technika1}"/>
+                                  Style="{StaticResource CategoryButton}">
+                        <ToggleButton.Resources>
+                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
+                                <GradientStop Color="#FF0095" Offset="0.1"/>
+                                <GradientStop Color="#7E63EA" Offset="0.9"/>
+                            </LinearGradientBrush>
+                            <SolidColorBrush x:Key="Foreground" Color="#5E275B"/>
+                        </ToggleButton.Resources>
+                    </ToggleButton>
                     <ToggleButton Content="TECHNIKA 2"
-                                  Style="{StaticResource Technika2}"/>
+                                  Style="{StaticResource CategoryButton}">
+                        <ToggleButton.Resources>
+                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.4" EndPoint="1,0.6">
+                                <GradientStop Color="#FF08D2"/>
+                                <GradientStop Color="#FF6F00" Offset="0.16485"/>
+                                <GradientStop Color="#FF8000" Offset="0.311989"/>
+                                <GradientStop Color="#FFC001" Offset="0.468665"/>
+                                <GradientStop Color="#FFC401" Offset="0.626703"/>
+                                <GradientStop Color="#62DC62" Offset="0.791962"/>
+                                <GradientStop Color="#00D0FF" Offset="0.940898"/>
+                            </LinearGradientBrush>
+                            <SolidColorBrush x:Key="Foreground" Color="#5E2B13"/>
+                        </ToggleButton.Resources>
+                    </ToggleButton>
                     <ToggleButton Content="TECHNIKA 3"
-                                  Style="{StaticResource Technika3}"/>
+                                  Style="{StaticResource CategoryButton}">
+                        <ToggleButton.Resources>
+                            <LinearGradientBrush x:Key="Background" StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#5131F0"/>
+                                <GradientStop Color="#6520E4" Offset="0.276827"/>
+                                <GradientStop Color="#3F42FF" Offset="0.286936"/>
+                                <GradientStop Color="#0C79FF" Offset="1"/>
+                            </LinearGradientBrush>
+                            <SolidColorBrush x:Key="Foreground" Color="#1D365E"/>
+                        </ToggleButton.Resources>
+                    </ToggleButton>
                 </UniformGrid>
-                <StackPanel Grid.Row="2" Grid.Column="1"
-                            Background="{StaticResource CategoryUnchecked}"
-                            Orientation="Horizontal"
-                            Margin="0,10,0,0">
+                <Grid Grid.Row="2" Grid.Column="1"
+                      Background="{StaticResource CategoryUnchecked}"
+                      Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
                     <TextBlock Text="COLLABORATION"
-                               FontFamily="{StaticResource Black}" FontSize="10" RenderTransformOrigin="0.492,2.856"/>
-                    <UniformGrid>
+                               FontFamily="{StaticResource Black}" FontSize="15"
+                               HorizontalAlignment="Center" Margin="0,20" RenderTransformOrigin="0.5,0.5">
+                        <TextBlock.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="0.8"/>
+                            </TransformGroup>
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
+                    <UniformGrid Columns="4"
+                                 Grid.Column="1" Grid.ColumnSpan="4">
                         <ToggleButton Content="GUILTY GEAR"
-                                      Style="{StaticResource CollabButton}">
+                                      Style="{StaticResource CollaborationButton}">
                             <ToggleButton.Resources>
-                                <SolidColorBrush x:Key="Color" Color="{StaticResource GG}"/>
+                                <SolidColorBrush x:Key="Color" Color="#D83E0E"/>
+                            </ToggleButton.Resources>
+                        </ToggleButton>
+                        <ToggleButton Content="GROOVE COASTER"
+                                      Style="{StaticResource CollaborationButton}">
+                            <ToggleButton.Resources>
+                                <SolidColorBrush x:Key="Color" Color="#51EEFE"/>
+                            </ToggleButton.Resources>
+                        </ToggleButton>
+                        <ToggleButton Content="DEEMO"
+                                      Style="{StaticResource CollaborationButton}">
+                            <ToggleButton.Resources>
+                                <SolidColorBrush x:Key="Color" Color="#99E5D8"/>
+                            </ToggleButton.Resources>
+                        </ToggleButton>
+                        <ToggleButton Content="CYTUS"
+                                      Style="{StaticResource CollaborationButton}">
+                            <ToggleButton.Resources>
+                                <SolidColorBrush x:Key="Color" Color="#EE1538"/>
+                            </ToggleButton.Resources>
+                        </ToggleButton>
+                        <ToggleButton Content="GIRLS' FRONTLINE"
+                                      Style="{StaticResource CollaborationButton}">
+                            <ToggleButton.Resources>
+                                <SolidColorBrush x:Key="Color" Color="#FDB426"/>
+                            </ToggleButton.Resources>
+                        </ToggleButton>
+                        <ToggleButton Content="CHUNITHM"
+                                      Style="{StaticResource CollaborationButton}">
+                            <ToggleButton.Resources>
+                                <SolidColorBrush x:Key="Color" Color="#FFD700"/>
+                            </ToggleButton.Resources>
+                        </ToggleButton>
+                        <ToggleButton Content="ESTIMATE"
+                                      Style="{StaticResource CollaborationButton}">
+                            <ToggleButton.Resources>
+                                <SolidColorBrush x:Key="Color" Color="#E6CE99"/>
+                            </ToggleButton.Resources>
+                        </ToggleButton>
+                        <ToggleButton Content="NEXON"
+                                      Style="{StaticResource CollaborationButton}">
+                            <ToggleButton.Resources>
+                                <SolidColorBrush x:Key="Color" Color="Lime"/>
                             </ToggleButton.Resources>
                         </ToggleButton>
                     </UniformGrid>
-                </StackPanel>
+                </Grid>
             </Grid>
         </GroupBox>
     </Grid>

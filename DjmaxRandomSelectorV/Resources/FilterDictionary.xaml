@@ -1,0 +1,120 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- ButtonTunesButton -->
+    <Style x:Key="ButtonTunesButton" TargetType="ToggleButton">
+        
+        <Setter Property="Width" Value="60"/>
+        <Setter Property="Height" Value="60"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <!-- BorderedButton -->
+    <Style x:Key="BorderedButton" TargetType="ToggleButton">
+        <Style.Resources>
+            <SolidColorBrush x:Key="Color"/>
+        </Style.Resources>
+        <Setter Property="Background" Value="{DynamicResource Color}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Color}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Color}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="FontFamily" Value="{StaticResource Black}"/>
+        <Setter Property="FontSize" Value="13"/>
+    </Style>
+
+    <!-- DifficultyButton : BorderedButton -->
+    <Style x:Key="DifficultyButton" TargetType="ToggleButton"
+           BasedOn="{StaticResource BorderedButton}">
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="Border"
+                            Background="Transparent"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background" TargetName="Border"
+                                    Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Setter Property="Foreground" Value="#242526"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- CollaborationButton : BorderedButton -->
+    <Style x:Key="CollaborationButton" TargetType="ToggleButton"
+           BasedOn="{StaticResource BorderedButton}">
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="Margin" Value="8,0"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid>
+                        <Border x:Name="Border"
+                                Background="Transparent"
+                                BorderBrush="{StaticResource Unchecked}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                TextBlock.Foreground="{StaticResource Unchecked}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background" TargetName="Border"
+                                    Value="#57000000"/>
+                            <Setter Property="BorderBrush" TargetName="Border"
+                                    Value="{Binding BorderBrush, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Setter Property="TextBlock.Foreground" TargetName="Border"
+                                    Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- CategoryButton -->
+    <Style x:Key="CategoryButton" TargetType="ToggleButton">
+        <Style.Resources>
+            <LinearGradientBrush x:Key="Background"/>
+            <SolidColorBrush x:Key="Foreground"/>
+        </Style.Resources>
+        <Setter Property="Background" Value="{DynamicResource Background}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="FontFamily" Value="{StaticResource Black}"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid>
+                        <Rectangle x:Name="Rectangle" Fill="#56000000"/>
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Fill" TargetName="Rectangle"
+                                    Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

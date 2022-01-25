@@ -23,5 +23,12 @@ namespace DjmaxRandomSelectorV.Views
         {
             InitializeComponent();
         }
+        private void MoveWindow(object sender, MouseButtonEventArgs e)
+        {
+            if(e.ChangedButton == MouseButton.Left)
+            {
+                DragMove();
+            }
+        }
     }
 }
