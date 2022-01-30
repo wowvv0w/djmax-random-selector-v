@@ -4,12 +4,21 @@
 
     <!-- ButtonTunesButton -->
     <Style x:Key="ButtonTunesButton" TargetType="ToggleButton">
-        
         <Setter Property="Width" Value="60"/>
         <Setter Property="Height" Value="60"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
+                    <Grid>
+                        <Image x:Name="Image"
+                               Source="{Binding Tag[0], RelativeSource={RelativeSource TemplatedParent}}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Image" Property="Source"
+                                    Value="{Binding Tag[1], RelativeSource={RelativeSource TemplatedParent}}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -116,5 +125,43 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+    
+    <!-- LevelButton -->
+    <Style x:Key="LevelButton" TargetType="Button">
+        <Setter Property="ClickMode" Value="Press"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="Transparent">
+                        <ContentPresenter/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- LevelIndicator -->
+    <Style x:Key="LevelIndicator" TargetType="Image">
+        <Setter Property="Width" Value="18"/>
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Source" Value="pack://application:,,,/Images/d_blk.png"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- LevelIndicatorVariations : LevelIndicator -->
+    <Style x:Key="LevelIndicatorYellow" TargetType="Image"
+           BasedOn="{StaticResource LevelIndicator}">
+        <Setter Property="Source" Value="pack://application:,,,/Images/d_ylw.png"/>
+    </Style>
+    <Style x:Key="LevelIndicatorOrange" TargetType="Image"
+           BasedOn="{StaticResource LevelIndicator}">
+        <Setter Property="Source" Value="pack://application:,,,/Images/d_org.png"/>
+    </Style>
+    <Style x:Key="LevelIndicatorRed" TargetType="Image"
+           BasedOn="{StaticResource LevelIndicator}">
+        <Setter Property="Source" Value="pack://application:,,,/Images/d_red.png"/>
     </Style>
 </ResourceDictionary>

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
+             xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="340" d:DesignWidth="680">
     <Grid>
@@ -54,16 +55,49 @@
                            Grid.Column="1"
                            Grid.ColumnSpan="4"
                            Margin="0,0,0,17"/>
-                <ToggleButton Grid.Row="1" Grid.Column="1">
-                    
+                <ToggleButton cal:Message.Attach="[Event Checked] = [Action AddButtonTune('4B')];
+                                                  [Event Unchecked] = [Action RemoveButtonTune('4B')]"
+                              Grid.Row="1" Grid.Column="1"
+                              Style="{StaticResource ButtonTunesButton}">
+                    <ToggleButton.Tag>
+                        <x:Array Type="ImageSource">
+                            <BitmapImage UriSource="pack://application:,,,/Images/4B_OFF.png"/>
+                            <BitmapImage UriSource="pack://application:,,,/Images/4B_ON.png"/>
+                        </x:Array>
+                    </ToggleButton.Tag>
                 </ToggleButton>
-                <ToggleButton Grid.Row="1" Grid.Column="2">
-                    
+                <ToggleButton cal:Message.Attach="[Event Checked] = [Action AddButtonTune('5B')];
+                                                  [Event Unchecked] = [Action RemoveButtonTune('5B')]"
+                              Grid.Row="1" Grid.Column="2"
+                              Style="{StaticResource ButtonTunesButton}">
+                    <ToggleButton.Tag>
+                        <x:Array Type="ImageSource">
+                            <BitmapImage UriSource="pack://application:,,,/Images/5B_OFF.png"/>
+                            <BitmapImage UriSource="pack://application:,,,/Images/5B_ON.png"/>
+                        </x:Array>
+                    </ToggleButton.Tag>
                 </ToggleButton>
-                <ToggleButton Grid.Row="1" Grid.Column="3">
-                    
+                <ToggleButton cal:Message.Attach="[Event Checked] = [Action AddButtonTune('6B')];
+                                                  [Event Unchecked] = [Action RemoveButtonTune('6B')]"
+                              Grid.Row="1" Grid.Column="3"
+                              Style="{StaticResource ButtonTunesButton}">
+                    <ToggleButton.Tag>
+                        <x:Array Type="ImageSource">
+                            <BitmapImage UriSource="pack://application:,,,/Images/6B_OFF.png"/>
+                            <BitmapImage UriSource="pack://application:,,,/Images/6B_ON.png"/>
+                        </x:Array>
+                    </ToggleButton.Tag>
                 </ToggleButton>
-                <ToggleButton Grid.Row="1" Grid.Column="4">
+                <ToggleButton cal:Message.Attach="[Event Checked] = [Action AddButtonTune('8B')];
+                                                  [Event Unchecked] = [Action RemoveButtonTune('8B')]"
+                              Grid.Row="1" Grid.Column="4"
+                              Style="{StaticResource ButtonTunesButton}">
+                    <ToggleButton.Tag>
+                        <x:Array Type="ImageSource">
+                            <BitmapImage UriSource="pack://application:,,,/Images/8B_OFF.png"/>
+                            <BitmapImage UriSource="pack://application:,,,/Images/8B_ON.png"/>
+                        </x:Array>
+                    </ToggleButton.Tag>
                     
                 </ToggleButton>
             </Grid>
@@ -91,6 +125,8 @@
                            Grid.ColumnSpan="4"
                            Margin="0,0,0,10"/>
                 <ToggleButton Content="NORMAL"
+                              cal:Message.Attach="[Event Checked] = [Action AddDifficulty('NM')];
+                                                  [Event Unchecked] = [Action RemoveDifficulty('NM')]"
                               Grid.Row="1" Grid.Column="1"
                               Margin="0,0,9,0"
                               Style="{StaticResource DifficultyButton}">
@@ -99,6 +135,8 @@
                     </ToggleButton.Resources>
                 </ToggleButton>
                 <ToggleButton Content="HARD"
+                              cal:Message.Attach="[Event Checked] = [Action AddDifficulty('HD')];
+                                                  [Event Unchecked] = [Action RemoveDifficulty('HD')]"
                               Grid.Row="1" Grid.Column="2"
                               Margin="3,0,6,0"
                               Style="{StaticResource DifficultyButton}">
@@ -107,6 +145,8 @@
                     </ToggleButton.Resources>
                 </ToggleButton>
                 <ToggleButton Content="MAXIMUM"
+                              cal:Message.Attach="[Event Checked] = [Action AddDifficulty('MX')];
+                                                  [Event Unchecked] = [Action RemoveDifficulty('MX')]"
                               Grid.Row="1" Grid.Column="3"
                               Margin="6,0,3,0"
                               Style="{StaticResource DifficultyButton}">
@@ -115,6 +155,8 @@
                     </ToggleButton.Resources>
                 </ToggleButton>
                 <ToggleButton Content="SC"
+                              cal:Message.Attach="[Event Checked] = [Action AddDifficulty('SC')];
+                                                  [Event Unchecked] = [Action RemoveDifficulty('SC')]"
                               Grid.Row="1" Grid.Column="4"
                               Margin="9,0,0,0"
                               Style="{StaticResource DifficultyButton}">
@@ -125,51 +167,123 @@
 
                 <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4"
                             Orientation="Horizontal" Margin="0, 10">
-                    <Image Source="pack://application:,,,/Images/d_ylw.png" Width="18"/>
+                    <Image Style="{StaticResource LevelIndicatorYellow}"
+                           IsEnabled="{Binding LevelIndicators[1].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorYellow}"
+                           IsEnabled="{Binding LevelIndicators[2].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorYellow}"
+                           IsEnabled="{Binding LevelIndicators[3].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorYellow}"
+                           IsEnabled="{Binding LevelIndicators[4].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorYellow}"
+                           IsEnabled="{Binding LevelIndicators[5].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorOrange}"
+                           IsEnabled="{Binding LevelIndicators[6].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorOrange}"
+                           IsEnabled="{Binding LevelIndicators[7].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorOrange}"
+                           IsEnabled="{Binding LevelIndicators[8].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorOrange}"
+                           IsEnabled="{Binding LevelIndicators[9].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorOrange}"
+                           IsEnabled="{Binding LevelIndicators[10].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorRed}"
+                           IsEnabled="{Binding LevelIndicators[11].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorRed}"
+                           IsEnabled="{Binding LevelIndicators[12].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorRed}"
+                           IsEnabled="{Binding LevelIndicators[13].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorRed}"
+                           IsEnabled="{Binding LevelIndicators[14].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorRed}"
+                           IsEnabled="{Binding LevelIndicators[15].Value}"/>
                 </StackPanel>
                 <Grid Grid.Row="3" Grid.Column="1"
                       Grid.ColumnSpan="2"
-                      Margin="0,0,4.5,0">
+                      Margin="0,0,4.5,0"
+                      Height="20">
+                    <Grid.Background>
+                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                            <GradientStop Color="#7F584E46" Offset="0.4999"/>
+                            <GradientStop Color="#FF604E41" Offset="0.5"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="MIN" FontSize="13"/>
+                    <TextBlock Text="MIN" FontSize="13"
+                               Margin="10,0,0,0"
+                               VerticalAlignment="Center"/>
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Button/>
-                        <TextBlock Text="1" FontSize="13" Grid.Column="1"
+                        <Button x:Name="DecreaseLevelMin"
+                                Style="{StaticResource LevelButton}">
+                            <Image Source="pack://application:,,,/Images/btn_left.png"
+                                   Width="8"/>
+                        </Button>
+                        <TextBlock x:Name="LevelMin"
+                                   Grid.Column="1"
+                                   FontFamily="{StaticResource Black}" FontSize="13"
+                                   Foreground="White"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Button Grid.Column="2"/>
+                        <Button x:Name="IncreaseLevelMin"
+                                Style="{StaticResource LevelButton}"
+                                Grid.Column="2">
+                            <Image Source="pack://application:,,,/Images/btn_right.png"
+                                   Width="8"/>
+                        </Button>
                     </Grid>
                 </Grid>
                 <Grid Grid.Row="3" Grid.Column="3"
                       Grid.ColumnSpan="2"
-                      Margin="4.5,0,0,0">
+                      Margin="4.5,0,0,0"
+                      Height="20">
+                    <Grid.Background>
+                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                            <GradientStop Color="#7F584E46" Offset="0.4999"/>
+                            <GradientStop Color="#FF604E41" Offset="0.5"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="MAX" FontSize="13"/>
+                    <TextBlock Text="MAX" FontSize="13"
+                               Margin="10,0,0,0"
+                               VerticalAlignment="Center"/>
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Button/>
-                        <TextBlock Text="15" FontSize="13" Grid.Column="1"
+                        <Button x:Name="DecreaseLevelMax"
+                                Style="{StaticResource LevelButton}">
+                            <Image Source="pack://application:,,,/Images/btn_left.png"
+                                   Width="8"/>
+                        </Button>
+                        <TextBlock x:Name="LevelMax"
+                                   Grid.Column="1"
+                                   FontFamily="{StaticResource Black}" FontSize="13"
+                                   Foreground="White"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Button Grid.Column="2"/>
+                        <Button x:Name="IncreaseLevelMax"
+                                Style="{StaticResource LevelButton}"
+                                Grid.Column="2">
+                            <Image Source="pack://application:,,,/Images/btn_right.png"
+                                   Width="8"/>
+                        </Button>
                     </Grid>
                 </Grid>
             </Grid>
         </GroupBox>
-
+        
+        <!-- CATEGORIES -->
         <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                   Margin="0,5,0,0">
             <Grid>
@@ -189,6 +303,8 @@
                 <UniformGrid Grid.Row="1" Grid.Column="1"
                              Columns="5">
                     <ToggleButton Content="RESPECT"
+                                  cal:Message.Attach="[Event Checked] = [Action AddCategory('RP')];
+                                                      [Event Unchecked] = [Action RemoveCategory('RP')]"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -199,6 +315,8 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="PORTABLE 1"
+                                  cal:Message.Attach="[Event Checked] = [Action AddCategory('P1')];
+                                                      [Event Unchecked] = [Action RemoveCategory('P1')]"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -209,6 +327,8 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="PORTABLE 2"
+                                  cal:Message.Attach="[Event Checked] = [Action AddCategory('P2')];
+                                                      [Event Unchecked] = [Action RemoveCategory('P2')]"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -219,6 +339,8 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="PORTABLE 3"
+                                  cal:Message.Attach="[Event Checked] = [Action AddCategory('P3')];
+                                                      [Event Unchecked] = [Action RemoveCategory('P3')]"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -234,6 +356,8 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="TRILOGY"
+                                  cal:Message.Attach="[Event Checked] = [Action AddCategory('TR')];
+                                                      [Event Unchecked] = [Action RemoveCategory('TR')]"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.4" EndPoint="1,0.5">
@@ -244,6 +368,8 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="CLAZZIQUAI"
+                                  cal:Message.Attach="[Event Checked] = [Action AddCategory('CE')];
+                                                      [Event Unchecked] = [Action RemoveCategory('CE')]"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0" EndPoint="1,1">
@@ -258,6 +384,8 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="BLACK SQUARE"
+                                  cal:Message.Attach="[Event Checked] = [Action AddCategory('BS')];
+                                                      [Event Unchecked] = [Action RemoveCategory('BS')]"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -268,6 +396,8 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="V EXTENSION"
+                                  cal:Message.Attach="[Event Checked] = [Action AddCategory('VE')];
+                                                      [Event Unchecked] = [Action RemoveCategory('VE')]"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -279,6 +409,8 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="V EXTENSION 2"
+                                  cal:Message.Attach="[Event Checked] = [Action AddCategory('VE2')];
+                                                      [Event Unchecked] = [Action RemoveCategory('VE2')]"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <SolidColorBrush x:Key="Background" Color="Wheat"/>
@@ -286,6 +418,8 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="EMOTIONAL S."
+                                  cal:Message.Attach="[Event Checked] = [Action AddCategory('ES')];
+                                                      [Event Unchecked] = [Action RemoveCategory('ES')]"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -297,6 +431,8 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="TECHNIKA 1"
+                                  cal:Message.Attach="[Event Checked] = [Action AddCategory('T1')];
+                                                      [Event Unchecked] = [Action RemoveCategory('T1')]"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -307,6 +443,8 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="TECHNIKA 2"
+                                  cal:Message.Attach="[Event Checked] = [Action AddCategory('T2')];
+                                                      [Event Unchecked] = [Action RemoveCategory('T2')]"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.4" EndPoint="1,0.6">
@@ -322,6 +460,8 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="TECHNIKA 3"
+                                  cal:Message.Attach="[Event Checked] = [Action AddCategory('T3')];
+                                                      [Event Unchecked] = [Action RemoveCategory('T3')]"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0" EndPoint="1,1">
@@ -356,48 +496,64 @@
                     <UniformGrid Columns="4"
                                  Grid.Column="1" Grid.ColumnSpan="4">
                         <ToggleButton Content="GUILTY GEAR"
+                                      cal:Message.Attach="[Event Checked] = [Action AddCategory('GG')];
+                                                          [Event Unchecked] = [Action RemoveCategory('GG')]"
                                       Style="{StaticResource CollaborationButton}">
                             <ToggleButton.Resources>
                                 <SolidColorBrush x:Key="Color" Color="#D83E0E"/>
                             </ToggleButton.Resources>
                         </ToggleButton>
                         <ToggleButton Content="GROOVE COASTER"
+                                      cal:Message.Attach="[Event Checked] = [Action AddCategory('GC')];
+                                                          [Event Unchecked] = [Action RemoveCategory('GC')]"
                                       Style="{StaticResource CollaborationButton}">
                             <ToggleButton.Resources>
                                 <SolidColorBrush x:Key="Color" Color="#51EEFE"/>
                             </ToggleButton.Resources>
                         </ToggleButton>
                         <ToggleButton Content="DEEMO"
+                                      cal:Message.Attach="[Event Checked] = [Action AddCategory('DM')];
+                                                          [Event Unchecked] = [Action RemoveCategory('DM')]"
                                       Style="{StaticResource CollaborationButton}">
                             <ToggleButton.Resources>
                                 <SolidColorBrush x:Key="Color" Color="#99E5D8"/>
                             </ToggleButton.Resources>
                         </ToggleButton>
                         <ToggleButton Content="CYTUS"
+                                      cal:Message.Attach="[Event Checked] = [Action AddCategory('CY')];
+                                                          [Event Unchecked] = [Action RemoveCategory('CY')]"
                                       Style="{StaticResource CollaborationButton}">
                             <ToggleButton.Resources>
                                 <SolidColorBrush x:Key="Color" Color="#EE1538"/>
                             </ToggleButton.Resources>
                         </ToggleButton>
                         <ToggleButton Content="GIRLS' FRONTLINE"
+                                      cal:Message.Attach="[Event Checked] = [Action AddCategory('GF')];
+                                                          [Event Unchecked] = [Action RemoveCategory('GF')]"
                                       Style="{StaticResource CollaborationButton}">
                             <ToggleButton.Resources>
                                 <SolidColorBrush x:Key="Color" Color="#FDB426"/>
                             </ToggleButton.Resources>
                         </ToggleButton>
                         <ToggleButton Content="CHUNITHM"
+                                      cal:Message.Attach="[Event Checked] = [Action AddCategory('CHU')];
+                                                          [Event Unchecked] = [Action RemoveCategory('CHU')]"
                                       Style="{StaticResource CollaborationButton}">
                             <ToggleButton.Resources>
                                 <SolidColorBrush x:Key="Color" Color="#FFD700"/>
                             </ToggleButton.Resources>
                         </ToggleButton>
                         <ToggleButton Content="ESTIMATE"
+                                      cal:Message.Attach="[Event Checked] = [Action AddCategory('ESTI')];
+                                                          [Event Unchecked] = [Action RemoveCategory('ESTI')]"
                                       Style="{StaticResource CollaborationButton}">
                             <ToggleButton.Resources>
                                 <SolidColorBrush x:Key="Color" Color="#E6CE99"/>
                             </ToggleButton.Resources>
                         </ToggleButton>
                         <ToggleButton Content="NEXON"
+                                      cal:Message.Attach="[Event Checked] = [Action AddCategory('NEXON')];
+                                                          [Event Unchecked] = [Action RemoveCategory('NEXON')]"
                                       Style="{StaticResource CollaborationButton}">
                             <ToggleButton.Resources>
                                 <SolidColorBrush x:Key="Color" Color="Lime"/>
