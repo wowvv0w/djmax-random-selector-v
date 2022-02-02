@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -17,7 +18,28 @@ namespace DjmaxRandomSelectorV.ViewModels
             HistoryViewModel = new HistoryViewModel();
         }
 
-        /// Menu Bar
+
+
+        // Window Bar
+        public void MoveWindow(object view)
+        {
+            var window = view as Window;
+            window.DragMove();
+        }
+
+        // Window Buttons
+        public void MinimizeWindow(object view)
+        {
+            var window = view as Window;
+            window.WindowState = WindowState.Minimized;
+        }
+        public void CloseWindow(object view)
+        {
+            var window = view as Window;
+            window.Close();
+        }
+
+        // Tab Buttons
         private bool _isFilterTabSelected = true;
         private bool _isHistoryTabSelected = false;
         public bool IsFilterTabSelected

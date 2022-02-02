@@ -4,31 +4,34 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using DjmaxRandomSelectorV.Properties;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
     public class FilterViewModel : Screen
     {
-        public List<Track> TrackList { get; set; }
-
         public FilterViewModel()
         {
             for(int i = 0; i < 16; i++)
             {
-                /// DO NOT use index 0
+                // DO NOT use index 0
                 LevelIndicators.Add(new LevelIndicator());
             }
-            TrackList = Manager.ReadTrackList();
+            Manager.ReadAllTrackList();
+            Manager.UpdateTrackList();
         }
         public int LevelMin
         {
             get { return Filter.Levels[0]; }
-            set 
+            set
             {
                 Filter.Levels[0] = value;
                 NotifyOfPropertyChange(() => LevelMin);
+                UpdateLevelIndicators();
             }
         }
         public int LevelMax
@@ -38,47 +41,44 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 Filter.Levels[1] = value;
                 NotifyOfPropertyChange(() => LevelMax);
+                UpdateLevelIndicators();
             }
         }
 
+        public void UpdateFilter(string methodName, object button)
+        {
+            var type = GetType();
+            var method = type.GetMethod(methodName);
 
-        /// Update Filter.ButtonTunes
-        public void AddButtonTune(string value)
-        {
-            Filter.ButtonTunes.Add(value);
-        }
-        public void RemoveButtonTune(string value)
-        {
-            Filter.ButtonTunes.Remove(value);
-        }
-       
-        /// Update Filter.Difficulties
-        public void AddDifficulty(string value)
-        {
-            Filter.Difficulties.Add(value);
-        }
-        public void RemoveDifficulty(string value)
-        {
-            Filter.Difficulties.Remove(value);
+            var uIElement = button as UIElement;
+            var value = uIElement.Uid;
+
+            var parameter = new object[1] { value };
+            method.Invoke(this, parameter);
+            FilterChanged();
         }
 
-        /// Update Filter.Categories
-        public void AddCategory(string value)
-        {
-            Filter.Categories.Add(value);
-        }
-        public void RemoveCategory(string value)
-        {
-            Filter.Categories.Remove(value);
-        }
+        // Set IsFilterChanged true
+        public void FilterChanged() => Selector.IsFilterChanged = true;
 
-        /// Update Filter.Level
+        // Update Filter.ButtonTunes
+        public void AddButtonTune(string value) => Filter.ButtonTunes.Add(value);
+        public void RemoveButtonTune(string value) => Filter.ButtonTunes.Remove(value);
+
+        // Update Filter.Difficulties
+        public void AddDifficulty(string value) => Filter.Difficulties.Add(value);
+        public void RemoveDifficulty(string value) => Filter.Difficulties.Remove(value);
+
+        // Update Filter.Categories
+        public void AddCategory(string value) => Filter.Categories.Add(value);
+        public void RemoveCategory(string value) => Filter.Categories.Remove(value);
+
+        // Update Filter.Level
         public void IncreaseLevelMin()
         {
-            if(LevelMin < 15 && LevelMin < LevelMax)
+            if (LevelMin < 15 && LevelMin < LevelMax)
             {
                 LevelMin++;
-                UpdateLevelIndicators();
             }
         }
         public void DecreaseLevelMin()
@@ -86,7 +86,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (LevelMin > 1)
             {
                 LevelMin--;
-                UpdateLevelIndicators();
             }
         }
         public void IncreaseLevelMax()
@@ -94,7 +93,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (LevelMax < 15)
             {
                 LevelMax++;
-                UpdateLevelIndicators();
             }
         }
         public void DecreaseLevelMax()
@@ -102,14 +100,13 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (LevelMax > 1 && LevelMax > LevelMin)
             {
                 LevelMax--;
-                UpdateLevelIndicators();
             }
         }
 
-        /// Update LevelIndicators
+        // Update LevelIndicators
         public void UpdateLevelIndicators()
         {
-            for(int i = 1; i < LevelMin; i++)
+            for (int i = 1; i < LevelMin; i++)
             {
                 LevelIndicators[i].Value = false;
             }
@@ -117,7 +114,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 LevelIndicators[i].Value = true;
             }
-            for (int i = LevelMax+1; i <= 15; i++)
+            for (int i = LevelMax + 1; i <= 15; i++)
             {
                 LevelIndicators[i].Value = false;
             }
@@ -139,8 +136,10 @@ namespace DjmaxRandomSelectorV.ViewModels
                 _value = true;
             }
         }
-        public ObservableCollection<LevelIndicator> LevelIndicators { get; set; }
-            = new ObservableCollection<LevelIndicator>();
+        public List<LevelIndicator> LevelIndicators { get; set; }
+            = new List<LevelIndicator>();
+
+
 
     }
 }

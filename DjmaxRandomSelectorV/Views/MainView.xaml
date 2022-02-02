@@ -10,7 +10,10 @@
         WindowStyle="None" FontFamily="{StaticResource Black}"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.Background>
-        <LinearGradientBrush StartPoint="0.993,0.007" EndPoint="1,0" SpreadMethod="Repeat">
+        <LinearGradientBrush StartPoint="0.987,0.5" EndPoint="1,0.5" SpreadMethod="Repeat">
+            <LinearGradientBrush.RelativeTransform>
+                <RotateTransform Angle="325" CenterX="0.5" CenterY="0.5"/>
+            </LinearGradientBrush.RelativeTransform>
             <GradientStop Color="#2D2E2F" Offset="0.4"/>
             <GradientStop Color="#2A2B2C" Offset="0.475"/>
             <GradientStop Color="#2A2B2C" Offset="0.525"/>
@@ -19,7 +22,8 @@
     </Window.Background>
     <DockPanel>
         <!-- Top Bar -->
-        <Grid Height="40" DockPanel.Dock="Top" MouseDown="MoveWindow">
+        <Grid Height="40" DockPanel.Dock="Top"
+              cal:Message.Attach="[Event MouseDown] = [Action MoveWindow($view)]">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -28,12 +32,14 @@
             <TextBlock Text="DJMAX Random Selector V" Foreground="#989999"
                        FontSize="15" VerticalAlignment="Center" Margin="10,0,0,0"/>
                        
-            <Button Width="60" Grid.Column="1"
+            <Button cal:Message.Attach="[Event Click] = [Action MinimizeWindow($view)]"
+                    Width="60" Grid.Column="1"
                     Style="{StaticResource WindowButton}">
                 <Image Width="16" Height="16"
                        Source="pack://application:,,,/Images/Minimize.png"/>
             </Button>
-            <Button Width="60" Grid.Column="2"
+            <Button cal:Message.Attach="[Event Click] = [Action CloseWindow($view)]"
+                    Width="60" Grid.Column="2"
                     Style="{StaticResource WindowButton}">
                 <Image Width="16" Height="16"
                        Source="pack://application:,,,/Images/Close.png"/>

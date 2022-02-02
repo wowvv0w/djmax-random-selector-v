@@ -11,7 +11,8 @@ namespace DjmaxRandomSelectorV.Models
         public static List<string> ButtonTunes { get; set; } = new List<string>();
         public static List<string> Difficulties { get; set; } = new List<string>();
         public static List<string> Categories { get; set; } = new List<string>();
-        public static int[] Levels { get; set; } = new int[2] { 1, 15 };
-        public static bool Freestyle { get; set; } = true;
+        public static int[] Levels { get; set; } = new int[2] { 1, 15 }; /// 1 ~ 15
+        public static bool Mode { get; set; } = true; /// FREESTYLE = true, ONLINE = false
+        public static int InputDelay { get; set; } = 50;
     }
 }
