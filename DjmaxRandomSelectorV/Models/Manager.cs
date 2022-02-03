@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using DjmaxRandomSelectorV.Properties;
 
@@ -28,6 +29,8 @@ namespace DjmaxRandomSelectorV.Models
         public static void UpdateTrackList()
         {
             var ownedDlc = Settings.Default.ownedDlc;
+            var basicCategories = new string[] { "RP", "P1", "P2", "GG" };
+            ownedDlc.AddRange(basicCategories);
             var titleFilter = CreateTitleFilter();
             var trackList = from track in Selector.AllTrackList
                             where ownedDlc.Contains(track.Category)
@@ -62,6 +65,27 @@ namespace DjmaxRandomSelectorV.Models
 
                 return list;
             }  
+        }
+
+        public static void LoadPreset(string path = @"C:\Projects\DjmaxRandomSelectorV\DjmaxRandomSelectorV\DataFiles\default.json")
+        {
+            using (var reader = new StreamReader(path))
+            {
+                Preset preset = new Preset();
+                string json = reader.ReadToEnd();
+                preset = JsonSerializer.Deserialize<Preset>(json);
+            }
+        }
+
+        public static void SavePreset(Preset preset, string path = @"C:\Projects\DjmaxRandomSelectorV\DjmaxRandomSelectorV\DataFiles\default.json")
+        {
+            var options = new JsonSerializerOptions() { WriteIndented = true, IgnoreReadOnlyProperties = false };
+            string jsonString = JsonSerializer.Serialize(preset, options);
+
+            using (var writer = new StreamWriter(path))
+            {
+                writer.Write(jsonString);
+            }
         }
     }
 }

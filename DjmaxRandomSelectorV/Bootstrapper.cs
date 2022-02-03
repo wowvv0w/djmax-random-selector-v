@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using DjmaxRandomSelectorV.Models;
 using DjmaxRandomSelectorV.ViewModels;
 using Microsoft.Xaml.Behaviors.Input;
 using System;

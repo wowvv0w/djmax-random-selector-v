@@ -1,0 +1,120 @@
+{
+  "Setting": {
+    "4B": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "5B": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "6B": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "8B": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "NM": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "HD": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "MX": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "SC": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "RP": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "P1": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "P2": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "P3": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "TR": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "CE": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "BS": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "VE": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "VE2": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "ES": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "T1": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "T2": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "T3": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "GG": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "CHU": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "CY": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "DM": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "ESTI": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "GC": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "GF": {
+      "IsChecked": false,
+      "IsNotifying": true
+    },
+    "NXN": {
+      "IsChecked": false,
+      "IsNotifying": true
+    }
+  }
+}

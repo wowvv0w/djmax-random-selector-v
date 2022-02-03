@@ -58,7 +58,7 @@
                            Grid.Column="1"
                            Grid.ColumnSpan="4"
                            Margin="0,0,0,17"/>
-                <ToggleButton x:Uid="4B"
+                <ToggleButton x:Uid="4B" IsChecked="{Binding preset.Setting[4B].IsChecked}"
                               Grid.Row="1" Grid.Column="1"
                               Style="{StaticResource ButtonTunesButton}">
                     <ToggleButton.Tag>
@@ -68,7 +68,7 @@
                         </x:Array>
                     </ToggleButton.Tag>
                 </ToggleButton>
-                <ToggleButton x:Uid="5B"
+                <ToggleButton x:Uid="5B" IsChecked="{Binding preset.Setting[5B].IsChecked}"
                               Grid.Row="1" Grid.Column="2"
                               Style="{StaticResource ButtonTunesButton}">
                     <ToggleButton.Tag>
@@ -78,7 +78,7 @@
                         </x:Array>
                     </ToggleButton.Tag>
                 </ToggleButton>
-                <ToggleButton x:Uid="6B"
+                <ToggleButton x:Uid="6B" IsChecked="{Binding preset.Setting[6B].IsChecked}"
                               Grid.Row="1" Grid.Column="3"
                               Style="{StaticResource ButtonTunesButton}">
                     <ToggleButton.Tag>
@@ -88,7 +88,7 @@
                         </x:Array>
                     </ToggleButton.Tag>
                 </ToggleButton>
-                <ToggleButton x:Uid="8B"
+                <ToggleButton x:Uid="8B" IsChecked="{Binding preset.Setting[8B].IsChecked}"
                               Grid.Row="1" Grid.Column="4"
                               Style="{StaticResource ButtonTunesButton}">
                     <ToggleButton.Tag>
@@ -124,7 +124,7 @@
                            Grid.ColumnSpan="4"
                            Margin="0,0,0,10"/>
                 <ToggleButton Content="NORMAL"
-                              x:Uid="NM"
+                              x:Uid="NM" IsChecked="{Binding preset.Setting[NM].IsChecked}"
                               Grid.Row="1" Grid.Column="1"
                               Margin="0,0,9,0"
                               Style="{StaticResource DifficultyButton}">
@@ -133,7 +133,7 @@
                     </ToggleButton.Resources>
                 </ToggleButton>
                 <ToggleButton Content="HARD"
-                              x:Uid="HD"
+                              x:Uid="HD" IsChecked="{Binding preset.Setting[HD].IsChecked}"
                               Grid.Row="1" Grid.Column="2"
                               Margin="3,0,6,0"
                               Style="{StaticResource DifficultyButton}">
@@ -142,7 +142,7 @@
                     </ToggleButton.Resources>
                 </ToggleButton>
                 <ToggleButton Content="MAXIMUM"
-                              x:Uid="MX"
+                              x:Uid="MX" IsChecked="{Binding preset.Setting[MX].IsChecked}"
                               Grid.Row="1" Grid.Column="3"
                               Margin="6,0,3,0"
                               Style="{StaticResource DifficultyButton}">
@@ -151,7 +151,7 @@
                     </ToggleButton.Resources>
                 </ToggleButton>
                 <ToggleButton Content="SC"
-                              x:Uid="SC"
+                              x:Uid="SC" IsChecked="{Binding preset.Setting[SC].IsChecked}"
                               Grid.Row="1" Grid.Column="4"
                               Margin="9,0,0,0"
                               Style="{StaticResource DifficultyButton}">
@@ -298,7 +298,7 @@
                 <UniformGrid Grid.Row="1" Grid.Column="1"
                              Columns="5">
                     <ToggleButton Content="RESPECT"
-                                  x:Uid="RP"
+                                  x:Uid="RP" IsChecked="{Binding preset.Setting[RP].IsChecked}"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -309,7 +309,7 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="PORTABLE 1"
-                                  x:Uid="P1"
+                                  x:Uid="P1" IsChecked="{Binding preset.Setting[P1].IsChecked}"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -320,7 +320,7 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="PORTABLE 2"
-                                  x:Uid="P2"
+                                  x:Uid="P2" IsChecked="{Binding preset.Setting[P2].IsChecked}"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -331,7 +331,7 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="PORTABLE 3"
-                                  x:Uid="P3"
+                                  x:Uid="P3" IsChecked="{Binding preset.Setting[P3].IsChecked}"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -347,7 +347,7 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="TRILOGY"
-                                  x:Uid="TR"
+                                  x:Uid="TR" IsChecked="{Binding preset.Setting[TR].IsChecked}"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -358,7 +358,7 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="CLAZZIQUAI"
-                                  x:Uid="CE"
+                                  x:Uid="CE" IsChecked="{Binding preset.Setting[CE].IsChecked}"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -376,7 +376,7 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="BLACK SQUARE"
-                                  x:Uid="BS"
+                                  x:Uid="BS" IsChecked="{Binding preset.Setting[BS].IsChecked}"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -387,7 +387,7 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="V EXTENSION"
-                                  x:Uid="VE"
+                                  x:Uid="VE" IsChecked="{Binding preset.Setting[VE].IsChecked}"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -399,7 +399,7 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="V EXTENSION 2"
-                                  x:Uid="VE2"
+                                  x:Uid="VE2" IsChecked="{Binding preset.Setting[VE2].IsChecked}"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -437,7 +437,7 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="EMOTIONAL S."
-                                  x:Uid="ES"
+                                  x:Uid="ES" IsChecked="{Binding preset.Setting[ES].IsChecked}"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -449,7 +449,7 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="TECHNIKA 1"
-                                  x:Uid="T1"
+                                  x:Uid="T1" IsChecked="{Binding preset.Setting[T1].IsChecked}"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -460,7 +460,7 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="TECHNIKA 2"
-                                  x:Uid="T2"
+                                  x:Uid="T2" IsChecked="{Binding preset.Setting[T2].IsChecked}"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -479,7 +479,7 @@
                         </ToggleButton.Resources>
                     </ToggleButton>
                     <ToggleButton Content="TECHNIKA 3"
-                                  x:Uid="T3"
+                                  x:Uid="T3" IsChecked="{Binding preset.Setting[T3].IsChecked}"
                                   Style="{StaticResource CategoryButton}">
                         <ToggleButton.Resources>
                             <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
@@ -512,56 +512,56 @@
                     <UniformGrid Columns="4"
                                  Grid.Column="1" Grid.ColumnSpan="4">
                         <ToggleButton Content="GUILTY GEAR"
-                                      x:Uid="GG"
+                                      x:Uid="GG" IsChecked="{Binding preset.Setting[GG].IsChecked}"
                                       Style="{StaticResource CollaborationButton}">
                             <ToggleButton.Resources>
                                 <SolidColorBrush x:Key="Color" Color="#E0480A"/>
                             </ToggleButton.Resources>
                         </ToggleButton>
                         <ToggleButton Content="CHUNITHM"
-                                      x:Uid="CHU"
+                                      x:Uid="CHU" IsChecked="{Binding preset.Setting[CHU].IsChecked}"
                                       Style="{StaticResource CollaborationButton}">
                             <ToggleButton.Resources>
                                 <SolidColorBrush x:Key="Color" Color="#FFD704"/>
                             </ToggleButton.Resources>
                         </ToggleButton>
                         <ToggleButton Content="CYTUS"
-                                      x:Uid="CY"
+                                      x:Uid="CY" IsChecked="{Binding preset.Setting[CY].IsChecked}"
                                       Style="{StaticResource CollaborationButton}">
                             <ToggleButton.Resources>
                                 <SolidColorBrush x:Key="Color" Color="#EF1434"/>
                             </ToggleButton.Resources>
                         </ToggleButton>
                         <ToggleButton Content="DEEMO"
-                                      x:Uid="DM"
+                                      x:Uid="DM" IsChecked="{Binding preset.Setting[DM].IsChecked}"
                                       Style="{StaticResource CollaborationButton}">
                             <ToggleButton.Resources>
                                 <SolidColorBrush x:Key="Color" Color="#9FF0E0"/>
                             </ToggleButton.Resources>
                         </ToggleButton>
                         <ToggleButton Content="ESTIMATE"
-                                      x:Uid="ESTI"
+                                      x:Uid="ESTI" IsChecked="{Binding preset.Setting[ESTI].IsChecked}"
                                       Style="{StaticResource CollaborationButton}">
                             <ToggleButton.Resources>
                                 <SolidColorBrush x:Key="Color" Color="#E9D19B"/>
                             </ToggleButton.Resources>
                         </ToggleButton>
                         <ToggleButton Content="GROOVE COASTER"
-                                      x:Uid="GC"
+                                      x:Uid="GC" IsChecked="{Binding preset.Setting[GC].IsChecked}"
                                       Style="{StaticResource CollaborationButton}">
                             <ToggleButton.Resources>
                                 <SolidColorBrush x:Key="Color" Color="#55EFFF"/>
                             </ToggleButton.Resources>
                         </ToggleButton>
                         <ToggleButton Content="GIRLS' FRONTLINE"
-                                      x:Uid="GF"
+                                      x:Uid="GF" IsChecked="{Binding preset.Setting[GF].IsChecked}"
                                       Style="{StaticResource CollaborationButton}">
                             <ToggleButton.Resources>
                                 <SolidColorBrush x:Key="Color" Color="#DF9300"/>
                             </ToggleButton.Resources>
                         </ToggleButton>
                         <ToggleButton Content="NEXON"
-                                      x:Uid="NEXON"
+                                      x:Uid="NXN" IsChecked="{Binding preset.Setting[NXN].IsChecked}"
                                       Style="{StaticResource CollaborationButton}">
                             <ToggleButton.Resources>
                                 <LinearGradientBrush x:Key="Color" StartPoint="0,0.5" EndPoint="1,0.5">

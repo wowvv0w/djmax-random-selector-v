@@ -24,6 +24,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             Manager.ReadAllTrackList();
             Manager.UpdateTrackList();
         }
+        
+        public Preset preset { get; set; } = new Preset();
         public int LevelMin
         {
             get { return Filter.Levels[0]; }
@@ -138,8 +140,5 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         public List<LevelIndicator> LevelIndicators { get; set; }
             = new List<LevelIndicator>();
-
-
-
     }
 }

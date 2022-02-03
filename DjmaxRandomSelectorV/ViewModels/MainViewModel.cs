@@ -18,8 +18,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             HistoryViewModel = new HistoryViewModel();
         }
 
-
-
         // Window Bar
         public void MoveWindow(object view)
         {
