@@ -67,14 +67,15 @@ namespace DjmaxRandomSelectorV.Models
             }  
         }
 
-        public static void LoadPreset(string path = @"C:\Projects\DjmaxRandomSelectorV\DjmaxRandomSelectorV\DataFiles\default.json")
+        public static Preset LoadPreset(Preset preset, string path = @"C:\Projects\DjmaxRandomSelectorV\DjmaxRandomSelectorV\DataFiles\default.json")
         {
             using (var reader = new StreamReader(path))
             {
-                Preset preset = new Preset();
                 string json = reader.ReadToEnd();
                 preset = JsonSerializer.Deserialize<Preset>(json);
             }
+
+            return preset;
         }
 
         public static void SavePreset(Preset preset, string path = @"C:\Projects\DjmaxRandomSelectorV\DjmaxRandomSelectorV\DataFiles\default.json")

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using DjmaxRandomSelectorV.Models;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -16,6 +17,12 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             FilterViewModel = new FilterViewModel();
             HistoryViewModel = new HistoryViewModel();
+            FilterViewModel.preset = Manager.LoadPreset(FilterViewModel.preset);
+        }
+
+        public void CloseEvent()
+        {
+            Manager.SavePreset(FilterViewModel.preset);
         }
 
         // Window Bar

@@ -47,33 +47,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
-        public void UpdateFilter(string methodName, object button)
-        {
-            var type = GetType();
-            var method = type.GetMethod(methodName);
-
-            var uIElement = button as UIElement;
-            var value = uIElement.Uid;
-
-            var parameter = new object[1] { value };
-            method.Invoke(this, parameter);
-            FilterChanged();
-        }
-
-        // Set IsFilterChanged true
-        public void FilterChanged() => Selector.IsFilterChanged = true;
-
-        // Update Filter.ButtonTunes
-        public void AddButtonTune(string value) => Filter.ButtonTunes.Add(value);
-        public void RemoveButtonTune(string value) => Filter.ButtonTunes.Remove(value);
-
-        // Update Filter.Difficulties
-        public void AddDifficulty(string value) => Filter.Difficulties.Add(value);
-        public void RemoveDifficulty(string value) => Filter.Difficulties.Remove(value);
-
-        // Update Filter.Categories
-        public void AddCategory(string value) => Filter.Categories.Add(value);
-        public void RemoveCategory(string value) => Filter.Categories.Remove(value);
 
         // Update Filter.Level
         public void IncreaseLevelMin()

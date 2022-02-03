@@ -8,7 +8,8 @@
         mc:Ignorable="d"
         Title="DJMAX Random Selector V" Width="740" Height="490"
         WindowStyle="None" FontFamily="{StaticResource Black}"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        cal:Message.Attach="[Event Closing] = [Action CloseEvent]">
     <Window.Background>
         <LinearGradientBrush StartPoint="0.987,0.5" EndPoint="1,0.5" SpreadMethod="Repeat">
             <LinearGradientBrush.RelativeTransform>

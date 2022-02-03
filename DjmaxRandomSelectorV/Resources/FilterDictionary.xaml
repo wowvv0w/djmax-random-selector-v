@@ -5,12 +5,6 @@
     
     <!-- ButtonTunesButton -->
     <Style x:Key="ButtonTunesButton" TargetType="ToggleButton">
-        <Setter Property="cal:Message.Attach">
-            <Setter.Value>
-                [Event Checked] = [Action UpdateFilter('AddButtonTune', $source)];
-                [Event Unchecked] = [Action UpdateFilter('RemoveButtonTune', $source)]
-            </Setter.Value>
-        </Setter>
         <Setter Property="Width" Value="60"/>
         <Setter Property="Height" Value="60"/>
         <Setter Property="Template">
@@ -48,12 +42,6 @@
     <!-- DifficultyButton : BorderedButton -->
     <Style x:Key="DifficultyButton" TargetType="ToggleButton"
            BasedOn="{StaticResource BorderedButton}">
-        <Setter Property="cal:Message.Attach">
-            <Setter.Value>
-                [Event Checked] = [Action UpdateFilter('AddDifficulty', $source)];
-                [Event Unchecked] = [Action UpdateFilter('RemoveDifficulty', $source)]
-            </Setter.Value>
-        </Setter>
         <Setter Property="Height" Value="25"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -79,12 +67,6 @@
     <!-- CollaborationButton : BorderedButton -->
     <Style x:Key="CollaborationButton" TargetType="ToggleButton"
            BasedOn="{StaticResource BorderedButton}">
-        <Setter Property="cal:Message.Attach">
-            <Setter.Value>
-                [Event Checked] = [Action UpdateFilter('AddCategory', $source)];
-                [Event Unchecked] = [Action UpdateFilter('RemoveCategory', $source)]
-            </Setter.Value>
-        </Setter>
         <Setter Property="Height" Value="20"/>
         <Setter Property="Margin" Value="8,0"/>
         <Setter Property="FontSize" Value="11"/>
@@ -119,12 +101,6 @@
             <LinearGradientBrush x:Key="Background"/>
             <SolidColorBrush x:Key="Foreground"/>
         </Style.Resources>
-        <Setter Property="cal:Message.Attach">
-            <Setter.Value>
-                [Event Checked] = [Action UpdateFilter('AddCategory', $source)];
-                [Event Unchecked] = [Action UpdateFilter('RemoveCategory', $source)]
-            </Setter.Value>
-        </Setter>
         <Setter Property="Background" Value="{DynamicResource Background}"/>
         <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
         <Setter Property="Height" Value="30"/>

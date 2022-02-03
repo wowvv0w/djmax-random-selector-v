@@ -1,119 +1,119 @@
 {
   "Setting": {
     "4B": {
-      "IsChecked": false,
+      "Value": true,
       "IsNotifying": true
     },
     "5B": {
-      "IsChecked": false,
+      "Value": true,
       "IsNotifying": true
     },
     "6B": {
-      "IsChecked": false,
+      "Value": true,
       "IsNotifying": true
     },
     "8B": {
-      "IsChecked": false,
+      "Value": true,
       "IsNotifying": true
     },
     "NM": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "HD": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "MX": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "SC": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "RP": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "P1": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "P2": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "P3": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "TR": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "CE": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "BS": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "VE": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "VE2": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "ES": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "T1": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "T2": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "T3": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "GG": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "CHU": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "CY": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "DM": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "ESTI": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "GC": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "GF": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     },
     "NXN": {
-      "IsChecked": false,
+      "Value": false,
       "IsNotifying": true
     }
   }
