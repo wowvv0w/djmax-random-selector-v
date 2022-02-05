@@ -14,6 +14,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class FilterViewModel : Screen
     {
+        public static Filter Filter { get; set; }
         public FilterViewModel()
         {
             for(int i = 0; i < 16; i++)
@@ -23,6 +24,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             Manager.ReadAllTrackList();
             Manager.UpdateTrackList();
+            UpdateLevelIndicators();
         }
 
         private const string _4B = "4B";

@@ -9,22 +9,24 @@ using System.Windows.Input;
 using System.Windows.Forms;
 using System.Threading;
 using System.Runtime.InteropServices;
+using DjmaxRandomSelectorV.Properties;
 
 namespace DjmaxRandomSelectorV.Models
 {
     public class Selector
     {
-        public static bool IsFilterChanged { get; set; }
+        public static bool IsFilterChanged { get; set; } = true;
         public static List<Track> AllTrackList { get; set; }
         public static List<Track> TrackList { get; set; }
         private static List<Music> MusicList { get; set; }
-
+        public static Filter Filter { get; set; }
         public static bool CanStart { get; set; } = true;
-        public static void Start()
+        public static void Start(Filter filter)
         {
             CanStart = false;
             if (IsFilterChanged)
             {
+                Filter = filter;
                 SiftOut();
                 IsFilterChanged = false;
             }
@@ -130,6 +132,7 @@ namespace DjmaxRandomSelectorV.Models
             List<string> difficulties = new List<string> { "NM", "HD", "MX", "SC" };
             int a = difficulties.FindIndex(x => x == selectedMusic.Style.Substring(2, 2));
             List<string> styles = new List<string>();
+
             for(int i = 0; i <= a; i++)
             {
                 styles.Add($"{selectedButton}{difficulties[i]}");
@@ -154,13 +157,13 @@ namespace DjmaxRandomSelectorV.Models
 
         private static void Select(ArrayList inputList)
         {
-            char button = (char)inputList[0];
-            char initial = (char)inputList[1];
+            byte button = (byte)inputList[0];
+            byte initial = (byte)inputList[1];
             int vertical = (int)inputList[2];
             int right = (int)inputList[3];
             bool alphabet = (bool)inputList[4];
             bool forward = (bool)inputList[5];
-            var delay = Filter.InputDelay;
+            int delay = Settings.Default.inputDelay;
             byte direction;
 
 
@@ -179,8 +182,8 @@ namespace DjmaxRandomSelectorV.Models
                 direction = 38; // UP
             }
 
-            Input((byte)button);
-            Input((byte)initial);
+            Input(button);
+            Input(initial);
             if (alphabet == false && forward)
             {
                 Input(33); // PAGE UP

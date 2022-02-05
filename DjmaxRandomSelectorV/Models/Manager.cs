@@ -66,27 +66,35 @@ namespace DjmaxRandomSelectorV.Models
                 return list;
             }  
         }
-        /*
-        public static Preset LoadPreset(Preset preset, string path = @"C:\Projects\DjmaxRandomSelectorV\DjmaxRandomSelectorV\DataFiles\default.json")
+        public static Filter LoadPreset(string path = @"C:\Projects\DjmaxRandomSelectorV\DjmaxRandomSelectorV\DataFiles\default.json")
         {
-            using (var reader = new StreamReader(path))
+            Filter filter;
+
+            try
             {
-                string json = reader.ReadToEnd();
-                preset = JsonSerializer.Deserialize<Preset>(json);
+                using (var reader = new StreamReader(path))
+                {
+                    string json = reader.ReadToEnd();
+                    filter = JsonSerializer.Deserialize<Filter>(json);
+                }
+            }
+            catch
+            {
+                filter = new Filter();
             }
 
-            return preset;
+            return filter;
         }
 
-        public static void SavePreset(Preset preset, string path = @"C:\Projects\DjmaxRandomSelectorV\DjmaxRandomSelectorV\DataFiles\default.json")
+        public static void SavePreset(Filter filter, string path = @"C:\Projects\DjmaxRandomSelectorV\DjmaxRandomSelectorV\DataFiles\default.json")
         {
             var options = new JsonSerializerOptions() { WriteIndented = true, IgnoreReadOnlyProperties = false };
-            string jsonString = JsonSerializer.Serialize(preset, options);
+            string jsonString = JsonSerializer.Serialize(filter, options);
 
             using (var writer = new StreamWriter(path))
             {
                 writer.Write(jsonString);
             }
-        }*/
+        }
     }
 }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using DjmaxRandomSelectorV.Models;
+using System.Threading;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -15,14 +16,29 @@ namespace DjmaxRandomSelectorV.ViewModels
         public HistoryViewModel HistoryViewModel { get; set; }
         public MainViewModel()
         {
+            FilterViewModel.Filter = Manager.LoadPreset();
+
             FilterViewModel = new FilterViewModel();
             HistoryViewModel = new HistoryViewModel();
-            //FilterViewModel.Preset = Manager.LoadPreset(FilterViewModel.Preset);
+        }
+
+        public static void Start()
+        {
+            if (Selector.CanStart)
+            {
+                Thread thread = new Thread(new ThreadStart(() => Selector.Start(FilterViewModel.Filter)));
+                Console.WriteLine("Start");
+                thread.Start();
+            }
+            else
+            {
+                Console.WriteLine("Nope");
+            }
         }
 
         public void CloseEvent()
         {
-            //Manager.SavePreset(FilterViewModel.Preset);
+            Manager.SavePreset(FilterViewModel.Filter);
         }
 
         // Window Bar
@@ -72,6 +88,13 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void LoadHistoryTab()
         {
             IsHistoryTabSelected = true;
+        }
+    
+        // Utility Buttons
+        IWindowManager windowManager = new WindowManager();
+        public void ShowOption()
+        {
+            windowManager.ShowDialogAsync(new OptionViewModel());
         }
     }
 }

@@ -1,165 +1,25 @@
 {
-  "ButtonTunes": {
-    "4B": {
-      "Name": "4B",
-      "Value": true,
-      "IsNotifying": true
-    },
-    "5B": {
-      "Name": "5B",
-      "Value": true,
-      "IsNotifying": true
-    },
-    "6B": {
-      "Name": "6B",
-      "Value": true,
-      "IsNotifying": true
-    },
-    "8B": {
-      "Name": "8B",
-      "Value": true,
-      "IsNotifying": true
-    }
-  },
-  "Difficulties": {
-    "NM": {
-      "Name": "NM",
-      "Value": true,
-      "IsNotifying": true
-    },
-    "HD": {
-      "Name": "HD",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "MX": {
-      "Name": "MX",
-      "Value": true,
-      "IsNotifying": true
-    },
-    "SC": {
-      "Name": "SC",
-      "Value": true,
-      "IsNotifying": true
-    }
-  },
-  "Levels": {
-    "MIN": {
-      "Value": 2,
-      "Name": "MIN",
-      "IsNotifying": true
-    },
-    "MAX": {
-      "Value": 15,
-      "Name": "MAX",
-      "IsNotifying": true
-    }
-  },
-  "Categories": {
-    "RP": {
-      "Name": "RP",
-      "Value": true,
-      "IsNotifying": true
-    },
-    "P1": {
-      "Name": "P1",
-      "Value": true,
-      "IsNotifying": true
-    },
-    "P2": {
-      "Name": "P2",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "P3": {
-      "Name": "P3",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "TR": {
-      "Name": "TR",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "CE": {
-      "Name": "CE",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "BS": {
-      "Name": "BS",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "VE": {
-      "Name": "VE",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "VE2": {
-      "Name": "VE2",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "ES": {
-      "Name": "ES",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "T1": {
-      "Name": "T1",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "T2": {
-      "Name": "T2",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "T3": {
-      "Name": "T3",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "GG": {
-      "Name": "GG",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "CHU": {
-      "Name": "CHU",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "CY": {
-      "Name": "CY",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "DM": {
-      "Name": "DM",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "ESTI": {
-      "Name": "ESTI",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "GC": {
-      "Name": "GC",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "GF": {
-      "Name": "GF",
-      "Value": false,
-      "IsNotifying": true
-    },
-    "NXN": {
-      "Name": "NXN",
-      "Value": false,
-      "IsNotifying": true
-    }
-  }
+  "ButtonTunes": [
+    "8B",
+    "4B",
+    "5B",
+    "6B"
+  ],
+  "Difficulties": [
+    "NM",
+    "HD",
+    "MX",
+    "SC"
+  ],
+  "Categories": [
+    "P1",
+    "RP",
+    "P2",
+    "GG"
+  ],
+  "Levels": [
+    3,
+    15
+  ],
+  "Mode": true
 }

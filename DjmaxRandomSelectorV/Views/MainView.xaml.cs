@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DjmaxRandomSelectorV.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -15,6 +16,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using DjmaxRandomSelectorV.Models;
 
 namespace DjmaxRandomSelectorV.Views
 {
@@ -55,17 +57,7 @@ namespace DjmaxRandomSelectorV.Views
                             int vkey = (((int)lParam >> 16) & 0xFFFF);
                             if (vkey == (uint)Keys.F7)
                             {
-                                if (Models.Selector.CanStart)
-                                {
-                                    Thread thread = new Thread(new ThreadStart(Models.Selector.Start));
-                                    Console.WriteLine("Start");
-                                    thread.Start();
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Nope");
-                                }
-                                
+                                MainViewModel.Start();
                             }
                             handled = true;
                             break;

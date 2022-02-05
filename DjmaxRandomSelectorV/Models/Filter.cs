@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace DjmaxRandomSelectorV.Models
 {
-    public static class Filter
+    public class Filter
     {
-        public static List<string> ButtonTunes { get; set; } = new List<string>();
-        public static List<string> Difficulties { get; set; } = new List<string>();
-        public static List<string> Categories { get; set; } = new List<string>();
-        public static int[] Levels { get; set; } = new int[2] { 1, 15 }; /// 1 ~ 15
-        public static bool Mode { get; set; } = true; /// FREESTYLE = true, ONLINE = false
-        public static int InputDelay { get; set; } = 50;
+        public List<string> ButtonTunes { get; set; } = new List<string>();
+        public List<string> Difficulties { get; set; } = new List<string>();
+        public List<string> Categories { get; set; } = new List<string>();
+        public int[] Levels { get; set; } = new int[2] { 1, 15 }; /// 1 ~ 15
+        public bool Mode { get; set; } = true; /// FREESTYLE = true, ONLINE = false
     }
 }
