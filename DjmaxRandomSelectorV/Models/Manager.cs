@@ -20,7 +20,7 @@ namespace DjmaxRandomSelectorV.Models
             using (var reader = new StreamReader(userData, Encoding.UTF8))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
-                csv.Context.RegisterClassMap<MusicMap>();
+                csv.Context.RegisterClassMap<TrackMap>();
                 var records = csv.GetRecords<Track>().ToList();
                 Selector.AllTrackList = records;
             }
@@ -66,7 +66,7 @@ namespace DjmaxRandomSelectorV.Models
                 return list;
             }  
         }
-
+        /*
         public static Preset LoadPreset(Preset preset, string path = @"C:\Projects\DjmaxRandomSelectorV\DjmaxRandomSelectorV\DataFiles\default.json")
         {
             using (var reader = new StreamReader(path))
@@ -87,6 +87,6 @@ namespace DjmaxRandomSelectorV.Models
             {
                 writer.Write(jsonString);
             }
-        }
+        }*/
     }
 }

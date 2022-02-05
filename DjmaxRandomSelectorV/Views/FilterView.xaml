@@ -15,7 +15,7 @@
                 <Setter Property="Foreground" Value="{StaticResource Default}"/>
             </Style>
             <Style TargetType="TextBlock">
-                <Setter Property="FontFamily" Value="{StaticResource Standard}"/>
+                <Setter Property="FontFamily" Value="{StaticResource Lato}"/>
                 <Setter Property="FontSize" Value="20"/>
             </Style>
         </Grid.Resources>
@@ -58,8 +58,9 @@
                            Grid.Column="1"
                            Grid.ColumnSpan="4"
                            Margin="0,0,0,17"/>
-                <ToggleButton x:Uid="4B" IsChecked="{Binding preset.Setting[4B].Value}"
-                              Grid.Row="1" Grid.Column="1"
+                <ToggleButton x:Name="ButtonTune4B"
+                              Grid.Row="1"
+                              Grid.Column="1"
                               Style="{StaticResource ButtonTunesButton}">
                     <ToggleButton.Tag>
                         <x:Array Type="ImageSource">
@@ -68,8 +69,9 @@
                         </x:Array>
                     </ToggleButton.Tag>
                 </ToggleButton>
-                <ToggleButton x:Uid="5B" IsChecked="{Binding preset.Setting[5B].Value}"
-                              Grid.Row="1" Grid.Column="2"
+                <ToggleButton x:Name="ButtonTune5B"
+                              Grid.Row="1"
+                              Grid.Column="2"
                               Style="{StaticResource ButtonTunesButton}">
                     <ToggleButton.Tag>
                         <x:Array Type="ImageSource">
@@ -78,8 +80,9 @@
                         </x:Array>
                     </ToggleButton.Tag>
                 </ToggleButton>
-                <ToggleButton x:Uid="6B" IsChecked="{Binding preset.Setting[6B].Value}"
-                              Grid.Row="1" Grid.Column="3"
+                <ToggleButton x:Name="ButtonTune6B"
+                              Grid.Row="1"
+                              Grid.Column="3"
                               Style="{StaticResource ButtonTunesButton}">
                     <ToggleButton.Tag>
                         <x:Array Type="ImageSource">
@@ -88,8 +91,9 @@
                         </x:Array>
                     </ToggleButton.Tag>
                 </ToggleButton>
-                <ToggleButton x:Uid="8B" IsChecked="{Binding preset.Setting[8B].Value}"
-                              Grid.Row="1" Grid.Column="4"
+                <ToggleButton x:Name="ButtonTune8B"
+                              Grid.Row="1"
+                              Grid.Column="4"
                               Style="{StaticResource ButtonTunesButton}">
                     <ToggleButton.Tag>
                         <x:Array Type="ImageSource">
@@ -97,7 +101,6 @@
                             <BitmapImage UriSource="pack://application:,,,/Images/8B_ON.png"/>
                         </x:Array>
                     </ToggleButton.Tag>
-                    
                 </ToggleButton>
             </Grid>
         </GroupBox>
@@ -123,45 +126,50 @@
                            Grid.Column="1"
                            Grid.ColumnSpan="4"
                            Margin="0,0,0,10"/>
-                <ToggleButton Content="NORMAL"
-                              x:Uid="NM" IsChecked="{Binding preset.Setting[NM].Value}"
-                              Grid.Row="1" Grid.Column="1"
+                <ToggleButton x:Name="DifficultyNM"
+                              Content="NORMAL"
+                              Grid.Row="1"
+                              Grid.Column="1"
                               Margin="0,0,9,0"
-                              Style="{StaticResource DifficultyButton}">
-                    <ToggleButton.Resources>
-                        <SolidColorBrush x:Key="Color" Color="#FFCC25"/>
-                    </ToggleButton.Resources>
+                              Style="{StaticResource DifficultyButton}"
+                              Background="{StaticResource Normal}">
                 </ToggleButton>
-                <ToggleButton Content="HARD"
-                              x:Uid="HD" IsChecked="{Binding preset.Setting[HD].Value}"
-                              Grid.Row="1" Grid.Column="2"
+                <ToggleButton x:Name="DifficultyHD"
+                              Content="HARD"
+                              Grid.Row="1"
+                              Grid.Column="2"
                               Margin="3,0,6,0"
-                              Style="{StaticResource DifficultyButton}">
+                              Style="{StaticResource DifficultyButton}"
+                              Background="{StaticResource Hard}">
                     <ToggleButton.Resources>
-                        <SolidColorBrush x:Key="Color" Color="#FE7724"/>
                     </ToggleButton.Resources>
                 </ToggleButton>
-                <ToggleButton Content="MAXIMUM"
-                              x:Uid="MX" IsChecked="{Binding preset.Setting[MX].Value}"
-                              Grid.Row="1" Grid.Column="3"
+                <ToggleButton x:Name="DifficultyMX"
+                              Content="MAXIMUM"
+                              Grid.Row="1"
+                              Grid.Column="3"
                               Margin="6,0,3,0"
-                              Style="{StaticResource DifficultyButton}">
+                              Style="{StaticResource DifficultyButton}"
+                              Background="{StaticResource Maximum}">
                     <ToggleButton.Resources>
-                        <SolidColorBrush x:Key="Color" Color="#F91C55"/>
                     </ToggleButton.Resources>
                 </ToggleButton>
-                <ToggleButton Content="SC"
-                              x:Uid="SC" IsChecked="{Binding preset.Setting[SC].Value}"
-                              Grid.Row="1" Grid.Column="4"
+                <ToggleButton x:Name="DifficultySC"
+                              Content="SC"
+                              Grid.Row="1"
+                              Grid.Column="4"
                               Margin="9,0,0,0"
-                              Style="{StaticResource DifficultyButton}">
+                              Style="{StaticResource DifficultyButton}"
+                              Background="{StaticResource SC}">
                     <ToggleButton.Resources>
-                        <SolidColorBrush x:Key="Color" Color="#FF11E6"/>
                     </ToggleButton.Resources>
                 </ToggleButton>
 
-                <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4"
-                            Orientation="Horizontal" Margin="0, 10">
+                <StackPanel Grid.Row="2"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="4"
+                            Orientation="Horizontal"
+                            Margin="0, 10">
                     <Image Style="{StaticResource LevelIndicatorYellow}"
                            IsEnabled="{Binding LevelIndicators[1].Value}"/>
                     <Image Style="{StaticResource LevelIndicatorYellow}"
@@ -193,21 +201,18 @@
                     <Image Style="{StaticResource LevelIndicatorRed}"
                            IsEnabled="{Binding LevelIndicators[15].Value}"/>
                 </StackPanel>
-                <Grid Grid.Row="3" Grid.Column="1"
+                <Grid Grid.Row="3"
+                      Grid.Column="1"
                       Grid.ColumnSpan="2"
                       Margin="0,0,4.5,0"
+                      Background="{StaticResource OptionElement}"
                       Height="20">
-                    <Grid.Background>
-                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                            <GradientStop Color="#7F584E46" Offset="0.4999"/>
-                            <GradientStop Color="#FF604E41" Offset="0.5"/>
-                        </LinearGradientBrush>
-                    </Grid.Background>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="MIN" FontSize="13"
+                    <TextBlock Text="MIN"
+                               FontSize="13"
                                Margin="10,0,0,0"
                                VerticalAlignment="Center"/>
                     <Grid Grid.Column="1">
@@ -223,9 +228,11 @@
                         </Button>
                         <TextBlock x:Name="LevelMin"
                                    Grid.Column="1"
-                                   FontFamily="{StaticResource Black}" FontSize="13"
+                                   FontFamily="{StaticResource Lato Black}"
+                                   FontSize="13"
                                    Foreground="White"
-                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
                         <Button x:Name="IncreaseLevelMin"
                                 Style="{StaticResource LevelButton}"
                                 Grid.Column="2">
@@ -234,21 +241,18 @@
                         </Button>
                     </Grid>
                 </Grid>
-                <Grid Grid.Row="3" Grid.Column="3"
+                <Grid Grid.Row="3"
+                      Grid.Column="3"
                       Grid.ColumnSpan="2"
                       Margin="4.5,0,0,0"
+                      Background="{StaticResource OptionElement}"
                       Height="20">
-                    <Grid.Background>
-                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                            <GradientStop Color="#7F584E46" Offset="0.4999"/>
-                            <GradientStop Color="#FF604E41" Offset="0.5"/>
-                        </LinearGradientBrush>
-                    </Grid.Background>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="MAX" FontSize="13"
+                    <TextBlock Text="MAX"
+                               FontSize="13"
                                Margin="10,0,0,0"
                                VerticalAlignment="Center"/>
                     <Grid Grid.Column="1">
@@ -264,9 +268,11 @@
                         </Button>
                         <TextBlock x:Name="LevelMax"
                                    Grid.Column="1"
-                                   FontFamily="{StaticResource Black}" FontSize="13"
+                                   FontFamily="{StaticResource Lato Black}"
+                                   FontSize="13"
                                    Foreground="White"
-                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
                         <Button x:Name="IncreaseLevelMax"
                                 Style="{StaticResource LevelButton}"
                                 Grid.Column="2">
@@ -279,7 +285,9 @@
         </GroupBox>
         
         <!-- CATEGORIES -->
-        <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+        <GroupBox Grid.Row="1"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
                   Margin="0,5,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -295,208 +303,91 @@
                 <TextBlock Text="CATEGORIES"
                            Grid.Column="1"
                            Margin="0,0,0,10"/>
-                <UniformGrid Grid.Row="1" Grid.Column="1"
+                <UniformGrid Grid.Row="1"
+                             Grid.Column="1"
                              Columns="5">
-                    <ToggleButton Content="RESPECT"
-                                  x:Uid="RP" IsChecked="{Binding preset.Setting[RP].Value}"
-                                  Style="{StaticResource CategoryButton}">
-                        <ToggleButton.Resources>
-                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
-                                <GradientStop Color="#F96775" Offset="0.1"/>
-                                <GradientStop Color="#F0B405" Offset="0.9"/>
-                            </LinearGradientBrush>
-                            <SolidColorBrush x:Key="Foreground" Color="#594713"/>
-                        </ToggleButton.Resources>
+                    <ToggleButton x:Name="CategoryRP"
+                                  Content="RESPECT"
+                                  Style="{StaticResource CategoryButton}"
+                                  Background="{StaticResource BgRespect}"
+                                  Foreground="{StaticResource FgRespect}">
                     </ToggleButton>
-                    <ToggleButton Content="PORTABLE 1"
-                                  x:Uid="P1" IsChecked="{Binding preset.Setting[P1].Value}"
-                                  Style="{StaticResource CategoryButton}">
-                        <ToggleButton.Resources>
-                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
-                                <GradientStop Color="#AA45F9" Offset="0"/>
-                                <GradientStop Color="#00B3D2" Offset="1"/>
-                            </LinearGradientBrush>
-                            <SolidColorBrush x:Key="Foreground" Color="#0E6677"/>
-                        </ToggleButton.Resources>
+                    <ToggleButton x:Name="CategoryP1"
+                                  Content="PORTABLE 1"
+                                  Style="{StaticResource CategoryButton}"
+                                  Background="{StaticResource BgPortable1}"
+                                  Foreground="{StaticResource FgPortable1}">
                     </ToggleButton>
-                    <ToggleButton Content="PORTABLE 2"
-                                  x:Uid="P2" IsChecked="{Binding preset.Setting[P2].Value}"
-                                  Style="{StaticResource CategoryButton}">
-                        <ToggleButton.Resources>
-                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
-                                <GradientStop Color="#FF37AF" Offset="0"/>
-                                <GradientStop Color="#FF1E46" Offset="1"/>
-                            </LinearGradientBrush>
-                            <SolidColorBrush x:Key="Foreground" Color="#761A3f"/>
-                        </ToggleButton.Resources>
+                    <ToggleButton x:Name="CategoryP2"
+                                  Content="PORTABLE 2"
+                                  Style="{StaticResource CategoryButton}"
+                                  Background="{StaticResource BgPortable2}"
+                                  Foreground="{StaticResource FgPortable2}">
                     </ToggleButton>
-                    <ToggleButton Content="PORTABLE 3"
-                                  x:Uid="P3" IsChecked="{Binding preset.Setting[P3].Value}"
-                                  Style="{StaticResource CategoryButton}">
-                        <ToggleButton.Resources>
-                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
-                                <GradientStop Color="#FCAC00" Offset="0.0625"/>
-                                <GradientStop Color="#E7931F" Offset="0.0643116"/>
-                                <GradientStop Color="#E7931F" Offset="0.14221"/>
-                                <GradientStop Color="#D1750D" Offset="0.143116"/>
-                                <GradientStop Color="#D1750D" Offset="0.480072"/>
-                                <GradientStop Color="#BA5605" Offset="0.873188"/>
-                                <GradientStop Color="#D1750D" Offset="0.874094"/>
-                            </LinearGradientBrush>
-                            <SolidColorBrush x:Key="Foreground" Color="#563914"/>
-                        </ToggleButton.Resources>
+                    <ToggleButton x:Name="CategoryP3"
+                                  Content="PORTABLE 3"
+                                  Style="{StaticResource CategoryButton}"
+                                  Background="{StaticResource BgPortable3}"
+                                  Foreground="{StaticResource FgPortable3}">
                     </ToggleButton>
-                    <ToggleButton Content="TRILOGY"
-                                  x:Uid="TR" IsChecked="{Binding preset.Setting[TR].Value}"
-                                  Style="{StaticResource CategoryButton}">
-                        <ToggleButton.Resources>
-                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
-                                <GradientStop Color="#68E1FF"/>
-                                <GradientStop Color="#4A7AFF" Offset="0.78"/>
-                            </LinearGradientBrush>
-                            <SolidColorBrush x:Key="Foreground" Color="#3A4175"/>
-                        </ToggleButton.Resources>
+                    <ToggleButton x:Name="CategoryTR"
+                                  Content="TRILOGY"
+                                  Style="{StaticResource CategoryButton}"
+                                  Background="{StaticResource BgTrilogy}"
+                                  Foreground="{StaticResource FgTrilogy}">
                     </ToggleButton>
-                    <ToggleButton Content="CLAZZIQUAI"
-                                  x:Uid="CE" IsChecked="{Binding preset.Setting[CE].Value}"
-                                  Style="{StaticResource CategoryButton}">
-                        <ToggleButton.Resources>
-                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <RotateTransform Angle="6" CenterX="0.5" CenterY="0.5"/>
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FFFFFF" Offset="0.777"/>
-                                <GradientStop Color="#F5D84F" Offset="0.783"/>
-                                <GradientStop Color="#F5D84F" Offset="0.847"/>
-                                <GradientStop Color="#A97D1F" Offset="0.853"/>
-                                <GradientStop Color="#A97D1F" Offset="0.892"/>
-                                <GradientStop Color="#CB9531" Offset="0.898"/>
-                            </LinearGradientBrush>
-                            <SolidColorBrush x:Key="Foreground" Color="#747475"/>
-                        </ToggleButton.Resources>
+                    <ToggleButton x:Name="CategoryCE"
+                                  Content="CLAZZIQUAI"
+                                  Style="{StaticResource CategoryButton}"
+                                  Background="{StaticResource BgClazziquai}"
+                                  Foreground="{StaticResource FgClazziquai}">
                     </ToggleButton>
-                    <ToggleButton Content="BLACK SQUARE"
-                                  x:Uid="BS" IsChecked="{Binding preset.Setting[BS].Value}"
-                                  Style="{StaticResource CategoryButton}">
-                        <ToggleButton.Resources>
-                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
-                                <GradientStop Color="#EC0043" Offset="0.25"/>
-                                <GradientStop Color="#7F1721" Offset="1"/>
-                            </LinearGradientBrush>
-                            <SolidColorBrush x:Key="Foreground" Color="#5B1010"/>
-                        </ToggleButton.Resources>
+                    <ToggleButton x:Name="CategoryBS"
+                                  Content="BLACK SQUARE"
+                                  Style="{StaticResource CategoryButton}"
+                                  Background="{StaticResource BgBlackSquare}"
+                                  Foreground="{StaticResource FgBlackSquare}">
                     </ToggleButton>
-                    <ToggleButton Content="V EXTENSION"
-                                  x:Uid="VE" IsChecked="{Binding preset.Setting[VE].Value}"
-                                  Style="{StaticResource CategoryButton}">
-                        <ToggleButton.Resources>
-                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
-                                <GradientStop Color="#FF6F1B" Offset="0.25"/>
-                                <GradientStop Color="#E9712C" Offset="0.5"/>
-                                <GradientStop Color="#2C8AC1" Offset="1"/>
-                            </LinearGradientBrush>
-                            <SolidColorBrush x:Key="Foreground" Color="#5E321A"/>
-                        </ToggleButton.Resources>
+                    <ToggleButton x:Name="CategoryVE"
+                                  Content="V EXTENSION"
+                                  Style="{StaticResource CategoryButton}"
+                                  Background="{StaticResource BgVExtension}"
+                                  Foreground="{StaticResource FgVExtension}">
                     </ToggleButton>
-                    <ToggleButton Content="V EXTENSION 2"
-                                  x:Uid="VE2" IsChecked="{Binding preset.Setting[VE2].Value}"
-                                  Style="{StaticResource CategoryButton}">
-                        <ToggleButton.Resources>
-                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <RotateTransform Angle="8" CenterX="0.5" CenterY="0.5"/>
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#B82B49" Offset="0.264"/>
-                                <GradientStop Color="#F35664" Offset="0.265"/>
-                                <GradientStop Color="#F35664" Offset="0.358"/>
-                                <GradientStop Color="#F29491" Offset="0.359"/>
-                                <GradientStop Color="#F29491" Offset="0.390"/>
-                                <GradientStop Color="#F35664" Offset="0.391"/>
-                                <GradientStop Color="#F35664" Offset="0.437"/>
-                                <GradientStop Color="#FDAFAB" Offset="0.438"/>
-                                <GradientStop Color="#FDAFAB" Offset="0.487"/>
-                                <GradientStop Color="#FFFFFF" Offset="0.488"/>
-                                <GradientStop Color="#FFFFFF" Offset="0.536"/>
-                                <GradientStop Color="#F8D37C" Offset="0.537"/>
-                                <GradientStop Color="#F8D37C" Offset="0.578"/>
-                                <GradientStop Color="#F6A64D" Offset="0.579"/>
-                                <GradientStop Color="#F6A64D" Offset="0.623"/>
-                                <GradientStop Color="#F8D37C" Offset="0.624"/>
-                                <GradientStop Color="#F8D37C" Offset="0.656"/>
-                                <GradientStop Color="#E17543" Offset="0.657"/>
-                                <GradientStop Color="#E17543" Offset="0.734"/>
-                                <GradientStop Color="#F6A64D" Offset="0.735"/>
-                                <GradientStop Color="#F6A64D" Offset="0.781"/>
-                                <GradientStop Color="#E17543" Offset="0.782"/>
-                            </LinearGradientBrush>
-                            <LinearGradientBrush x:Key="Foreground" StartPoint="0,0.5" EndPoint="1,0.5">
-                                <GradientStop Color="#5E222F"/>
-                                <GradientStop Color="#5E2E2C" Offset="0.5"/>
-                                <GradientStop Color="#5E3929" Offset="1"/>
-                            </LinearGradientBrush>
-                        </ToggleButton.Resources>
+                    <ToggleButton x:Name="CategoryVE2"
+                                  Content="V EXTENSION 2"
+                                  Style="{StaticResource CategoryButton}"
+                                  Background="{StaticResource BgVExtension2}"
+                                  Foreground="{StaticResource FgVExtension2}">
                     </ToggleButton>
-                    <ToggleButton Content="EMOTIONAL S."
-                                  x:Uid="ES" IsChecked="{Binding preset.Setting[ES].Value}"
-                                  Style="{StaticResource CategoryButton}">
-                        <ToggleButton.Resources>
-                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
-                                <GradientStop Color="#0C82CC"/>
-                                <GradientStop Color="#2FD43A" Offset="0.5"/>
-                                <GradientStop Color="#35DF26" Offset="1"/>
-                            </LinearGradientBrush>
-                            <SolidColorBrush x:Key="Foreground" Color="#20541D"/>
-                        </ToggleButton.Resources>
+                    <ToggleButton x:Name="CategoryES"
+                                  Content="EMOTIONAL S."
+                                  Style="{StaticResource CategoryButton}"
+                                  Background="{StaticResource BgEmotionalS}"
+                                  Foreground="{StaticResource FgEmotionalS}">
                     </ToggleButton>
-                    <ToggleButton Content="TECHNIKA 1"
-                                  x:Uid="T1" IsChecked="{Binding preset.Setting[T1].Value}"
-                                  Style="{StaticResource CategoryButton}">
-                        <ToggleButton.Resources>
-                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
-                                <GradientStop Color="#FF0095" Offset="0.1"/>
-                                <GradientStop Color="#7E63EA" Offset="0.9"/>
-                            </LinearGradientBrush>
-                            <SolidColorBrush x:Key="Foreground" Color="#5E275B"/>
-                        </ToggleButton.Resources>
+                    <ToggleButton x:Name="CategoryT1"
+                                  Content="TECHNIKA 1"
+                                  Style="{StaticResource CategoryButton}"
+                                  Background="{StaticResource BgTechnika1}"
+                                  Foreground="{StaticResource FgTechnika1}">
                     </ToggleButton>
-                    <ToggleButton Content="TECHNIKA 2"
-                                  x:Uid="T2" IsChecked="{Binding preset.Setting[T2].Value}"
-                                  Style="{StaticResource CategoryButton}">
-                        <ToggleButton.Resources>
-                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <RotateTransform Angle="1" CenterX="0.5" CenterY="0.5"/>
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#FF08D2"/>
-                                <GradientStop Color="#FF6F00" Offset="0.16485"/>
-                                <GradientStop Color="#FF8000" Offset="0.311989"/>
-                                <GradientStop Color="#FFC001" Offset="0.468665"/>
-                                <GradientStop Color="#FFC401" Offset="0.626703"/>
-                                <GradientStop Color="#62DC62" Offset="0.791962"/>
-                                <GradientStop Color="#00D0FF" Offset="0.940898"/>
-                            </LinearGradientBrush>
-                            <SolidColorBrush x:Key="Foreground" Color="#5E2B13"/>
-                        </ToggleButton.Resources>
+                    <ToggleButton x:Name="CategoryT2"
+                                  Content="TECHNIKA 2"
+                                  Style="{StaticResource CategoryButton}"
+                                  Background="{StaticResource BgTechnika2}"
+                                  Foreground="{StaticResource FgTechnika2}">
                     </ToggleButton>
-                    <ToggleButton Content="TECHNIKA 3"
-                                  x:Uid="T3" IsChecked="{Binding preset.Setting[T3].Value}"
-                                  Style="{StaticResource CategoryButton}">
-                        <ToggleButton.Resources>
-                            <LinearGradientBrush x:Key="Background" StartPoint="0,0.5" EndPoint="1,0.5">
-                                <LinearGradientBrush.RelativeTransform>
-                                    <RotateTransform Angle="4" CenterX="0.5" CenterY="0.5"/>
-                                </LinearGradientBrush.RelativeTransform>
-                                <GradientStop Color="#5131F0"/>
-                                <GradientStop Color="#6520E4" Offset="0.276827"/>
-                                <GradientStop Color="#3F42FF" Offset="0.286936"/>
-                                <GradientStop Color="#0C79FF" Offset="1"/>
-                            </LinearGradientBrush>
-                            <SolidColorBrush x:Key="Foreground" Color="#1D365E"/>
-                        </ToggleButton.Resources>
+                    <ToggleButton x:Name="CategoryT3"
+                                  Content="TECHNIKA 3"
+                                  Style="{StaticResource CategoryButton}"
+                                  Background="{StaticResource BgTechnika3}"
+                                  Foreground="{StaticResource FgTechnika3}">
                     </ToggleButton>
                 </UniformGrid>
-                <Grid Grid.Row="2" Grid.Column="1"
-                      Background="{StaticResource CategoryUnchecked}"
+                <Grid Grid.Row="2"
+                      Grid.Column="1"
+                      Background="#56000000"
                       Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -506,72 +397,53 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="COLLABORATION"
-                               FontFamily="{StaticResource Category}" FontSize="20"
-                               HorizontalAlignment="Center" Margin="0,15" RenderTransformOrigin="0.5,0.5">
+                               FontFamily="{StaticResource Bebas Neue}"
+                               FontSize="20"
+                               HorizontalAlignment="Center"
+                               Margin="0,15">
                     </TextBlock>
                     <UniformGrid Columns="4"
-                                 Grid.Column="1" Grid.ColumnSpan="4">
-                        <ToggleButton Content="GUILTY GEAR"
-                                      x:Uid="GG" IsChecked="{Binding preset.Setting[GG].Value}"
-                                      Style="{StaticResource CollaborationButton}">
-                            <ToggleButton.Resources>
-                                <SolidColorBrush x:Key="Color" Color="#E0480A"/>
-                            </ToggleButton.Resources>
+                                 Grid.Column="1"
+                                 Grid.ColumnSpan="4">
+                        <ToggleButton x:Name="CategoryGG"
+                                      Content="GUILTY GEAR"
+                                      Style="{StaticResource CollaborationButton}"
+                                      Background="{StaticResource BgGuiltyGear}">
                         </ToggleButton>
-                        <ToggleButton Content="CHUNITHM"
-                                      x:Uid="CHU" IsChecked="{Binding preset.Setting[CHU].Value}"
-                                      Style="{StaticResource CollaborationButton}">
-                            <ToggleButton.Resources>
-                                <SolidColorBrush x:Key="Color" Color="#FFD704"/>
-                            </ToggleButton.Resources>
+                        <ToggleButton x:Name="CategoryCHU"
+                                      Content="CHUNITHM"
+                                      Style="{StaticResource CollaborationButton}"
+                                      Background="{StaticResource BgChunithm}">
                         </ToggleButton>
-                        <ToggleButton Content="CYTUS"
-                                      x:Uid="CY" IsChecked="{Binding preset.Setting[CY].Value}"
-                                      Style="{StaticResource CollaborationButton}">
-                            <ToggleButton.Resources>
-                                <SolidColorBrush x:Key="Color" Color="#EF1434"/>
-                            </ToggleButton.Resources>
+                        <ToggleButton x:Name="CategoryCY"
+                                      Content="CYTUS"
+                                      Style="{StaticResource CollaborationButton}"
+                                      Background="{StaticResource BgCytus}">
                         </ToggleButton>
-                        <ToggleButton Content="DEEMO"
-                                      x:Uid="DM" IsChecked="{Binding preset.Setting[DM].Value}"
-                                      Style="{StaticResource CollaborationButton}">
-                            <ToggleButton.Resources>
-                                <SolidColorBrush x:Key="Color" Color="#9FF0E0"/>
-                            </ToggleButton.Resources>
+                        <ToggleButton x:Name="CategoryDM"
+                                      Content="DEEMO"
+                                      Style="{StaticResource CollaborationButton}"
+                                      Background="{StaticResource BgDeemo}">
                         </ToggleButton>
-                        <ToggleButton Content="ESTIMATE"
-                                      x:Uid="ESTI" IsChecked="{Binding preset.Setting[ESTI].Value}"
-                                      Style="{StaticResource CollaborationButton}">
-                            <ToggleButton.Resources>
-                                <SolidColorBrush x:Key="Color" Color="#E9D19B"/>
-                            </ToggleButton.Resources>
+                        <ToggleButton x:Name="CategoryESTI"
+                                      Content="ESTIMATE"
+                                      Style="{StaticResource CollaborationButton}"
+                                      Background="{StaticResource BgEstimate}">
                         </ToggleButton>
-                        <ToggleButton Content="GROOVE COASTER"
-                                      x:Uid="GC" IsChecked="{Binding preset.Setting[GC].Value}"
-                                      Style="{StaticResource CollaborationButton}">
-                            <ToggleButton.Resources>
-                                <SolidColorBrush x:Key="Color" Color="#55EFFF"/>
-                            </ToggleButton.Resources>
+                        <ToggleButton x:Name="CategoryGC"
+                                      Content="GROOVE COASTER"
+                                      Style="{StaticResource CollaborationButton}"
+                                      Background="{StaticResource BgGrooveCoaster}">
                         </ToggleButton>
-                        <ToggleButton Content="GIRLS' FRONTLINE"
-                                      x:Uid="GF" IsChecked="{Binding preset.Setting[GF].Value}"
-                                      Style="{StaticResource CollaborationButton}">
-                            <ToggleButton.Resources>
-                                <SolidColorBrush x:Key="Color" Color="#DF9300"/>
-                            </ToggleButton.Resources>
+                        <ToggleButton x:Name="CategoryGF"
+                                      Content="GIRLS' FRONTLINE"
+                                      Style="{StaticResource CollaborationButton}"
+                                      Background="{StaticResource BgGirlsFrontline}">
                         </ToggleButton>
-                        <ToggleButton Content="NEXON"
-                                      x:Uid="NXN" IsChecked="{Binding preset.Setting[NXN].Value}"
-                                      Style="{StaticResource CollaborationButton}">
-                            <ToggleButton.Resources>
-                                <LinearGradientBrush x:Key="Color" StartPoint="0,0.5" EndPoint="1,0.5">
-                                    <LinearGradientBrush.RelativeTransform>
-                                        <RotateTransform Angle="25" CenterX="0.5" CenterY="0.5"/>
-                                    </LinearGradientBrush.RelativeTransform>
-                                    <GradientStop Color="#00A1E1" Offset="0.5"/>
-                                    <GradientStop Color="#C3D600" Offset="0.51"/>
-                                </LinearGradientBrush>
-                            </ToggleButton.Resources>
+                        <ToggleButton x:Name="CategoryNXN"
+                                      Content="NEXON"
+                                      Style="{StaticResource CollaborationButton}"
+                                      Background="{StaticResource BgNexon}">
                         </ToggleButton>
                     </UniformGrid>
                 </Grid>

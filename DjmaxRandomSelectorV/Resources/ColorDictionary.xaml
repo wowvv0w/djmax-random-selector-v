@@ -1,0 +1,159 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Text Colors -->
+    <SolidColorBrush x:Key="Default" Color="#7F7F7F"/>
+    <SolidColorBrush x:Key="Highlight" Color="#FFBE00"/>
+
+    <!-- Panel Colors -->
+    <SolidColorBrush x:Key="Nav" Color="#9E000000"/>
+    <SolidColorBrush x:Key="Widget" Color="#33000000"/>
+
+    <!-- Difficulty Colors -->
+    <SolidColorBrush x:Key="Normal" Color="#FFCC25"/>
+    <SolidColorBrush x:Key="Hard" Color="#FE7724"/>
+    <SolidColorBrush x:Key="Maximum" Color="#F91C55"/>
+    <SolidColorBrush x:Key="SC" Color="#FF11E6"/>
+
+    <LinearGradientBrush x:Key="OptionElement" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#7F584E46" Offset="0.4999"/>
+        <GradientStop Color="#FF604E41" Offset="0.5"/>
+    </LinearGradientBrush>
+    
+    <!-- Category Colors -->
+    <LinearGradientBrush x:Key="BgRespect" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#F96775" Offset="0.1"/>
+        <GradientStop Color="#F0B405" Offset="0.9"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgPortable1" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#AA45F9" Offset="0"/>
+        <GradientStop Color="#00B3D2" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgPortable2" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#FF37AF" Offset="0"/>
+        <GradientStop Color="#FF1E46" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgPortable3" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#FCAC00" Offset="0.0625"/>
+        <GradientStop Color="#E7931F" Offset="0.0643116"/>
+        <GradientStop Color="#E7931F" Offset="0.14221"/>
+        <GradientStop Color="#D1750D" Offset="0.143116"/>
+        <GradientStop Color="#D1750D" Offset="0.480072"/>
+        <GradientStop Color="#BA5605" Offset="0.873188"/>
+        <GradientStop Color="#D1750D" Offset="0.874094"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgTrilogy" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#68E1FF"/>
+        <GradientStop Color="#4A7AFF" Offset="0.78"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgClazziquai" StartPoint="0,0.5" EndPoint="1,0.5">
+        <LinearGradientBrush.RelativeTransform>
+            <RotateTransform Angle="6" CenterX="0.5" CenterY="0.5"/>
+        </LinearGradientBrush.RelativeTransform>
+        <GradientStop Color="#FFFFFF" Offset="0.777"/>
+        <GradientStop Color="#F5D84F" Offset="0.783"/>
+        <GradientStop Color="#F5D84F" Offset="0.847"/>
+        <GradientStop Color="#A97D1F" Offset="0.853"/>
+        <GradientStop Color="#A97D1F" Offset="0.892"/>
+        <GradientStop Color="#CB9531" Offset="0.898"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgBlackSquare" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#EC0043" Offset="0.25"/>
+        <GradientStop Color="#7F1721" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgVExtension" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#FF6F1B" Offset="0.25"/>
+        <GradientStop Color="#E9712C" Offset="0.5"/>
+        <GradientStop Color="#2C8AC1" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgVExtension2" StartPoint="0,0.5" EndPoint="1,0.5">
+        <LinearGradientBrush.RelativeTransform>
+            <RotateTransform Angle="8" CenterX="0.5" CenterY="0.5"/>
+        </LinearGradientBrush.RelativeTransform>
+        <GradientStop Color="#B82B49" Offset="0.264"/>
+        <GradientStop Color="#F35664" Offset="0.265"/>
+        <GradientStop Color="#F35664" Offset="0.358"/>
+        <GradientStop Color="#F29491" Offset="0.359"/>
+        <GradientStop Color="#F29491" Offset="0.390"/>
+        <GradientStop Color="#F35664" Offset="0.391"/>
+        <GradientStop Color="#F35664" Offset="0.437"/>
+        <GradientStop Color="#FDAFAB" Offset="0.438"/>
+        <GradientStop Color="#FDAFAB" Offset="0.487"/>
+        <GradientStop Color="#FFFFFF" Offset="0.488"/>
+        <GradientStop Color="#FFFFFF" Offset="0.536"/>
+        <GradientStop Color="#F8D37C" Offset="0.537"/>
+        <GradientStop Color="#F8D37C" Offset="0.578"/>
+        <GradientStop Color="#F6A64D" Offset="0.579"/>
+        <GradientStop Color="#F6A64D" Offset="0.623"/>
+        <GradientStop Color="#F8D37C" Offset="0.624"/>
+        <GradientStop Color="#F8D37C" Offset="0.656"/>
+        <GradientStop Color="#E17543" Offset="0.657"/>
+        <GradientStop Color="#E17543" Offset="0.734"/>
+        <GradientStop Color="#F6A64D" Offset="0.735"/>
+        <GradientStop Color="#F6A64D" Offset="0.781"/>
+        <GradientStop Color="#E17543" Offset="0.782"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgEmotionalS" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#0C82CC"/>
+        <GradientStop Color="#2FD43A" Offset="0.5"/>
+        <GradientStop Color="#35DF26" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgTechnika1" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#FF0095" Offset="0.1"/>
+        <GradientStop Color="#7E63EA" Offset="0.9"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgTechnika2" StartPoint="0,0.5" EndPoint="1,0.5">
+        <LinearGradientBrush.RelativeTransform>
+            <RotateTransform Angle="1" CenterX="0.5" CenterY="0.5"/>
+        </LinearGradientBrush.RelativeTransform>
+        <GradientStop Color="#FF08D2"/>
+        <GradientStop Color="#FF6F00" Offset="0.16485"/>
+        <GradientStop Color="#FF8000" Offset="0.311989"/>
+        <GradientStop Color="#FFC001" Offset="0.468665"/>
+        <GradientStop Color="#FFC401" Offset="0.626703"/>
+        <GradientStop Color="#62DC62" Offset="0.791962"/>
+        <GradientStop Color="#00D0FF" Offset="0.940898"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgTechnika3" StartPoint="0,0.5" EndPoint="1,0.5">
+        <LinearGradientBrush.RelativeTransform>
+            <RotateTransform Angle="4" CenterX="0.5" CenterY="0.5"/>
+        </LinearGradientBrush.RelativeTransform>
+        <GradientStop Color="#5131F0"/>
+        <GradientStop Color="#6520E4" Offset="0.276827"/>
+        <GradientStop Color="#3F42FF" Offset="0.286936"/>
+        <GradientStop Color="#0C79FF" Offset="1"/>
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="FgRespect" Color="#594713"/>
+    <SolidColorBrush x:Key="FgPortable1" Color="#0E6677"/>
+    <SolidColorBrush x:Key="FgPortable2" Color="#761A3f"/>
+    <SolidColorBrush x:Key="FgPortable3" Color="#563914"/>
+    <SolidColorBrush x:Key="FgTrilogy" Color="#3A4175"/>
+    <SolidColorBrush x:Key="FgClazziquai" Color="#747475"/>
+    <SolidColorBrush x:Key="FgBlackSquare" Color="#5B1010"/>
+    <SolidColorBrush x:Key="FgVExtension" Color="#5E321A"/>
+    <LinearGradientBrush x:Key="FgVExtension2" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#5E222F"/>
+        <GradientStop Color="#5E2E2C" Offset="0.5"/>
+        <GradientStop Color="#5E3929" Offset="1"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="FgEmotionalS" Color="#20541D"/>
+    <SolidColorBrush x:Key="FgTechnika1" Color="#5E275B"/>
+    <SolidColorBrush x:Key="FgTechnika2" Color="#5E2B13"/>
+    <SolidColorBrush x:Key="FgTechnika3" Color="#1D365E"/>
+
+    <SolidColorBrush x:Key="BgGuiltyGear" Color="#E0480A"/>
+    <SolidColorBrush x:Key="BgChunithm" Color="#FFD704"/>
+    <SolidColorBrush x:Key="BgCytus" Color="#EF1434"/>
+    <SolidColorBrush x:Key="BgDeemo" Color="#9FF0E0"/>
+    <SolidColorBrush x:Key="BgEstimate" Color="#E9D19B"/>
+    <SolidColorBrush x:Key="BgGrooveCoaster" Color="#55EFFF"/>
+    <SolidColorBrush x:Key="BgGirlsFrontline" Color="#DF9300"/>
+    <LinearGradientBrush x:Key="BgNexon" StartPoint="0,0.5" EndPoint="1,0.5">
+        <LinearGradientBrush.RelativeTransform>
+            <RotateTransform Angle="25" CenterX="0.5" CenterY="0.5"/>
+        </LinearGradientBrush.RelativeTransform>
+        <GradientStop Color="#00A1E1" Offset="0.5"/>
+        <GradientStop Color="#C3D600" Offset="0.51"/>
+    </LinearGradientBrush>
+</ResourceDictionary>

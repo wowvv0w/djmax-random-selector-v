@@ -114,12 +114,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Preset.cs" />
     <Compile Include="Models\Filter.cs" />
     <Compile Include="Models\Manager.cs" />
     <Compile Include="Models\Music.cs" />
     <Compile Include="Models\Selector.cs" />
     <Compile Include="Models\Track.cs" />
+    <Compile Include="Models\TrackMap.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -175,7 +175,15 @@
     <Resource Include="Images\setting.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Resources\ColorDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\FilterDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\FontDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

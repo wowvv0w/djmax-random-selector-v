@@ -7,7 +7,7 @@
         xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d"
         Title="DJMAX Random Selector V" Width="740" Height="490"
-        WindowStyle="None" FontFamily="{StaticResource Black}"
+        WindowStyle="None" FontFamily="{StaticResource Lato Black}"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
         cal:Message.Attach="[Event Closing] = [Action CloseEvent]">
     <Window.Background>
@@ -58,7 +58,7 @@
                 <ColumnDefinition Width="30"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="FILTER" Foreground="{StaticResource Highlight}"
-                       FontFamily="{StaticResource Light}" FontSize="23"
+                       FontFamily="{StaticResource Lato Light}" FontSize="23"
                        Grid.Column="1" VerticalAlignment="Center"/>
             <RadioButton cal:Message.Attach="[Event Checked] = [Action LoadFilterTab]"
                           Grid.Column="3" Style="{StaticResource TabButton}"

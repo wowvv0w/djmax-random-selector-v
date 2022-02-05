@@ -1,118 +1,163 @@
 {
-  "Setting": {
+  "ButtonTunes": {
     "4B": {
+      "Name": "4B",
       "Value": true,
       "IsNotifying": true
     },
     "5B": {
+      "Name": "5B",
       "Value": true,
       "IsNotifying": true
     },
     "6B": {
+      "Name": "6B",
       "Value": true,
       "IsNotifying": true
     },
     "8B": {
+      "Name": "8B",
+      "Value": true,
+      "IsNotifying": true
+    }
+  },
+  "Difficulties": {
+    "NM": {
+      "Name": "NM",
       "Value": true,
       "IsNotifying": true
     },
-    "NM": {
-      "Value": false,
-      "IsNotifying": true
-    },
     "HD": {
+      "Name": "HD",
       "Value": false,
       "IsNotifying": true
     },
     "MX": {
-      "Value": false,
+      "Name": "MX",
+      "Value": true,
       "IsNotifying": true
     },
     "SC": {
-      "Value": false,
+      "Name": "SC",
+      "Value": true,
+      "IsNotifying": true
+    }
+  },
+  "Levels": {
+    "MIN": {
+      "Value": 2,
+      "Name": "MIN",
       "IsNotifying": true
     },
+    "MAX": {
+      "Value": 15,
+      "Name": "MAX",
+      "IsNotifying": true
+    }
+  },
+  "Categories": {
     "RP": {
-      "Value": false,
+      "Name": "RP",
+      "Value": true,
       "IsNotifying": true
     },
     "P1": {
-      "Value": false,
+      "Name": "P1",
+      "Value": true,
       "IsNotifying": true
     },
     "P2": {
+      "Name": "P2",
       "Value": false,
       "IsNotifying": true
     },
     "P3": {
+      "Name": "P3",
       "Value": false,
       "IsNotifying": true
     },
     "TR": {
+      "Name": "TR",
       "Value": false,
       "IsNotifying": true
     },
     "CE": {
+      "Name": "CE",
       "Value": false,
       "IsNotifying": true
     },
     "BS": {
+      "Name": "BS",
       "Value": false,
       "IsNotifying": true
     },
     "VE": {
+      "Name": "VE",
       "Value": false,
       "IsNotifying": true
     },
     "VE2": {
+      "Name": "VE2",
       "Value": false,
       "IsNotifying": true
     },
     "ES": {
+      "Name": "ES",
       "Value": false,
       "IsNotifying": true
     },
     "T1": {
+      "Name": "T1",
       "Value": false,
       "IsNotifying": true
     },
     "T2": {
+      "Name": "T2",
       "Value": false,
       "IsNotifying": true
     },
     "T3": {
+      "Name": "T3",
       "Value": false,
       "IsNotifying": true
     },
     "GG": {
+      "Name": "GG",
       "Value": false,
       "IsNotifying": true
     },
     "CHU": {
+      "Name": "CHU",
       "Value": false,
       "IsNotifying": true
     },
     "CY": {
+      "Name": "CY",
       "Value": false,
       "IsNotifying": true
     },
     "DM": {
+      "Name": "DM",
       "Value": false,
       "IsNotifying": true
     },
     "ESTI": {
+      "Name": "ESTI",
       "Value": false,
       "IsNotifying": true
     },
     "GC": {
+      "Name": "GC",
       "Value": false,
       "IsNotifying": true
     },
     "GF": {
+      "Name": "GF",
       "Value": false,
       "IsNotifying": true
     },
     "NXN": {
+      "Name": "NXN",
       "Value": false,
       "IsNotifying": true
     }

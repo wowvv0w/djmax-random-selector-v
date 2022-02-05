@@ -1,23 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <!--Fonts-->
-    <FontFamily x:Key="Light">pack://application:,,,/Fonts/#Lato Light</FontFamily>
-    <FontFamily x:Key="Standard">pack://application:,,,/Fonts/#Lato</FontFamily>
-    <FontFamily x:Key="Black">pack://application:,,,/Fonts/#Lato Black</FontFamily>
-    <FontFamily x:Key="Category">pack://application:,,,/Fonts/#Bebas Neue</FontFamily>
 
-    <!--Text Colors-->
-    <SolidColorBrush x:Key="Default" Color="#7F7F7F"/>
-    <SolidColorBrush x:Key="Highlight" Color="#FFBE00"/>
-
-    <!--Panel Colors-->
-    <SolidColorBrush x:Key="Nav" Color="#9E000000"/>
-    <SolidColorBrush x:Key="Widget" Color="#33000000"/>
-
-    <!--Button Colors-->
-    <SolidColorBrush x:Key="Unchecked" Color="#5E5E5E"/>
-    <SolidColorBrush x:Key="CategoryUnchecked" Color="#56000000"/>
-    
     <!--WindowButton-->
     <Style x:Key="WindowButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>

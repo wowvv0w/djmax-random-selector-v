@@ -17,12 +17,12 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             FilterViewModel = new FilterViewModel();
             HistoryViewModel = new HistoryViewModel();
-            FilterViewModel.preset = Manager.LoadPreset(FilterViewModel.preset);
+            //FilterViewModel.Preset = Manager.LoadPreset(FilterViewModel.Preset);
         }
 
         public void CloseEvent()
         {
-            Manager.SavePreset(FilterViewModel.preset);
+            //Manager.SavePreset(FilterViewModel.Preset);
         }
 
         // Window Bar
