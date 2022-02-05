@@ -7,18 +7,80 @@
         mc:Ignorable="d"
         Width="740" Height="490"
         ResizeMode="NoResize"
-        Background="#72000000"
-        WindowStartupLocation="CenterOwner">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20"/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="20"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
-            <RowDefinition/>
-            <RowDefinition Height="20"/>
-        </Grid.RowDefinitions>
-    </Grid>
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Background="Transparent"
+        WindowStartupLocation="CenterOwner"
+        Loaded="Loaded2">
+    <Border Background="#DF000000"
+            BorderBrush="Gray"
+            BorderThickness="2"
+            Margin="40">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="10"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10"/>
+                <RowDefinition/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="10"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="40,0">
+                <StackPanel.Resources>
+                    <Style TargetType="Grid">
+                        <Setter Property="Background" Value="{StaticResource OptionElement}"/>
+                        <Setter Property="Height" Value="30"/>
+                        <Setter Property="Margin" Value="0,10,0,0"/>
+                    </Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="{StaticResource Default}"/>
+                        <Setter Property="FontFamily" Value="{StaticResource Lato Black}"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="10,0,0,0"/>
+                    </Style>
+                </StackPanel.Resources>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="INPUT DELAY"/>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="MINIMIZE BUTTON ACTION"/>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="OWNED DLC LIST"/>
+                </Grid>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right">
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Width" Value="80"/>
+                        <Setter Property="Margin" Value="10,0,0,0"/>
+                    </Style>
+                </StackPanel.Resources>
+                <Button/>
+                <Button/>
+
+            </StackPanel>
+        </Grid>
+    </Border>
 </Window>

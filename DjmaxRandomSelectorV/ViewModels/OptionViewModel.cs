@@ -8,7 +8,7 @@ using DjmaxRandomSelectorV.Properties;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class OptionViewModel : Screen
+    public class OptionViewModel : Conductor<object>
     {
     }
 }

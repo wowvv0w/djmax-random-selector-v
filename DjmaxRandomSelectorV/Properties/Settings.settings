@@ -8,9 +8,6 @@
     <Setting Name="tray" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="autoStart" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="versionApp" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
