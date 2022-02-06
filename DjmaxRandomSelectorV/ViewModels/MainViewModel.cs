@@ -54,10 +54,22 @@ namespace DjmaxRandomSelectorV.ViewModels
             var window = view as Window;
             window.WindowState = WindowState.Minimized;
         }
+
         public void CloseWindow(object view)
         {
             var window = view as Window;
             window.Close();
+        }
+
+        private string _currentTab = "FILTER";
+        public string CurrentTab
+        {
+            get { return _currentTab; }
+            set 
+            { 
+                _currentTab = value; 
+                NotifyOfPropertyChange(() => CurrentTab);
+            }
         }
 
         // Tab Buttons
@@ -84,10 +96,12 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void LoadFilterTab()
         {
             IsFilterTabSelected = true;
+            CurrentTab = "FILTER";
         }
         public void LoadHistoryTab()
         {
             IsHistoryTabSelected = true;
+            CurrentTab = "HISTORY";
         }
     
         // Utility Buttons

@@ -12,13 +12,27 @@
     "SC"
   ],
   "Categories": [
-    "P1",
+    "P3",
     "RP",
+    "P1",
     "P2",
-    "GG"
+    "BS",
+    "VE",
+    "VE2",
+    "ES",
+    "T1",
+    "T2",
+    "T3",
+    "GG",
+    "ESTI",
+    "GC",
+    "CHU",
+    "CY",
+    "DM",
+    "NXN"
   ],
   "Levels": [
-    3,
+    1,
     15
   ],
   "Mode": true

@@ -30,13 +30,20 @@ namespace DjmaxRandomSelectorV.Models
                 SiftOut();
                 IsFilterChanged = false;
             }
-
+            
+            try
+            {
             ArrayList inputList = Pick();
 
             Console.WriteLine($"{inputList[0]} {inputList[1]} {inputList[2]} {inputList[3]}");
             Console.WriteLine("--------------------------");
 
             //Select(inputList);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("None\n");
+            }
             CanStart = true;
         }
         private static void SiftOut()

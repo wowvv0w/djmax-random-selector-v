@@ -28,12 +28,12 @@ namespace DjmaxRandomSelectorV.Models
 
         public static void UpdateTrackList()
         {
-            var ownedDlc = Settings.Default.ownedDlc;
+            var ownedDlcs = Settings.Default.ownedDlcs;
             var basicCategories = new string[] { "RP", "P1", "P2", "GG" };
-            ownedDlc.AddRange(basicCategories);
+            ownedDlcs.AddRange(basicCategories);
             var titleFilter = CreateTitleFilter();
             var trackList = from track in Selector.AllTrackList
-                            where ownedDlc.Contains(track.Category)
+                            where ownedDlcs.Contains(track.Category)
                             && titleFilter.Contains(track.Title) == false
                             select track;
             Selector.TrackList = trackList.ToList();
@@ -42,25 +42,25 @@ namespace DjmaxRandomSelectorV.Models
             {
                 var list = new List<string>();
 
-                if (ownedDlc.Contains("P3") == false)
+                if (ownedDlcs.Contains("P3") == false)
                 {
                     list.Add("glory day (Mintorment Remix)");
                     list.Add("glory day -JHS Remix-");
                 }
-                if (ownedDlc.Contains("TR") == false) list.Add("Nevermind");
-                if (ownedDlc.Contains("CE") == false) list.Add("Rising The Sonic");
-                if (ownedDlc.Contains("BS") == false) list.Add("ANALYS");
-                if (ownedDlc.Contains("T1") == false) list.Add("Do you want it");
-                if (ownedDlc.Contains("T2") == false) list.Add("End of Mythology");
-                if (ownedDlc.Contains("T3") == false) list.Add("ALiCE");
+                if (ownedDlcs.Contains("TR") == false) list.Add("Nevermind");
+                if (ownedDlcs.Contains("CE") == false) list.Add("Rising The Sonic");
+                if (ownedDlcs.Contains("BS") == false) list.Add("ANALYS");
+                if (ownedDlcs.Contains("T1") == false) list.Add("Do you want it");
+                if (ownedDlcs.Contains("T2") == false) list.Add("End of Mythology");
+                if (ownedDlcs.Contains("T3") == false) list.Add("ALiCE");
 
-                if (ownedDlc.Contains("CE") && !ownedDlc.Contains("BS") && !ownedDlc.Contains("T1"))
+                if (ownedDlcs.Contains("CE") && !ownedDlcs.Contains("BS") && !ownedDlcs.Contains("T1"))
                     list.Add("Here in the Moment ~Extended Mix~");
-                if (!ownedDlc.Contains("CE") && ownedDlc.Contains("BS") && !ownedDlc.Contains("T1"))
+                if (!ownedDlcs.Contains("CE") && ownedDlcs.Contains("BS") && !ownedDlcs.Contains("T1"))
                     list.Add("Airwave ~Extended Mix~");
-                if (!ownedDlc.Contains("CE") && !ownedDlc.Contains("BS") && ownedDlc.Contains("T1"))
+                if (!ownedDlcs.Contains("CE") && !ownedDlcs.Contains("BS") && ownedDlcs.Contains("T1"))
                     list.Add("SON OF SUN ~Extended Mix~");
-                if (!ownedDlc.Contains("VE") && ownedDlc.Contains("VE2"))
+                if (!ownedDlcs.Contains("VE") && ownedDlcs.Contains("VE2"))
                     list.Add("너로피어오라 ~Original Ver.~");
 
                 return list;

@@ -37,51 +37,14 @@ namespace DjmaxRandomSelectorV.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool tray {
-            get {
-                return ((bool)(this["tray"]));
-            }
-            set {
-                this["tray"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int versionApp {
-            get {
-                return ((int)(this["versionApp"]));
-            }
-            set {
-                this["versionApp"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20220118")]
-        public int versionTrackList {
-            get {
-                return ((int)(this["versionTrackList"]));
-            }
-            set {
-                this["versionTrackList"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
-            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n  <s" +
-            "tring>TR</string>\r\n  <string>CE</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection ownedDlc {
+            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" />")]
+        public global::System.Collections.Specialized.StringCollection ownedDlcs {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ownedDlc"]));
+                return ((global::System.Collections.Specialized.StringCollection)(this["ownedDlcs"]));
             }
             set {
-                this["ownedDlc"] = value;
+                this["ownedDlcs"] = value;
             }
         }
     }

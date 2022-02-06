@@ -11,7 +11,7 @@
         WindowStyle="None"
         Background="Transparent"
         WindowStartupLocation="CenterOwner"
-        Loaded="Loaded2">
+        Loaded="OptionLoaded">
     <Border Background="#DF000000"
             BorderBrush="Gray"
             BorderThickness="2"
@@ -25,60 +25,281 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="10"/>
                 <RowDefinition/>
+                <RowDefinition Height="10"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="10"/>
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="1"
-                        Grid.Column="1"
-                        Margin="40,0">
-                <StackPanel.Resources>
-                    <Style TargetType="Grid">
-                        <Setter Property="Background" Value="{StaticResource OptionElement}"/>
-                        <Setter Property="Height" Value="30"/>
-                        <Setter Property="Margin" Value="0,10,0,0"/>
-                    </Style>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Foreground" Value="{StaticResource Default}"/>
-                        <Setter Property="FontFamily" Value="{StaticResource Lato Black}"/>
-                        <Setter Property="FontSize" Value="13"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                        <Setter Property="Margin" Value="10,0,0,0"/>
-                    </Style>
-                </StackPanel.Resources>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="INPUT DELAY"/>
-                </Grid>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="MINIMIZE BUTTON ACTION"/>
-                </Grid>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="OWNED DLC LIST"/>
-                </Grid>
-            </StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          Grid.Row="1"
+                          Grid.Column="1">
+                <StackPanel Margin="40,0">
+                    <StackPanel.Resources>
+                        <Style TargetType="Grid">
+                            <Setter Property="Background" Value="{StaticResource OptionElement}"/>
+                            <Setter Property="Height" Value="30"/>
+                            <Setter Property="Margin" Value="0,5,0,0"/>
+                        </Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="{StaticResource Default}"/>
+                            <Setter Property="FontFamily" Value="{StaticResource Lato Black}"/>
+                            <Setter Property="FontSize" Value="13"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="10,0,0,0"/>
+                        </Style>
+                        <Style TargetType="ToggleButton">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border x:Name="Border"
+                                                Background="Transparent"
+                                                BorderThickness="0">
+                                            <TextBlock x:Name="TextBlock"
+                                                       Text="OFF"
+                                                       Foreground="{StaticResource Default}"
+                                                       FontFamily="{StaticResource Lato Black}"
+                                                       FontSize="13"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter Property="Text"
+                                                        TargetName="TextBlock"
+                                                        Value="ON"/>
+                                                <Setter Property="Foreground"
+                                                        TargetName="TextBlock"
+                                                        Value="White"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </StackPanel.Resources>
+                    
+                    <!-- Selector Setting -->
+                    <TextBlock Text="SELECTOR SETTING"
+                               Foreground="#1FFFFFFF"
+                               FontFamily="{StaticResource Lato}"
+                               FontSize="23"
+                               Margin="0,0,0,-5"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="INPUT DELAY"/>
+                        <TextBlock x:Name="InputDelayText"
+                                   HorizontalAlignment="Right"
+                                   Margin="0,0,10,0"/>
+                        <Slider x:Name="InputDelay"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Margin="40,0"
+                                Minimum="10"
+                                Maximum="50"/>
+                    </Grid>
+
+
+
+
+                    <TextBlock Text="TRACK LIST SETTING"
+                               Foreground="#1FFFFFFF"
+                               FontFamily="{StaticResource Lato}"
+                               FontSize="23"
+                               Margin="0,20,0,-5"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="PORTABLE 3"/>
+                        <ToggleButton Grid.Column="1"
+                                      x:Name="OptionP3"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="TRILOGY"/>
+                        <ToggleButton Grid.Column="1"
+                                      x:Name="OptionTR"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="CLAZZIQUAI EDITION"/>
+                        <ToggleButton Grid.Column="1"
+                                      x:Name="OptionCE"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="BLACK SQUARE"/>
+                        <ToggleButton Grid.Column="1"
+                                      x:Name="OptionBS"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="V EXTENSION"/>
+                        <ToggleButton Grid.Column="1"
+                                      x:Name="OptionVE"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="V EXTENSION 2"/>
+                        <ToggleButton Grid.Column="1"
+                                      x:Name="OptionVE2"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="EMOTIONAL SENSE"/>
+                        <ToggleButton Grid.Column="1"
+                                      x:Name="OptionES"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="TECHNIKA 1"/>
+                        <ToggleButton Grid.Column="1"
+                                      x:Name="OptionT1"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="TECHNIKA 2"/>
+                        <ToggleButton Grid.Column="1"
+                                      x:Name="OptionT2"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="TECHNIKA 3"/>
+                        <ToggleButton Grid.Column="1"
+                                      x:Name="OptionT3"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="CHUNITHM"/>
+                        <ToggleButton Grid.Column="1"
+                                      x:Name="OptionCHU"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="CYTUS"/>
+                        <ToggleButton Grid.Column="1"
+                                      x:Name="OptionCY"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="DEEMO"/>
+                        <ToggleButton Grid.Column="1"
+                                      x:Name="OptionDM"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="ESTIMATE"/>
+                        <ToggleButton Grid.Column="1"
+                                      x:Name="OptionESTI"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="GROOVE COASTER"/>
+                        <ToggleButton Grid.Column="1"
+                                      x:Name="OptionGC"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="GIRLS' FRONTLINE"/>
+                        <ToggleButton Grid.Column="1"
+                                      x:Name="OptionGF"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="NEXON"/>
+                        <ToggleButton Grid.Column="1"
+                                      x:Name="OptionNXN"/>
+                    </Grid>
+
+
+
+
+
+
+                </StackPanel>
+            </ScrollViewer>
             <StackPanel Orientation="Horizontal"
-                        Grid.Row="2"
+                        Grid.Row="3"
                         Grid.Column="1"
                         HorizontalAlignment="Right">
                 <StackPanel.Resources>
                     <Style TargetType="Button">
                         <Setter Property="Width" Value="80"/>
                         <Setter Property="Margin" Value="10,0,0,0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="#56000000"
+                                            BorderBrush="#818282"
+                                            BorderThickness="3"
+                                            CornerRadius="6">
+                                        <TextBlock Text="{TemplateBinding Content}"
+                                                   Foreground="#818282"
+                                                   FontFamily="{StaticResource Lato Black}"
+                                                   FontSize="15"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
                     </Style>
                 </StackPanel.Resources>
-                <Button/>
-                <Button/>
+                <Button x:Name="ApplyOption"
+                        Content="APPLY"/>
+                <Button x:Name="CancelOption"
+                        Content="CANCEL"/>
 
             </StackPanel>
         </Grid>

@@ -28,7 +28,7 @@ namespace DjmaxRandomSelectorV.Views
         {
             InitializeComponent();
         }
-        public void Loaded2(object sender, RoutedEventArgs e)
+        public void OptionLoaded(object sender, RoutedEventArgs e)
         {
             EnableBlur();
         }
