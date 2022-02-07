@@ -4,6 +4,10 @@ using System.Collections;
 using System.Windows;
 using DjmaxRandomSelectorV.Models;
 using static DjmaxRandomSelectorV.Models.Selector;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -19,7 +23,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             HistoryViewModel = new HistoryViewModel();
         }
 
-        public static void Start()
+        public void StartSelector()
         {
             CanStart = false;
             if (IsFilterChanged)
@@ -39,7 +43,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             catch (ArgumentOutOfRangeException)
             {
-                MessageBox.Show("There is no music in filtered list.",
+                System.Windows.MessageBox.Show("There is no music in filtered list.",
                     "Filter Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
@@ -120,6 +124,57 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void ShowOption()
         {
             windowManager.ShowDialogAsync(new OptionViewModel());
+        }
+
+
+
+
+        [DllImport("user32.dll")]
+        private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
+
+        private const int HOTKEY_ID = 9000;
+
+        public void AddHotKey(object view)
+        {
+            Window window = view as Window;
+
+            HwndSource source;
+            IntPtr handle = new WindowInteropHelper(window).Handle;
+            source = HwndSource.FromHwnd(handle);
+            source.AddHook(HwndHook);
+
+            RegisterHotKey(handle, HOTKEY_ID, 0x0000, (uint)Keys.F7);
+        }
+
+        private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            const int WM_HOTKEY = 0x0312;
+            switch (msg)
+            {
+                case WM_HOTKEY:
+                    switch (wParam.ToInt32())
+                    {
+                        case HOTKEY_ID:
+                            int vkey = (((int)lParam >> 16) & 0xFFFF);
+                            if (vkey == (uint)Keys.F7)
+                            {
+                                if (CanStart)
+                                {
+                                    Thread thread = new Thread(new ThreadStart(() => StartSelector()));
+                                    Console.WriteLine("Start");
+                                    thread.Start();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Nope");
+                                }
+                            }
+                            handled = true;
+                            break;
+                    }
+                    break;
+            }
+            return IntPtr.Zero;
         }
     }
 }

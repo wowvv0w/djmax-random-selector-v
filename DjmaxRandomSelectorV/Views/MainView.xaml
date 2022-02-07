@@ -9,7 +9,7 @@
         Title="DJMAX Random Selector V" Width="740" Height="480"
         WindowStyle="None" FontFamily="{StaticResource Lato Black}"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        cal:Message.Attach="[Event Closing] = [Action CloseEvent]"
+        cal:Message.Attach="[Event Loaded] = [Action AddHotKey($view)];[Event Closing] = [Action CloseEvent]"
         Icon="pack://application:,,,/Images/icon.png">
     <Window.Background>
         <LinearGradientBrush StartPoint="0.987,0.5" EndPoint="1,0.5" SpreadMethod="Repeat">
