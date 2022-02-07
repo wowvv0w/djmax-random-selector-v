@@ -57,7 +57,16 @@ namespace DjmaxRandomSelectorV.Views
                             int vkey = (((int)lParam >> 16) & 0xFFFF);
                             if (vkey == (uint)Keys.F7)
                             {
-                                MainViewModel.Start();
+                                if (Selector.CanStart)
+                                {
+                                    Thread thread = new Thread(new ThreadStart(() => MainViewModel.Start()));
+                                    Console.WriteLine("Start");
+                                    thread.Start();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Nope");
+                                }
                             }
                             handled = true;
                             break;

@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
         mc:Ignorable="d"
-        Width="740" Height="490"
+        Width="740" Height="480"
         ResizeMode="NoResize"
         AllowsTransparency="True"
         WindowStyle="None"
         Background="Transparent"
         WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
         Loaded="OptionLoaded">
     <Border Background="#DF000000"
             BorderBrush="Gray"
@@ -131,7 +132,7 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="CLAZZIQUAI EDITION"/>
+                        <TextBlock Text="CLAZZIQUAI"/>
                         <ToggleButton Grid.Column="1"
                                       x:Name="OptionCE"/>
                     </Grid>
@@ -167,7 +168,7 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="EMOTIONAL SENSE"/>
+                        <TextBlock Text="EMOTIONAL S."/>
                         <ToggleButton Grid.Column="1"
                                       x:Name="OptionES"/>
                     </Grid>

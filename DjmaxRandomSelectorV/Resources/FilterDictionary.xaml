@@ -31,15 +31,17 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Border x:Name="Border"
-                            Background="Transparent"
-                            BorderBrush="{TemplateBinding Background}"
+                    <Border BorderBrush="{TemplateBinding Background}"
                             BorderThickness="2">
-                        <TextBlock x:Name="TextBlock"
+                        <Border x:Name="Border"
+                                Background="Transparent"
+                                Margin="-1">
+                            <TextBlock x:Name="TextBlock"
                                    Text="{TemplateBinding Content}"
                                    Foreground="{TemplateBinding Background}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"/>
+                        </Border>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">

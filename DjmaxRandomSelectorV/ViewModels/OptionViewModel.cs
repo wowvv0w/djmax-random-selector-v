@@ -36,6 +36,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             Settings.Default.Save();
             Manager.UpdateTrackList();
+            Selector.IsFilterChanged = true;
             TryCloseAsync();
         }
         public void CancelOption()

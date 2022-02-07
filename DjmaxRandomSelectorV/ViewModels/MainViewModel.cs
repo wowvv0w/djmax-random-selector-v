@@ -1,12 +1,9 @@
 ﻿using Caliburn.Micro;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections;
 using System.Windows;
 using DjmaxRandomSelectorV.Models;
-using System.Threading;
+using static DjmaxRandomSelectorV.Models.Selector;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -24,16 +21,30 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public static void Start()
         {
-            if (Selector.CanStart)
+            CanStart = false;
+            if (IsFilterChanged)
             {
-                Thread thread = new Thread(new ThreadStart(() => Selector.Start(FilterViewModel.Filter)));
-                Console.WriteLine("Start");
-                thread.Start();
+                SiftOut(FilterViewModel.Filter);
+                IsFilterChanged = false;
             }
-            else
+
+            try
             {
-                Console.WriteLine("Nope");
+                var selectedMusic = Pick();
+                var historyItem = new HistoryItem(selectedMusic);
+                HistoryViewModel.UpdateHistory(historyItem);
+
+                var inputCommand = Find(selectedMusic);
+                //Select(inputCommand);
             }
+            catch (ArgumentOutOfRangeException)
+            {
+                MessageBox.Show("There is no music in filtered list.",
+                    "Filter Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+            CanStart = true;
         }
 
         public void CloseEvent()

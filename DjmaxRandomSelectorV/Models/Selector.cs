@@ -4,9 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Windows.Forms;
 using System.Threading;
 using System.Runtime.InteropServices;
 using DjmaxRandomSelectorV.Properties;
@@ -19,49 +16,24 @@ namespace DjmaxRandomSelectorV.Models
         public static List<Track> AllTrackList { get; set; }
         public static List<Track> TrackList { get; set; }
         private static List<Music> MusicList { get; set; }
-        public static Filter Filter { get; set; }
         public static bool CanStart { get; set; } = true;
-        public static void Start(Filter filter)
-        {
-            CanStart = false;
-            if (IsFilterChanged)
-            {
-                Filter = filter;
-                SiftOut();
-                IsFilterChanged = false;
-            }
-            
-            try
-            {
-            ArrayList inputList = Pick();
 
-            Console.WriteLine($"{inputList[0]} {inputList[1]} {inputList[2]} {inputList[3]}");
-            Console.WriteLine("--------------------------");
-
-            //Select(inputList);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                Console.WriteLine("None\n");
-            }
-            CanStart = true;
-        }
-        private static void SiftOut()
+        public static void SiftOut(Filter filter)
         {
             List<string> Styles = new List<string>();
-            foreach(string button in Filter.ButtonTunes)
+            foreach(string button in filter.ButtonTunes)
             {
-                foreach(string difficulty in Filter.Difficulties)
+                foreach(string difficulty in filter.Difficulties)
                 {
                     Styles.Add($"{button}{difficulty}");
                 }
             }
             var musicList = from track in TrackList
                             from pattern in track.Patterns
-                            where Filter.Categories.Contains(track.Category)
+                            where filter.Categories.Contains(track.Category)
                             && Styles.Contains(pattern.Key)
-                            && pattern.Value >= Filter.Levels[0]
-                            && pattern.Value <= Filter.Levels[1]
+                            && pattern.Value >= filter.Levels[0]
+                            && pattern.Value <= filter.Levels[1]
                             select new Music
                             {
                                 Title = track.Title,
@@ -71,14 +43,18 @@ namespace DjmaxRandomSelectorV.Models
             MusicList = musicList.ToList();
         }
 
-        private static ArrayList Pick()
+        public static Music Pick()
         {
-            // Select randomly
             var random = new Random();
             var index = random.Next(MusicList.Count() - 1);
             var selectedMusic = MusicList[index];
             Console.WriteLine($"{selectedMusic.Title} {selectedMusic.Style} {selectedMusic.Level}");
 
+            return selectedMusic;
+        }
+
+        public static InputCommand Find(Music selectedMusic) 
+        {
             // Check if title starts with alphabet or not
             char initial = selectedMusic.Title[0];
             bool isAlphabet = Regex.IsMatch(initial.ToString(), "[a-z]", RegexOptions.IgnoreCase);
@@ -89,7 +65,7 @@ namespace DjmaxRandomSelectorV.Models
             {
                 var list = from track in TrackList
                            let t = track.Title.Substring(0, 1)
-                           where String.Compare(t, initial.ToString()) == 0
+                           where String.Compare(t, initial.ToString(), true) == 0
                            select track;
                 sameInitialList = list.ToList();
             }
@@ -105,7 +81,8 @@ namespace DjmaxRandomSelectorV.Models
             // Find which key should be pressed
             int whereIsIt = sameInitialList.FindIndex(x => x.Title == selectedMusic.Title);
             int count = sameInitialList.Count();
-            bool isForward = whereIsIt <= Math.Ceiling((double)count / 2) || "wxyz".Contains(initial);
+            bool isForward = whereIsIt <= Math.Ceiling((double)count / 2) || "wxyzWXYZ".Contains(initial);
+
             char inputInitial;
             int inputVertical;
             if (isForward)
@@ -152,31 +129,35 @@ namespace DjmaxRandomSelectorV.Models
 
             char inputButton = selectedButton[0];
 
-            return new ArrayList() 
-            { 
-                inputButton, Char.ToUpper(inputInitial), inputVertical, inputRight,
-                isAlphabet, isForward 
+            var inputCommand = new InputCommand()
+            {
+                ButtonTune = inputButton,
+                Initial = Char.ToUpper(inputInitial),
+                VerticalInputCount = inputVertical,
+                RightInputCount = inputRight,
+                IsAlphabet = isAlphabet,
+                IsForward = isForward
             };
+
+            return inputCommand;
         }
 
-        [DllImport("user32.dll")]
-        static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
-
-        private static void Select(ArrayList inputList)
+        public static void Select(InputCommand inputCommand)
         {
-            byte button = (byte)inputList[0];
-            byte initial = (byte)inputList[1];
-            int vertical = (int)inputList[2];
-            int right = (int)inputList[3];
-            bool alphabet = (bool)inputList[4];
-            bool forward = (bool)inputList[5];
+            char button = inputCommand.ButtonTune;
+            char initial = inputCommand.Initial;
+            int vertical = inputCommand.VerticalInputCount;
+            int right = inputCommand.RightInputCount;
+            bool alphabet = inputCommand.IsAlphabet;
+            bool forward = inputCommand.IsForward;
             int delay = Settings.Default.inputDelay;
             byte direction;
 
 
             void Input(byte key)
             {
-                keybd_event(key, 0x45, 0x1, UIntPtr.Zero);
+                keybd_event(key, 0x45, 0x00, UIntPtr.Zero);
+                keybd_event(key, 0x45, 0x02, UIntPtr.Zero);
                 Thread.Sleep(delay);
             }
 
@@ -189,12 +170,13 @@ namespace DjmaxRandomSelectorV.Models
                 direction = 38; // UP
             }
 
-            Input(button);
-            Input(initial);
+            Input((byte)button);
+            Input(33); // PAGE UP
+            Input((byte)initial);
             if (alphabet == false && forward)
             {
                 Input(33); // PAGE UP
-                Input(33);
+                Input(33); // PAGE UP
                 Input(34); // PAGE DOWN
             }
             for(int i = 0; i < vertical; i++)
@@ -205,7 +187,9 @@ namespace DjmaxRandomSelectorV.Models
             {
                 Input(39); // RIGHT
             }
-            
         }
+
+        [DllImport("user32.dll")]
+        static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
     }
 }

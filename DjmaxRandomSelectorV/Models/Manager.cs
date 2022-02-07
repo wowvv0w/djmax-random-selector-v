@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using DjmaxRandomSelectorV.Properties;
 
 namespace DjmaxRandomSelectorV.Models
@@ -15,7 +14,7 @@ namespace DjmaxRandomSelectorV.Models
     {
         public static void ReadAllTrackList()
         {
-            var userData = @"C:\Projects\DjmaxRandomSelectorV\DjmaxRandomSelectorV\DataFiles\test_data.csv";
+            var userData = "DataFiles/AllTrackList.csv";
 
             using (var reader = new StreamReader(userData, Encoding.UTF8))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
@@ -66,7 +65,7 @@ namespace DjmaxRandomSelectorV.Models
                 return list;
             }  
         }
-        public static Filter LoadPreset(string path = @"C:\Projects\DjmaxRandomSelectorV\DjmaxRandomSelectorV\DataFiles\default.json")
+        public static Filter LoadPreset(string path = "DataFiles/default.json")
         {
             Filter filter;
 
@@ -86,7 +85,7 @@ namespace DjmaxRandomSelectorV.Models
             return filter;
         }
 
-        public static void SavePreset(Filter filter, string path = @"C:\Projects\DjmaxRandomSelectorV\DjmaxRandomSelectorV\DataFiles\default.json")
+        public static void SavePreset(Filter filter, string path = "DataFiles/default.json")
         {
             var options = new JsonSerializerOptions() { WriteIndented = true, IgnoreReadOnlyProperties = false };
             string jsonString = JsonSerializer.Serialize(filter, options);

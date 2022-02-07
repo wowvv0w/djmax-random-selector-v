@@ -7,7 +7,7 @@
     <ProjectGuid>{9E7B4681-5399-4F1F-BE21-49CCA80C088F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>DjmaxRandomSelectorV</RootNamespace>
-    <AssemblyName>DjmaxRandomSelectorV</AssemblyName>
+    <AssemblyName>DJMAX Random Selector V</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -35,6 +35,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Caliburn.Micro.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
@@ -115,8 +118,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Filter.cs" />
+    <Compile Include="Models\InputCommand.cs" />
     <Compile Include="Models\Manager.cs" />
     <Compile Include="Models\Music.cs" />
+    <Compile Include="Models\HistoryItem.cs" />
     <Compile Include="Models\Selector.cs" />
     <Compile Include="Models\Track.cs" />
     <Compile Include="Models\TrackMap.cs" />
@@ -162,8 +167,12 @@
     <Resource Include="Fonts\Lato-Light.ttf" />
     <Resource Include="Fonts\Lato-Regular.ttf" />
     <Resource Include="Fonts\Lato-Thin.ttf" />
-    <None Include="DataFiles\default.json" />
-    <None Include="DataFiles\test_data.csv" />
+    <None Include="DataFiles\default.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="DataFiles\AllTrackList.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Resource Include="Fonts\BebasNeue-Regular.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -235,6 +244,13 @@
   <ItemGroup>
     <Resource Include="Images\btn_left.png" />
     <Resource Include="Images\btn_right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icon.ico" />
+    <Resource Include="Images\icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Text.Json.6.0.1\build\System.Text.Json.targets" Condition="Exists('..\packages\System.Text.Json.6.0.1\build\System.Text.Json.targets')" />

@@ -1,12 +1,6 @@
 {
-  "ButtonTunes": [
-    "8B",
-    "4B",
-    "5B",
-    "6B"
-  ],
+  "ButtonTunes": [],
   "Difficulties": [
-    "NM",
     "HD",
     "MX",
     "SC"
@@ -32,7 +26,7 @@
     "NXN"
   ],
   "Levels": [
-    1,
+    8,
     15
   ],
   "Mode": true
