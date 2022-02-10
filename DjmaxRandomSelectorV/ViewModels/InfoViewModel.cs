@@ -10,18 +10,25 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class InfoViewModel : Screen
     {
-        public InfoViewModel(int selectorVersion)
+        public InfoViewModel(int currentVersion, int lastVersion)
         {
-            var str = selectorVersion.ToString();
-            for (int i = 1; i <= 5; i += 2)
-            {
-                str = str.Insert(i, ".");
-            }
-            CurrentVersion = str;
+            CurrentVersion = IntToString(currentVersion);
+            LastVersion = IntToString(lastVersion);
             AllTrackVersion = Settings.Default.allTrackVersion.ToString();
+
+            string IntToString(int version)
+            {
+                var str = version.ToString();
+                for (int i = 1; i <= 5; i += 2)
+                {
+                    str = str.Insert(i, ".");
+                }
+                return str;
+            }
         }
 
         private string _currentVersion;
+        private string _lastVersion;
         private string _allTrackVersion;
         public string CurrentVersion
         {
@@ -30,6 +37,15 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 _currentVersion = $"Current Version: {value}";
                 NotifyOfPropertyChange(() => CurrentVersion);
+            }
+        }
+        public string LastVersion
+        {
+            get { return _lastVersion; }
+            set
+            {
+                _lastVersion = $"Last Version: {value}";
+                NotifyOfPropertyChange(() => LastVersion);
             }
         }
         public string AllTrackVersion

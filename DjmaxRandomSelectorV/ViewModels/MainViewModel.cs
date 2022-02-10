@@ -1,8 +1,9 @@
 ﻿using Caliburn.Micro;
+using DjmaxRandomSelectorV.Models;
+using DjmaxRandomSelectorV.Properties;
 using System;
 using System.Collections;
 using System.Windows;
-using DjmaxRandomSelectorV.Models;
 using static DjmaxRandomSelectorV.Models.Selector;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
@@ -15,12 +16,30 @@ namespace DjmaxRandomSelectorV.ViewModels
     {
         private const int SELECTOR_VERSION = 1000;
 
+        private const string RELEASE_URL = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
+
+        private int _lastSelectorVersion;
+        private int _lastAllTrackVersion;
+
         public FilterViewModel FilterViewModel { get; set; }
         public HistoryViewModel HistoryViewModel { get; set; }
+
         public MainViewModel()
         {
-            Manager.ReadAllTrackList();
+            (_lastSelectorVersion, _lastAllTrackVersion) = Manager.UpdateCheck();
+            if (SELECTOR_VERSION < _lastSelectorVersion)
+            {
+                OpenReleasePageVisibility = Visibility.Visible;
+            }
+            if (Settings.Default.allTrackVersion < _lastAllTrackVersion)
+            {
+                Manager.UpdateAllTrackList();
+                Settings.Default.allTrackVersion = _lastAllTrackVersion;
+                Settings.Default.Save();
+            }
 
+
+            Manager.ReadAllTrackList();
             Manager.UpdateTrackList();
 
             FilterViewModel.Filter = Manager.LoadPreset();
@@ -62,6 +81,24 @@ namespace DjmaxRandomSelectorV.ViewModels
             Manager.SavePreset(FilterViewModel.Filter);
         }
 
+
+        public void OpenReleasePage()
+        {
+            System.Diagnostics.Process.Start(RELEASE_URL);
+        }
+
+        private Visibility _openReleasePageVisibility = Visibility.Hidden;
+        public Visibility OpenReleasePageVisibility
+        {
+            get { return _openReleasePageVisibility; }
+            set
+            {
+                _openReleasePageVisibility = value;
+                NotifyOfPropertyChange(() => OpenReleasePageVisibility);
+            }
+        }
+
+
         // Window Bar
         public void MoveWindow(object view)
         {
@@ -81,6 +118,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             var window = view as Window;
             window.Close();
         }
+
+
 
         private string _currentTab = "FILTER";
         public string CurrentTab
@@ -133,7 +172,8 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         public void ShowInfo()
         {
-            windowManager.ShowDialogAsync(new InfoViewModel(SELECTOR_VERSION));
+            var infoViewModel = new InfoViewModel(SELECTOR_VERSION, _lastSelectorVersion);
+            windowManager.ShowDialogAsync(infoViewModel);
         }
 
 

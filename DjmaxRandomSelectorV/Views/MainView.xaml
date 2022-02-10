@@ -32,8 +32,19 @@
             </Grid.ColumnDefinitions>
             <TextBlock Text="DJMAX Random Selector V" Foreground="#989999"
                        FontSize="12" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <Border Background="Transparent" cal:Message.Attach="[Event MouseDown] = [Action MoveWindow($view)]"/>
-                       
+            <Border Background="Transparent"
+                    cal:Message.Attach="[Event MouseDown] = [Action MoveWindow($view)]"/>
+            <Button x:Name="OpenReleasePage"
+                    Content="[New Update is Available]"
+                    Foreground="{StaticResource Highlight}"
+                    FontFamily="{StaticResource Lato}"
+                    FontSize="12"
+                    Width="140"
+                    HorizontalAlignment="Left"
+                    Margin="170,0,0,0"
+                    Style="{StaticResource WindowButton}"
+                    Visibility="{Binding OpenReleasePageVisibility}"/>
+
             <Button cal:Message.Attach="[Event Click] = [Action MinimizeWindow($view)]"
                     Grid.Column="1"
                     Style="{StaticResource WindowButton}">

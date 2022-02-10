@@ -50,7 +50,7 @@ namespace DjmaxRandomSelectorV.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("220209")]
+        [global::System.Configuration.DefaultSettingValueAttribute("220210")]
         public int allTrackVersion {
             get {
                 return ((int)(this["allTrackVersion"]));

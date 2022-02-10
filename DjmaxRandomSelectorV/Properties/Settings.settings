@@ -10,7 +10,7 @@
 &lt;ArrayOfString xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" /&gt;</Value>
     </Setting>
     <Setting Name="allTrackVersion" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">220209</Value>
+      <Value Profile="(Default)">220210</Value>
     </Setting>
   </Settings>
 </SettingsFile>

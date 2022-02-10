@@ -16,23 +16,23 @@ namespace DjmaxRandomSelectorV.Models
         private const string ALL_TRACK_LIST = "DataFiles/AllTrackList.csv";
         private const string PRESET_DEFAULT = "DataFiles/default.json";
 
-        private const string VERSION_URL = "";
+        private const string VERSION_URL = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
         private const string ALL_TRACK_URL = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/DataFiles/AllTrackList.csv";
 
-        public static void SelectorUpdateCheck()
+        public static (int, int) UpdateCheck()
         {
-
-        }
-        public static void ReadAllTrackList()
-        {
-            using (var reader = new StreamReader(ALL_TRACK_LIST, Encoding.UTF8))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            using (WebClient client = new WebClient())
             {
-                csv.Context.RegisterClassMap<TrackMap>();
-                var records = csv.GetRecords<Track>().ToList();
-                Selector.AllTrackList = records;
+                var data = client.DownloadString(VERSION_URL);
+                var versions = data.Split(',');
+                
+                var lastSelectorVersion = Int32.Parse(versions[0]);
+                var lastAllTrackVersion = Int32.Parse(versions[1]);
+
+                return (lastSelectorVersion, lastAllTrackVersion);
             }
         }
+        
 
         public static void UpdateAllTrackList()
         {
@@ -47,6 +47,17 @@ namespace DjmaxRandomSelectorV.Models
             using (var writer = new StreamWriter(ALL_TRACK_LIST))
             {
                 writer.Write(data);
+            }
+        }
+
+        public static void ReadAllTrackList()
+        {
+            using (var reader = new StreamReader(ALL_TRACK_LIST, Encoding.UTF8))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                csv.Context.RegisterClassMap<TrackMap>();
+                var records = csv.GetRecords<Track>().ToList();
+                Selector.AllTrackList = records;
             }
         }
 
@@ -100,6 +111,7 @@ namespace DjmaxRandomSelectorV.Models
                 return list;
             }  
         }
+
         public static Filter LoadPreset(string path = PRESET_DEFAULT)
         {
             Filter filter;
