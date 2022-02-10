@@ -13,10 +13,16 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class MainViewModel : Conductor<object>
     {
+        private const int SELECTOR_VERSION = 1000;
+
         public FilterViewModel FilterViewModel { get; set; }
         public HistoryViewModel HistoryViewModel { get; set; }
         public MainViewModel()
         {
+            Manager.ReadAllTrackList();
+
+            Manager.UpdateTrackList();
+
             FilterViewModel.Filter = Manager.LoadPreset();
 
             FilterViewModel = new FilterViewModel();
@@ -39,7 +45,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 HistoryViewModel.UpdateHistory(historyItem);
 
                 var inputCommand = Find(selectedMusic);
-                //Select(inputCommand);
+                Select(inputCommand);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -124,6 +130,10 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void ShowOption()
         {
             windowManager.ShowDialogAsync(new OptionViewModel());
+        }
+        public void ShowInfo()
+        {
+            windowManager.ShowDialogAsync(new InfoViewModel(SELECTOR_VERSION));
         }
 
 

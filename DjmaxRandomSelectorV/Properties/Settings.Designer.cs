@@ -47,5 +47,17 @@ namespace DjmaxRandomSelectorV.Properties {
                 this["ownedDlcs"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("220209")]
+        public int allTrackVersion {
+            get {
+                return ((int)(this["allTrackVersion"]));
+            }
+            set {
+                this["allTrackVersion"] = value;
+            }
+        }
     }
 }

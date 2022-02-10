@@ -70,6 +70,25 @@ namespace DjmaxRandomSelectorV.ViewModels
             InputDelayText = $"{InputDelay}ms";
         }
 
+
+
+        public bool CheckOwnedDlcs(string value)
+        {
+            return _ownedDlcs.Contains(value);
+        }
+
+        public void UpdateOwnedDlcs(bool isChecked, string value)
+        {
+            if (isChecked)
+            {
+                _ownedDlcs.Add(value);
+            }
+            else
+            {
+                _ownedDlcs.Remove(value);
+            }
+        }
+
         private const string _P3 = "P3";
         private const string _TR = "TR";
         private const string _CE = "CE";
@@ -90,171 +109,154 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public bool OptionP3
         {
-            get { return _ownedDlcs.Contains(_P3); }
+            get { return CheckOwnedDlcs(_P3); }
             set
             {
-                if (value) { _ownedDlcs.Add(_P3); }
-                else { _ownedDlcs.Remove(_P3); }
+                UpdateOwnedDlcs(value, _P3);
                 NotifyOfPropertyChange(() => OptionP3);
             }
         }
         public bool OptionTR
         {
-            get { return _ownedDlcs.Contains(_TR); }
+            get { return CheckOwnedDlcs(_TR); }
             set
             {
-                if (value) { _ownedDlcs.Add(_TR); }
-                else { _ownedDlcs.Remove(_TR); }
+                UpdateOwnedDlcs(value, _TR);
                 NotifyOfPropertyChange(() => OptionTR);
             }
         }
         public bool OptionCE
         {
-            get { return _ownedDlcs.Contains(_CE); }
+            get { return CheckOwnedDlcs(_CE); }
             set
             {
-                if (value) { _ownedDlcs.Add(_CE); }
-                else { _ownedDlcs.Remove(_CE); }
+                UpdateOwnedDlcs(value, _CE);
                 NotifyOfPropertyChange(() => OptionCE);
             }
         }
         public bool OptionBS
         {
-            get { return _ownedDlcs.Contains(_BS); }
+            get { return CheckOwnedDlcs(_BS); }
             set
             {
-                if (value) { _ownedDlcs.Add(_BS); }
-                else { _ownedDlcs.Remove(_BS); }
+                UpdateOwnedDlcs(value, _BS);
                 NotifyOfPropertyChange(() => OptionBS);
             }
         }
         public bool OptionVE
         {
-            get { return _ownedDlcs.Contains(_VE); }
+            get { return CheckOwnedDlcs(_VE); }
             set
             {
-                if (value) { _ownedDlcs.Add(_VE); }
-                else { _ownedDlcs.Remove(_VE); }
+                UpdateOwnedDlcs(value, _VE);
                 NotifyOfPropertyChange(() => OptionVE);
             }
         }
         public bool OptionVE2
         {
-            get { return _ownedDlcs.Contains(_VE2); }
+            get { return CheckOwnedDlcs(_VE2); }
             set
             {
-                if (value) { _ownedDlcs.Add(_VE2); }
-                else { _ownedDlcs.Remove(_VE2); }
+                UpdateOwnedDlcs(value, _VE2);
                 NotifyOfPropertyChange(() => OptionVE2);
             }
         }
         public bool OptionES
         {
-            get { return _ownedDlcs.Contains(_ES); }
+            get { return CheckOwnedDlcs(_ES); }
             set
             {
-                if (value) { _ownedDlcs.Add(_ES); }
-                else { _ownedDlcs.Remove(_ES); }
+                UpdateOwnedDlcs(value, _ES);
                 NotifyOfPropertyChange(() => OptionES);
             }
         }
         public bool OptionT1
         {
-            get { return _ownedDlcs.Contains(_T1); }
+            get { return CheckOwnedDlcs(_T1); }
             set
             {
-                if (value) { _ownedDlcs.Add(_T1); }
-                else { _ownedDlcs.Remove(_T1); }
+                UpdateOwnedDlcs(value, _T1);
                 NotifyOfPropertyChange(() => OptionT1);
             }
         }
         public bool OptionT2
         {
-            get { return _ownedDlcs.Contains(_T2); }
+            get { return CheckOwnedDlcs(_T2); }
             set
             {
-                if (value) { _ownedDlcs.Add(_T2); }
-                else { _ownedDlcs.Remove(_T2); }
+                UpdateOwnedDlcs(value, _T2);
                 NotifyOfPropertyChange(() => OptionT2);
             }
         }
         public bool OptionT3
         {
-            get { return _ownedDlcs.Contains(_T3); }
+            get { return CheckOwnedDlcs(_T3); }
             set
             {
-                if (value) { _ownedDlcs.Add(_T3); }
-                else { _ownedDlcs.Remove(_T3); }
+                UpdateOwnedDlcs(value, _T3);
                 NotifyOfPropertyChange(() => OptionT3);
             }
         }
         public bool OptionCHU
         {
-            get { return _ownedDlcs.Contains(_CHU); }
+            get { return CheckOwnedDlcs(_CHU); }
             set
             {
-                if (value) { _ownedDlcs.Add(_CHU); }
-                else { _ownedDlcs.Remove(_CHU); }
+                UpdateOwnedDlcs(value, _CHU);
                 NotifyOfPropertyChange(() => OptionCHU);
             }
         }
         public bool OptionCY
         {
-            get { return _ownedDlcs.Contains(_CY); }
+            get { return CheckOwnedDlcs(_CY); }
             set
             {
-                if (value) { _ownedDlcs.Add(_CY); }
-                else { _ownedDlcs.Remove(_CY); }
+                UpdateOwnedDlcs(value, _CY);
                 NotifyOfPropertyChange(() => OptionCY);
             }
         }
         public bool OptionDM
         {
-            get { return _ownedDlcs.Contains(_DM); }
+            get { return CheckOwnedDlcs(_DM); }
             set
             {
-                if (value) { _ownedDlcs.Add(_DM); }
-                else { _ownedDlcs.Remove(_DM); }
+                UpdateOwnedDlcs(value, _DM);
                 NotifyOfPropertyChange(() => OptionDM);
             }
         }
         public bool OptionESTI
         {
-            get { return _ownedDlcs.Contains(_ESTI); }
+            get { return CheckOwnedDlcs(_ESTI); }
             set
             {
-                if (value) { _ownedDlcs.Add(_ESTI); }
-                else { _ownedDlcs.Remove(_ESTI); }
+                UpdateOwnedDlcs(value, _ESTI);
                 NotifyOfPropertyChange(() => OptionESTI);
             }
         }
         public bool OptionGC
         {
-            get { return _ownedDlcs.Contains(_GC); }
+            get { return CheckOwnedDlcs(_GC); }
             set
             {
-                if (value) { _ownedDlcs.Add(_GC); }
-                else { _ownedDlcs.Remove(_GC); }
+                UpdateOwnedDlcs(value, _GC);
                 NotifyOfPropertyChange(() => OptionGC);
             }
         }
         public bool OptionGF
         {
-            get { return _ownedDlcs.Contains(_GF); }
+            get { return CheckOwnedDlcs(_GF); }
             set
             {
-                if (value) { _ownedDlcs.Add(_GF); }
-                else { _ownedDlcs.Remove(_GF); }
+                UpdateOwnedDlcs(value, _GF);
                 NotifyOfPropertyChange(() => OptionGF);
             }
         }
         public bool OptionNXN
         {
-            get { return _ownedDlcs.Contains(_NXN); }
+            get { return CheckOwnedDlcs(_NXN); }
             set
             {
-                if (value) { _ownedDlcs.Add(_NXN); }
-                else { _ownedDlcs.Remove(_NXN); }
+                UpdateOwnedDlcs(value, _NXN);
                 NotifyOfPropertyChange(() => OptionNXN);
             }
         }

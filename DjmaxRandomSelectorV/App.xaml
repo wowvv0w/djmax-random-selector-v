@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="Resources/ColorDictionary.xaml"/>
                 <ResourceDictionary Source="Resources/MainDictionary.xaml"/>
                 <ResourceDictionary Source="Resources/FilterDictionary.xaml"/>
+                <ResourceDictionary Source="Resources/DialogDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

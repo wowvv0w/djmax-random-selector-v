@@ -22,10 +22,74 @@ namespace DjmaxRandomSelectorV.ViewModels
                 // DO NOT use index 0
                 LevelIndicators.Add(new LevelIndicator());
             }
-            Manager.ReadAllTrackList();
-            Manager.UpdateTrackList();
             UpdateLevelIndicators();
         }
+
+
+        private bool CheckFilter(List<string> filter, string value)
+        {
+            return filter.Contains(value);
+        }
+
+        private void UpdateFilter(bool isChecked, List<string> filter, string value)
+        {
+            if (isChecked)
+            {
+                filter.Add(value);
+            }
+            else
+            {
+                filter.Remove(value);
+            }
+            Selector.IsFilterChanged = true;
+        }
+
+        public void IncreaseLevelMin()
+        {
+            if (LevelMin < 15 && LevelMin < LevelMax)
+            {
+                LevelMin++;
+            }
+        }
+        public void DecreaseLevelMin()
+        {
+            if (LevelMin > 1)
+            {
+                LevelMin--;
+            }
+        }
+        public void IncreaseLevelMax()
+        {
+            if (LevelMax < 15)
+            {
+                LevelMax++;
+            }
+        }
+        public void DecreaseLevelMax()
+        {
+            if (LevelMax > 1 && LevelMax > LevelMin)
+            {
+                LevelMax--;
+            }
+        }
+
+
+        public void UpdateLevelIndicators()
+        {
+            for (int i = 1; i < LevelMin; i++)
+            {
+                LevelIndicators[i].Value = false;
+            }
+            for (int i = LevelMin; i <= LevelMax; i++)
+            {
+                LevelIndicators[i].Value = true;
+            }
+            for (int i = LevelMax + 1; i <= 15; i++)
+            {
+                LevelIndicators[i].Value = false;
+            }
+        }
+
 
         private const string _4B = "4B";
         private const string _5B = "5B";
@@ -59,90 +123,74 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public bool ButtonTune4B
         {
-            get { return Filter.ButtonTunes.Contains(_4B); }
+            get { return CheckFilter(Filter.ButtonTunes, _4B); }
             set
             {
-                if (value) { Filter.ButtonTunes.Add(_4B); }
-                else { Filter.ButtonTunes.Remove(_4B); }
+                UpdateFilter(value, Filter.ButtonTunes, _4B);
                 NotifyOfPropertyChange(() => ButtonTune4B);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool ButtonTune5B
         {
-            get { return Filter.ButtonTunes.Contains(_5B); }
+            get { return CheckFilter(Filter.ButtonTunes, _5B); }
             set
             {
-                if (value) { Filter.ButtonTunes.Add(_5B); }
-                else { Filter.ButtonTunes.Remove(_5B); }
+                UpdateFilter(value, Filter.ButtonTunes, _5B);
                 NotifyOfPropertyChange(() => ButtonTune5B);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool ButtonTune6B
         {
-            get { return Filter.ButtonTunes.Contains(_6B); }
+            get { return CheckFilter(Filter.ButtonTunes, _6B); }
             set
             {
-                if (value) { Filter.ButtonTunes.Add(_6B); }
-                else { Filter.ButtonTunes.Remove(_6B); }
+                UpdateFilter(value, Filter.ButtonTunes, _6B);
                 NotifyOfPropertyChange(() => ButtonTune6B);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool ButtonTune8B
         {
-            get { return Filter.ButtonTunes.Contains(_8B); }
+            get { return CheckFilter(Filter.ButtonTunes, _8B); }
             set
             {
-                if (value) { Filter.ButtonTunes.Add(_8B); }
-                else { Filter.ButtonTunes.Remove(_8B); }
+                UpdateFilter(value, Filter.ButtonTunes, _8B);
                 NotifyOfPropertyChange(() => ButtonTune8B);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool DifficultyNM
         {
-            get { return Filter.Difficulties.Contains(_NM); }
+            get { return CheckFilter(Filter.Difficulties, _NM); }
             set
             {
-                if (value) { Filter.Difficulties.Add(_NM); }
-                else { Filter.Difficulties.Remove(_NM); }
+                UpdateFilter(value, Filter.Difficulties, _NM);
                 NotifyOfPropertyChange(() => DifficultyNM);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool DifficultyHD
         {
-            get { return Filter.Difficulties.Contains(_HD); }
+            get { return CheckFilter(Filter.Difficulties, _HD); }
             set
             {
-                if (value) { Filter.Difficulties.Add(_HD); }
-                else { Filter.Difficulties.Remove(_HD); }
+                UpdateFilter(value, Filter.Difficulties, _HD);
                 NotifyOfPropertyChange(() => DifficultyHD);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool DifficultyMX
         {
-            get { return Filter.Difficulties.Contains(_MX); }
+            get { return CheckFilter(Filter.Difficulties, _MX); }
             set
             {
-                if (value) { Filter.Difficulties.Add(_MX); }
-                else { Filter.Difficulties.Remove(_MX); }
+                UpdateFilter(value, Filter.Difficulties, _MX);
                 NotifyOfPropertyChange(() => DifficultyMX);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool DifficultySC
         {
-            get { return Filter.Difficulties.Contains(_SC); }
+            get { return CheckFilter(Filter.Difficulties, _SC); }
             set
             {
-                if (value) { Filter.Difficulties.Add(_SC); }
-                else { Filter.Difficulties.Remove(_SC); }
+                UpdateFilter(value, Filter.Difficulties, _SC);
                 NotifyOfPropertyChange(() => DifficultySC);
-                Selector.IsFilterChanged = true;
             }
         }
         public int LevelMin
@@ -167,282 +215,196 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         public bool CategoryRP
         {
-            get { return Filter.Categories.Contains(_RP); }
+            get { return CheckFilter(Filter.Categories, _RP); }
             set
             {
-                if (value) { Filter.Categories.Add(_RP); }
-                else { Filter.Categories.Remove(_RP); }
+                UpdateFilter(value, Filter.Categories, _RP);
                 NotifyOfPropertyChange(() => CategoryRP);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryP1
         {
-            get { return Filter.Categories.Contains(_P1); }
+            get { return CheckFilter(Filter.Categories, _P1); }
             set
             {
-                if (value) { Filter.Categories.Add(_P1); }
-                else { Filter.Categories.Remove(_P1); }
+                UpdateFilter(value, Filter.Categories, _P1);
                 NotifyOfPropertyChange(() => CategoryP1);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryP2
         {
-            get { return Filter.Categories.Contains(_P2); }
+            get { return CheckFilter(Filter.Categories, _P2); }
             set
             {
-                if (value) { Filter.Categories.Add(_P2); }
-                else { Filter.Categories.Remove(_P2); }
+                UpdateFilter(value, Filter.Categories, _P2);
                 NotifyOfPropertyChange(() => CategoryP2);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryP3
         {
-            get { return Filter.Categories.Contains(_P3); }
+            get { return CheckFilter(Filter.Categories, _P3); }
             set
             {
-                if (value) { Filter.Categories.Add(_P3); }
-                else { Filter.Categories.Remove(_P3); }
+                UpdateFilter(value, Filter.Categories, _P3);
                 NotifyOfPropertyChange(() => CategoryP3);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryTR
         {
-            get { return Filter.Categories.Contains(_TR); }
+            get { return CheckFilter(Filter.Categories, _TR); }
             set
             {
-                if (value) { Filter.Categories.Add(_TR); }
-                else { Filter.Categories.Remove(_TR); }
+                UpdateFilter(value, Filter.Categories, _TR);
                 NotifyOfPropertyChange(() => CategoryTR);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryCE
         {
-            get { return Filter.Categories.Contains(_CE); }
+            get { return CheckFilter(Filter.Categories, _CE); }
             set
             {
-                if (value) { Filter.Categories.Add(_CE); }
-                else { Filter.Categories.Remove(_CE); }
+                UpdateFilter(value, Filter.Categories, _CE);
                 NotifyOfPropertyChange(() => CategoryCE);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryBS
         {
-            get { return Filter.Categories.Contains(_BS); }
+            get { return CheckFilter(Filter.Categories, _BS); }
             set
             {
-                if (value) { Filter.Categories.Add(_BS); }
-                else { Filter.Categories.Remove(_BS); }
+                UpdateFilter(value, Filter.Categories, _BS);
                 NotifyOfPropertyChange(() => CategoryBS);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryVE
         {
-            get { return Filter.Categories.Contains(_VE); }
+            get { return CheckFilter(Filter.Categories, _VE); }
             set
             {
-                if (value) { Filter.Categories.Add(_VE); }
-                else { Filter.Categories.Remove(_VE); }
+                UpdateFilter(value, Filter.Categories, _VE);
                 NotifyOfPropertyChange(() => CategoryVE);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryVE2
         {
-            get { return Filter.Categories.Contains(_VE2); }
+            get { return CheckFilter(Filter.Categories, _VE2); }
             set
             {
-                if (value) { Filter.Categories.Add(_VE2); }
-                else { Filter.Categories.Remove(_VE2); }
+                UpdateFilter(value, Filter.Categories, _VE2);
                 NotifyOfPropertyChange(() => CategoryVE2);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryES
         {
-            get { return Filter.Categories.Contains(_ES); }
+            get { return CheckFilter(Filter.Categories, _ES); }
             set
             {
-                if (value) { Filter.Categories.Add(_ES); }
-                else { Filter.Categories.Remove(_ES); }
+                UpdateFilter(value, Filter.Categories, _ES);
                 NotifyOfPropertyChange(() => CategoryES);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryT1
         {
-            get { return Filter.Categories.Contains(_T1); }
+            get { return CheckFilter(Filter.Categories, _T1); }
             set
             {
-                if (value) { Filter.Categories.Add(_T1); }
-                else { Filter.Categories.Remove(_T1); }
+                UpdateFilter(value, Filter.Categories, _T1);
                 NotifyOfPropertyChange(() => CategoryT1);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryT2
         {
-            get { return Filter.Categories.Contains(_T2); }
+            get { return CheckFilter(Filter.Categories, _T2); }
             set
             {
-                if (value) { Filter.Categories.Add(_T2); }
-                else { Filter.Categories.Remove(_T2); }
+                UpdateFilter(value, Filter.Categories, _T2);
                 NotifyOfPropertyChange(() => CategoryT2);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryT3
         {
-            get { return Filter.Categories.Contains(_T3); }
+            get { return CheckFilter(Filter.Categories, _T3); }
             set
             {
-                if (value) { Filter.Categories.Add(_T3); }
-                else { Filter.Categories.Remove(_T3); }
+                UpdateFilter(value, Filter.Categories, _T3);
                 NotifyOfPropertyChange(() => CategoryT3);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryGG
         {
-            get { return Filter.Categories.Contains(_GG); }
+            get { return CheckFilter(Filter.Categories, _GG); }
             set
             {
-                if (value) { Filter.Categories.Add(_GG); }
-                else { Filter.Categories.Remove(_GG); }
+                UpdateFilter(value, Filter.Categories, _GG);
                 NotifyOfPropertyChange(() => CategoryGG);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryCHU
         {
-            get { return Filter.Categories.Contains(_CHU); }
+            get { return CheckFilter(Filter.Categories, _CHU); }
             set
             {
-                if (value) { Filter.Categories.Add(_CHU); }
-                else { Filter.Categories.Remove(_CHU); }
+                UpdateFilter(value, Filter.Categories, _CHU);
                 NotifyOfPropertyChange(() => CategoryCHU);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryCY
         {
-            get { return Filter.Categories.Contains(_CY); }
+            get { return CheckFilter(Filter.Categories, _CY); }
             set
             {
-                if (value) { Filter.Categories.Add(_CY); }
-                else { Filter.Categories.Remove(_CY); }
+                UpdateFilter(value, Filter.Categories, _CY);
                 NotifyOfPropertyChange(() => CategoryCY);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryDM
         {
-            get { return Filter.Categories.Contains(_DM); }
+            get { return CheckFilter(Filter.Categories, _DM); }
             set
             {
-                if (value) { Filter.Categories.Add(_DM); }
-                else { Filter.Categories.Remove(_DM); }
+                UpdateFilter(value, Filter.Categories, _DM);
                 NotifyOfPropertyChange(() => CategoryDM);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryESTI
         {
-            get { return Filter.Categories.Contains(_ESTI); }
+            get { return CheckFilter(Filter.Categories, _ESTI); }
             set
             {
-                if (value) { Filter.Categories.Add(_ESTI); }
-                else { Filter.Categories.Remove(_ESTI); }
+                UpdateFilter(value, Filter.Categories, _ESTI);
                 NotifyOfPropertyChange(() => CategoryESTI);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryGC
         {
-            get { return Filter.Categories.Contains(_GC); }
+            get { return CheckFilter(Filter.Categories, _GC); }
             set
             {
-                if (value) { Filter.Categories.Add(_GC); }
-                else { Filter.Categories.Remove(_GC); }
+                UpdateFilter(value, Filter.Categories, _GC);
                 NotifyOfPropertyChange(() => CategoryGC);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryGF
         {
-            get { return Filter.Categories.Contains(_GF); }
+            get { return CheckFilter(Filter.Categories, _GF); }
             set
             {
-                if (value) { Filter.Categories.Add(_GF); }
-                else { Filter.Categories.Remove(_GF); }
+                UpdateFilter(value, Filter.Categories, _GF);
                 NotifyOfPropertyChange(() => CategoryGF);
-                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryNXN
         {
-            get { return Filter.Categories.Contains(_NXN); }
+            get { return CheckFilter(Filter.Categories, _NXN); }
             set
             {
-                if (value) { Filter.Categories.Add(_NXN); }
-                else { Filter.Categories.Remove(_NXN); }
+                UpdateFilter(value, Filter.Categories, _NXN);
                 NotifyOfPropertyChange(() => CategoryNXN);
-                Selector.IsFilterChanged = true;
             }
         }
 
-        // Update Filter.Level
-        public void IncreaseLevelMin()
-        {
-            if (LevelMin < 15 && LevelMin < LevelMax)
-            {
-                LevelMin++;
-            }
-        }
-        public void DecreaseLevelMin()
-        {
-            if (LevelMin > 1)
-            {
-                LevelMin--;
-            }
-        }
-        public void IncreaseLevelMax()
-        {
-            if (LevelMax < 15)
-            {
-                LevelMax++;
-            }
-        }
-        public void DecreaseLevelMax()
-        {
-            if (LevelMax > 1 && LevelMax > LevelMin)
-            {
-                LevelMax--;
-            }
-        }
 
-        // Update LevelIndicators
-        public void UpdateLevelIndicators()
-        {
-            for (int i = 1; i < LevelMin; i++)
-            {
-                LevelIndicators[i].Value = false;
-            }
-            for (int i = LevelMin; i <= LevelMax; i++)
-            {
-                LevelIndicators[i].Value = true;
-            }
-            for (int i = LevelMax + 1; i <= 15; i++)
-            {
-                LevelIndicators[i].Value = false;
-            }
-        }
+        
         public class LevelIndicator : PropertyChangedBase
         {
             private bool _value;

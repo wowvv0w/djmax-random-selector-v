@@ -59,6 +59,7 @@
                 <ColumnDefinition Width="30"/>
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="CurrentTab"
+                       Text="FILTER"
                        Foreground="{StaticResource Highlight}"
                        FontFamily="{StaticResource Lato Light}"
                        FontSize="23"
@@ -73,7 +74,14 @@
         </Grid>
         <!-- Bottom Bar -->
         <Grid Height="50" DockPanel.Dock="Bottom" Background="{StaticResource Nav}">
-
+            <StackPanel Orientation="Horizontal"
+                        Margin="30,0">
+                <Button x:Name="ShowInfo"
+                        Style="{StaticResource UtilityButton}"
+                        Margin="0">
+                    <Image Source="pack://application:,,,/Images/icon.png"/>
+                </Button>
+            </StackPanel>
             <TextBlock Text="Press F7 to Start Random Selector" Foreground="{StaticResource Default}"
                        FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <StackPanel Orientation="Horizontal"

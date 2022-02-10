@@ -9,12 +9,11 @@
              d:DesignHeight="340" d:DesignWidth="680">
     <Grid>
         <Grid.Resources>
-            <Style TargetType="GroupBox">
+            <Style TargetType="Border">
                 <Setter Property="Background" Value="{StaticResource Widget}"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Foreground" Value="{StaticResource Default}"/>
             </Style>
             <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource Default}"/>
                 <Setter Property="FontFamily" Value="{StaticResource Lato}"/>
                 <Setter Property="FontSize" Value="20"/>
             </Style>
@@ -29,16 +28,8 @@
         </Grid.RowDefinitions>
 
         <!--BUTTON TUNES-->
-        <GroupBox Margin="0,0,5,5">
-            <Grid>
-                <Grid.Resources>
-                    <Style TargetType="ToggleButton">
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="Width" Value="60"/>
-                        <Setter Property="Height" Value="60"/>
-                    </Style>
-                </Grid.Resources>
+        <Border Margin="0,0,5,5">
+            <Grid Margin="5,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="70"/>
@@ -51,9 +42,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <ItemsControl>
-                    
-                </ItemsControl>
+                
                 <TextBlock Text="BUTTON TUNES"
                            Grid.Column="1"
                            Grid.ColumnSpan="4"
@@ -103,11 +92,11 @@
                     </ToggleButton.Tag>
                 </ToggleButton>
             </Grid>
-        </GroupBox>
+        </Border>
 
         <!--DIFFICULTY-->
-        <GroupBox Grid.Column="1" Margin="5,0,0,5">
-            <Grid>
+        <Border Grid.Column="1" Margin="5,0,0,5">
+            <Grid Margin="5,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="*"/>
@@ -282,14 +271,14 @@
                     </Grid>
                 </Grid>
             </Grid>
-        </GroupBox>
+        </Border>
         
         <!-- CATEGORIES -->
-        <GroupBox Grid.Row="1"
-                  Grid.Column="0"
-                  Grid.ColumnSpan="2"
-                  Margin="0,5,0,0">
-            <Grid>
+        <Border Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="0,5,0,0">
+            <Grid Margin="5,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="*"/>
@@ -448,6 +437,6 @@
                     </UniformGrid>
                 </Grid>
             </Grid>
-        </GroupBox>
+        </Border>
     </Grid>
 </UserControl>
