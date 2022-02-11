@@ -264,10 +264,13 @@
     <Resource Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\icon.png" />
+    <Resource Include="Images\icon2.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Version.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Text.Json.6.0.1\build\System.Text.Json.targets" Condition="Exists('..\packages\System.Text.Json.6.0.1\build\System.Text.Json.targets')" />

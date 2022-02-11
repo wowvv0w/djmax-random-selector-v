@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
+        xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d"
         Height="340" Width="430"
         ResizeMode="NoResize"
@@ -16,6 +17,8 @@
               Style="{StaticResource DialogBar}">
             <TextBlock Text="INFO"
                        Style="{StaticResource DialogTitle}"/>
+            <Border Background="Transparent"
+                    cal:Message.Attach="[Event MouseDown] = [Action MoveWindow($view)]"/>
         </Grid>
         <Grid DockPanel.Dock="Bottom"
               Style="{StaticResource DialogBar}">
@@ -41,7 +44,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Image Source="pack://application:,,,/Images/icon.png"
+                <Image Source="pack://application:,,,/Images/icon2.png"
                        Height="90"/>
                 <StackPanel Grid.Column="1"
                             Margin="20,0,0,0"

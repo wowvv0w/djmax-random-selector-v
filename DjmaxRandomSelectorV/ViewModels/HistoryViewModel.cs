@@ -13,10 +13,10 @@ namespace DjmaxRandomSelectorV.ViewModels
         public BindableCollection<HistoryItem> History { get; set; }
         public void UpdateHistory(HistoryItem historyItem)
         {
-            History.Add(historyItem);
+            History.Insert(0, historyItem);
             if (History.Count > 8)
             {
-                History.RemoveAt(0);
+                History.RemoveAt(8);
             }
         }
 

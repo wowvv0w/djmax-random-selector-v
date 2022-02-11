@@ -127,7 +127,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!-- LevelButton -->
     <Style x:Key="LevelButton" TargetType="Button">
         <Setter Property="ClickMode" Value="Press"/>

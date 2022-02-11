@@ -73,7 +73,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
-
         public void UpdateLevelIndicators()
         {
             for (int i = 1; i < LevelMin; i++)
@@ -89,7 +88,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                 LevelIndicators[i].Value = false;
             }
         }
-
 
         private const string _4B = "4B";
         private const string _5B = "5B";

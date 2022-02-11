@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Threading;
 using System.Windows.Forms;
+using System.Text;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -26,18 +27,28 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public MainViewModel()
         {
-            (_lastSelectorVersion, _lastAllTrackVersion) = Manager.UpdateCheck();
-            if (SELECTOR_VERSION < _lastSelectorVersion)
+            try
             {
-                OpenReleasePageVisibility = Visibility.Visible;
+                (_lastSelectorVersion, _lastAllTrackVersion) = Manager.UpdateCheck();
+                if (SELECTOR_VERSION < _lastSelectorVersion)
+                {
+                    OpenReleasePageVisibility = Visibility.Visible;
+                }
+                if (Settings.Default.allTrackVersion < _lastAllTrackVersion)
+                {
+                    Manager.UpdateAllTrackList();
+                    Settings.Default.allTrackVersion = _lastAllTrackVersion;
+                    Settings.Default.Save();
+                }
             }
-            if (Settings.Default.allTrackVersion < _lastAllTrackVersion)
+            catch
             {
-                Manager.UpdateAllTrackList();
-                Settings.Default.allTrackVersion = _lastAllTrackVersion;
-                Settings.Default.Save();
+                System.Windows.MessageBox.Show("Cannot check last version.",
+                    "Selector Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                _lastSelectorVersion = SELECTOR_VERSION;
             }
-
 
             Manager.ReadAllTrackList();
             Manager.UpdateTrackList();
@@ -59,12 +70,18 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             try
             {
-                var selectedMusic = Pick();
-                var historyItem = new HistoryItem(selectedMusic);
-                HistoryViewModel.UpdateHistory(historyItem);
+                var recents = FilterViewModel.Filter.Recents;
+                recents = CheckRecents(recents);
+
+                var selectedMusic = Pick(recents);
 
                 var inputCommand = Find(selectedMusic);
                 Select(inputCommand);
+
+                var historyItem = new HistoryItem(selectedMusic);
+                HistoryViewModel.UpdateHistory(historyItem);
+
+                recents.Add(selectedMusic.Title);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -208,11 +225,20 @@ namespace DjmaxRandomSelectorV.ViewModels
                             int vkey = (((int)lParam >> 16) & 0xFFFF);
                             if (vkey == (uint)Keys.F7)
                             {
-                                if (CanStart)
+                                var windowTitle = GetActiveWindowTitle();
+                                Console.WriteLine(windowTitle);
+                                if (CanStart && windowTitle == "DJMAX RESPECT V")
                                 {
                                     Thread thread = new Thread(new ThreadStart(() => StartSelector()));
                                     Console.WriteLine("Start");
                                     thread.Start();
+                                }
+                                else if (windowTitle != "DJMAX RESPECT V")
+                                {
+                                    System.Windows.MessageBox.Show("Active window is not DJMAX RESPECT V.",
+                                        "Selector Error",
+                                        MessageBoxButton.OK,
+                                        MessageBoxImage.Error);
                                 }
                                 else
                                 {
@@ -225,6 +251,25 @@ namespace DjmaxRandomSelectorV.ViewModels
                     break;
             }
             return IntPtr.Zero;
+        }
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
+        private string GetActiveWindowTitle()
+        {
+            const int nChars = 256;
+            StringBuilder Buff = new StringBuilder(nChars);
+            IntPtr handle = GetForegroundWindow();
+
+            if (GetWindowText(handle, Buff, nChars) > 0)
+            {
+                return Buff.ToString();
+            }
+            return null;
         }
     }
 }

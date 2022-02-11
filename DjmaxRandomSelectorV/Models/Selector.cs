@@ -16,6 +16,7 @@ namespace DjmaxRandomSelectorV.Models
         public static List<Track> AllTrackList { get; set; }
         public static List<Track> TrackList { get; set; }
         private static List<Music> MusicList { get; set; }
+        private static List<string> TitleList { get; set; }
         public static bool CanStart { get; set; } = true;
 
         public static void SiftOut(Filter filter)
@@ -41,14 +42,42 @@ namespace DjmaxRandomSelectorV.Models
                                 Level = pattern.Value
                             };
             MusicList = musicList.ToList();
+
+            var titleList = from music in MusicList
+                            select music.Title;
+            TitleList = titleList.Distinct().ToList();
         }
 
-        public static Music Pick()
+
+        public static List<string> CheckRecents(List<string> recents)
         {
+            if (recents.Count >= TitleList.Count)
+            {
+                try
+                {
+                    recents.RemoveRange(0, recents.Count - TitleList.Count + 1);
+                }
+                catch (ArgumentException)
+                {
+                }
+            }
+            else if (recents.Count > 5)
+            {
+                recents.RemoveAt(0);
+            }
+
+            return recents;
+        }
+
+        public static Music Pick(List<string> recents)
+        {
+            var musicList = (from music in MusicList
+                             where !recents.Contains(music.Title)
+                             select music).ToList();
+
             var random = new Random();
-            var index = random.Next(MusicList.Count() - 1);
-            var selectedMusic = MusicList[index];
-            Console.WriteLine($"{selectedMusic.Title} {selectedMusic.Style} {selectedMusic.Level}");
+            var index = random.Next(musicList.Count - 1);
+            var selectedMusic = musicList[index];
 
             return selectedMusic;
         }
@@ -80,7 +109,7 @@ namespace DjmaxRandomSelectorV.Models
 
             // Find which key should be pressed
             int whereIsIt = sameInitialList.FindIndex(x => x.Title == selectedMusic.Title);
-            int count = sameInitialList.Count();
+            int count = sameInitialList.Count;
             bool isForward = whereIsIt <= Math.Ceiling((double)count / 2) || "wxyzWXYZ".Contains(initial);
 
             char inputInitial;
@@ -170,7 +199,6 @@ namespace DjmaxRandomSelectorV.Models
                 direction = 38; // UP
             }
 
-            Input((byte)button);
             Input(33); // PAGE UP
             Input((byte)initial);
             if (alphabet == false && forward)
@@ -183,6 +211,8 @@ namespace DjmaxRandomSelectorV.Models
             {
                 Input(direction);
             }
+
+            Input((byte)button);
             for(int i = 0; i < right; i++)
             {
                 Input(39); // RIGHT

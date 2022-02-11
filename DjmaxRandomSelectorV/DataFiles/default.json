@@ -1,33 +1,44 @@
 {
-  "ButtonTunes": [],
+  "ButtonTunes": [
+    "6B",
+    "4B",
+    "5B",
+    "8B"
+  ],
   "Difficulties": [
+    "SC",
+    "NM",
     "HD",
-    "MX",
-    "SC"
+    "MX"
   ],
   "Categories": [
-    "P3",
-    "RP",
-    "P1",
-    "P2",
-    "BS",
-    "VE",
+    "NXN",
     "VE2",
-    "ES",
+    "RP",
+    "CE",
     "T1",
     "T2",
+    "BS",
+    "P1",
+    "P2",
     "T3",
-    "GG",
-    "ESTI",
+    "VE",
+    "P3",
+    "TR",
+    "ES",
+    "DM",
+    "CY",
+    "GF",
     "GC",
     "CHU",
-    "CY",
-    "DM",
-    "NXN"
+    "GG",
+    "ESTI"
   ],
   "Levels": [
-    8,
+    1,
     15
   ],
-  "Mode": true
+  "Recents": [
+    
+  ]
 }
