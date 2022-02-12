@@ -57,8 +57,8 @@
                                Foreground="{StaticResource Default}"
                                FontFamily="{StaticResource Lato}"
                                FontSize="16"/>
-                    <TextBlock x:Name="LastVersion"
-                               Text="Last Version:"
+                    <TextBlock x:Name="LastestVersion"
+                               Text="Lastest Version:"
                                Foreground="{StaticResource Highlight}"
                                FontFamily="{StaticResource Lato}"
                                FontSize="16"/>

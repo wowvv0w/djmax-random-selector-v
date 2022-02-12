@@ -26,10 +26,10 @@ namespace DjmaxRandomSelectorV.Models
                 var data = client.DownloadString(VERSION_URL);
                 var versions = data.Split(',');
                 
-                var lastSelectorVersion = Int32.Parse(versions[0]);
-                var lastAllTrackVersion = Int32.Parse(versions[1]);
+                var lastSelectorVer = Int32.Parse(versions[0]);
+                var lastAllTrackVer = Int32.Parse(versions[1]);
 
-                return (lastSelectorVersion, lastAllTrackVersion);
+                return (lastSelectorVer, lastAllTrackVer);
             }
         }
         

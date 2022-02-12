@@ -11,6 +11,7 @@
         FontFamily="{StaticResource Lato Black}"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
+        SnapsToDevicePixels="True"
         cal:Message.Attach="[Event Loaded] = [Action AddHotKey($view)];[Event Closing] = [Action CloseEvent]"
         Icon="pack://application:,,,/Images/icon.png">
     <Window.Background>

@@ -16,10 +16,10 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private DockPanel _dockPanel;
 
-        public InfoViewModel(int currentVersion, int lastVersion, DockPanel dockPanel)
+        public InfoViewModel(int currentVersion, int lastestVersion, DockPanel dockPanel)
         {
             CurrentVersion = IntToString(currentVersion);
-            LastVersion = IntToString(lastVersion);
+            LastestVersion = IntToString(lastestVersion);
             AllTrackVersion = Settings.Default.allTrackVersion.ToString();
 
             _dockPanel = dockPanel;
@@ -36,7 +36,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
 
         private string _currentVersion;
-        private string _lastVersion;
+        private string _lastestVersion;
         private string _allTrackVersion;
         public string CurrentVersion
         {
@@ -47,13 +47,13 @@ namespace DjmaxRandomSelectorV.ViewModels
                 NotifyOfPropertyChange(() => CurrentVersion);
             }
         }
-        public string LastVersion
+        public string LastestVersion
         {
-            get { return _lastVersion; }
+            get { return _lastestVersion; }
             set
             {
-                _lastVersion = $"Last Version: {value}";
-                NotifyOfPropertyChange(() => LastVersion);
+                _lastestVersion = $"Lastest Version: {value}";
+                NotifyOfPropertyChange(() => LastestVersion);
             }
         }
         public string AllTrackVersion

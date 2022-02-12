@@ -20,8 +20,8 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private const string RELEASE_URL = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
 
-        private int _lastSelectorVersion;
-        private int _lastAllTrackVersion;
+        private int _lastSelectorVer;
+        private int _lastAllTrackVer;
 
         private DockPanel _dockPanel;
         private BlurEffect _blur = new BlurEffect() { Radius = 75 };
@@ -43,7 +43,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                     "Selector Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
-                _lastSelectorVersion = SELECTOR_VERSION;
+                _lastSelectorVer = SELECTOR_VERSION;
             }
 
             try
@@ -68,17 +68,17 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private void CheckUpdate()
         {
-            (_lastSelectorVersion, _lastAllTrackVersion) = Manager.GetLastVersions();
+            (_lastSelectorVer, _lastAllTrackVer) = Manager.GetLastVersions();
 
-            if (SELECTOR_VERSION < _lastSelectorVersion)
+            if (SELECTOR_VERSION < _lastSelectorVer)
             {
                 OpenReleasePageVisibility = Visibility.Visible;
             }
 
-            if (Settings.Default.allTrackVersion < _lastAllTrackVersion)
+            if (Settings.Default.allTrackVersion < _lastAllTrackVer)
             {
                 Manager.UpdateAllTrackList();
-                Settings.Default.allTrackVersion = _lastAllTrackVersion;
+                Settings.Default.allTrackVersion = _lastAllTrackVer;
                 Settings.Default.Save();
             }
         }
@@ -218,7 +218,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void ShowInfo()
         {
             _dockPanel.Effect = _blur;
-            var infoViewModel = new InfoViewModel(SELECTOR_VERSION, _lastSelectorVersion, _dockPanel);
+            var infoViewModel = new InfoViewModel(SELECTOR_VERSION, _lastSelectorVer, _dockPanel);
             windowManager.ShowDialogAsync(infoViewModel);
         }
 
