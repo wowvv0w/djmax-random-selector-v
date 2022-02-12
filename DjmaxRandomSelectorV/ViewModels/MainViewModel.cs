@@ -28,41 +28,62 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public FilterViewModel FilterViewModel { get; set; }
         public HistoryViewModel HistoryViewModel { get; set; }
-        //public InfoViewModel InfoViewModel { get; set; }
+
+        private Advanced Advanced { get; set; }
 
         public MainViewModel()
         {
             try
             {
-                (_lastSelectorVersion, _lastAllTrackVersion) = Manager.GetLastVersions();
-                if (SELECTOR_VERSION < _lastSelectorVersion)
-                {
-                    OpenReleasePageVisibility = Visibility.Visible;
-                }
-                if (Settings.Default.allTrackVersion < _lastAllTrackVersion)
-                {
-                    Manager.UpdateAllTrackList();
-                    Settings.Default.allTrackVersion = _lastAllTrackVersion;
-                    Settings.Default.Save();
-                }
+                CheckUpdate();
             }
-            catch
+            catch (Exception e)
             {
-                MessageBox.Show("Cannot check update.",
+                MessageBox.Show(e.Message,
                     "Selector Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
                 _lastSelectorVersion = SELECTOR_VERSION;
             }
 
-            Manager.ReadAllTrackList();
-            Manager.UpdateTrackList();
+            try
+            {
+                Manager.ReadAllTrackList();
+                Manager.UpdateTrackList();
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+                MessageBox.Show("Cannot Find AllTrackList.csv",
+                    "Selector Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                TryCloseAsync();
+            }
 
             FilterViewModel = new FilterViewModel();
             HistoryViewModel = new HistoryViewModel();
+
+            Advanced = new Advanced();
         }
 
-        public void StartSelector()
+        private void CheckUpdate()
+        {
+            (_lastSelectorVersion, _lastAllTrackVersion) = Manager.GetLastVersions();
+
+            if (SELECTOR_VERSION < _lastSelectorVersion)
+            {
+                OpenReleasePageVisibility = Visibility.Visible;
+            }
+
+            if (Settings.Default.allTrackVersion < _lastAllTrackVersion)
+            {
+                Manager.UpdateAllTrackList();
+                Settings.Default.allTrackVersion = _lastAllTrackVersion;
+                Settings.Default.Save();
+            }
+        }
+
+        private void Start()
         {
             CanStart = false;
             if (IsFilterChanged)
@@ -71,11 +92,11 @@ namespace DjmaxRandomSelectorV.ViewModels
                 IsFilterChanged = false;
             }
 
+            List<string> recents = Advanced.Recents;
+            recents = CheckRecents(recents);
+
             try
             {
-                List<string> recents = FilterViewModel.Filter.Recents;
-                recents = CheckRecents(recents);
-
                 Music selectedMusic = Pick(recents);
 
                 InputCommand inputCommand = Find(selectedMusic);
@@ -235,7 +256,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
                     if (CanStart && windowTitle == DJMAX_TITLE)
                     {
-                        Thread thread = new Thread(new ThreadStart(() => StartSelector()));
+                        Thread thread = new Thread(new ThreadStart(() => Start()));
                         thread.Start();
                     }
                     else if (windowTitle != DJMAX_TITLE)

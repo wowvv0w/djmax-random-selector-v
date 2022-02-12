@@ -55,10 +55,13 @@
                                    Margin="0,0,10,0"/>
                         <Slider x:Name="InputDelay"
                                 Grid.Column="1"
-                                VerticalAlignment="Center"
                                 Margin="40,0"
+                                VerticalAlignment="Center"
                                 Minimum="10"
-                                Maximum="50"/>
+                                Maximum="50"
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="10"
+                                Style="{StaticResource SettingSlider}"/>
                     </Grid>
 
                     <TextBlock Text="TRACK LIST SETTING"
