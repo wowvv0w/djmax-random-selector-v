@@ -259,16 +259,13 @@
     <Resource Include="Images\btn_right.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\icon2.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Version.txt" />
+    <None Include="Version.txt" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\icon.png" />
