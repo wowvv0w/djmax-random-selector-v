@@ -17,8 +17,6 @@
               Style="{StaticResource DialogBar}">
             <TextBlock Text="INFO"
                        Style="{StaticResource DialogTitle}"/>
-            <Border Background="Transparent"
-                    cal:Message.Attach="[Event MouseDown] = [Action MoveWindow($view)]"/>
         </Grid>
         <Grid DockPanel.Dock="Bottom"
               Style="{StaticResource DialogBar}">

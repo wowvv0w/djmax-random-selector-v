@@ -19,9 +19,9 @@ namespace DjmaxRandomSelectorV.Models
         private const string VERSION_URL = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
         private const string ALL_TRACK_URL = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/DataFiles/AllTrackList.csv";
 
-        public static (int, int) UpdateCheck()
+        public static (int, int) GetLastVersions()
         {
-            using (WebClient client = new WebClient())
+            using (var client = new WebClient())
             {
                 var data = client.DownloadString(VERSION_URL);
                 var versions = data.Split(',');
@@ -38,7 +38,7 @@ namespace DjmaxRandomSelectorV.Models
         {
             string data;
 
-            using (WebClient client = new WebClient())
+            using (var client = new WebClient())
             {
                 client.Encoding = Encoding.UTF8;
                 data = client.DownloadString(ALL_TRACK_URL);    

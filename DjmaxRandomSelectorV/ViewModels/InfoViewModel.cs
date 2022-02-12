@@ -1,12 +1,11 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Properties;
 using System;
-using System.Diagnostics;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -15,11 +14,15 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string GITHUB_PAGE_URL = "https://github.com/wowvv0w/djmax-random-selector-v";
         private const string BUG_REPORT_URL = "https://github.com/wowvv0w/djmax-random-selector-v/issues";
 
-        public InfoViewModel(int currentVersion, int lastVersion)
+        private DockPanel _dockPanel;
+
+        public InfoViewModel(int currentVersion, int lastVersion, DockPanel dockPanel)
         {
             CurrentVersion = IntToString(currentVersion);
             LastVersion = IntToString(lastVersion);
             AllTrackVersion = Settings.Default.allTrackVersion.ToString();
+
+            _dockPanel = dockPanel;
 
             string IntToString(int version)
             {
@@ -76,12 +79,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void Close()
         {
             TryCloseAsync();
-        }
-
-        public void MoveWindow(object view)
-        {
-            var window = view as Window;
-            window.DragMove();
+            _dockPanel.Effect = null;
         }
     }
 }

@@ -14,9 +14,10 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class FilterViewModel : Screen
     {
-        public static Filter Filter { get; set; }
+        public Filter Filter { get; set; }
         public FilterViewModel()
         {
+            Filter = Manager.LoadPreset();
             for(int i = 0; i < 16; i++)
             {
                 // DO NOT use index 0

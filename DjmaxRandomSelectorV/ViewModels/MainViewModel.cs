@@ -1,15 +1,16 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
+using static DjmaxRandomSelectorV.Models.Selector;
 using DjmaxRandomSelectorV.Properties;
 using System;
-using System.Collections;
-using System.Windows;
-using static DjmaxRandomSelectorV.Models.Selector;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Windows.Interop;
-using System.Threading;
-using System.Windows.Forms;
 using System.Text;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Interop;
+using System.Windows.Media.Effects;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -22,14 +23,18 @@ namespace DjmaxRandomSelectorV.ViewModels
         private int _lastSelectorVersion;
         private int _lastAllTrackVersion;
 
+        private DockPanel _dockPanel;
+        private BlurEffect _blur = new BlurEffect() { Radius = 75 };
+
         public FilterViewModel FilterViewModel { get; set; }
         public HistoryViewModel HistoryViewModel { get; set; }
+        //public InfoViewModel InfoViewModel { get; set; }
 
         public MainViewModel()
         {
             try
             {
-                (_lastSelectorVersion, _lastAllTrackVersion) = Manager.UpdateCheck();
+                (_lastSelectorVersion, _lastAllTrackVersion) = Manager.GetLastVersions();
                 if (SELECTOR_VERSION < _lastSelectorVersion)
                 {
                     OpenReleasePageVisibility = Visibility.Visible;
@@ -43,17 +48,15 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             catch
             {
-                System.Windows.MessageBox.Show("Cannot check last version.",
+                MessageBox.Show("Cannot check update.",
                     "Selector Error",
                     MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                    MessageBoxImage.Error);
                 _lastSelectorVersion = SELECTOR_VERSION;
             }
 
             Manager.ReadAllTrackList();
             Manager.UpdateTrackList();
-
-            FilterViewModel.Filter = Manager.LoadPreset();
 
             FilterViewModel = new FilterViewModel();
             HistoryViewModel = new HistoryViewModel();
@@ -70,12 +73,12 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             try
             {
-                var recents = FilterViewModel.Filter.Recents;
+                List<string> recents = FilterViewModel.Filter.Recents;
                 recents = CheckRecents(recents);
 
-                var selectedMusic = Pick(recents);
+                Music selectedMusic = Pick(recents);
 
-                var inputCommand = Find(selectedMusic);
+                InputCommand inputCommand = Find(selectedMusic);
                 Select(inputCommand);
 
                 var historyItem = new HistoryItem(selectedMusic);
@@ -85,7 +88,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             catch (ArgumentOutOfRangeException)
             {
-                System.Windows.MessageBox.Show("There is no music in filtered list.",
+                MessageBox.Show("There is no music in filtered list.",
                     "Filter Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
@@ -136,7 +139,10 @@ namespace DjmaxRandomSelectorV.ViewModels
             window.Close();
         }
 
-
+        public void GetDockPanel(object source)
+        {
+            _dockPanel = source as DockPanel;
+        }
 
         private string _currentTab = "FILTER";
         public string CurrentTab
@@ -180,16 +186,18 @@ namespace DjmaxRandomSelectorV.ViewModels
             IsHistoryTabSelected = true;
             CurrentTab = "HISTORY";
         }
-    
+
         // Utility Buttons
         IWindowManager windowManager = new WindowManager();
-        public void ShowOption()
+        public void ShowSetting()
         {
-            windowManager.ShowDialogAsync(new OptionViewModel());
+            _dockPanel.Effect = _blur;
+            windowManager.ShowDialogAsync(new SettingViewModel(_dockPanel));
         }
         public void ShowInfo()
         {
-            var infoViewModel = new InfoViewModel(SELECTOR_VERSION, _lastSelectorVersion);
+            _dockPanel.Effect = _blur;
+            var infoViewModel = new InfoViewModel(SELECTOR_VERSION, _lastSelectorVersion, _dockPanel);
             windowManager.ShowDialogAsync(infoViewModel);
         }
 
@@ -199,56 +207,46 @@ namespace DjmaxRandomSelectorV.ViewModels
         [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
 
+        private const int WM_HOTKEY = 0x0312;
         private const int HOTKEY_ID = 9000;
+        private const uint KEY_F7 = 118;
+        private const string DJMAX_TITLE = "DJMAX RESPECT V";
 
         public void AddHotKey(object view)
         {
-            Window window = view as Window;
+            var window = view as Window;
 
             HwndSource source;
             IntPtr handle = new WindowInteropHelper(window).Handle;
             source = HwndSource.FromHwnd(handle);
             source.AddHook(HwndHook);
 
-            RegisterHotKey(handle, HOTKEY_ID, 0x0000, (uint)Keys.F7);
+            RegisterHotKey(handle, HOTKEY_ID, 0x0000, KEY_F7);
         }
 
         private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            const int WM_HOTKEY = 0x0312;
-            switch (msg)
+            if (msg == WM_HOTKEY && wParam.ToInt32() == HOTKEY_ID)
             {
-                case WM_HOTKEY:
-                    switch (wParam.ToInt32())
+                int vkey = ((int)lParam >> 16) & 0xFFFF;
+                if (vkey == KEY_F7)
+                {
+                    string windowTitle = GetActiveWindowTitle();
+
+                    if (CanStart && windowTitle == DJMAX_TITLE)
                     {
-                        case HOTKEY_ID:
-                            int vkey = (((int)lParam >> 16) & 0xFFFF);
-                            if (vkey == (uint)Keys.F7)
-                            {
-                                var windowTitle = GetActiveWindowTitle();
-                                Console.WriteLine(windowTitle);
-                                if (CanStart && windowTitle == "DJMAX RESPECT V")
-                                {
-                                    Thread thread = new Thread(new ThreadStart(() => StartSelector()));
-                                    Console.WriteLine("Start");
-                                    thread.Start();
-                                }
-                                else if (windowTitle != "DJMAX RESPECT V")
-                                {
-                                    System.Windows.MessageBox.Show("Active window is not DJMAX RESPECT V.",
-                                        "Selector Error",
-                                        MessageBoxButton.OK,
-                                        MessageBoxImage.Error);
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Nope");
-                                }
-                            }
-                            handled = true;
-                            break;
+                        Thread thread = new Thread(new ThreadStart(() => StartSelector()));
+                        thread.Start();
                     }
-                    break;
+                    else if (windowTitle != DJMAX_TITLE)
+                    {
+                        MessageBox.Show("Foreground window is not DJMAX RESPECT V.",
+                            "Selector Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                    }
+                }
+                handled = true;
             }
             return IntPtr.Zero;
         }

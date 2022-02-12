@@ -7,8 +7,10 @@
         xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d"
         Title="DJMAX Random Selector V" Width="740" Height="480"
-        WindowStyle="None" FontFamily="{StaticResource Lato Black}"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        WindowStyle="None"
+        FontFamily="{StaticResource Lato Black}"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
         cal:Message.Attach="[Event Loaded] = [Action AddHotKey($view)];[Event Closing] = [Action CloseEvent]"
         Icon="pack://application:,,,/Images/icon.png">
     <Window.Background>
@@ -22,7 +24,7 @@
             <GradientStop Color="#2D2E2F" Offset="0.6"/>
         </LinearGradientBrush>
     </Window.Background>
-    <DockPanel>
+    <DockPanel cal:Message.Attach="[Event Loaded] = [Action GetDockPanel($source)]">
         <!-- Top Bar -->
         <Grid Height="30" DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
@@ -41,6 +43,7 @@
                     FontSize="12"
                     Width="140"
                     HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
                     Margin="170,0,0,0"
                     Style="{StaticResource WindowButton}"
                     Visibility="{Binding OpenReleasePageVisibility}"/>
@@ -98,7 +101,7 @@
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         Margin="30,0">
-                <Button x:Name="ShowOption"
+                <Button x:Name="ShowSetting"
                         Style="{StaticResource UtilityButton}">
                     <Image Source="pack://application:,,,/Images/setting.png"/>
                 </Button>

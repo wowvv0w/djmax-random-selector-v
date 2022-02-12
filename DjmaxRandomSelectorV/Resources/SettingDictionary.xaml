@@ -1,0 +1,70 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Style x:Key="SettingBar" TargetType="Grid">
+        <Setter Property="Background" Value="{StaticResource SettingElement}"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Margin" Value="0,5,0,0"/>
+    </Style>
+    
+    <Style x:Key="SettingText" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource Default}"/>
+        <Setter Property="FontFamily" Value="{StaticResource Lato Black}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="10,0,0,0"/>
+    </Style>
+    
+    <Style x:Key="SettingToggleButton" TargetType="ToggleButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="Border"
+                            Background="Transparent"
+                            BorderThickness="0">
+                        <TextBlock x:Name="TextBlock"
+                                   Text="OFF"
+                                   Foreground="{StaticResource Default}"
+                                   FontFamily="{StaticResource Lato Black}"
+                                   FontSize="13"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Text"
+                                    TargetName="TextBlock"
+                                    Value="ON"/>
+                            <Setter Property="Foreground"
+                                    TargetName="TextBlock"
+                                    Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SettingWindowButton" TargetType="Button">
+        <Setter Property="Width" Value="80"/>
+        <Setter Property="Margin" Value="10,0,0,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="#56000000"
+                            BorderBrush="#818282"
+                            BorderThickness="3"
+                            CornerRadius="6">
+                        <TextBlock Text="{TemplateBinding Content}"
+                                   Foreground="#818282"
+                                   FontFamily="{StaticResource Lato Black}"
+                                   FontSize="15"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

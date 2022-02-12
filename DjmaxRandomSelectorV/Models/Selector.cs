@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using DjmaxRandomSelectorV.Properties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Runtime.InteropServices;
-using DjmaxRandomSelectorV.Properties;
 
 namespace DjmaxRandomSelectorV.Models
 {
@@ -142,9 +141,9 @@ namespace DjmaxRandomSelectorV.Models
             // Find right arrow input count
             Track sameMusic = TrackList.Find(x => x.Title == selectedMusic.Title);
             string selectedButton = selectedMusic.Style.Substring(0, 2);
-            List<string> difficulties = new List<string> { "NM", "HD", "MX", "SC" };
+            var difficulties = new List<string> { "NM", "HD", "MX", "SC" };
             int a = difficulties.FindIndex(x => x == selectedMusic.Style.Substring(2, 2));
-            List<string> styles = new List<string>();
+            var styles = new List<string>();
 
             for(int i = 0; i <= a; i++)
             {
@@ -160,9 +159,9 @@ namespace DjmaxRandomSelectorV.Models
 
             var inputCommand = new InputCommand()
             {
-                ButtonTune = inputButton,
                 Initial = Char.ToUpper(inputInitial),
                 VerticalInputCount = inputVertical,
+                ButtonTune = inputButton,
                 RightInputCount = inputRight,
                 IsAlphabet = isAlphabet,
                 IsForward = isForward
@@ -173,9 +172,9 @@ namespace DjmaxRandomSelectorV.Models
 
         public static void Select(InputCommand inputCommand)
         {
-            char button = inputCommand.ButtonTune;
             char initial = inputCommand.Initial;
             int vertical = inputCommand.VerticalInputCount;
+            char button = inputCommand.ButtonTune;
             int right = inputCommand.RightInputCount;
             bool alphabet = inputCommand.IsAlphabet;
             bool forward = inputCommand.IsForward;

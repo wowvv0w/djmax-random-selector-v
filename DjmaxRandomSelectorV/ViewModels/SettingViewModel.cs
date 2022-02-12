@@ -1,18 +1,23 @@
 ﻿using Caliburn.Micro;
+using DjmaxRandomSelectorV.Models;
+using DjmaxRandomSelectorV.Properties;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using DjmaxRandomSelectorV.Properties;
-using DjmaxRandomSelectorV.Models;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class OptionViewModel : Screen
+    public class SettingViewModel : Screen
     {
-        public OptionViewModel()
+        private int _inputDelay;
+        private List<string> _ownedDlcs;
+
+        private DockPanel _dockPanel;
+
+        public SettingViewModel(DockPanel dockPanel)
         {
             _inputDelay = Settings.Default.inputDelay;
             _ownedDlcs = new List<string>();
@@ -21,12 +26,11 @@ namespace DjmaxRandomSelectorV.ViewModels
                 _ownedDlcs.Add(dlc);
             }
             UpdateInputDelayText();
+
+            _dockPanel = dockPanel;
         }
 
-        private int _inputDelay;
-        private List<string> _ownedDlcs;
-
-        public void ApplyOption()
+        public void Apply()
         {
             Settings.Default.inputDelay = _inputDelay;
             Settings.Default.ownedDlcs = new StringCollection();
@@ -37,11 +41,17 @@ namespace DjmaxRandomSelectorV.ViewModels
             Settings.Default.Save();
             Manager.UpdateTrackList();
             Selector.IsFilterChanged = true;
-            TryCloseAsync();
+            Close();
         }
-        public void CancelOption()
+        public void Cancel()
+        {
+            Close();
+        }
+
+        public void Close()
         {
             TryCloseAsync();
+            _dockPanel.Effect = null;
         }
 
         public int InputDelay
@@ -107,157 +117,157 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string _GF = "GF";
         private const string _NXN = "NXN";
 
-        public bool OptionP3
+        public bool SettingP3
         {
             get { return CheckOwnedDlcs(_P3); }
             set
             {
                 UpdateOwnedDlcs(value, _P3);
-                NotifyOfPropertyChange(() => OptionP3);
+                NotifyOfPropertyChange(() => SettingP3);
             }
         }
-        public bool OptionTR
+        public bool SettingTR
         {
             get { return CheckOwnedDlcs(_TR); }
             set
             {
                 UpdateOwnedDlcs(value, _TR);
-                NotifyOfPropertyChange(() => OptionTR);
+                NotifyOfPropertyChange(() => SettingTR);
             }
         }
-        public bool OptionCE
+        public bool SettingCE
         {
             get { return CheckOwnedDlcs(_CE); }
             set
             {
                 UpdateOwnedDlcs(value, _CE);
-                NotifyOfPropertyChange(() => OptionCE);
+                NotifyOfPropertyChange(() => SettingCE);
             }
         }
-        public bool OptionBS
+        public bool SettingBS
         {
             get { return CheckOwnedDlcs(_BS); }
             set
             {
                 UpdateOwnedDlcs(value, _BS);
-                NotifyOfPropertyChange(() => OptionBS);
+                NotifyOfPropertyChange(() => SettingBS);
             }
         }
-        public bool OptionVE
+        public bool SettingVE
         {
             get { return CheckOwnedDlcs(_VE); }
             set
             {
                 UpdateOwnedDlcs(value, _VE);
-                NotifyOfPropertyChange(() => OptionVE);
+                NotifyOfPropertyChange(() => SettingVE);
             }
         }
-        public bool OptionVE2
+        public bool SettingVE2
         {
             get { return CheckOwnedDlcs(_VE2); }
             set
             {
                 UpdateOwnedDlcs(value, _VE2);
-                NotifyOfPropertyChange(() => OptionVE2);
+                NotifyOfPropertyChange(() => SettingVE2);
             }
         }
-        public bool OptionES
+        public bool SettingES
         {
             get { return CheckOwnedDlcs(_ES); }
             set
             {
                 UpdateOwnedDlcs(value, _ES);
-                NotifyOfPropertyChange(() => OptionES);
+                NotifyOfPropertyChange(() => SettingES);
             }
         }
-        public bool OptionT1
+        public bool SettingT1
         {
             get { return CheckOwnedDlcs(_T1); }
             set
             {
                 UpdateOwnedDlcs(value, _T1);
-                NotifyOfPropertyChange(() => OptionT1);
+                NotifyOfPropertyChange(() => SettingT1);
             }
         }
-        public bool OptionT2
+        public bool SettingT2
         {
             get { return CheckOwnedDlcs(_T2); }
             set
             {
                 UpdateOwnedDlcs(value, _T2);
-                NotifyOfPropertyChange(() => OptionT2);
+                NotifyOfPropertyChange(() => SettingT2);
             }
         }
-        public bool OptionT3
+        public bool SettingT3
         {
             get { return CheckOwnedDlcs(_T3); }
             set
             {
                 UpdateOwnedDlcs(value, _T3);
-                NotifyOfPropertyChange(() => OptionT3);
+                NotifyOfPropertyChange(() => SettingT3);
             }
         }
-        public bool OptionCHU
+        public bool SettingCHU
         {
             get { return CheckOwnedDlcs(_CHU); }
             set
             {
                 UpdateOwnedDlcs(value, _CHU);
-                NotifyOfPropertyChange(() => OptionCHU);
+                NotifyOfPropertyChange(() => SettingCHU);
             }
         }
-        public bool OptionCY
+        public bool SettingCY
         {
             get { return CheckOwnedDlcs(_CY); }
             set
             {
                 UpdateOwnedDlcs(value, _CY);
-                NotifyOfPropertyChange(() => OptionCY);
+                NotifyOfPropertyChange(() => SettingCY);
             }
         }
-        public bool OptionDM
+        public bool SettingDM
         {
             get { return CheckOwnedDlcs(_DM); }
             set
             {
                 UpdateOwnedDlcs(value, _DM);
-                NotifyOfPropertyChange(() => OptionDM);
+                NotifyOfPropertyChange(() => SettingDM);
             }
         }
-        public bool OptionESTI
+        public bool SettingESTI
         {
             get { return CheckOwnedDlcs(_ESTI); }
             set
             {
                 UpdateOwnedDlcs(value, _ESTI);
-                NotifyOfPropertyChange(() => OptionESTI);
+                NotifyOfPropertyChange(() => SettingESTI);
             }
         }
-        public bool OptionGC
+        public bool SettingGC
         {
             get { return CheckOwnedDlcs(_GC); }
             set
             {
                 UpdateOwnedDlcs(value, _GC);
-                NotifyOfPropertyChange(() => OptionGC);
+                NotifyOfPropertyChange(() => SettingGC);
             }
         }
-        public bool OptionGF
+        public bool SettingGF
         {
             get { return CheckOwnedDlcs(_GF); }
             set
             {
                 UpdateOwnedDlcs(value, _GF);
-                NotifyOfPropertyChange(() => OptionGF);
+                NotifyOfPropertyChange(() => SettingGF);
             }
         }
-        public bool OptionNXN
+        public bool SettingNXN
         {
             get { return CheckOwnedDlcs(_NXN); }
             set
             {
                 UpdateOwnedDlcs(value, _NXN);
-                NotifyOfPropertyChange(() => OptionNXN);
+                NotifyOfPropertyChange(() => SettingNXN);
             }
         }
     }

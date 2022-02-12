@@ -194,7 +194,7 @@
                       Grid.Column="1"
                       Grid.ColumnSpan="2"
                       Margin="0,0,4.5,0"
-                      Background="{StaticResource OptionElement}"
+                      Background="{StaticResource SettingElement}"
                       Height="20">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -234,7 +234,7 @@
                       Grid.Column="3"
                       Grid.ColumnSpan="2"
                       Margin="4.5,0,0,0"
-                      Background="{StaticResource OptionElement}"
+                      Background="{StaticResource SettingElement}"
                       Height="20">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -289,7 +289,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="CATEGORIES"
+                <TextBlock Text="CATEGORY"
                            Grid.Column="1"
                            Margin="0,0,0,10"/>
                 <UniformGrid Grid.Row="1"

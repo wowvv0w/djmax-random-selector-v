@@ -15,7 +15,7 @@
     <SolidColorBrush x:Key="Maximum" Color="#F91C55"/>
     <SolidColorBrush x:Key="SC" Color="#FF11E6"/>
 
-    <LinearGradientBrush x:Key="OptionElement" StartPoint="0,0.5" EndPoint="1,0.5">
+    <LinearGradientBrush x:Key="SettingElement" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Color="#7F584E46" Offset="0.4999"/>
         <GradientStop Color="#FF604E41" Offset="0.5"/>
     </LinearGradientBrush>
