@@ -18,7 +18,7 @@ namespace DjmaxRandomSelectorV.Models
         private const string PRESET_DEFAULT = "Default";
 
         private const string VERSION_URL = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
-        private const string ALL_TRACK_URL = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/DataFiles/AllTrackList.csv";
+        private const string ALL_TRACK_URL = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/AllTrackList.csv";
 
 
         public static Setting LoadSetting()
