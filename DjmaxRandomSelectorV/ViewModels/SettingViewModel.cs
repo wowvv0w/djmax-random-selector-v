@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
-using DjmaxRandomSelectorV.Properties;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -12,15 +11,17 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class SettingViewModel : Screen
     {
+        private Setting _setting;
         private int _inputDelay;
-        private StringCollection _ownedDlcs;
+        private List<string> _ownedDlcs;
 
         private DockPanel _dockPanel;
 
-        public SettingViewModel(DockPanel dockPanel)
+        public SettingViewModel(Setting setting, DockPanel dockPanel)
         {
-            _inputDelay = Settings.Default.inputDelay;
-            _ownedDlcs = Settings.Default.ownedDlcs;
+            _setting = setting;
+            _inputDelay = setting.InputDelay;
+            _ownedDlcs = setting.OwnedDlcs;
             UpdateInputDelayText();
 
             _dockPanel = dockPanel;
@@ -28,9 +29,11 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void Apply()
         {
-            Settings.Default.inputDelay = _inputDelay;
-            Settings.Default.Save();
-            Manager.UpdateTrackList();
+            _setting.InputDelay = _inputDelay;
+            _setting.OwnedDlcs = _ownedDlcs;
+
+            Manager.SaveSetting(_setting);
+            Manager.UpdateTrackList(_ownedDlcs);
             Selector.IsFilterChanged = true;
             Close();
         }

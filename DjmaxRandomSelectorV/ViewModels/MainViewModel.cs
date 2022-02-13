@@ -1,7 +1,6 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
 using static DjmaxRandomSelectorV.Models.Selector;
-using DjmaxRandomSelectorV.Properties;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -11,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media.Effects;
+using System.IO;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -30,9 +30,23 @@ namespace DjmaxRandomSelectorV.ViewModels
         public HistoryViewModel HistoryViewModel { get; set; }
 
         private Advanced Advanced { get; set; }
+        private Setting Setting { get; set; }
 
         public MainViewModel()
         {
+            try
+            {
+                Setting = Manager.LoadSetting();
+            }
+            catch (FileNotFoundException)
+            {
+                MessageBox.Show("Cannot Find config.json\nCreate new file.",
+                    "Selector Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                Setting = new Setting();
+            }
+
             try
             {
                 CheckUpdate();
@@ -42,22 +56,22 @@ namespace DjmaxRandomSelectorV.ViewModels
                 MessageBox.Show(e.Message,
                     "Selector Error",
                     MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                    MessageBoxImage.Warning);
                 _lastSelectorVer = SELECTOR_VERSION;
             }
 
             try
             {
                 Manager.ReadAllTrackList();
-                Manager.UpdateTrackList();
+                Manager.UpdateTrackList(Setting.OwnedDlcs);
             }
-            catch (System.IO.FileNotFoundException)
+            catch (FileNotFoundException)
             {
-                MessageBox.Show("Cannot Find AllTrackList.csv",
+                MessageBox.Show("Cannot Find AllTrackList.csv\nCreate new file.",
                     "Selector Error",
                     MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-                TryCloseAsync();
+                    MessageBoxImage.Warning);
+                Manager.UpdateAllTrackList();
             }
 
             FilterViewModel = new FilterViewModel();
@@ -75,11 +89,11 @@ namespace DjmaxRandomSelectorV.ViewModels
                 OpenReleasePageVisibility = Visibility.Visible;
             }
 
-            if (Settings.Default.allTrackVersion < _lastAllTrackVer)
+            if (Setting.AllTrackVersion < _lastAllTrackVer)
             {
                 Manager.UpdateAllTrackList();
-                Settings.Default.allTrackVersion = _lastAllTrackVer;
-                Settings.Default.Save();
+                Setting.AllTrackVersion = _lastAllTrackVer;
+                Manager.SaveSetting(Setting);
             }
         }
 
@@ -100,7 +114,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 Music selectedMusic = Pick(recents);
 
                 InputCommand inputCommand = Find(selectedMusic);
-                Select(inputCommand);
+                Select(inputCommand, Setting.InputDelay);
 
                 var historyItem = new HistoryItem(selectedMusic);
                 HistoryViewModel.UpdateHistory(historyItem);
@@ -213,12 +227,13 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void ShowSetting()
         {
             _dockPanel.Effect = _blur;
-            windowManager.ShowDialogAsync(new SettingViewModel(_dockPanel));
+            windowManager.ShowDialogAsync(new SettingViewModel(Setting, _dockPanel));
         }
         public void ShowInfo()
         {
             _dockPanel.Effect = _blur;
-            var infoViewModel = new InfoViewModel(SELECTOR_VERSION, _lastSelectorVer, _dockPanel);
+            var infoViewModel
+                = new InfoViewModel(SELECTOR_VERSION, _lastSelectorVer, Setting.AllTrackVersion, _dockPanel);
             windowManager.ShowDialogAsync(infoViewModel);
         }
 

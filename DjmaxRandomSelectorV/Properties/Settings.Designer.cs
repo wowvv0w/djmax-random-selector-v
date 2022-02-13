@@ -22,42 +22,5 @@ namespace DjmaxRandomSelectorV.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("30")]
-        public int inputDelay {
-            get {
-                return ((int)(this["inputDelay"]));
-            }
-            set {
-                this["inputDelay"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsd=\"http://www.w3." +
-            "org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" />")]
-        public global::System.Collections.Specialized.StringCollection ownedDlcs {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ownedDlcs"]));
-            }
-            set {
-                this["ownedDlcs"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("220210")]
-        public int allTrackVersion {
-            get {
-                return ((int)(this["allTrackVersion"]));
-            }
-            set {
-                this["allTrackVersion"] = value;
-            }
-        }
     }
 }

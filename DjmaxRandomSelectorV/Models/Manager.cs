@@ -1,5 +1,4 @@
 ﻿using CsvHelper;
-using DjmaxRandomSelectorV.Properties;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,11 +12,35 @@ namespace DjmaxRandomSelectorV.Models
 {
     public class Manager
     {
-        private const string ALL_TRACK_LIST = "DataFiles/AllTrackList.csv";
-        private const string PRESET_DEFAULT = "DataFiles/Preset/Default.json";
+        private const string ALL_TRACK_LIST = "AllTrackList.csv";
+        private const string CONFIG = "config.json";
+        
+        private const string PRESET_DEFAULT = "Default";
 
         private const string VERSION_URL = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
         private const string ALL_TRACK_URL = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/DataFiles/AllTrackList.csv";
+
+
+        public static Setting LoadSetting()
+        {
+            using (var reader = new StreamReader(CONFIG))
+            {
+                string json = reader.ReadToEnd();
+                Setting setting = JsonSerializer.Deserialize<Setting>(json);
+
+                return setting;
+            }
+        }
+        public static void SaveSetting(Setting setting)
+        {
+            var options = new JsonSerializerOptions() { WriteIndented = true, IgnoreReadOnlyProperties = false };
+            string jsonString = JsonSerializer.Serialize(setting, options);
+
+            using (var writer = new StreamWriter(CONFIG))
+            {
+                writer.Write(jsonString);
+            }
+        }
 
         public static (int, int) GetLastVersions()
         {
@@ -61,9 +84,8 @@ namespace DjmaxRandomSelectorV.Models
             }
         }
 
-        public static void UpdateTrackList()
+        public static void UpdateTrackList(List<string> ownedDlcs)
         {
-            var ownedDlcs = Settings.Default.ownedDlcs;
             var basicCategories = new List<string>() { "RP", "P1", "P2", "GG" };
             var titleFilter = CreateTitleFilter();
             var trackList = from track in Selector.AllTrackList
@@ -110,9 +132,10 @@ namespace DjmaxRandomSelectorV.Models
             }  
         }
 
-        public static Filter LoadPreset(string path = PRESET_DEFAULT)
+        public static Filter LoadPreset(string presetName = PRESET_DEFAULT)
         {
             Filter filter;
+            var path = $"Preset/{presetName}.json";
 
             try
             {
@@ -130,10 +153,11 @@ namespace DjmaxRandomSelectorV.Models
             return filter;
         }
 
-        public static void SavePreset(Filter filter, string path = PRESET_DEFAULT)
+        public static void SavePreset(Filter filter, string presetName = PRESET_DEFAULT)
         {
             var options = new JsonSerializerOptions() { WriteIndented = true, IgnoreReadOnlyProperties = false };
             string jsonString = JsonSerializer.Serialize(filter, options);
+            var path = $"Preset/{presetName}.json";
 
             using (var writer = new StreamWriter(path))
             {

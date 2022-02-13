@@ -1,5 +1,4 @@
-﻿using DjmaxRandomSelectorV.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -170,7 +169,7 @@ namespace DjmaxRandomSelectorV.Models
             return inputCommand;
         }
 
-        public static void Select(InputCommand inputCommand)
+        public static void Select(InputCommand inputCommand, int delay)
         {
             char initial = inputCommand.Initial;
             int vertical = inputCommand.VerticalInputCount;
@@ -178,7 +177,6 @@ namespace DjmaxRandomSelectorV.Models
             int right = inputCommand.RightInputCount;
             bool alphabet = inputCommand.IsAlphabet;
             bool forward = inputCommand.IsForward;
-            int delay = Settings.Default.inputDelay;
             byte direction;
 
 

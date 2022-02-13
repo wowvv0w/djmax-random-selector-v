@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,11 +15,11 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private DockPanel _dockPanel;
 
-        public InfoViewModel(int currentVersion, int lastestVersion, DockPanel dockPanel)
+        public InfoViewModel(int currentVersion, int lastestVersion, int allTrackVersion, DockPanel dockPanel)
         {
             CurrentVersion = IntToString(currentVersion);
             LastestVersion = IntToString(lastestVersion);
-            AllTrackVersion = Settings.Default.allTrackVersion.ToString();
+            AllTrackVersion = allTrackVersion.ToString();
 
             _dockPanel = dockPanel;
 
