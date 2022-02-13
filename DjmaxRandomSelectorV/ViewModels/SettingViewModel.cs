@@ -13,18 +13,14 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class SettingViewModel : Screen
     {
         private int _inputDelay;
-        private List<string> _ownedDlcs;
+        private StringCollection _ownedDlcs;
 
         private DockPanel _dockPanel;
 
         public SettingViewModel(DockPanel dockPanel)
         {
             _inputDelay = Settings.Default.inputDelay;
-            _ownedDlcs = new List<string>();
-            foreach (var dlc in Settings.Default.ownedDlcs)
-            {
-                _ownedDlcs.Add(dlc);
-            }
+            _ownedDlcs = Settings.Default.ownedDlcs;
             UpdateInputDelayText();
 
             _dockPanel = dockPanel;
@@ -33,11 +29,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void Apply()
         {
             Settings.Default.inputDelay = _inputDelay;
-            Settings.Default.ownedDlcs = new StringCollection();
-            foreach (var dlc in _ownedDlcs)
-            {
-                Settings.Default.ownedDlcs.Add(dlc);
-            }
             Settings.Default.Save();
             Manager.UpdateTrackList();
             Selector.IsFilterChanged = true;

@@ -200,6 +200,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 Filter.Levels[0] = value;
                 NotifyOfPropertyChange(() => LevelMin);
                 UpdateLevelIndicators();
+                Selector.IsFilterChanged = true;
             }
         }
         public int LevelMax
@@ -210,6 +211,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 Filter.Levels[1] = value;
                 NotifyOfPropertyChange(() => LevelMax);
                 UpdateLevelIndicators();
+                Selector.IsFilterChanged = true;
             }
         }
         public bool CategoryRP

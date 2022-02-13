@@ -64,12 +64,10 @@ namespace DjmaxRandomSelectorV.Models
         public static void UpdateTrackList()
         {
             var ownedDlcs = Settings.Default.ownedDlcs;
-            var basicCategories = new string[] { "RP", "P1", "P2", "GG" };
-            ownedDlcs.AddRange(basicCategories);
-
+            var basicCategories = new List<string>() { "RP", "P1", "P2", "GG" };
             var titleFilter = CreateTitleFilter();
             var trackList = from track in Selector.AllTrackList
-                            where ownedDlcs.Contains(track.Category)
+                            where (ownedDlcs.Contains(track.Category) || basicCategories.Contains(track.Category))
                             && titleFilter.Contains(track.Title) == false
                             select track;
 
