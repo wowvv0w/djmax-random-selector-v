@@ -11,6 +11,8 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media.Effects;
 using System.IO;
+using Microsoft.Win32;
+using DjmaxRandomSelectorV.Views;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -31,6 +33,8 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private Advanced Advanced { get; set; }
         private Setting Setting { get; set; }
+
+        public RegistryKey RegKey = Registry.CurrentUser.OpenSubKey("Software", true);
 
         public MainViewModel()
         {
@@ -78,6 +82,25 @@ namespace DjmaxRandomSelectorV.ViewModels
             HistoryViewModel = new HistoryViewModel();
 
             Advanced = new Advanced();
+        }
+
+        public void SetPos(object view)
+        {
+            var window = view as Window;
+
+            RegKey.CreateSubKey("DRSV");
+            RegKey = RegKey.OpenSubKey("DRSV", true);
+
+            if (RegKey.GetValue("WINDOW_TOP") == null || RegKey.GetValue("WINDOW_LEFT") == null)
+            {
+                RegKey.SetValue("WINDOW_TOP", window.Top);
+                RegKey.SetValue("WINDOW_LEFT", window.Left);
+            }
+            else
+            {
+                window.Top = Convert.ToDouble(RegKey.GetValue("WINDOW_TOP"));
+                window.Left = Convert.ToDouble(RegKey.GetValue("WINDOW_LEFT"));
+            }
         }
 
         private void CheckUpdate()
@@ -131,9 +154,16 @@ namespace DjmaxRandomSelectorV.ViewModels
             CanStart = true;
         }
 
-        public void CloseEvent()
+        public void CloseEvent(object view)
         {
+            var window = view as Window;
+
             Manager.SavePreset(FilterViewModel.Filter);
+
+            RegKey = RegKey.OpenSubKey("DRSV", true);
+
+            RegKey.SetValue("WINDOW_TOP", window.Top);
+            RegKey.SetValue("WINDOW_LEFT", window.Left);
         }
 
 
