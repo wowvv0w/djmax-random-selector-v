@@ -88,18 +88,13 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             var window = view as Window;
 
-            RegKey.CreateSubKey("DRSV");
-            RegKey = RegKey.OpenSubKey("DRSV", true);
-
-            if (RegKey.GetValue("WINDOW_TOP") == null || RegKey.GetValue("WINDOW_LEFT") == null)
+            if (double.IsNaN(Properties.Settings.Default.Top) || double.IsNaN(Properties.Settings.Default.Top))
             {
-                RegKey.SetValue("WINDOW_TOP", window.Top);
-                RegKey.SetValue("WINDOW_LEFT", window.Left);
+                Properties.Settings.Default.Top = window.Top; Properties.Settings.Default.Left = window.Left;
             }
             else
             {
-                window.Top = Convert.ToDouble(RegKey.GetValue("WINDOW_TOP"));
-                window.Left = Convert.ToDouble(RegKey.GetValue("WINDOW_LEFT"));
+                window.Top = Properties.Settings.Default.Top; window.Left = Properties.Settings.Default.Left;
             }
         }
 
@@ -160,10 +155,9 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             Manager.SavePreset(FilterViewModel.Filter);
 
-            RegKey = RegKey.OpenSubKey("DRSV", true);
-
-            RegKey.SetValue("WINDOW_TOP", window.Top);
-            RegKey.SetValue("WINDOW_LEFT", window.Left);
+            Properties.Settings.Default.Top = window.Top;
+            Properties.Settings.Default.Left = window.Left;
+            Properties.Settings.Default.Save();
         }
 
 
