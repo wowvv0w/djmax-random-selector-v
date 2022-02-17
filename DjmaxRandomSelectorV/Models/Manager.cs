@@ -12,13 +12,13 @@ namespace DjmaxRandomSelectorV.Models
 {
     public class Manager
     {
-        private const string ALL_TRACK_LIST = "AllTrackList.csv";
-        private const string CONFIG = "config.json";
+        private const string ALL_TRACK_LIST = "Data/AllTrackList.csv";
+        private const string CONFIG = "Data/Config.json";
         
-        private const string PRESET_DEFAULT = "Default";
+        private const string PRESET_DEFAULT = "Default.json";
 
         private const string VERSION_URL = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
-        private const string ALL_TRACK_URL = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/AllTrackList.csv";
+        private const string ALL_TRACK_URL = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Data/AllTrackList.csv";
 
 
         public static Setting LoadSetting()
@@ -135,7 +135,7 @@ namespace DjmaxRandomSelectorV.Models
         public static Filter LoadPreset(string presetName = PRESET_DEFAULT)
         {
             Filter filter;
-            var path = $"Preset/{presetName}.json";
+            var path = $"Data/Preset/{presetName}";
 
             try
             {
@@ -157,7 +157,7 @@ namespace DjmaxRandomSelectorV.Models
         {
             var options = new JsonSerializerOptions() { WriteIndented = true, IgnoreReadOnlyProperties = false };
             string jsonString = JsonSerializer.Serialize(filter, options);
-            var path = $"Preset/{presetName}.json";
+            var path = $"Data/Preset/{presetName}";
 
             using (var writer = new StreamWriter(path))
             {
