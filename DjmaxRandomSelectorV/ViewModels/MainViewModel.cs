@@ -34,8 +34,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         private Advanced Advanced { get; set; }
         private Setting Setting { get; set; }
 
-        public RegistryKey RegKey = Registry.CurrentUser.OpenSubKey("Software", true);
-
         public MainViewModel()
         {
             try
