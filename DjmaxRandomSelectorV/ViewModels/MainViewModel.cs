@@ -11,8 +11,6 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media.Effects;
 using System.IO;
-using Microsoft.Win32;
-using DjmaxRandomSelectorV.Views;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
