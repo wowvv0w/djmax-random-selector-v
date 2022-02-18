@@ -88,14 +88,16 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             var window = view as Window;
 
-            if (double.IsNaN(Properties.Settings.Default.Top) || double.IsNaN(Properties.Settings.Default.Top))
+            Setting = Manager.LoadSetting();
+            
+            if (Setting.Position == null || Setting.Position.Length < 2)
             {
-                Properties.Settings.Default.Top = window.Top; Properties.Settings.Default.Left = window.Left;
-            }
-            else
+                Setting.Position = new double[2] { window.Top, window.Left };
+            } else
             {
-                window.Top = Properties.Settings.Default.Top; window.Left = Properties.Settings.Default.Left;
+                window.Top = Setting.Position[0]; window.Left = Setting.Position[1];
             }
+            Manager.SaveSetting(Setting);
         }
 
         private void CheckUpdate()
@@ -155,9 +157,9 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             Manager.SavePreset(FilterViewModel.Filter);
 
-            Properties.Settings.Default.Top = window.Top;
-            Properties.Settings.Default.Left = window.Left;
-            Properties.Settings.Default.Save();
+            Setting = Manager.LoadSetting();
+            Setting.Position = new double[2]{ window.Top, window.Left };
+            Manager.SaveSetting(Setting);
         }
 
 
