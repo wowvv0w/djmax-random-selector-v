@@ -80,6 +80,22 @@ namespace DjmaxRandomSelectorV.ViewModels
             Advanced = new Advanced();
         }
 
+        public void SetPos(object view)
+        {
+            var window = view as Window;
+
+            Setting = Manager.LoadSetting();
+            
+            if (Setting.Position == null || Setting.Position.Length < 2)
+            {
+                Setting.Position = new double[2] { window.Top, window.Left };
+            } else
+            {
+                window.Top = Setting.Position[0]; window.Left = Setting.Position[1];
+            }
+            Manager.SaveSetting(Setting);
+        }
+
         private void CheckUpdate()
         {
             (_lastSelectorVer, _lastAllTrackVer) = Manager.GetLastVersions();
@@ -131,9 +147,15 @@ namespace DjmaxRandomSelectorV.ViewModels
             CanStart = true;
         }
 
-        public void CloseEvent()
+        public void CloseEvent(object view)
         {
+            var window = view as Window;
+
             Manager.SavePreset(FilterViewModel.Filter);
+
+            Setting = Manager.LoadSetting();
+            Setting.Position = new double[2] { (window.Top < 0 ? 0 : window.Top), (window.Left < 0 ? 0 : window.Left) };
+            Manager.SaveSetting(Setting);
         }
 
 
