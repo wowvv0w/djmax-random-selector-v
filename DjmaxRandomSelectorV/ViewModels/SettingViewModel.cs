@@ -12,16 +12,13 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class SettingViewModel : Screen
     {
         private Setting _setting;
-        private int _inputDelay;
-        private List<string> _ownedDlcs;
-
         private DockPanel _dockPanel;
+
+        private bool _updatesTrackList = false;
 
         public SettingViewModel(Setting setting, DockPanel dockPanel)
         {
             _setting = setting;
-            _inputDelay = setting.InputDelay;
-            _ownedDlcs = setting.OwnedDlcs;
             UpdateInputDelayText();
 
             _dockPanel = dockPanel;
@@ -29,11 +26,11 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void Apply()
         {
-            _setting.InputDelay = _inputDelay;
-            _setting.OwnedDlcs = _ownedDlcs;
-
             Manager.SaveSetting(_setting);
-            Manager.UpdateTrackList(_ownedDlcs);
+            if (_updatesTrackList)
+            {
+                Manager.UpdateTrackList(_setting.OwnedDlcs);
+            }
             Selector.IsFilterChanged = true;
             Close();
         }
@@ -50,10 +47,10 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public int InputDelay
         {
-            get { return _inputDelay; }
+            get { return _setting.InputDelay; }
             set
             {
-                _inputDelay = value;
+                _setting.InputDelay = value;
                 NotifyOfPropertyChange(() => InputDelay);
                 UpdateInputDelayText();
             }
@@ -74,23 +71,33 @@ namespace DjmaxRandomSelectorV.ViewModels
             InputDelayText = $"{InputDelay}ms";
         }
 
+        public bool SavesRecents
+        {
+            get { return _setting.SavesRecents; }
+            set
+            {
+                _setting.SavesRecents = value;
+                NotifyOfPropertyChange(() => SavesRecents);
+            }
+        }
 
 
         public bool CheckOwnedDlcs(string value)
         {
-            return _ownedDlcs.Contains(value);
+            return _setting.OwnedDlcs.Contains(value);
         }
 
         public void UpdateOwnedDlcs(bool isChecked, string value)
         {
             if (isChecked)
             {
-                _ownedDlcs.Add(value);
+                _setting.OwnedDlcs.Add(value);
             }
             else
             {
-                _ownedDlcs.Remove(value);
+                _setting.OwnedDlcs.Remove(value);
             }
+            _updatesTrackList = true;
         }
 
         private const string _P3 = "P3";

@@ -250,7 +250,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Advanced.cs" />
     <Compile Include="Models\Filter.cs" />
     <Compile Include="Models\InputCommand.cs" />
     <Compile Include="Models\Manager.cs" />

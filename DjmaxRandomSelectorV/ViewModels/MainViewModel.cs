@@ -29,7 +29,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         public FilterViewModel FilterViewModel { get; set; }
         public HistoryViewModel HistoryViewModel { get; set; }
 
-        private Advanced Advanced { get; set; }
         private Setting Setting { get; set; }
 
         public MainViewModel()
@@ -77,7 +76,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             FilterViewModel = new FilterViewModel();
             HistoryViewModel = new HistoryViewModel();
 
-            Advanced = new Advanced();
         }
 
         public void SetPos(object view)
@@ -122,15 +120,17 @@ namespace DjmaxRandomSelectorV.ViewModels
                 IsFilterChanged = false;
             }
 
-            List<string> recents = Advanced.Recents;
-            recents = CheckRecents(recents);
+            List<string> recents = FilterViewModel.Filter.Recents;
+            recents = CheckRecents(recents, Setting.RecentsCount);
 
             try
             {
                 Music selectedMusic = Pick(recents);
 
                 InputCommand inputCommand = Find(selectedMusic);
-                Select(inputCommand, Setting.InputDelay);
+                inputCommand.Delay = Setting.InputDelay;
+                inputCommand.Starts = Setting.AutoStart;
+                Select(inputCommand);
 
                 var historyItem = new HistoryItem(selectedMusic);
                 HistoryViewModel.UpdateHistory(historyItem);
@@ -151,9 +151,12 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             var window = view as Window;
 
+            if (!Setting.SavesRecents)
+            {
+                FilterViewModel.Filter.Recents.Clear();
+            }
             Manager.SavePreset(FilterViewModel.Filter);
 
-            Setting = Manager.LoadSetting();
             Setting.Position = new double[2] { (window.Top < 0 ? 0 : window.Top), (window.Left < 0 ? 0 : window.Left) };
             Manager.SaveSetting(Setting);
         }
@@ -259,6 +262,45 @@ namespace DjmaxRandomSelectorV.ViewModels
             windowManager.ShowDialogAsync(infoViewModel);
         }
 
+        // Additional Filter
+        public bool StartsAutomatically
+        {
+            get { return Setting.AutoStart; }
+            set
+            {
+                Setting.AutoStart = value;
+                NotifyOfPropertyChange(() => StartsAutomatically);
+            }
+        }
+        public int RecentsCount
+        {
+            get { return Setting.RecentsCount; }
+            set
+            {
+                Setting.RecentsCount = value;
+                NotifyOfPropertyChange(() => RecentsCount);
+            }
+        }
+        
+        public void OpenFavoriteEditor()
+        {
+
+        }
+
+        private bool _isAdditionalShown = false;
+        public void ToggleAdditionalFilter()
+        {
+            if (_isAdditionalShown)
+            {
+                _dockPanel.Effect = null;
+                _isAdditionalShown = false;
+            }
+            else
+            {
+                _dockPanel.Effect = _blur;
+                _isAdditionalShown = true;
+            }
+        }
 
 
 

@@ -14,8 +14,16 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="10,0,0,0"/>
     </Style>
-    
+
+    <Style x:Key="SettingCategoryText" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#1FFFFFFF"/>
+        <Setter Property="FontFamily" Value="{StaticResource Lato}"/>
+        <Setter Property="FontSize" Value="23"/>
+        <Setter Property="Margin" Value="0,20,0,-5"/>
+    </Style>
+
     <Style x:Key="SettingToggleButton" TargetType="ToggleButton">
+        <Setter Property="Grid.Column" Value="1"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
@@ -67,6 +75,31 @@
         </Setter>
     </Style>
 
+    <Style x:Key="SettingEditButton" TargetType="Button"
+           BasedOn="{StaticResource SettingWindowButton}">
+        <Setter Property="Grid.Column" Value="1"/>
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="#56000000"
+                            BorderBrush="#818282"
+                            BorderThickness="3"
+                            CornerRadius="6">
+                        <TextBlock Text="EDIT"
+                                   Foreground="#818282"
+                                   FontFamily="{StaticResource Lato Black}"
+                                   FontSize="12"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
     <Style x:Key="SliderButtonStyle" TargetType="RepeatButton">
         <Setter Property="Template">
             <Setter.Value>
@@ -89,6 +122,9 @@
         </Setter>
     </Style>
     <Style x:Key="SettingSlider" TargetType="Slider">
+        <Setter Property="Grid.Column" Value="1"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="40,0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>

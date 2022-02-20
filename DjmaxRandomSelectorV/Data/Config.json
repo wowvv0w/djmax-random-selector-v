@@ -1,7 +1,11 @@
 {
+  "AutoStart": false,
+  "RecentsCount": 5,
+  "Favorite": [],
   "InputDelay": 30,
+  "SavesRecents": false,
   "OwnedDlcs": [
   ],
-  "AllTrackVersion": 220219,
-  "Position": []
+  "Position": [],
+  "AllTrackVersion": 220219
 }

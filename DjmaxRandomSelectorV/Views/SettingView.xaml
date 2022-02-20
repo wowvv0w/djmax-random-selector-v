@@ -36,13 +36,12 @@
                         <Style TargetType="Grid" BasedOn="{StaticResource SettingBar}"/>
                         <Style TargetType="TextBlock" BasedOn="{StaticResource SettingText}"/>
                         <Style TargetType="ToggleButton" BasedOn="{StaticResource SettingToggleButton}"/>
+                        <Style TargetType="Slider" BasedOn="{StaticResource SettingSlider}"/>
                     </StackPanel.Resources>
 
                     <!-- Selector Setting -->
                     <TextBlock Text="SELECTOR SETTING"
-                               Foreground="#1FFFFFFF"
-                               FontFamily="{StaticResource Lato}"
-                               FontSize="23"
+                               Style="{StaticResource SettingCategoryText}"
                                Margin="0,0,0,-5"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -54,29 +53,29 @@
                                    HorizontalAlignment="Right"
                                    Margin="0,0,10,0"/>
                         <Slider x:Name="InputDelay"
-                                Grid.Column="1"
-                                Margin="40,0"
-                                VerticalAlignment="Center"
                                 Minimum="10"
                                 Maximum="50"
                                 IsSnapToTickEnabled="True"
-                                TickFrequency="10"
-                                Style="{StaticResource SettingSlider}"/>
+                                TickFrequency="10"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="SAVE RECENT MUSIC LIST"/>
+                        <ToggleButton x:Name="SavesRecents"/>
                     </Grid>
 
                     <TextBlock Text="TRACK LIST SETTING"
-                               Foreground="#1FFFFFFF"
-                               FontFamily="{StaticResource Lato}"
-                               FontSize="23"
-                               Margin="0,20,0,-5"/>
+                               Style="{StaticResource SettingCategoryText}"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="PORTABLE 3"/>
-                        <ToggleButton Grid.Column="1"
-                                      x:Name="SettingP3"/>
+                        <ToggleButton x:Name="SettingP3"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -84,8 +83,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="TRILOGY"/>
-                        <ToggleButton Grid.Column="1"
-                                      x:Name="SettingTR"/>
+                        <ToggleButton x:Name="SettingTR"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -93,8 +91,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="CLAZZIQUAI"/>
-                        <ToggleButton Grid.Column="1"
-                                      x:Name="SettingCE"/>
+                        <ToggleButton x:Name="SettingCE"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -102,8 +99,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="BLACK SQUARE"/>
-                        <ToggleButton Grid.Column="1"
-                                      x:Name="SettingBS"/>
+                        <ToggleButton x:Name="SettingBS"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -111,8 +107,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="V EXTENSION"/>
-                        <ToggleButton Grid.Column="1"
-                                      x:Name="SettingVE"/>
+                        <ToggleButton x:Name="SettingVE"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -120,8 +115,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="V EXTENSION 2"/>
-                        <ToggleButton Grid.Column="1"
-                                      x:Name="SettingVE2"/>
+                        <ToggleButton x:Name="SettingVE2"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -129,8 +123,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="EMOTIONAL S."/>
-                        <ToggleButton Grid.Column="1"
-                                      x:Name="SettingES"/>
+                        <ToggleButton x:Name="SettingES"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -138,8 +131,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="TECHNIKA 1"/>
-                        <ToggleButton Grid.Column="1"
-                                      x:Name="SettingT1"/>
+                        <ToggleButton x:Name="SettingT1"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -147,8 +139,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="TECHNIKA 2"/>
-                        <ToggleButton Grid.Column="1"
-                                      x:Name="SettingT2"/>
+                        <ToggleButton x:Name="SettingT2"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -156,8 +147,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="TECHNIKA 3"/>
-                        <ToggleButton Grid.Column="1"
-                                      x:Name="SettingT3"/>
+                        <ToggleButton x:Name="SettingT3"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -165,8 +155,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="CHUNITHM"/>
-                        <ToggleButton Grid.Column="1"
-                                      x:Name="SettingCHU"/>
+                        <ToggleButton x:Name="SettingCHU"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -174,8 +163,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="CYTUS"/>
-                        <ToggleButton Grid.Column="1"
-                                      x:Name="SettingCY"/>
+                        <ToggleButton x:Name="SettingCY"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -183,8 +171,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="DEEMO"/>
-                        <ToggleButton Grid.Column="1"
-                                      x:Name="SettingDM"/>
+                        <ToggleButton x:Name="SettingDM"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -192,8 +179,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="ESTIMATE"/>
-                        <ToggleButton Grid.Column="1"
-                                      x:Name="SettingESTI"/>
+                        <ToggleButton x:Name="SettingESTI"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -201,8 +187,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="GROOVE COASTER"/>
-                        <ToggleButton Grid.Column="1"
-                                      x:Name="SettingGC"/>
+                        <ToggleButton x:Name="SettingGC"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -210,8 +195,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="GIRLS' FRONTLINE"/>
-                        <ToggleButton Grid.Column="1"
-                                      x:Name="SettingGF"/>
+                        <ToggleButton x:Name="SettingGF"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -219,8 +203,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="NEXON"/>
-                        <ToggleButton Grid.Column="1"
-                                      x:Name="SettingNXN"/>
+                        <ToggleButton x:Name="SettingNXN"/>
                     </Grid>
                 </StackPanel>
             </ScrollViewer>
