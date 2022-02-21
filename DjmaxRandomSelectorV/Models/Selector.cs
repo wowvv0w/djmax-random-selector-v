@@ -17,7 +17,7 @@ namespace DjmaxRandomSelectorV.Models
         private static List<string> TitleList { get; set; }
         public static bool CanStart { get; set; } = true;
 
-        public static void SiftOut(Filter filter)
+        public static void SiftOut(Filter filter, List<string> favorite)
         {
             List<string> Styles = new List<string>();
             foreach(string button in filter.ButtonTunes)
@@ -29,7 +29,7 @@ namespace DjmaxRandomSelectorV.Models
             }
             var musicList = from track in TrackList
                             from pattern in track.Patterns
-                            where filter.Categories.Contains(track.Category)
+                            where (filter.Categories.Contains(track.Category) || favorite.Contains(track.Title))
                             && Styles.Contains(pattern.Key)
                             && pattern.Value >= filter.Levels[0]
                             && pattern.Value <= filter.Levels[1]

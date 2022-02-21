@@ -114,14 +114,21 @@ namespace DjmaxRandomSelectorV.ViewModels
         private void Start()
         {
             CanStart = false;
+            Filter filter = FilterViewModel.Filter;
+
+            var favorite = filter.IncludesFavorite ? Setting.Favorite : new List<string>();
+            List<string> recents = filter.Recents;
+
             if (IsFilterChanged)
             {
-                SiftOut(FilterViewModel.Filter);
+                SiftOut(filter, favorite);
+                recents.Clear();
                 IsFilterChanged = false;
             }
-
-            List<string> recents = FilterViewModel.Filter.Recents;
-            recents = CheckRecents(recents, Setting.RecentsCount);
+            else
+            {
+                recents = CheckRecents(recents, Setting.RecentsCount);
+            }
 
             try
             {
@@ -249,17 +256,22 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         // Utility Buttons
         IWindowManager windowManager = new WindowManager();
-        public void ShowSetting()
-        {
-            _dockPanel.Effect = _blur;
-            windowManager.ShowDialogAsync(new SettingViewModel(Setting, _dockPanel));
-        }
         public void ShowInfo()
         {
             _dockPanel.Effect = _blur;
             var infoViewModel
                 = new InfoViewModel(SELECTOR_VERSION, _lastSelectorVer, Setting.AllTrackVersion, _dockPanel);
             windowManager.ShowDialogAsync(infoViewModel);
+        }
+        public void ShowSetting()
+        {
+            _dockPanel.Effect = _blur;
+            windowManager.ShowDialogAsync(new SettingViewModel(Setting, _dockPanel));
+        }
+        public void ShowInventory()
+        {
+            _dockPanel.Effect = _blur;
+            windowManager.ShowDialogAsync(new InventoryViewModel(Setting, _dockPanel));
         }
 
         // Additional Filter
@@ -280,11 +292,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                 Setting.RecentsCount = value;
                 NotifyOfPropertyChange(() => RecentsCount);
             }
-        }
-        
-        public void OpenFavoriteEditor()
-        {
-
         }
 
         private bool _isAdditionalShown = false;

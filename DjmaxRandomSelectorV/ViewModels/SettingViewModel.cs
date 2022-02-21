@@ -14,11 +14,20 @@ namespace DjmaxRandomSelectorV.ViewModels
         private Setting _setting;
         private DockPanel _dockPanel;
 
+        private int _inputDelay;
+        private bool _savesRecents;
+        private List<string> _ownedDlcs;
+
         private bool _updatesTrackList = false;
 
         public SettingViewModel(Setting setting, DockPanel dockPanel)
         {
             _setting = setting;
+
+            _inputDelay = setting.InputDelay;
+            _savesRecents = setting.SavesRecents;
+            _ownedDlcs = setting.OwnedDlcs.ConvertAll(x => x);
+
             UpdateInputDelayText();
 
             _dockPanel = dockPanel;
@@ -26,10 +35,14 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void Apply()
         {
+            _setting.InputDelay = _inputDelay;
+            _setting.SavesRecents = _savesRecents;
+            _setting.OwnedDlcs = _ownedDlcs;
+
             Manager.SaveSetting(_setting);
             if (_updatesTrackList)
             {
-                Manager.UpdateTrackList(_setting.OwnedDlcs);
+                Manager.UpdateTrackList(_ownedDlcs);
             }
             Selector.IsFilterChanged = true;
             Close();
@@ -47,10 +60,10 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public int InputDelay
         {
-            get { return _setting.InputDelay; }
+            get { return _inputDelay; }
             set
             {
-                _setting.InputDelay = value;
+                _inputDelay = value;
                 NotifyOfPropertyChange(() => InputDelay);
                 UpdateInputDelayText();
             }
@@ -73,10 +86,10 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public bool SavesRecents
         {
-            get { return _setting.SavesRecents; }
+            get { return _savesRecents; }
             set
             {
-                _setting.SavesRecents = value;
+                _savesRecents = value;
                 NotifyOfPropertyChange(() => SavesRecents);
             }
         }
@@ -84,18 +97,18 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public bool CheckOwnedDlcs(string value)
         {
-            return _setting.OwnedDlcs.Contains(value);
+            return _ownedDlcs.Contains(value);
         }
 
         public void UpdateOwnedDlcs(bool isChecked, string value)
         {
             if (isChecked)
             {
-                _setting.OwnedDlcs.Add(value);
+                _ownedDlcs.Add(value);
             }
             else
             {
-                _setting.OwnedDlcs.Remove(value);
+                _ownedDlcs.Remove(value);
             }
             _updatesTrackList = true;
         }

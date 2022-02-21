@@ -373,6 +373,12 @@
                                   Background="{StaticResource BgTechnika3}"
                                   Foreground="{StaticResource FgTechnika3}">
                     </ToggleButton>
+                    <ToggleButton x:Name="CategoryFavorite"
+                                  Content="FAVORITE ★"
+                                  Style="{StaticResource CategoryButton}"
+                                  Background="{StaticResource BgFavorite}"
+                                  Foreground="{StaticResource FgFavorite}">
+                    </ToggleButton>
                 </UniformGrid>
                 <Grid Grid.Row="2"
                       Grid.Column="1"

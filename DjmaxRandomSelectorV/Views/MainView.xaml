@@ -71,14 +71,6 @@
                                 Minimum="0"
                                 Maximum="20"/>
                     </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="FAVORITE"/>
-                        <Button x:Name="OpenFavoriteEditor"/>
-                    </Grid>
                 </StackPanel>
             </Border>
             <ToggleButton x:Name="ToggleAdditionalFilter"
@@ -201,6 +193,10 @@
                     <Button x:Name="ShowSetting"
                             Style="{StaticResource UtilityButton}">
                         <Image Source="pack://application:,,,/Images/setting.png"/>
+                    </Button>
+                    <Button x:Name="ShowInventory"
+                            Style="{StaticResource UtilityButton}">
+                        <Image Source="pack://application:,,,/Images/inventory.png"/>
                     </Button>
                 </StackPanel>
             </Grid>
