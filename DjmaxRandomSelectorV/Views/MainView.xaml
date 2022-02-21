@@ -36,7 +36,7 @@
             <TextBlock Text="DJMAX Random Selector V" Foreground="#989999"
                        FontSize="12" VerticalAlignment="Center" Margin="10,0,0,0"/>
             <Border Background="Transparent"
-                    cal:Message.Attach="[Event MouseDown] = [Action MoveWindow($view)]"/>
+                    cal:Message.Attach="[Event MouseLeftButtonDown] = [Action MoveWindow($view)]"/>
             <Button x:Name="OpenReleasePage"
                     Content="[New Update is Available]"
                     Foreground="{StaticResource Highlight}"
