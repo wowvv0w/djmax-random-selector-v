@@ -6,6 +6,9 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Win32;
+using System.IO;
+
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -16,6 +19,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private List<string> _ownedDlcs;
 
         private DockPanel _dockPanel;
+        private int updated;
 
         public SettingViewModel(Setting setting, DockPanel dockPanel)
         {
@@ -25,6 +29,27 @@ namespace DjmaxRandomSelectorV.ViewModels
             UpdateInputDelayText();
 
             _dockPanel = dockPanel;
+        }
+
+        public void Detect()
+        {
+            SettingBS = SettingCE = SettingCHU = SettingCY = SettingDM = SettingES = SettingESTI= SettingGC = SettingGF
+                = SettingNXN = SettingP3 = SettingT1 = SettingT2 = SettingT3 = SettingTR = SettingVE = SettingVE2 = false;
+
+            string steamPath = (string)Registry.GetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Valve\\Steam", "InstallPath", null);
+            
+            DirectoryInfo libraryPath = new DirectoryInfo(steamPath + "\\appcache\\librarycache");
+
+            updated = 0;
+            foreach (FileInfo file in libraryPath.GetFiles())
+            {
+                if (file.Extension.ToLower().CompareTo(".jpg") == 0)
+                {
+                    if (FindDLCs(file.Name.Substring(0, file.Name.Length - 11)) == true) updated++;
+                }
+            }
+
+            MessageBox.Show(updated + " DLCs detected.", "Notice");
         }
 
         public void Apply()
@@ -37,6 +62,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             Selector.IsFilterChanged = true;
             Close();
         }
+
         public void Cancel()
         {
             Close();
@@ -263,6 +289,33 @@ namespace DjmaxRandomSelectorV.ViewModels
                 UpdateOwnedDlcs(value, _NXN);
                 NotifyOfPropertyChange(() => SettingNXN);
             }
+        }
+        public bool FindDLCs(string name)
+        {
+            bool dlccontained = true;
+            switch (name)
+            {
+                case "1568680": SettingP3 = true; break;
+                case "1271670": SettingTR = true; break;
+                case "1300210": SettingCE = true; break;
+                case "1300211": SettingBS = true; break;
+                case "1080550": SettingVE = true; break;
+                case "1843020": SettingVE2 = true; break;
+                case "1238760": SettingES = true; break;
+                case "1386610": SettingT1 = true; break;
+                case "1386611": SettingT2 = true; break;
+                case "1386612": SettingT3 = true; break;
+                case "1472190": SettingCHU = true; break;
+                case "1356221": SettingCY = true; break;
+                case "1356220": SettingDM = true; break;
+                case "1664550": SettingESTI = true; break;
+                case "1271671": SettingGC = true; break;
+                case "1472191": SettingGF = true; break;
+                case "1782170": SettingNXN = true; break;
+                default: dlccontained = false; break;
+            }
+
+            return dlccontained;
         }
     }
 }

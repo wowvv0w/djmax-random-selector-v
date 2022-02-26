@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media.Effects;
 using System.IO;
+using DjmaxRandomSelectorV.Views;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -259,15 +260,13 @@ namespace DjmaxRandomSelectorV.ViewModels
             windowManager.ShowDialogAsync(infoViewModel);
         }
 
-
-
-
         [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
 
         private const int WM_HOTKEY = 0x0312;
         private const int HOTKEY_ID = 9000;
         private const uint KEY_F7 = 118;
+        private const uint KEY_F2 = 113;
         private const string DJMAX_TITLE = "DJMAX RESPECT V";
 
         public void AddHotKey(object view)
@@ -280,17 +279,18 @@ namespace DjmaxRandomSelectorV.ViewModels
             source.AddHook(HwndHook);
 
             RegisterHotKey(handle, HOTKEY_ID, 0x0000, KEY_F7);
+            RegisterHotKey(handle, HOTKEY_ID, 0x0000, KEY_F2);
         }
 
         private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             if (msg == WM_HOTKEY && wParam.ToInt32() == HOTKEY_ID)
             {
+                string windowTitle = GetActiveWindowTitle();
+                
                 int vkey = ((int)lParam >> 16) & 0xFFFF;
                 if (vkey == KEY_F7)
                 {
-                    string windowTitle = GetActiveWindowTitle();
-
                     if (CanStart && windowTitle == DJMAX_TITLE)
                     {
                         Thread thread = new Thread(new ThreadStart(() => Start()));
@@ -304,6 +304,25 @@ namespace DjmaxRandomSelectorV.ViewModels
                             MessageBoxImage.Error);
                     }
                 }
+                else if (vkey == KEY_F2)
+                {
+                    if (windowTitle == DJMAX_TITLE)
+                    {
+                        var view = GetView() as MainView;
+                        var window = view as Window;
+
+                        if (window.WindowState != WindowState.Minimized)
+                        {
+                            window.WindowState = WindowState.Minimized;
+                        }
+                        else
+                        {
+                            window.WindowState = WindowState.Normal;
+                            window.Activate();
+                        }
+                    }
+                }
+
                 handled = true;
             }
             return IntPtr.Zero;
