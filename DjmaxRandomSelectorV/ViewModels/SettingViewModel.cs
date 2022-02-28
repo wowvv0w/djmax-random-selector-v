@@ -19,7 +19,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private List<string> _ownedDlcs;
 
         private DockPanel _dockPanel;
-        private int updated;
+        private int dlcCount;
 
         public SettingViewModel(Setting setting, DockPanel dockPanel)
         {
@@ -40,16 +40,16 @@ namespace DjmaxRandomSelectorV.ViewModels
             
             DirectoryInfo libraryPath = new DirectoryInfo(steamPath + "\\appcache\\librarycache");
 
-            updated = 0;
+            dlcCount = 0;
             foreach (FileInfo file in libraryPath.GetFiles())
             {
                 if (file.Extension.ToLower().CompareTo(".jpg") == 0)
                 {
-                    if (FindDLCs(file.Name.Substring(0, file.Name.Length - 11)) == true) updated++;
+                    if (FindDLCs(file.Name.Substring(0, file.Name.Length - 11)) == true) dlcCount++;
                 }
             }
 
-            MessageBox.Show(updated + " DLCs detected.", "Notice");
+            MessageBox.Show(dlcCount + " DLCs detected.", "Notice");
         }
 
         public void Apply()
