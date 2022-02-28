@@ -292,7 +292,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         public bool FindDLCs(string name)
         {
-            bool dlccontained = true;
+            bool hasDLC = true;
             switch (name)
             {
                 case "1568680": SettingP3 = true; break;
@@ -312,10 +312,10 @@ namespace DjmaxRandomSelectorV.ViewModels
                 case "1271671": SettingGC = true; break;
                 case "1472191": SettingGF = true; break;
                 case "1782170": SettingNXN = true; break;
-                default: dlccontained = false; break;
+                default: hasDLC = false; break;
             }
 
-            return dlccontained;
+            return hasDLC;
         }
     }
 }
