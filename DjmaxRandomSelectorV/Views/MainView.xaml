@@ -26,57 +26,123 @@
         </LinearGradientBrush>
     </Window.Background>
     <Grid>
-
+        
         <!-- Slide Panel -->
         <Grid x:Name="Equipment"
-              Panel.ZIndex="1"
+              Panel.ZIndex="2"
               HorizontalAlignment="Left"
-              Margin="-500,0,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="500"/>
-                <ColumnDefinition Width="25"/>
-            </Grid.ColumnDefinitions>
+              Margin="-500,0,0,0"
+              Width="500">
             <Border Background="#DF221C15"
                     BorderBrush="Gray"
                     BorderThickness="2"
                     Margin="-4,-4,0,-4">
-                <StackPanel Margin="30,50">
-                    <StackPanel.Resources>
-                        <Style TargetType="Grid" BasedOn="{StaticResource SettingBar}"/>
-                        <Style TargetType="TextBlock" BasedOn="{StaticResource SettingText}"/>
-                        <Style TargetType="Button" BasedOn="{StaticResource SettingEditButton}"/>
-                        <Style TargetType="ToggleButton" BasedOn="{StaticResource SettingToggleButton}"/>
-                        <Style TargetType="Slider" BasedOn="{StaticResource SettingSlider}"/>
-                    </StackPanel.Resources>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="AUTO START"/>
-                        <ToggleButton x:Name="StartsAutomatically"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="EXCLUDE RECENT MUSICS"/>
-                        <TextBlock Text="{Binding ElementName=RecentsCount, Path=Value}"
-                                   HorizontalAlignment="Right"
-                                   Margin="0,0,10,0">
-                        </TextBlock>
-                        <Slider x:Name="RecentsCount"
-                                Margin="20,0"
-                                Minimum="0"
-                                Maximum="20"/>
-                    </Grid>
-                </StackPanel>
             </Border>
-            <ToggleButton x:Name="ToggleEquipment"
-                          Grid.Column="1">
-                <ToggleButton.Triggers>
-                    <EventTrigger RoutedEvent="ToggleButton.Unchecked">
+            <StackPanel Margin="30,50">
+                <StackPanel.Resources>
+                    <Style TargetType="Grid" BasedOn="{StaticResource SettingBar}"/>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource SettingText}"/>
+                    <Style TargetType="ToggleButton" BasedOn="{StaticResource SettingToggleButton}"/>
+                    <Style TargetType="Slider" BasedOn="{StaticResource SettingSlider}"/>
+                </StackPanel.Resources>
+
+                <TextBlock Text="ADD-ON"
+                           Margin="0"
+                           Style="{StaticResource SettingCategoryText}"/>
+                <Grid Style="{x:Null}"
+                      Background="#7F584E46"
+                      Height="90">
+                    <ContentControl x:Name="AddonViewModel"
+                                    Height="55"/>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="EXCLUDE RECENT MUSICS"/>
+                    <TextBlock Text="{Binding ElementName=RecentsCount, Path=Value}"
+                                HorizontalAlignment="Right"
+                                Margin="0,0,10,0">
+                    </TextBlock>
+                    <Slider x:Name="RecentsCount"
+                            Margin="20,0"
+                            Minimum="0"
+                            Maximum="30"/>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="MODE"/>
+                    <Grid Grid.Column="1"
+                          Style="{x:Null}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="30"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="FREESTYLE"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Grid.Column="1"/>
+                    </Grid>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="AIDER"/>
+                    <Grid Grid.Column="1"
+                          Style="{x:Null}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="30"/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="PrevAider"
+                                Style="{StaticResource LeftArrowButton}"/>
+                        <TextBlock x:Name="AiderText"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Grid.Column="1"/>
+                        <Button x:Name="NextAider"
+                                Grid.Column="2"
+                                Style="{StaticResource RightArrowButton}"/>
+                    </Grid>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="LEVEL"/>
+                    <Grid Grid.Column="1"
+                          Style="{x:Null}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="30"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="OFF"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Grid.Column="1"/>
+                    </Grid>
+                </Grid>
+            </StackPanel>
+            <Button x:Name="HideEquipment"
+                    Content="OK"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Height="30"
+                    Margin="30"
+                    Style="{StaticResource SettingWindowButton}">
+                <Button.Triggers>
+                    <EventTrigger RoutedEvent="Button.Click">
                         <BeginStoryboard>
                             <Storyboard>
                                 <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="Equipment"
@@ -88,27 +154,22 @@
                                     <SplineThicknessKeyFrame KeyTime="0:0:0.2"
                                                              Value="-500,0,0,0"/>
                                 </ThicknessAnimationUsingKeyFrames>
+                                <ThicknessAnimation Storyboard.TargetName="BlockGrid"
+                                                    Storyboard.TargetProperty="Margin"
+                                                    To="-740,0,0,0"
+                                                    Duration="0:0:0"/>
                             </Storyboard>
                         </BeginStoryboard>
                     </EventTrigger>
-                    <EventTrigger RoutedEvent="ToggleButton.Checked">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="Equipment"
-                                                                  Storyboard.TargetProperty="Margin"
-                                                                  BeginTime="0:0:0"
-                                                                  DecelerationRatio=".9">
-                                    <SplineThicknessKeyFrame KeyTime="0:0:0"
-                                                             Value="-500,0,0,0"/>
-                                    <SplineThicknessKeyFrame KeyTime="0:0:0.2"
-                                                             Value="0,0,0,0"/>
-                                </ThicknessAnimationUsingKeyFrames>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </ToggleButton.Triggers>
-            </ToggleButton>
+                </Button.Triggers>
+            </Button>
         </Grid>
+        <Grid x:Name="BlockGrid"
+              Panel.ZIndex="1"
+              Background="Transparent"
+              HorizontalAlignment="Left"
+              Margin="-740,0,0,0"
+              Width="740"/>
 
 
         <!-- MainWindow -->
@@ -176,14 +237,49 @@
             </Grid>
             <!-- Bottom Bar -->
             <Grid Height="50" DockPanel.Dock="Bottom" Background="{StaticResource Nav}">
-                <TextBlock Text="Press F7 to Start Random Selector" Foreground="{StaticResource Default}"
-                           FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Grid.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource UtilityButton}"/>
+                </Grid.Resources>
+
+                <Button x:Name="ShowEquipment"
+                        Width="150" Height="40"
+                        Margin="30,0,0,0"
+                        HorizontalAlignment="Left">
+                    <Grid>
+                        <ContentControl x:Name="AddonButton"/>
+                    </Grid>
+                    <Button.Triggers>
+                        <EventTrigger RoutedEvent="Button.Click">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="Equipment"
+                                                                      Storyboard.TargetProperty="Margin"
+                                                                      BeginTime="0:0:0"
+                                                                      DecelerationRatio=".9">
+                                        <SplineThicknessKeyFrame KeyTime="0:0:0"
+                                                                 Value="-500,0,0,0"/>
+                                        <SplineThicknessKeyFrame KeyTime="0:0:0.2"
+                                                                 Value="0,0,0,0"/>
+                                    </ThicknessAnimationUsingKeyFrames>
+                                    <ThicknessAnimation Storyboard.TargetName="BlockGrid"
+                                                        Storyboard.TargetProperty="Margin"
+                                                        To="0,0,0,0"
+                                                        Duration="0:0:0"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Button.Triggers>
+                </Button>
+                
+                <TextBlock Text="Press F7 to Start Random Selector"
+                           Foreground="{StaticResource Default}"
+                           FontSize="15"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             Margin="30,0">
-                    <StackPanel.Resources>
-                        <Style TargetType="Button" BasedOn="{StaticResource UtilityButton}"/>
-                    </StackPanel.Resources>
                     <Button x:Name="ShowInfo">
                         <Image Source="pack://application:,,,/Images/info.png"/>
                     </Button>

@@ -142,6 +142,32 @@
         </Setter>
     </Style>
 
+    <Style x:Key="LeftArrowButton" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="Transparent">
+                        <Image Source="pack://application:,,,/Images/btn_left.png"
+                               Width="12"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="RightArrowButton" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="Transparent">
+                        <Image Source="pack://application:,,,/Images/btn_right.png"
+                               Width="12"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- LevelIndicator -->
     <Style x:Key="LevelIndicator" TargetType="Image">
         <Setter Property="Width" Value="18"/>

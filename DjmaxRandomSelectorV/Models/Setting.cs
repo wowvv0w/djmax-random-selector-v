@@ -9,8 +9,8 @@ namespace DjmaxRandomSelectorV.Models
     public class Setting
     {
         // Equipment
-        public bool AutoStart { get; set; } = false;
         public int RecentsCount { get; set; } = 5;
+        public Aider Aider { get; set; } = Aider.Off;
 
         // Setting
         public int InputDelay { get; set; } = 30;

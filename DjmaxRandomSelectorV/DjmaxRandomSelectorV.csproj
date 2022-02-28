@@ -250,6 +250,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\Filter.cs" />
     <Compile Include="Models\InputCommand.cs" />
     <Compile Include="Models\Manager.cs" />
@@ -265,6 +266,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
+    <Compile Include="ViewModels\AddonViewModel.cs" />
     <Compile Include="ViewModels\FavoriteViewModel.cs" />
     <Compile Include="ViewModels\FilterViewModel.cs" />
     <Compile Include="ViewModels\HistoryViewModel.cs" />
@@ -272,6 +274,9 @@
     <Compile Include="ViewModels\InventoryViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\SettingViewModel.cs" />
+    <Compile Include="Views\AddonView.xaml.cs">
+      <DependentUpon>AddonView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\FavoriteView.xaml.cs">
       <DependentUpon>FavoriteView.xaml</DependentUpon>
     </Compile>
@@ -362,6 +367,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\AddonView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\FavoriteView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -425,6 +434,19 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\aider_auto.png" />
+    <Resource Include="Images\aider_observe.png" />
+    <Resource Include="Images\except.png" />
+    <Resource Include="Images\level_beginner.png" />
+    <Resource Include="Images\level_master.png" />
+    <Resource Include="Images\level_standard.png" />
+    <Resource Include="Images\mode_fs.png" />
+    <Resource Include="Images\mode_on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\addon_none.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Text.Json.6.0.1\build\System.Text.Json.targets" Condition="Exists('..\packages\System.Text.Json.6.0.1\build\System.Text.Json.targets')" />
