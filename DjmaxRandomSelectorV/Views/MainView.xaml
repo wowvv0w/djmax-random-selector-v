@@ -177,25 +177,21 @@
             </Grid>
             <!-- Bottom Bar -->
             <Grid Height="50" DockPanel.Dock="Bottom" Background="{StaticResource Nav}">
-                <StackPanel Orientation="Horizontal"
-                            Margin="30,0">
-                    <Button x:Name="ShowInfo"
-                            Style="{StaticResource UtilityButton}"
-                            Margin="0">
-                        <Image Source="pack://application:,,,/Images/icon.png"/>
-                    </Button>
-                </StackPanel>
                 <TextBlock Text="Press F7 to Start Random Selector" Foreground="{StaticResource Default}"
                            FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             Margin="30,0">
-                    <Button x:Name="ShowSetting"
-                            Style="{StaticResource UtilityButton}">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button" BasedOn="{StaticResource UtilityButton}"/>
+                    </StackPanel.Resources>
+                    <Button x:Name="ShowInfo">
+                        <Image Source="pack://application:,,,/Images/info.png"/>
+                    </Button>
+                    <Button x:Name="ShowSetting">
                         <Image Source="pack://application:,,,/Images/setting.png"/>
                     </Button>
-                    <Button x:Name="ShowInventory"
-                            Style="{StaticResource UtilityButton}">
+                    <Button x:Name="ShowInventory">
                         <Image Source="pack://application:,,,/Images/inventory.png"/>
                     </Button>
                 </StackPanel>
