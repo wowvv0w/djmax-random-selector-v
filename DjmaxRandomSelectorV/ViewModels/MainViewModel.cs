@@ -271,7 +271,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             windowManager.ShowDialogAsync(new InventoryViewModel(Setting, _dockPanel));
         }
 
-        // Additional Filter
+        // Equipment
         public bool StartsAutomatically
         {
             get { return Setting.AutoStart; }
@@ -291,18 +291,18 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
-        private bool _isAdditionalShown = false;
-        public void ToggleAdditionalFilter()
+        private bool _isEquipmentShown = false;
+        public void ToggleEquipment()
         {
-            if (_isAdditionalShown)
+            if (_isEquipmentShown)
             {
                 _dockPanel.Effect = null;
-                _isAdditionalShown = false;
+                _isEquipmentShown = false;
             }
             else
             {
                 _dockPanel.Effect = _blur;
-                _isAdditionalShown = true;
+                _isEquipmentShown = true;
             }
         }
 

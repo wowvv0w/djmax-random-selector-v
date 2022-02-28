@@ -22,29 +22,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    <!-- AdditionalButton -->
-    <Style x:Key="AdditionalButton" TargetType="ToggleButton">
-        <Setter Property="Width" Value="25"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ToggleButton">
-                    <Border x:Name="Border"
-                            Background="{TemplateBinding Background}">
-                        <ContentPresenter HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" TargetName="Border" Value="#3D3E3F"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    
+
     <!--TabButton-->
     <Style x:Key="TabButton" TargetType="RadioButton">
         <Setter Property="Background" Value="Transparent"/>

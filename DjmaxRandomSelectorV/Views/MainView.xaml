@@ -28,7 +28,7 @@
     <Grid>
 
         <!-- Slide Panel -->
-        <Grid x:Name="AdditionalFilter"
+        <Grid x:Name="Equipment"
               Panel.ZIndex="1"
               HorizontalAlignment="Left"
               Margin="-500,0,0,0">
@@ -73,14 +73,13 @@
                     </Grid>
                 </StackPanel>
             </Border>
-            <ToggleButton x:Name="ToggleAdditionalFilter"
-                          Grid.Column="1"
-                          Style="{StaticResource AdditionalButton}">
+            <ToggleButton x:Name="ToggleEquipment"
+                          Grid.Column="1">
                 <ToggleButton.Triggers>
                     <EventTrigger RoutedEvent="ToggleButton.Unchecked">
                         <BeginStoryboard>
                             <Storyboard>
-                                <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="AdditionalFilter"
+                                <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="Equipment"
                                                                   Storyboard.TargetProperty="Margin"
                                                                   BeginTime="0:0:0"
                                                                   DecelerationRatio=".9">
@@ -95,7 +94,7 @@
                     <EventTrigger RoutedEvent="ToggleButton.Checked">
                         <BeginStoryboard>
                             <Storyboard>
-                                <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="AdditionalFilter"
+                                <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="Equipment"
                                                                   Storyboard.TargetProperty="Margin"
                                                                   BeginTime="0:0:0"
                                                                   DecelerationRatio=".9">

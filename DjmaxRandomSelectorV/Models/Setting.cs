@@ -8,7 +8,7 @@ namespace DjmaxRandomSelectorV.Models
 {
     public class Setting
     {
-        // Additional Filter
+        // Equipment
         public bool AutoStart { get; set; } = false;
         public int RecentsCount { get; set; } = 5;
 
