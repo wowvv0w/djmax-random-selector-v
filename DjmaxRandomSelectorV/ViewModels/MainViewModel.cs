@@ -81,8 +81,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void SetPos(object view)
         {
             var window = view as Window;
-
-            Setting = Manager.LoadSetting();
             
             if (Setting.Position == null || Setting.Position.Length < 2)
             {
@@ -91,7 +89,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 window.Top = Setting.Position[0]; window.Left = Setting.Position[1];
             }
-            Manager.SaveSetting(Setting);
         }
 
         private void CheckUpdate()
