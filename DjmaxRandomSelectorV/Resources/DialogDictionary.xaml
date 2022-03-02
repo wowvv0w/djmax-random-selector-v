@@ -30,4 +30,33 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <Style x:Key="DialogTabButton" TargetType="RadioButton">
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Margin" Value="0,0,10,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Grid Background="#2D2D2D">
+                        <TextBlock Text="{TemplateBinding Content}"
+                                   Foreground="White"
+                                   FontFamily="{StaticResource Lato Black}"
+                                   FontSize="15"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                        <Border x:Name="Highlight"
+                                Height="3"
+                                VerticalAlignment="Bottom"
+                                Background="{StaticResource Highlight}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter Property="Background" TargetName="Highlight" Value="Transparent"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

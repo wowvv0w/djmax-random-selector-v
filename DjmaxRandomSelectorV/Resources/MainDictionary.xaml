@@ -22,7 +22,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!--TabButton-->
     <Style x:Key="TabButton" TargetType="RadioButton">
         <Setter Property="Background" Value="Transparent"/>

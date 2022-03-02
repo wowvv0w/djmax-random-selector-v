@@ -1,0 +1,54 @@
+﻿<Window x:Class="DjmaxRandomSelectorV.Views.InventoryView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
+        mc:Ignorable="d"
+        Height="400" Width="640"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        Background="#1A1A1A"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False">
+    <DockPanel>
+        <Grid DockPanel.Dock="Top"
+              Style="{StaticResource DialogBar}">
+            <TextBlock Text="INVENTORY"
+                       Style="{StaticResource DialogTitle}"/>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <RadioButton Content="FAVORITE"
+                             IsChecked="True"
+                             Style="{StaticResource DialogTabButton}"/>
+            </StackPanel>
+        </Grid>
+        <Grid DockPanel.Dock="Bottom"
+              Style="{StaticResource DialogBar}">
+            <Button x:Name="OK"
+                    Content="OK"
+                    Style="{StaticResource DialogButton}"
+                    HorizontalAlignment="Right"
+                    Margin="0,0,10,0"
+                    Width="90"/>
+        </Grid>
+        
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Border BorderBrush="Black"
+                    BorderThickness="3"
+                    Grid.ColumnSpan="3"/>
+            <TabControl Grid.Column="1"
+                        Background="Transparent"
+                        BorderThickness="0">
+                <TabItem Visibility="Collapsed" IsSelected="True">
+                    <ContentControl x:Name="FavoriteViewModel"/>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </DockPanel>
+</Window>

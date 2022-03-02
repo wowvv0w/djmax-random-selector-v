@@ -14,8 +14,16 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="10,0,0,0"/>
     </Style>
-    
+
+    <Style x:Key="SettingCategoryText" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#1FFFFFFF"/>
+        <Setter Property="FontFamily" Value="{StaticResource Lato}"/>
+        <Setter Property="FontSize" Value="23"/>
+        <Setter Property="Margin" Value="0,20,0,-5"/>
+    </Style>
+
     <Style x:Key="SettingToggleButton" TargetType="ToggleButton">
+        <Setter Property="Grid.Column" Value="1"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
@@ -89,6 +97,9 @@
         </Setter>
     </Style>
     <Style x:Key="SettingSlider" TargetType="Slider">
+        <Setter Property="Grid.Column" Value="1"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="40,0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>

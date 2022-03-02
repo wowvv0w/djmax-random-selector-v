@@ -12,16 +12,22 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class SettingViewModel : Screen
     {
         private Setting _setting;
+        private DockPanel _dockPanel;
+
         private int _inputDelay;
+        private bool _savesRecents;
         private List<string> _ownedDlcs;
 
-        private DockPanel _dockPanel;
+        private bool _updatesTrackList = false;
 
         public SettingViewModel(Setting setting, DockPanel dockPanel)
         {
             _setting = setting;
+
             _inputDelay = setting.InputDelay;
-            _ownedDlcs = setting.OwnedDlcs;
+            _savesRecents = setting.SavesRecents;
+            _ownedDlcs = setting.OwnedDlcs.ConvertAll(x => x);
+
             UpdateInputDelayText();
 
             _dockPanel = dockPanel;
@@ -30,10 +36,14 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void Apply()
         {
             _setting.InputDelay = _inputDelay;
+            _setting.SavesRecents = _savesRecents;
             _setting.OwnedDlcs = _ownedDlcs;
 
             Manager.SaveSetting(_setting);
-            Manager.UpdateTrackList(_ownedDlcs);
+            if (_updatesTrackList)
+            {
+                Manager.UpdateTrackList(_ownedDlcs);
+            }
             Selector.IsFilterChanged = true;
             Close();
         }
@@ -74,6 +84,15 @@ namespace DjmaxRandomSelectorV.ViewModels
             InputDelayText = $"{InputDelay}ms";
         }
 
+        public bool SavesRecents
+        {
+            get { return _savesRecents; }
+            set
+            {
+                _savesRecents = value;
+                NotifyOfPropertyChange(() => SavesRecents);
+            }
+        }
 
 
         public bool CheckOwnedDlcs(string value)
@@ -91,6 +110,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 _ownedDlcs.Remove(value);
             }
+            _updatesTrackList = true;
         }
 
         private const string _P3 = "P3";

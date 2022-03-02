@@ -1,7 +1,10 @@
 {
+  "RecentsCount": 5,
+  "Aider": 0,
   "InputDelay": 30,
-  "OwnedDlcs": [
-  ],
-  "AllTrackVersion": 220221,
-  "Position": []
+  "SavesRecents": false,
+  "OwnedDlcs": [],
+  "Position": [],
+  "Favorite": [],
+  "AllTrackVersion": 220221
 }

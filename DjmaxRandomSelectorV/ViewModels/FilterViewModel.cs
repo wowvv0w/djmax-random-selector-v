@@ -88,6 +88,17 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
+        public bool CategoryFavorite
+        {
+            get { return Filter.IncludesFavorite; }
+            set
+            {
+                Filter.IncludesFavorite = value;
+                NotifyOfPropertyChange(() => CategoryFavorite);
+                Selector.IsFilterChanged = true;
+            }
+        }
+
         private const string _4B = "4B";
         private const string _5B = "5B";
         private const string _6B = "6B";
