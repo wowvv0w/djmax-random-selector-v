@@ -32,6 +32,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
 
     <Style x:Key="SettingCategoryText" TargetType="TextBlock">
         <Setter Property="Foreground" Value="#1FFFFFFF"/>
