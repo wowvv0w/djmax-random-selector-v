@@ -107,7 +107,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 OpenReleasePageVisibility = Visibility.Visible;
             }
 
-            if (Setting.AllTrackVersion < _lastAllTrackVer)
+            if (Setting.AllTrackVersion != _lastAllTrackVer)
             {
                 Manager.UpdateAllTrackList();
                 Setting.AllTrackVersion = _lastAllTrackVer;
