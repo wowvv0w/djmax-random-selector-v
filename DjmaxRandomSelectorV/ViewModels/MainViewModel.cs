@@ -30,7 +30,9 @@ namespace DjmaxRandomSelectorV.ViewModels
         public FilterViewModel FilterViewModel { get; set; }
         public HistoryViewModel HistoryViewModel { get; set; }
 
-        private Advanced Advanced { get; set; }
+        public AddonViewModel AddonViewModel { get; set; }
+        public AddonViewModel AddonButton { get; set; }
+
         private Setting Setting { get; set; }
 
         public MainViewModel()
@@ -78,14 +80,15 @@ namespace DjmaxRandomSelectorV.ViewModels
             FilterViewModel = new FilterViewModel();
             HistoryViewModel = new HistoryViewModel();
 
-            Advanced = new Advanced();
+            AddonViewModel = new AddonViewModel(Setting);
+            AddonButton = new AddonViewModel(Setting);
+
+            UpdateAddon(Setting.Aider);
         }
 
         public void SetPos(object view)
         {
             var window = view as Window;
-
-            Setting = Manager.LoadSetting();
             
             if (Setting.Position == null || Setting.Position.Length < 2)
             {
@@ -94,7 +97,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 window.Top = Setting.Position[0]; window.Left = Setting.Position[1];
             }
-            Manager.SaveSetting(Setting);
         }
 
         private void CheckUpdate()
@@ -106,7 +108,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 OpenReleasePageVisibility = Visibility.Visible;
             }
 
-            if (Setting.AllTrackVersion < _lastAllTrackVer)
+            if (Setting.AllTrackVersion != _lastAllTrackVer)
             {
                 Manager.UpdateAllTrackList();
                 Setting.AllTrackVersion = _lastAllTrackVer;
@@ -117,21 +119,30 @@ namespace DjmaxRandomSelectorV.ViewModels
         private void Start()
         {
             CanStart = false;
+            Filter filter = FilterViewModel.Filter;
+
+            var favorite = filter.IncludesFavorite ? Setting.Favorite : new List<string>();
+            List<string> recents = filter.Recents;
+
             if (IsFilterChanged)
             {
-                SiftOut(FilterViewModel.Filter);
+                SiftOut(filter, favorite);
+                recents.Clear();
                 IsFilterChanged = false;
             }
-
-            List<string> recents = Advanced.Recents;
-            recents = CheckRecents(recents);
+            else
+            {
+                recents = CheckRecents(recents, Setting.RecentsCount);
+            }
 
             try
             {
                 Music selectedMusic = Pick(recents);
 
                 InputCommand inputCommand = Find(selectedMusic);
-                Select(inputCommand, Setting.InputDelay);
+                inputCommand.Delay = Setting.InputDelay;
+                inputCommand.Starts = (Setting.Aider == Aider.AutoStart);
+                Select(inputCommand);
 
                 var historyItem = new HistoryItem(selectedMusic);
                 HistoryViewModel.UpdateHistory(historyItem);
@@ -152,9 +163,12 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             var window = view as Window;
 
+            if (!Setting.SavesRecents)
+            {
+                FilterViewModel.Filter.Recents.Clear();
+            }
             Manager.SavePreset(FilterViewModel.Filter);
 
-            Setting = Manager.LoadSetting();
             Setting.Position = new double[2] { (window.Top < 0 ? 0 : window.Top), (window.Left < 0 ? 0 : window.Left) };
             Manager.SaveSetting(Setting);
         }
@@ -245,20 +259,106 @@ namespace DjmaxRandomSelectorV.ViewModels
             CurrentTab = "HISTORY";
         }
 
-        // Utility Buttons
+
+
         IWindowManager windowManager = new WindowManager();
-        public void ShowSetting()
-        {
-            _dockPanel.Effect = _blur;
-            windowManager.ShowDialogAsync(new SettingViewModel(Setting, _dockPanel));
-        }
         public void ShowInfo()
         {
-            _dockPanel.Effect = _blur;
+            SetBlurEffect();
             var infoViewModel
                 = new InfoViewModel(SELECTOR_VERSION, _lastSelectorVer, Setting.AllTrackVersion, _dockPanel);
             windowManager.ShowDialogAsync(infoViewModel);
         }
+        public void ShowSetting()
+        {
+            SetBlurEffect();
+            windowManager.ShowDialogAsync(new SettingViewModel(Setting, _dockPanel));
+        }
+        public void ShowInventory()
+        {
+            SetBlurEffect();
+            windowManager.ShowDialogAsync(new InventoryViewModel(Setting, _dockPanel));
+        }
+
+
+        #region Equipment
+        public void ShowEquipment()
+        {
+            SetBlurEffect();
+        }
+        public void HideEquipment()
+        {
+            SetBlurEffect(false);
+        }
+
+        public int RecentsCount
+        {
+            get => Setting.RecentsCount;
+            set
+            {
+                Setting.RecentsCount = value;
+                NotifyOfPropertyChange(() => RecentsCount);
+                AddonViewModel.ExceptCount = value;
+                AddonButton.ExceptCount = value;
+            }
+        }
+
+        private const string OFF = "OFF";
+        private const string AUTO_START = "AUTO START";
+
+        private string _aiderText;
+        public string AiderText
+        {
+            get => _aiderText;
+            set
+            {
+                _aiderText = value;
+                NotifyOfPropertyChange(() => AiderText);
+            }
+        }
+        
+        private void UpdateAddon(Aider aider)
+        {
+            switch (aider)
+            {
+                case Aider.Off: AiderText = OFF; break;
+                case Aider.AutoStart: AiderText = AUTO_START; break;
+            }
+            AddonViewModel.SetBitmapImage(aider);
+            AddonButton.SetBitmapImage(aider);
+        }
+        public void PrevAider()
+        {
+            if (Setting.Aider == Aider.Off)
+            {
+                Setting.Aider = Aider.AutoStart;
+            }
+            else
+            {
+                Setting.Aider = Aider.Off;
+            }
+            UpdateAddon(Setting.Aider);
+        }
+        public void NextAider()
+        {
+            if (Setting.Aider == Aider.AutoStart)
+            {
+                Setting.Aider = Aider.Off;
+            }
+            else
+            {
+                Setting.Aider = Aider.AutoStart;
+            }
+            UpdateAddon(Setting.Aider);
+        }
+
+        public void SetBlurEffect(bool turnsOn = true)
+        {
+            _dockPanel.Effect = turnsOn ? _blur : null;
+        }
+
+        #endregion
+
 
         [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);

@@ -17,7 +17,7 @@ namespace DjmaxRandomSelectorV.Models
         private static List<string> TitleList { get; set; }
         public static bool CanStart { get; set; } = true;
 
-        public static void SiftOut(Filter filter)
+        public static void SiftOut(Filter filter, List<string> favorite)
         {
             List<string> Styles = new List<string>();
             foreach(string button in filter.ButtonTunes)
@@ -29,7 +29,7 @@ namespace DjmaxRandomSelectorV.Models
             }
             var musicList = from track in TrackList
                             from pattern in track.Patterns
-                            where filter.Categories.Contains(track.Category)
+                            where (filter.Categories.Contains(track.Category) || favorite.Contains(track.Title))
                             && Styles.Contains(pattern.Key)
                             && pattern.Value >= filter.Levels[0]
                             && pattern.Value <= filter.Levels[1]
@@ -47,21 +47,23 @@ namespace DjmaxRandomSelectorV.Models
         }
 
 
-        public static List<string> CheckRecents(List<string> recents)
+        public static List<string> CheckRecents(List<string> recents, int count)
         {
-            if (recents.Count >= TitleList.Count)
+            var recentsCount = recents.Count;
+
+            if (recentsCount >= TitleList.Count)
             {
                 try
                 {
-                    recents.RemoveRange(0, recents.Count - TitleList.Count + 1);
+                    recents.RemoveRange(0, recentsCount - TitleList.Count + 1);
                 }
                 catch (ArgumentException)
                 {
                 }
             }
-            else if (recents.Count > 5)
+            else if (recentsCount > count)
             {
-                recents.RemoveAt(0);
+                recents.RemoveRange(0, recentsCount - count);
             }
 
             return recents;
@@ -169,7 +171,7 @@ namespace DjmaxRandomSelectorV.Models
             return inputCommand;
         }
 
-        public static void Select(InputCommand inputCommand, int delay)
+        public static void Select(InputCommand inputCommand)
         {
             char initial = inputCommand.Initial;
             int vertical = inputCommand.VerticalInputCount;
@@ -177,6 +179,8 @@ namespace DjmaxRandomSelectorV.Models
             int right = inputCommand.RightInputCount;
             bool alphabet = inputCommand.IsAlphabet;
             bool forward = inputCommand.IsForward;
+            int delay = inputCommand.Delay;
+            bool starts = inputCommand.Starts;
             byte direction;
 
 
@@ -213,6 +217,15 @@ namespace DjmaxRandomSelectorV.Models
             for(int i = 0; i < right; i++)
             {
                 Input(39); // RIGHT
+            }
+
+            if (starts)
+            {
+                int startDelay = 800 - delay * (right + 1);
+                startDelay = startDelay < 0 ? 0 : startDelay;
+
+                Thread.Sleep(startDelay);
+                Input(116); // F5
             }
         }
 

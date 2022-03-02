@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="DjmaxRandomSelectorV.Views.AddonView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="55" d:DesignWidth="220">
+    <Viewbox Stretch="Uniform">
+        <StackPanel Orientation="Horizontal">
+            <Grid Style="{x:Null}">
+                <Image Source="pack://application:,,,/Images/except.png"
+                       Margin="2.5"/>
+                <TextBlock x:Name="ExceptCount"
+                           Text="5"
+                           FontFamily="{StaticResource Bebas Neue}"
+                           FontSize="36"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Margin="0,0,0,-15">
+                    <TextBlock.Foreground>
+                        <LinearGradientBrush StartPoint=".5,0" EndPoint=".5,1">
+                            <GradientStop Color="#FFFFFF" Offset=".1"/>
+                            <GradientStop Color="#D6D6D6" Offset="1"/>
+                        </LinearGradientBrush>
+                    </TextBlock.Foreground>
+                </TextBlock>
+            </Grid>
+            <Image Source="pack://application:,,,/Images/mode_fs.png"
+                   Margin="2.5"/>
+            <Image x:Name="AiderImage"
+                   Source="pack://application:,,,/Images/addon_none.png"
+                   Margin="2.5"/>
+            <Image Source="pack://application:,,,/Images/addon_none.png"
+                   Margin="2.5"/>
+        </StackPanel>
+    </Viewbox>
+</UserControl>

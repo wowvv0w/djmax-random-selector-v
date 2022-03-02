@@ -124,7 +124,11 @@
         <GradientStop Color="#3F42FF" Offset="0.286936"/>
         <GradientStop Color="#0C79FF" Offset="1"/>
     </LinearGradientBrush>
-
+    <LinearGradientBrush x:Key="BgFavorite" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#EBED19" Offset="0.45"/>
+        <GradientStop Color="#F79421" Offset="1"/>
+    </LinearGradientBrush>
+    
     <SolidColorBrush x:Key="FgRespect" Color="#594713"/>
     <SolidColorBrush x:Key="FgPortable1" Color="#0E6677"/>
     <SolidColorBrush x:Key="FgPortable2" Color="#761A3f"/>
@@ -142,6 +146,7 @@
     <SolidColorBrush x:Key="FgTechnika1" Color="#5E275B"/>
     <SolidColorBrush x:Key="FgTechnika2" Color="#5E2B13"/>
     <SolidColorBrush x:Key="FgTechnika3" Color="#1D365E"/>
+    <SolidColorBrush x:Key="FgFavorite" Color="#686C19"/>
 
     <SolidColorBrush x:Key="BgGuiltyGear" Color="#E0480A"/>
     <SolidColorBrush x:Key="BgChunithm" Color="#FFD704"/>

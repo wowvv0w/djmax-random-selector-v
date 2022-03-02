@@ -35,9 +35,9 @@
             <TextBlock Text="TIME" Grid.Column="4"/>
         </Grid>
         <ItemsControl x:Name="History"
-                 Background="#56000000"
-                 BorderThickness="0"
-                 Grid.Row="1">
+                      Background="#56000000"
+                      BorderThickness="0"
+                      Grid.Row="1">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <DataTemplate.Resources>

@@ -18,123 +18,307 @@
     <Window.Background>
         <SolidColorBrush Opacity="0" Color="White" />
     </Window.Background>
-    <DockPanel cal:Message.Attach="[Event Loaded] = [Action GetDockPanel($source)]">
-        <DockPanel.Background>
-            <LinearGradientBrush StartPoint="0.987,0.5" EndPoint="1,0.5" SpreadMethod="Repeat">
-                <LinearGradientBrush.RelativeTransform>
-                    <RotateTransform Angle="325" CenterX="0.5" CenterY="0.5"/>
-                </LinearGradientBrush.RelativeTransform>
-                <GradientStop Color="#2D2E2F" Offset="0.4"/>
-                <GradientStop Color="#2A2B2C" Offset="0.475"/>
-                <GradientStop Color="#2A2B2C" Offset="0.525"/>
-                <GradientStop Color="#2D2E2F" Offset="0.6"/>
-            </LinearGradientBrush>
-        </DockPanel.Background>
-        <!-- Top Bar -->
-        <Grid Height="30" DockPanel.Dock="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="DJMAX Random Selector V" Foreground="#989999"
-                       FontSize="12" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <Border Background="Transparent"
-                    cal:Message.Attach="[Event MouseLeftButtonDown] = [Action MoveWindow($view)]"/>
-            <Button x:Name="OpenReleasePage"
-                    Content="[New Update is Available]"
-                    Foreground="{StaticResource Highlight}"
-                    FontFamily="{StaticResource Lato}"
-                    FontSize="12"
-                    Width="140"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Margin="170,0,0,0"
-                    Style="{StaticResource WindowButton}"
-                    Visibility="{Binding OpenReleasePageVisibility}"/>
+    <Grid>
+        
+        <!-- Slide Panel -->
+        <Grid x:Name="Equipment"
+              Panel.ZIndex="2"
+              HorizontalAlignment="Left"
+              Margin="-500,0,0,0"
+              Width="500">
+            <Border Background="#DF221C15"
+                    BorderBrush="Gray"
+                    BorderThickness="2"
+                    Margin="-4,-4,0,-4">
+            </Border>
+            <StackPanel Margin="30,50">
+                <StackPanel.Resources>
+                    <Style TargetType="Grid" BasedOn="{StaticResource SettingBar}"/>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource SettingText}"/>
+                    <Style TargetType="ToggleButton" BasedOn="{StaticResource SettingToggleButton}"/>
+                    <Style TargetType="Slider" BasedOn="{StaticResource SettingSlider}"/>
+                </StackPanel.Resources>
 
-            <Button cal:Message.Attach="[Event Click] = [Action MinimizeWindow($view)]"
-                    Grid.Column="1"
-                    Style="{StaticResource WindowButton}">
-                <Image Width="16"
-                       Source="pack://application:,,,/Images/Minimize.png"/>
-            </Button>
-            <Button cal:Message.Attach="[Event Click] = [Action CloseWindow($view)]"
-                    Grid.Column="2"
-                    Style="{StaticResource WindowButton}">
-                <Image Width="14"
-                       Source="pack://application:,,,/Images/Close.png"/>
-            </Button>
-        </Grid>
-        <!-- Menu Bar -->
-        <Grid Height="40" DockPanel.Dock="Top"
-                    Background="{StaticResource Nav}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="30"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="30"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock x:Name="CurrentTab"
-                       Text="FILTER"
-                       Foreground="{StaticResource Highlight}"
-                       FontFamily="{StaticResource Lato Light}"
-                       FontSize="23"
-                       Grid.Column="1"
-                       VerticalAlignment="Center"/>
-            <RadioButton x:Name="LoadFilterTab"
-                          Grid.Column="3" Style="{StaticResource TabButton}"
-                          Content="FILTER" IsChecked="True"/>
-            <RadioButton x:Name="LoadHistoryTab"
-                          Grid.Column="4" Style="{StaticResource TabButton}"
-                          Content="HISTORY" Margin="30,0,0,0"/>
-        </Grid>
-        <!-- Bottom Bar -->
-        <Grid Height="50" DockPanel.Dock="Bottom" Background="{StaticResource Nav}">
-            <StackPanel Orientation="Horizontal"
-                        Margin="30,0">
-                <Button x:Name="ShowInfo"
-                        Style="{StaticResource UtilityButton}"
-                        Margin="0">
-                    <Image Source="pack://application:,,,/Images/icon.png"/>
-                </Button>
+                <TextBlock Text="ADD-ON"
+                           Margin="0"
+                           Style="{StaticResource SettingCategoryText}"/>
+                <Grid Style="{x:Null}"
+                      Background="#7F584E46"
+                      Height="90">
+                    <ContentControl x:Name="AddonViewModel"
+                                    Height="55"/>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="EXCLUDE RECENT MUSICS"/>
+                    <TextBlock Text="{Binding ElementName=RecentsCount, Path=Value}"
+                                HorizontalAlignment="Right"
+                                Margin="0,0,10,0">
+                    </TextBlock>
+                    <Slider x:Name="RecentsCount"
+                            Margin="20,0"
+                            Minimum="0"
+                            Maximum="30"/>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="MODE"/>
+                    <Grid Grid.Column="1"
+                          Style="{x:Null}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="30"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="FREESTYLE"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Grid.Column="1"/>
+                    </Grid>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="AIDER"/>
+                    <Grid Grid.Column="1"
+                          Style="{x:Null}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="30"/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="PrevAider"
+                                Style="{StaticResource LeftArrowButton}"/>
+                        <TextBlock x:Name="AiderText"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Grid.Column="1"/>
+                        <Button x:Name="NextAider"
+                                Grid.Column="2"
+                                Style="{StaticResource RightArrowButton}"/>
+                    </Grid>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="LEVEL"/>
+                    <Grid Grid.Column="1"
+                          Style="{x:Null}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="30"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="OFF"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Grid.Column="1"/>
+                    </Grid>
+                </Grid>
             </StackPanel>
-            <TextBlock Text="Press F7 to Start Random Selector" Foreground="{StaticResource Default}"
-                       FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Right"
-                        Margin="30,0">
-                <Button x:Name="ShowSetting"
-                        Style="{StaticResource UtilityButton}">
-                    <Image Source="pack://application:,,,/Images/setting.png"/>
-                </Button>
-            </StackPanel>
+            <Button x:Name="HideEquipment"
+                    Content="OK"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Height="30"
+                    Margin="30"
+                    Style="{StaticResource SettingWindowButton}">
+                <Button.Triggers>
+                    <EventTrigger RoutedEvent="Button.Click">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="Equipment"
+                                                                  Storyboard.TargetProperty="Margin"
+                                                                  BeginTime="0:0:0"
+                                                                  DecelerationRatio=".9">
+                                    <SplineThicknessKeyFrame KeyTime="0:0:0"
+                                                             Value="0,0,0,0"/>
+                                    <SplineThicknessKeyFrame KeyTime="0:0:0.2"
+                                                             Value="-500,0,0,0"/>
+                                </ThicknessAnimationUsingKeyFrames>
+                                <ThicknessAnimation Storyboard.TargetName="BlockGrid"
+                                                    Storyboard.TargetProperty="Margin"
+                                                    To="-740,0,0,0"
+                                                    Duration="0:0:0"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Button.Triggers>
+            </Button>
         </Grid>
+        <Grid x:Name="BlockGrid"
+              Panel.ZIndex="1"
+              Background="Transparent"
+              HorizontalAlignment="Left"
+              Margin="-740,0,0,0"
+              Width="740"/>
 
-        <!-- Center -->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="30"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="30"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="10"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="10"/>
-            </Grid.RowDefinitions>
-            <TabControl Grid.Row="1" Grid.Column="1"
-                        Background="Transparent"
-                        BorderThickness="0">
-                <TabItem Visibility="Collapsed" IsSelected="{Binding IsFilterTabSelected}">
-                    <ContentControl x:Name="FilterViewModel"/>
-                </TabItem>
-                <TabItem Visibility="Collapsed" IsSelected="{Binding IsHistoryTabSelected}">
-                    <ContentControl x:Name="HistoryViewModel"/>
-                </TabItem>
-            </TabControl>
-        </Grid>
-    </DockPanel>
+
+        <!-- MainWindow -->
+        <DockPanel cal:Message.Attach="[Event Loaded] = [Action GetDockPanel($source)]">
+            <DockPanel.Background>
+                <LinearGradientBrush StartPoint="0.987,0.5" EndPoint="1,0.5" SpreadMethod="Repeat">
+                    <LinearGradientBrush.RelativeTransform>
+                        <RotateTransform Angle="325" CenterX="0.5" CenterY="0.5"/>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="#2D2E2F" Offset="0.4"/>
+                    <GradientStop Color="#2A2B2C" Offset="0.475"/>
+                    <GradientStop Color="#2A2B2C" Offset="0.525"/>
+                    <GradientStop Color="#2D2E2F" Offset="0.6"/>
+                </LinearGradientBrush>
+            </DockPanel.Background>
+            <!-- Top Bar -->
+            <Grid Height="30" DockPanel.Dock="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="DJMAX Random Selector V" Foreground="#989999"
+                           FontSize="12" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <Border Background="Transparent"
+                        cal:Message.Attach="[Event MouseLeftButtonDown] = [Action MoveWindow($view)]"/>
+                <Button x:Name="OpenReleasePage"
+                        Content="[New Update is Available]"
+                        Foreground="{StaticResource Highlight}"
+                        FontFamily="{StaticResource Lato}"
+                        FontSize="12"
+                        Width="140"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Margin="170,0,0,0"
+                        Style="{StaticResource WindowButton}"
+                        Visibility="{Binding OpenReleasePageVisibility}"/>
+
+                <Button cal:Message.Attach="[Event Click] = [Action MinimizeWindow($view)]"
+                        Grid.Column="1"
+                        Style="{StaticResource WindowButton}">
+                    <Image Width="16"
+                           Source="pack://application:,,,/Images/Minimize.png"/>
+                </Button>
+                <Button cal:Message.Attach="[Event Click] = [Action CloseWindow($view)]"
+                        Grid.Column="2"
+                        Style="{StaticResource WindowButton}">
+                    <Image Width="14"
+                           Source="pack://application:,,,/Images/Close.png"/>
+                </Button>
+            </Grid>
+            <!-- Menu Bar -->
+            <Grid Height="40" DockPanel.Dock="Top"
+                        Background="{StaticResource Nav}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="CurrentTab"
+                           Text="FILTER"
+                           Foreground="{StaticResource Highlight}"
+                           FontFamily="{StaticResource Lato Light}"
+                           FontSize="23"
+                           Grid.Column="1"
+                           VerticalAlignment="Center"/>
+                <RadioButton x:Name="LoadFilterTab"
+                              Grid.Column="3" Style="{StaticResource TabButton}"
+                              Content="FILTER" IsChecked="True"/>
+                <RadioButton x:Name="LoadHistoryTab"
+                              Grid.Column="4" Style="{StaticResource TabButton}"
+                              Content="HISTORY" Margin="30,0,0,0"/>
+            </Grid>
+            <!-- Bottom Bar -->
+            <Grid Height="50" DockPanel.Dock="Bottom" Background="{StaticResource Nav}">
+                <Grid.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource UtilityButton}"/>
+                </Grid.Resources>
+
+                <Button x:Name="ShowEquipment"
+                        Width="150" Height="40"
+                        Margin="30,0,0,0"
+                        HorizontalAlignment="Left">
+                    <Grid>
+                        <ContentControl x:Name="AddonButton"/>
+                    </Grid>
+                    <Button.Triggers>
+                        <EventTrigger RoutedEvent="Button.Click">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="Equipment"
+                                                                      Storyboard.TargetProperty="Margin"
+                                                                      BeginTime="0:0:0"
+                                                                      DecelerationRatio=".9">
+                                        <SplineThicknessKeyFrame KeyTime="0:0:0"
+                                                                 Value="-500,0,0,0"/>
+                                        <SplineThicknessKeyFrame KeyTime="0:0:0.2"
+                                                                 Value="0,0,0,0"/>
+                                    </ThicknessAnimationUsingKeyFrames>
+                                    <ThicknessAnimation Storyboard.TargetName="BlockGrid"
+                                                        Storyboard.TargetProperty="Margin"
+                                                        To="0,0,0,0"
+                                                        Duration="0:0:0"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Button.Triggers>
+                </Button>
+                
+                <TextBlock Text="Press F7 to Start Random Selector"
+                           Foreground="{StaticResource Default}"
+                           FontSize="15"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="30,0">
+                    <Button x:Name="ShowInfo">
+                        <Image Source="pack://application:,,,/Images/info.png"/>
+                    </Button>
+                    <Button x:Name="ShowSetting">
+                        <Image Source="pack://application:,,,/Images/setting.png"/>
+                    </Button>
+                    <Button x:Name="ShowInventory">
+                        <Image Source="pack://application:,,,/Images/inventory.png"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <!-- Center -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="10"/>
+                </Grid.RowDefinitions>
+                <TabControl Grid.Row="1" Grid.Column="1"
+                            Background="Transparent"
+                            BorderThickness="0">
+                    <TabItem Visibility="Collapsed" IsSelected="{Binding IsFilterTabSelected}">
+                        <ContentControl x:Name="FilterViewModel"/>
+                    </TabItem>
+                    <TabItem Visibility="Collapsed" IsSelected="{Binding IsHistoryTabSelected}">
+                        <ContentControl x:Name="HistoryViewModel"/>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </DockPanel>
+    </Grid>
 </Window>

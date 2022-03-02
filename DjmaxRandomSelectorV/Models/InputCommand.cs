@@ -9,5 +9,7 @@ namespace DjmaxRandomSelectorV.Models
         public int RightInputCount { get; set; }
         public bool IsForward { get; set; }
         public bool IsAlphabet { get; set; }
+        public int Delay { get; set; }
+        public bool Starts { get; set; }
     }
 }
