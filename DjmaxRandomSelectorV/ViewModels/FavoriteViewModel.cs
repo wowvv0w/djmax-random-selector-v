@@ -108,12 +108,14 @@ namespace DjmaxRandomSelectorV.ViewModels
             _favorite.Add(SearchBox);
 
             SearchBox = String.Empty;
+            Selector.IsFilterChanged = true;
         }
 
         public void RemoveItem(string child)
         {
             FavoriteItems.Remove(child);
             _favorite.Remove(child);
+            Selector.IsFilterChanged = true;
         }
     }
 }
