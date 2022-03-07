@@ -17,6 +17,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             SetBitmapImage(setting.Aider);
         }
 
+        #region Add-on Elements
         private int _exceptCount;
         private BitmapImage _modeImage;
         private BitmapImage _aiderImage;
@@ -58,7 +59,9 @@ namespace DjmaxRandomSelectorV.ViewModels
                 NotifyOfPropertyChange(() => LevelImage);
             }
         }
+        #endregion
 
+        #region Image Modification
         private BitmapImage GetBitmapImage(string file)
         {
             return new BitmapImage(new Uri($"pack://application:,,,/Images/{file}.png"));
@@ -76,7 +79,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                     break;
             }
         }
-
         public void SetBitmapImage(Aider aider)
         {
             switch (aider)
@@ -92,7 +94,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                     break;
             }
         }
-
         public void SetBitmapImage(Level level)
         {
             switch (level)
@@ -111,6 +112,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                     break;
             }
         }
-
+        #endregion
     }
 }

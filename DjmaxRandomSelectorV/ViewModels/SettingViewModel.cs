@@ -33,6 +33,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _dockPanel = dockPanel;
         }
 
+        #region On Exit
         public void Apply()
         {
             _setting.InputDelay = _inputDelay;
@@ -51,13 +52,14 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             Close();
         }
-
         public void Close()
         {
             TryCloseAsync();
             _dockPanel.Effect = null;
         }
+        #endregion
 
+        #region Selector Setting
         public int InputDelay
         {
             get { return _inputDelay; }
@@ -68,7 +70,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                 UpdateInputDelayText();
             }
         }
-
         private string _inputDelayText;
         public string InputDelayText
         {
@@ -93,13 +94,13 @@ namespace DjmaxRandomSelectorV.ViewModels
                 NotifyOfPropertyChange(() => SavesRecents);
             }
         }
+        #endregion
 
-
+        #region Track List Setting Updater
         public bool CheckOwnedDlcs(string value)
         {
             return _ownedDlcs.Contains(value);
         }
-
         public void UpdateOwnedDlcs(bool isChecked, string value)
         {
             if (isChecked)
@@ -112,7 +113,10 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             _updatesTrackList = true;
         }
+        #endregion
 
+        #region Track List Setting Elements
+        #region Constants
         private const string _P3 = "P3";
         private const string _TR = "TR";
         private const string _CE = "CE";
@@ -130,7 +134,8 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string _GC = "GC";
         private const string _GF = "GF";
         private const string _NXN = "NXN";
-
+        #endregion
+        #region Setting
         public bool SettingP3
         {
             get { return CheckOwnedDlcs(_P3); }
@@ -284,5 +289,8 @@ namespace DjmaxRandomSelectorV.ViewModels
                 NotifyOfPropertyChange(() => SettingNXN);
             }
         }
+        #endregion
+        #endregion
+
     }
 }

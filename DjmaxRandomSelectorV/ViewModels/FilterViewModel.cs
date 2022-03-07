@@ -24,12 +24,11 @@ namespace DjmaxRandomSelectorV.ViewModels
             UpdateLevelIndicators();
         }
 
-
+        #region Filter Updater
         private bool CheckFilter(List<string> filter, string value)
         {
             return filter.Contains(value);
         }
-
         private void UpdateFilter(bool isChecked, List<string> filter, string value)
         {
             if (isChecked)
@@ -42,7 +41,10 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             Selector.IsFilterChanged = true;
         }
+        #endregion
 
+
+        #region Level Adjustment
         public void IncreaseLevelMin()
         {
             if (LevelMin < 15 && LevelMin < LevelMax)
@@ -71,6 +73,28 @@ namespace DjmaxRandomSelectorV.ViewModels
                 LevelMax--;
             }
         }
+        #endregion
+
+        #region Level Indicator
+        public class LevelIndicator : PropertyChangedBase
+        {
+            private bool _value;
+            public bool Value
+            {
+                get { return _value; }
+                set
+                {
+                    _value = value;
+                    NotifyOfPropertyChange(() => Value);
+                }
+            }
+            public LevelIndicator()
+            {
+                _value = true;
+            }
+        }
+        public List<LevelIndicator> LevelIndicators { get; set; }
+            = new List<LevelIndicator>();
 
         public void UpdateLevelIndicators()
         {
@@ -87,18 +111,11 @@ namespace DjmaxRandomSelectorV.ViewModels
                 LevelIndicators[i].Value = false;
             }
         }
+        #endregion
 
-        public bool CategoryFavorite
-        {
-            get { return Filter.IncludesFavorite; }
-            set
-            {
-                Filter.IncludesFavorite = value;
-                NotifyOfPropertyChange(() => CategoryFavorite);
-                Selector.IsFilterChanged = true;
-            }
-        }
 
+        #region Filter Elements
+        #region Constants
         private const string _4B = "4B";
         private const string _5B = "5B";
         private const string _6B = "6B";
@@ -128,7 +145,8 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string _GC = "GC";
         private const string _GF = "GF";
         private const string _NXN = "NXN";
-
+        #endregion
+        #region ButtonTunes
         public bool ButtonTune4B
         {
             get { return CheckFilter(Filter.ButtonTunes, _4B); }
@@ -165,6 +183,8 @@ namespace DjmaxRandomSelectorV.ViewModels
                 NotifyOfPropertyChange(() => ButtonTune8B);
             }
         }
+        #endregion
+        #region Difficulty
         public bool DifficultyNM
         {
             get { return CheckFilter(Filter.Difficulties, _NM); }
@@ -223,6 +243,8 @@ namespace DjmaxRandomSelectorV.ViewModels
                 Selector.IsFilterChanged = true;
             }
         }
+        #endregion
+        #region Category
         public bool CategoryRP
         {
             get { return CheckFilter(Filter.Categories, _RP); }
@@ -412,27 +434,18 @@ namespace DjmaxRandomSelectorV.ViewModels
                 NotifyOfPropertyChange(() => CategoryNXN);
             }
         }
-
-
-        
-        public class LevelIndicator : PropertyChangedBase
+        #endregion
+        public bool CategoryFavorite
         {
-            private bool _value;
-            public bool Value
+            get { return Filter.IncludesFavorite; }
+            set
             {
-                get { return _value; }
-                set
-                {
-                    _value = value;
-                    NotifyOfPropertyChange(() => Value);
-                }
-            }
-            public LevelIndicator()
-            {
-                _value = true;
+                Filter.IncludesFavorite = value;
+                NotifyOfPropertyChange(() => CategoryFavorite);
+                Selector.IsFilterChanged = true;
             }
         }
-        public List<LevelIndicator> LevelIndicators { get; set; }
-            = new List<LevelIndicator>();
+        #endregion
+
     }
 }
