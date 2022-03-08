@@ -12,23 +12,22 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class FavoriteViewModel : Screen
     {
+        private bool _searchesSuggestion = true;
         private List<string> _favorite;
         public BindableCollection<string> FavoriteItems { get; set; }
-
         public BindableCollection<string> TitleSuggestions { get; set; }
 
-        private bool _opensSuggestionBox;
-        public bool OpensSuggestionBox
+        public FavoriteViewModel(List<string> favorite)
         {
-            get { return _opensSuggestionBox; }
-            set 
-            {
-                _opensSuggestionBox = value;
-                NotifyOfPropertyChange(() => OpensSuggestionBox);
-            }
+            _favorite = favorite;
+
+            FavoriteItems = new BindableCollection<string>(favorite);
+
+            TitleSuggestions = new BindableCollection<string>();
+            OpensSuggestionBox = false;
         }
 
-        private bool _searchesSuggestion = true;
+        #region SearchBox
         private string _searchBox;
         public string SearchBox
         {
@@ -39,16 +38,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                 NotifyOfPropertyChange(() => SearchBox);
                 if (_searchesSuggestion) { SearchTitle(); }
             }
-        }
-
-        public FavoriteViewModel(List<string> favorite)
-        {
-            _favorite = favorite;
-
-            FavoriteItems = new BindableCollection<string>(favorite);
-
-            TitleSuggestions = new BindableCollection<string>();
-            OpensSuggestionBox = false;
         }
 
         private void SearchTitle()
@@ -74,6 +63,19 @@ namespace DjmaxRandomSelectorV.ViewModels
                 OpensSuggestionBox = false;
             }
         }
+        #endregion
+
+        #region SuggestionBox
+        private bool _opensSuggestionBox;
+        public bool OpensSuggestionBox
+        {
+            get { return _opensSuggestionBox; }
+            set 
+            {
+                _opensSuggestionBox = value;
+                NotifyOfPropertyChange(() => OpensSuggestionBox);
+            }
+        }
 
         public void SelectSuggestion(string title)
         {
@@ -84,7 +86,9 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             _searchesSuggestion = true;
         }
+        #endregion
 
+        #region Favorite Item Adjustment
         public void AddItem()
         {
             if (!Selector.AllTrackList.Any(x => x.Title.Equals(SearchBox)))
@@ -110,12 +114,12 @@ namespace DjmaxRandomSelectorV.ViewModels
             SearchBox = String.Empty;
             Selector.IsFilterChanged = true;
         }
-
         public void RemoveItem(string child)
         {
             FavoriteItems.Remove(child);
             _favorite.Remove(child);
             Selector.IsFilterChanged = true;
         }
+        #endregion
     }
 }

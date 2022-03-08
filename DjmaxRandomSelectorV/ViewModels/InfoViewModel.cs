@@ -34,9 +34,11 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
+        #region Versions
         private string _currentVersion;
         private string _lastestVersion;
         private string _allTrackVersion;
+
         public string CurrentVersion
         {
             get { return _currentVersion; }
@@ -64,16 +66,18 @@ namespace DjmaxRandomSelectorV.ViewModels
                 NotifyOfPropertyChange(() => AllTrackVersion);
             }
         }
+        #endregion
 
+        #region Buttons
         public void OpenGithubPage()
         {
             Process.Start(GITHUB_PAGE_URL);
         }
-
         public void OpenBugReport()
         {
             Process.Start(BUG_REPORT_URL);
         }
+        #endregion
 
         public void Close()
         {

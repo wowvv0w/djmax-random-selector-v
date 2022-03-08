@@ -10,10 +10,7 @@
                 </ResourceDictionary>
                 <ResourceDictionary Source="Resources/FontDictionary.xaml"/>
                 <ResourceDictionary Source="Resources/ColorDictionary.xaml"/>
-                <ResourceDictionary Source="Resources/MainDictionary.xaml"/>
-                <ResourceDictionary Source="Resources/FilterDictionary.xaml"/>
-                <ResourceDictionary Source="Resources/DialogDictionary.xaml"/>
-                <ResourceDictionary Source="Resources/SettingDictionary.xaml"/>
+                <ResourceDictionary Source="Resources/StyleDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

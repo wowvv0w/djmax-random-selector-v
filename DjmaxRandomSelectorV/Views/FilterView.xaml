@@ -27,7 +27,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!--BUTTON TUNES-->
+        <!--#region Button Tunes-->
         <Border Margin="0,0,5,5">
             <Grid Margin="5,0">
                 <Grid.ColumnDefinitions>
@@ -93,8 +93,9 @@
                 </ToggleButton>
             </Grid>
         </Border>
-
-        <!--DIFFICULTY-->
+        <!--#endregion-->
+        
+        <!--#region Difficulty-->
         <Border Grid.Column="1" Margin="5,0,0,5">
             <Grid Margin="5,0">
                 <Grid.ColumnDefinitions>
@@ -272,8 +273,9 @@
                 </Grid>
             </Grid>
         </Border>
+        <!--#endregion-->
         
-        <!-- CATEGORIES -->
+        <!--#region Category-->
         <Border Grid.Row="1"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
@@ -444,5 +446,7 @@
                 </Grid>
             </Grid>
         </Border>
+        <!--#endregion-->
+        
     </Grid>
 </UserControl>

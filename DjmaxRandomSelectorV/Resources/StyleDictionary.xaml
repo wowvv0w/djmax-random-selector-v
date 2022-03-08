@@ -1,0 +1,430 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--#region Window-->
+    <Style x:Key="WindowButton" TargetType="Button">
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Border"
+                            Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="Border" Value="#3D3E3F"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="TabButton" TargetType="RadioButton">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource Default}"/>
+        <Setter Property="FontSize" Value="17"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="UtilityButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Width" Value="30"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Margin" Value="10,0,0,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+
+    <!--#region Filter-->
+    <Style x:Key="ButtonTunesButton" TargetType="ToggleButton">
+        <Setter Property="Width" Value="60"/>
+        <Setter Property="Height" Value="60"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid>
+                        <Image x:Name="Image"
+                               Source="{Binding Tag[0], RelativeSource={RelativeSource TemplatedParent}}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Image" Property="Source"
+                                    Value="{Binding Tag[1], RelativeSource={RelativeSource TemplatedParent}}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="DifficultyButton" TargetType="ToggleButton">
+        <Setter Property="FontFamily" Value="{StaticResource Lato Black}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border BorderBrush="{TemplateBinding Background}"
+                            BorderThickness="2">
+                        <Border x:Name="Border"
+                                Background="Transparent"
+                                Margin="-1">
+                            <TextBlock x:Name="TextBlock"
+                                   Text="{TemplateBinding Content}"
+                                   Foreground="{TemplateBinding Background}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                        </Border>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background"
+                                    TargetName="Border"
+                                    Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Setter Property="Foreground"
+                                    TargetName="TextBlock"
+                                    Value="#242526"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="CollaborationButton" TargetType="ToggleButton">
+        <Setter Property="FontFamily" Value="{StaticResource Lato Black}"/>
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="Margin" Value="8,0"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="Border"
+                            Background="Transparent"
+                            BorderBrush="#5E5E5E"
+                            BorderThickness="2">
+                        <TextBlock x:Name="TextBlock"
+                                   Text="{TemplateBinding Content}"
+                                   Foreground="#5E5E5E"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background"
+                                    TargetName="Border"
+                                    Value="#57000000"/>
+                            <Setter Property="BorderBrush"
+                                    TargetName="Border"
+                                    Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Setter Property="Foreground"
+                                    TargetName="TextBlock"
+                                    Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="CategoryButton" TargetType="ToggleButton">
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="FontFamily" Value="{StaticResource Bebas Neue}"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="Border"
+                            Background="#56000000"
+                            BorderThickness="0">
+                        <TextBlock x:Name="TextBlock"
+                                   Text="{TemplateBinding Content}"
+                                   Foreground="{TemplateBinding Foreground}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Margin="0,2,0,0"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background"
+                                    TargetName="Border"
+                                    Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Setter Property="Foreground"
+                                    TargetName="TextBlock"
+                                    Value="Black"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="LevelButton" TargetType="Button">
+        <Setter Property="ClickMode" Value="Press"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="Transparent">
+                        <ContentPresenter/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="LeftArrowButton" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="Transparent">
+                        <Image Source="pack://application:,,,/Images/btn_left.png"
+                               Width="12"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="RightArrowButton" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="Transparent">
+                        <Image Source="pack://application:,,,/Images/btn_right.png"
+                               Width="12"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="LevelIndicator" TargetType="Image">
+        <Setter Property="Width" Value="18"/>
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Source" Value="pack://application:,,,/Images/d_blk.png"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="LevelIndicatorYellow" TargetType="Image"
+           BasedOn="{StaticResource LevelIndicator}">
+        <Setter Property="Source" Value="pack://application:,,,/Images/d_ylw.png"/>
+    </Style>
+    <Style x:Key="LevelIndicatorOrange" TargetType="Image"
+           BasedOn="{StaticResource LevelIndicator}">
+        <Setter Property="Source" Value="pack://application:,,,/Images/d_org.png"/>
+    </Style>
+    <Style x:Key="LevelIndicatorRed" TargetType="Image"
+           BasedOn="{StaticResource LevelIndicator}">
+        <Setter Property="Source" Value="pack://application:,,,/Images/d_red.png"/>
+    </Style>
+    <!--#endregion-->
+
+    <!--#region Dialog-->
+    <Style x:Key="DialogBar" TargetType="Grid">
+        <Setter Property="Background" Value="#242424"/>
+        <Setter Property="Height" Value="50"/>
+    </Style>
+    <Style x:Key="DialogTitle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Lato}"/>
+        <Setter Property="FontSize" Value="23"/>
+        <Setter Property="Foreground" Value="{StaticResource Highlight}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="10,0,0,0"/>
+    </Style>
+    <Style x:Key="DialogButton" TargetType="Button">
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="#2D2D2D"
+                            BorderThickness="0">
+                        <TextBlock Text="{TemplateBinding Content}"
+                                   Foreground="White"
+                                   FontFamily="{StaticResource Lato Black}"
+                                   FontSize="15"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="DialogTabButton" TargetType="RadioButton">
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Margin" Value="0,0,10,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Grid Background="#2D2D2D">
+                        <TextBlock Text="{TemplateBinding Content}"
+                                   Foreground="White"
+                                   FontFamily="{StaticResource Lato Black}"
+                                   FontSize="15"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                        <Border x:Name="Highlight"
+                                Height="3"
+                                VerticalAlignment="Bottom"
+                                Background="{StaticResource Highlight}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter Property="Background" TargetName="Highlight" Value="Transparent"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+
+    <!--#region Setting-->
+    <Style x:Key="SettingBar" TargetType="Grid">
+        <Setter Property="Background" Value="{StaticResource SettingElement}"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Margin" Value="0,5,0,0"/>
+    </Style>
+    <Style x:Key="SettingText" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource Default}"/>
+        <Setter Property="FontFamily" Value="{StaticResource Lato Black}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="10,0,0,0"/>
+    </Style>
+    <Style x:Key="SettingCategoryText" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#1FFFFFFF"/>
+        <Setter Property="FontFamily" Value="{StaticResource Lato}"/>
+        <Setter Property="FontSize" Value="23"/>
+        <Setter Property="Margin" Value="0,20,0,-5"/>
+    </Style>
+    <Style x:Key="SettingToggleButton" TargetType="ToggleButton">
+        <Setter Property="Grid.Column" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="Border"
+                            Background="Transparent"
+                            BorderThickness="0">
+                        <TextBlock x:Name="TextBlock"
+                                   Text="OFF"
+                                   Foreground="{StaticResource Default}"
+                                   FontFamily="{StaticResource Lato Black}"
+                                   FontSize="13"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Text"
+                                    TargetName="TextBlock"
+                                    Value="ON"/>
+                            <Setter Property="Foreground"
+                                    TargetName="TextBlock"
+                                    Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="SettingWindowButton" TargetType="Button">
+        <Setter Property="Width" Value="80"/>
+        <Setter Property="Margin" Value="10,0,0,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="#56000000"
+                            BorderBrush="#818282"
+                            BorderThickness="3"
+                            CornerRadius="6">
+                        <TextBlock Text="{TemplateBinding Content}"
+                                   Foreground="#818282"
+                                   FontFamily="{StaticResource Lato Black}"
+                                   FontSize="15"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="SliderButtonStyle" TargetType="RepeatButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border Background="Transparent"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="SliderThumbStyle" TargetType="Thumb">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Thumb">
+                    <Ellipse Width="16"
+                             Height="16"
+                             Fill="White">
+                    </Ellipse>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="SettingSlider" TargetType="Slider">
+        <Setter Property="Grid.Column" Value="1"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="40,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Border x:Name="TrackBackground"
+                                Background="{StaticResource SliderBackground}"
+                                Margin="0"
+                                Height="8"
+                                Grid.Row="1">
+                        </Border>
+                        <Track Grid.Row="1"
+                               x:Name="PART_Track">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Style="{StaticResource SliderButtonStyle}"
+                                              Command="Slider.DecreaseLarge" />
+                            </Track.DecreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb Style="{StaticResource SliderThumbStyle}" />
+                            </Track.Thumb>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Style="{StaticResource SliderButtonStyle}"
+                                              Command="Slider.IncreaseLarge" />
+                            </Track.IncreaseRepeatButton>
+                        </Track>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+    
+</ResourceDictionary>

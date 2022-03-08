@@ -85,6 +85,19 @@ namespace DjmaxRandomSelectorV.ViewModels
             UpdateAddon(Setting.Aider);
         }
 
+
+        #region On Start Up
+        public void AddHotKey(object view)
+        {
+            var window = view as Window;
+
+            HwndSource source;
+            IntPtr handle = new WindowInteropHelper(window).Handle;
+            source = HwndSource.FromHwnd(handle);
+            source.AddHook(HwndHook);
+
+            RegisterHotKey(handle, HOTKEY_ID, 0x0000, KEY_F7);
+        }
         public void SetPos(object view)
         {
             var window = view as Window;
@@ -97,6 +110,11 @@ namespace DjmaxRandomSelectorV.ViewModels
                 window.Top = Setting.Position[0]; window.Left = Setting.Position[1];
             }
         }
+        public void GetDockPanel(object source)
+        {
+            _dockPanel = source as DockPanel;
+        }
+        #endregion
 
         private void CheckUpdate()
         {
@@ -115,6 +133,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
+        #region Start Selector
         private void Start()
         {
             CanStart = false;
@@ -157,7 +176,9 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             CanStart = true;
         }
+        #endregion
 
+        #region On Exit
         public void CloseEvent(object view)
         {
             var window = view as Window;
@@ -171,13 +192,10 @@ namespace DjmaxRandomSelectorV.ViewModels
             Setting.Position = new double[2] { (window.Top < 0 ? 0 : window.Top), (window.Left < 0 ? 0 : window.Left) };
             Manager.SaveSetting(Setting);
         }
+        #endregion
 
 
-        public void OpenReleasePage()
-        {
-            System.Diagnostics.Process.Start(RELEASE_URL);
-        }
-
+        #region Window Top Bar
         private Visibility _openReleasePageVisibility = Visibility.Hidden;
         public Visibility OpenReleasePageVisibility
         {
@@ -189,33 +207,31 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
-
-        // Window Bar
+        public void OpenReleasePage()
+        {
+            System.Diagnostics.Process.Start(RELEASE_URL);
+        }
         public void MoveWindow(object view)
         {
             var window = view as Window;
             window.DragMove();
         }
-
-        // Window Buttons
         public void MinimizeWindow(object view)
         {
             var window = view as Window;
             window.WindowState = WindowState.Minimized;
         }
-
         public void CloseWindow(object view)
         {
             var window = view as Window;
             window.Close();
         }
+        #endregion
 
-        public void GetDockPanel(object source)
-        {
-            _dockPanel = source as DockPanel;
-        }
-
+        #region Tab Bar
         private string _currentTab = "FILTER";
+        private bool _isFilterTabSelected = true;
+        private bool _isHistoryTabSelected = false;
         public string CurrentTab
         {
             get { return _currentTab; }
@@ -225,10 +241,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                 NotifyOfPropertyChange(() => CurrentTab);
             }
         }
-
-        // Tab Buttons
-        private bool _isFilterTabSelected = true;
-        private bool _isHistoryTabSelected = false;
         public bool IsFilterTabSelected
         {
             get { return _isFilterTabSelected; }
@@ -257,9 +269,9 @@ namespace DjmaxRandomSelectorV.ViewModels
             IsHistoryTabSelected = true;
             CurrentTab = "HISTORY";
         }
+        #endregion
 
-
-
+        #region Bottom Bar
         IWindowManager windowManager = new WindowManager();
         public void ShowInfo()
         {
@@ -278,9 +290,11 @@ namespace DjmaxRandomSelectorV.ViewModels
             SetBlurEffect();
             windowManager.ShowDialogAsync(new InventoryViewModel(Setting, _dockPanel));
         }
+        #endregion
 
 
         #region Equipment
+        #region Show/Hide
         public void ShowEquipment()
         {
             SetBlurEffect();
@@ -289,7 +303,12 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             SetBlurEffect(false);
         }
-
+        public void SetBlurEffect(bool turnsOn = true)
+        {
+            _dockPanel.Effect = turnsOn ? _blur : null;
+        }
+        #endregion
+        #region Except
         public int RecentsCount
         {
             get => Setting.RecentsCount;
@@ -301,10 +320,11 @@ namespace DjmaxRandomSelectorV.ViewModels
                 AddonButton.ExceptCount = value;
             }
         }
+        #endregion
 
         private const string OFF = "OFF";
         private const string AUTO_START = "AUTO START";
-
+        #region Aider
         private string _aiderText;
         public string AiderText
         {
@@ -350,33 +370,23 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             UpdateAddon(Setting.Aider);
         }
-
-        public void SetBlurEffect(bool turnsOn = true)
-        {
-            _dockPanel.Effect = turnsOn ? _blur : null;
-        }
+        #endregion
 
         #endregion
 
-        [DllImport("user32.dll")]
-        private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
 
+        #region Other Constants & Methods
         private const int WM_HOTKEY = 0x0312;
         private const int HOTKEY_ID = 9000;
         private const uint KEY_F7 = 118;
         private const string DJMAX_TITLE = "DJMAX RESPECT V";
 
-        public void AddHotKey(object view)
-        {
-            var window = view as Window;
-
-            HwndSource source;
-            IntPtr handle = new WindowInteropHelper(window).Handle;
-            source = HwndSource.FromHwnd(handle);
-            source.AddHook(HwndHook);
-
-            RegisterHotKey(handle, HOTKEY_ID, 0x0000, KEY_F7);
-        }
+        [DllImport("user32.dll")]
+        private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+        [DllImport("user32.dll")]
+        private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
         private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
@@ -404,13 +414,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             return IntPtr.Zero;
         }
-
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetForegroundWindow();
-
-        [DllImport("user32.dll")]
-        private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
-
         private string GetActiveWindowTitle()
         {
             const int nChars = 256;
@@ -423,5 +426,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             return null;
         }
+        #endregion
     }
 }
