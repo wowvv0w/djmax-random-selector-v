@@ -27,7 +27,7 @@
     </Window.Background>
     <Grid>
         
-        <!-- Slide Panel -->
+        <!--#region Equipment-->
         <Grid x:Name="Equipment"
               Panel.ZIndex="2"
               HorizontalAlignment="Left"
@@ -170,11 +170,12 @@
               HorizontalAlignment="Left"
               Margin="-740,0,0,0"
               Width="740"/>
+        <!--#endregion-->
 
-
-        <!-- MainWindow -->
+        <!--#region MainWindow-->
         <DockPanel cal:Message.Attach="[Event Loaded] = [Action GetDockPanel($source)]">
-            <!-- Top Bar -->
+            
+            <!--#region Top Bar-->
             <Grid Height="30" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -210,7 +211,9 @@
                            Source="pack://application:,,,/Images/Close.png"/>
                 </Button>
             </Grid>
-            <!-- Menu Bar -->
+            <!--#endregion-->
+            
+            <!--#region Tab Bar-->
             <Grid Height="40" DockPanel.Dock="Top"
                         Background="{StaticResource Nav}">
                 <Grid.ColumnDefinitions>
@@ -235,7 +238,9 @@
                               Grid.Column="4" Style="{StaticResource TabButton}"
                               Content="HISTORY" Margin="30,0,0,0"/>
             </Grid>
-            <!-- Bottom Bar -->
+            <!--#endregion-->
+            
+            <!--#region Bottom Bar-->
             <Grid Height="50" DockPanel.Dock="Bottom" Background="{StaticResource Nav}">
                 <Grid.Resources>
                     <Style TargetType="Button" BasedOn="{StaticResource UtilityButton}"/>
@@ -291,8 +296,9 @@
                     </Button>
                 </StackPanel>
             </Grid>
-
-            <!-- Center -->
+            <!--#endregion-->
+            
+            <!--#region Center-->
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="30"/>
@@ -316,5 +322,9 @@
                 </TabControl>
             </Grid>
         </DockPanel>
+        <!--#endregion-->
+        
+        <!--#endregion-->
+        
     </Grid>
 </Window>
