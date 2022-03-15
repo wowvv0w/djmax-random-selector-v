@@ -11,7 +11,6 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media.Effects;
 using System.IO;
-using DjmaxRandomSelectorV.Views;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -382,6 +381,28 @@ namespace DjmaxRandomSelectorV.ViewModels
             RegisterHotKey(handle, HOTKEY_ID, 0x0000, KEY_F2);
         }
 
+        private bool _MainViewTopmost = false;
+        public bool MainViewTopmost
+        {
+            get { return _MainViewTopmost; }
+            set
+            {
+                _MainViewTopmost = value;
+                NotifyOfPropertyChange(() => MainViewTopmost);
+            }
+        }
+
+        private WindowState _MainViewState = WindowState.Normal;
+        public WindowState MainViewState
+        {
+            get { return _MainViewState; }
+            set
+            {
+                _MainViewState = value;
+                NotifyOfPropertyChange(() => MainViewState);
+            }
+        }
+
         private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             if (msg == WM_HOTKEY && wParam.ToInt32() == HOTKEY_ID)
@@ -408,17 +429,15 @@ namespace DjmaxRandomSelectorV.ViewModels
                 {
                     if (windowTitle == DJMAX_TITLE)
                     {
-                        var view = GetView() as MainView;
-                        var window = view as Window;
-
-                        if (window.WindowState != WindowState.Minimized)
+                        if (MainViewState != WindowState.Minimized)
                         {
-                            window.WindowState = WindowState.Minimized;
+                            MainViewState = WindowState.Minimized;
+                            MainViewTopmost = false;
                         }
                         else
                         {
-                            window.WindowState = WindowState.Normal;
-                            window.Activate();
+                            MainViewState = WindowState.Normal;
+                            MainViewTopmost = true;
                         }
                     }
                 }

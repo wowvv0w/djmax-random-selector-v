@@ -21,8 +21,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         private bool _savesRecents;
         private List<string> _ownedDlcs;
 
-
-        private DockPanel _dockPanel;
         private int dlcCount;
 
         private bool _updatesTrackList = false;
