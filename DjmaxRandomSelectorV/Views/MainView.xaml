@@ -7,9 +7,6 @@
         mc:Ignorable="d"
         Title="DJMAX Random Selector V" Width="740" Height="480"
         WindowStyle="None"
-        WindowState="{Binding MainViewState}"
-        AllowsTransparency="True"
-        Topmost="{Binding MainViewTopmost}"
         FontFamily="{StaticResource Lato Black}"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
@@ -17,7 +14,15 @@
         cal:Message.Attach="[Event Loaded] = [Action AddHotKey($view)];[Event ContentRendered] = [Action SetPos($view)];[Event Closing] = [Action CloseEvent($view)]"
         Icon="pack://application:,,,/Images/icon.png">
     <Window.Background>
-        <SolidColorBrush Opacity="0" Color="White" />
+        <LinearGradientBrush StartPoint="0.987,0.5" EndPoint="1,0.5" SpreadMethod="Repeat">
+            <LinearGradientBrush.RelativeTransform>
+                <RotateTransform Angle="325" CenterX="0.5" CenterY="0.5"/>
+            </LinearGradientBrush.RelativeTransform>
+            <GradientStop Color="#2D2E2F" Offset="0.4"/>
+            <GradientStop Color="#2A2B2C" Offset="0.475"/>
+            <GradientStop Color="#2A2B2C" Offset="0.525"/>
+            <GradientStop Color="#2D2E2F" Offset="0.6"/>
+        </LinearGradientBrush>
     </Window.Background>
     <Grid>
         
@@ -168,17 +173,6 @@
 
         <!-- MainWindow -->
         <DockPanel cal:Message.Attach="[Event Loaded] = [Action GetDockPanel($source)]">
-            <DockPanel.Background>
-                <LinearGradientBrush StartPoint="0.987,0.5" EndPoint="1,0.5" SpreadMethod="Repeat">
-                    <LinearGradientBrush.RelativeTransform>
-                        <RotateTransform Angle="325" CenterX="0.5" CenterY="0.5"/>
-                    </LinearGradientBrush.RelativeTransform>
-                    <GradientStop Color="#2D2E2F" Offset="0.4"/>
-                    <GradientStop Color="#2A2B2C" Offset="0.475"/>
-                    <GradientStop Color="#2A2B2C" Offset="0.525"/>
-                    <GradientStop Color="#2D2E2F" Offset="0.6"/>
-                </LinearGradientBrush>
-            </DockPanel.Background>
             <!-- Top Bar -->
             <Grid Height="30" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>

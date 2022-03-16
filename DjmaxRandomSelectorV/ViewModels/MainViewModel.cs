@@ -365,7 +365,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const int WM_HOTKEY = 0x0312;
         private const int HOTKEY_ID = 9000;
         private const uint KEY_F7 = 118;
-        private const uint KEY_F2 = 113;
         private const string DJMAX_TITLE = "DJMAX RESPECT V";
 
         public void AddHotKey(object view)
@@ -378,29 +377,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             source.AddHook(HwndHook);
 
             RegisterHotKey(handle, HOTKEY_ID, 0x0000, KEY_F7);
-            RegisterHotKey(handle, HOTKEY_ID, 0x0000, KEY_F2);
-        }
-
-        private bool _MainViewTopmost = false;
-        public bool MainViewTopmost
-        {
-            get { return _MainViewTopmost; }
-            set
-            {
-                _MainViewTopmost = value;
-                NotifyOfPropertyChange(() => MainViewTopmost);
-            }
-        }
-
-        private WindowState _MainViewState = WindowState.Normal;
-        public WindowState MainViewState
-        {
-            get { return _MainViewState; }
-            set
-            {
-                _MainViewState = value;
-                NotifyOfPropertyChange(() => MainViewState);
-            }
         }
 
         private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
@@ -423,22 +399,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                             "Selector Error",
                             MessageBoxButton.OK,
                             MessageBoxImage.Error);
-                    }
-                }
-                else if (vkey == KEY_F2)
-                {
-                    if (windowTitle == DJMAX_TITLE)
-                    {
-                        if (MainViewState != WindowState.Minimized)
-                        {
-                            MainViewState = WindowState.Minimized;
-                            MainViewTopmost = false;
-                        }
-                        else
-                        {
-                            MainViewState = WindowState.Normal;
-                            MainViewTopmost = true;
-                        }
                     }
                 }
 
