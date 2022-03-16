@@ -392,11 +392,11 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             if (msg == WM_HOTKEY && wParam.ToInt32() == HOTKEY_ID)
             {
+                string windowTitle = GetActiveWindowTitle();
+                
                 int vkey = ((int)lParam >> 16) & 0xFFFF;
                 if (vkey == KEY_F7)
                 {
-                    string windowTitle = GetActiveWindowTitle();
-
                     if (CanStart && windowTitle == DJMAX_TITLE)
                     {
                         Thread thread = new Thread(new ThreadStart(() => Start()));
@@ -410,6 +410,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                             MessageBoxImage.Error);
                     }
                 }
+
                 handled = true;
             }
             return IntPtr.Zero;
