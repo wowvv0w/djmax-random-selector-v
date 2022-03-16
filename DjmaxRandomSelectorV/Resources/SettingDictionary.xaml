@@ -15,6 +15,25 @@
         <Setter Property="Margin" Value="10,0,0,0"/>
     </Style>
 
+    <Style x:Key="SettingDetectButton" TargetType="Button">
+        <Setter Property="Width" Value="auto"/>
+        <Setter Property="Margin" Value="0,0,0,-5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="Transparent">
+                        <TextBlock Text="DETECT"
+                                   Foreground="#b1b1b1"
+                                   FontFamily="{StaticResource Lato Black}"
+                                   FontSize="15"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="SettingCategoryText" TargetType="TextBlock">
         <Setter Property="Foreground" Value="#1FFFFFFF"/>
         <Setter Property="FontFamily" Value="{StaticResource Lato}"/>

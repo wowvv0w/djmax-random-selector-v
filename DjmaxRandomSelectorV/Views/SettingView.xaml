@@ -23,15 +23,16 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
-                <RowDefinition/>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="11*"/>
                 <RowDefinition Height="10"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="10"/>
             </Grid.RowDefinitions>
             <ScrollViewer VerticalScrollBarVisibility="Hidden"
                           Grid.Row="1"
-                          Grid.Column="1">
-                <StackPanel Margin="40,0">
+                          Grid.Column="1" Grid.RowSpan="2">
+                <StackPanel Margin="40,0" Orientation="Vertical">
                     <StackPanel.Resources>
                         <Style TargetType="Grid" BasedOn="{StaticResource SettingBar}"/>
                         <Style TargetType="TextBlock" BasedOn="{StaticResource SettingText}"/>
@@ -56,7 +57,7 @@
                                 Minimum="10"
                                 Maximum="50"
                                 IsSnapToTickEnabled="True"
-                                TickFrequency="10"/>
+                                TickFrequency="5"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -67,8 +68,23 @@
                         <ToggleButton x:Name="SavesRecents"/>
                     </Grid>
 
-                    <TextBlock Text="TRACK LIST SETTING"
-                               Style="{StaticResource SettingCategoryText}"/>
+                    <Grid Style="{x:Null}" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="TRACK LIST SETTING"
+                               Foreground="#1FFFFFFF"
+                               FontFamily="{StaticResource Lato}"
+                               FontSize="23"
+                               Margin="0,0,0,-5" Width="297"
+                               Grid.Column="0"/>
+                        <Button x:Name="Detect"
+                                Grid.Column="2"
+                                Style="{StaticResource SettingDetectButton}"/>
+                    </Grid>
+                  
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
@@ -208,7 +224,7 @@
                 </StackPanel>
             </ScrollViewer>
             <StackPanel Orientation="Horizontal"
-                        Grid.Row="3"
+                        Grid.Row="4"
                         Grid.Column="1"
                         HorizontalAlignment="Right"
                         Margin="40,0">
