@@ -11,6 +11,12 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class AddonViewModel : Screen
     {
+        private Mode _mode = Mode.Freestyle; 
+        private Aider _aider = Aider.Off;
+        private Level _level = Level.Off;
+
+        private bool _isFreestyle = true;
+
         public AddonViewModel(Setting setting)
         {
             ExceptCount = setting.RecentsCount;
@@ -78,6 +84,11 @@ namespace DjmaxRandomSelectorV.ViewModels
                     ModeImage = GetBitmapImage("mode_on");
                     break;
             }
+
+            _mode = mode;
+            _isFreestyle = _mode == Mode.Freestyle;
+            if (_aider == Aider.AutoStart) SetBitmapImage(_aider);
+            if (_level != Level.Off) SetBitmapImage(_level);
         }
         public void SetBitmapImage(Aider aider)
         {
@@ -87,12 +98,13 @@ namespace DjmaxRandomSelectorV.ViewModels
                     AiderImage = GetBitmapImage("addon_none");
                     break;
                 case Aider.AutoStart:
-                    AiderImage = GetBitmapImage("aider_auto");
+                    AiderImage = GetBitmapImage(_isFreestyle ? "aider_auto" : "aider_auto_locked");
                     break;
                 case Aider.Observe:
                     AiderImage = GetBitmapImage("aider_observe");
                     break;
             }
+            _aider = aider;
         }
         public void SetBitmapImage(Level level)
         {
@@ -102,12 +114,13 @@ namespace DjmaxRandomSelectorV.ViewModels
                     LevelImage = GetBitmapImage("addon_none");
                     break;
                 case Level.Beginner:
-                    LevelImage = GetBitmapImage("level_beginner");
+                    LevelImage = GetBitmapImage(_isFreestyle ? "level_beginner" : "level_beginner_locked");
                     break;
                 case Level.Master:
-                    LevelImage = GetBitmapImage("level_master");
+                    LevelImage = GetBitmapImage(_isFreestyle ? "level_master" : "level_master_locked");
                     break;
             }
+            _level = level;
         }
         #endregion
     }
