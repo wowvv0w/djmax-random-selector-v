@@ -1,4 +1,6 @@
-﻿using Caliburn.Micro;
+﻿#define debug
+
+using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
 using static DjmaxRandomSelectorV.Models.Selector;
 using System;
@@ -82,7 +84,9 @@ namespace DjmaxRandomSelectorV.ViewModels
             AddonViewModel = new AddonViewModel(Setting);
             AddonButton = new AddonViewModel(Setting);
 
+            UpdateAddon(Setting.Mode);
             UpdateAddon(Setting.Aider);
+            UpdateAddon(Setting.Level);
         }
 
 
@@ -139,12 +143,16 @@ namespace DjmaxRandomSelectorV.ViewModels
             CanStart = false;
             Filter filter = FilterViewModel.Filter;
 
+            Mode mode = Setting.Mode;
+            Aider aider = Setting.Aider;
+            Level level = Setting.Level;
+
             var favorite = filter.IncludesFavorite ? Setting.Favorite : new List<string>();
             List<string> recents = filter.Recents;
 
             if (IsFilterChanged)
             {
-                SiftOut(filter, favorite);
+                SiftOut(filter, favorite, mode, level);
                 recents.Clear();
                 IsFilterChanged = false;
             }
@@ -153,19 +161,10 @@ namespace DjmaxRandomSelectorV.ViewModels
                 recents = CheckRecents(recents, Setting.RecentsCount);
             }
 
+            Music selectedMusic;
             try
             {
-                Music selectedMusic = Pick(recents);
-
-                InputCommand inputCommand = Find(selectedMusic);
-                inputCommand.Delay = Setting.InputDelay;
-                inputCommand.Starts = (Setting.Aider == Aider.AutoStart);
-                Select(inputCommand);
-
-                var historyItem = new HistoryItem(selectedMusic);
-                HistoryViewModel.UpdateHistory(historyItem);
-
-                recents.Add(selectedMusic.Title);
+                selectedMusic = Pick(recents);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -173,7 +172,26 @@ namespace DjmaxRandomSelectorV.ViewModels
                     "Filter Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
+                return;
             }
+
+            if (aider == Aider.Observe)
+            {
+
+            }
+            else
+            {
+                InputCommand inputCommand = Find(selectedMusic);
+                inputCommand.Delay = Setting.InputDelay;
+                inputCommand.Starts = mode == Mode.Freestyle && aider == Aider.AutoStart;
+                Select(inputCommand);
+            }
+
+            var historyItem = new HistoryItem(selectedMusic);
+            HistoryViewModel.UpdateHistory(historyItem);
+            
+            recents.Add(selectedMusic.Title);
+
             CanStart = true;
         }
         #endregion
@@ -308,6 +326,14 @@ namespace DjmaxRandomSelectorV.ViewModels
             _dockPanel.Effect = turnsOn ? _blur : null;
         }
         #endregion
+        #region Constants
+        private const string OFF = "OFF";
+        private const string FREESTYLE = "FREESTYLE";
+        private const string ONLINE = "ONLINE";
+        private const string AUTO_START = "AUTO START";
+        private const string BEGINNER = "BEGINNER";
+        private const string MASTER = "MASTER";
+        #endregion        
         #region Except
         public int RecentsCount
         {
@@ -321,9 +347,42 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
         #endregion
+        #region Mode
+        private string _modeText;
+        public string ModeText
+        {
+            get => _modeText;
+            set
+            {
+                _modeText = value;
+                NotifyOfPropertyChange(() => ModeText);
+            }
+        }
 
-        private const string OFF = "OFF";
-        private const string AUTO_START = "AUTO START";
+        private void UpdateAddon(Mode mode)
+        {
+            switch (mode)
+            {
+                case Mode.Freestyle: ModeText = FREESTYLE; break;
+                case Mode.Online: ModeText = ONLINE; break;
+            }
+            AddonViewModel.SetBitmapImage(mode);
+            AddonButton.SetBitmapImage(mode);
+            IsFilterChanged = true;
+        }
+        public void SwitchMode()
+        {
+            if (Setting.Mode == Mode.Freestyle)
+            {
+                Setting.Mode = Mode.Online;
+            }
+            else
+            {
+                Setting.Mode = Mode.Freestyle;
+            }
+            UpdateAddon(Setting.Mode);
+        }
+        #endregion
         #region Aider
         private string _aiderText;
         public string AiderText
@@ -346,6 +405,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             AddonViewModel.SetBitmapImage(aider);
             AddonButton.SetBitmapImage(aider);
         }
+
         public void PrevAider()
         {
             if (Setting.Aider == Aider.Off)
@@ -371,7 +431,56 @@ namespace DjmaxRandomSelectorV.ViewModels
             UpdateAddon(Setting.Aider);
         }
         #endregion
+        #region Level
+        private string _levelText;
+        public string LevelText
+        {
+            get => _levelText;
+            set
+            {
+                _levelText = value;
+                NotifyOfPropertyChange(() => LevelText);
+            }
+        }
+        
+        private void UpdateAddon(Level level)
+        {
+            switch (level)
+            {
+                case Level.Off: LevelText = OFF; break;
+                case Level.Beginner: LevelText = BEGINNER; break;
+                case Level.Master: LevelText = MASTER; break;
+            }
+            AddonViewModel.SetBitmapImage(level);
+            AddonButton.SetBitmapImage(level);
+            IsFilterChanged = true;
+        }
 
+        public void PrevLevel()
+        {
+            if (Setting.Level == Level.Off)
+            {
+                Setting.Level = Level.Master;
+            }
+            else
+            {
+                Setting.Level--;
+            }
+            UpdateAddon(Setting.Level);
+        }
+        public void NextLevel()
+        {
+            if (Setting.Level == Level.Master)
+            {
+                Setting.Level = Level.Off;
+            }
+            else
+            {
+                Setting.Level++;
+            }
+            UpdateAddon(Setting.Level);
+        }
+        #endregion
         #endregion
 
 
@@ -392,11 +501,14 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             if (msg == WM_HOTKEY && wParam.ToInt32() == HOTKEY_ID)
             {
-                string windowTitle = GetActiveWindowTitle();
-                
                 int vkey = ((int)lParam >> 16) & 0xFFFF;
                 if (vkey == KEY_F7)
                 {
+                    string windowTitle = GetActiveWindowTitle();
+#if debug
+                    Thread thread = new Thread(new ThreadStart(() => Start()));
+                    thread.Start();
+#else
                     if (CanStart && windowTitle == DJMAX_TITLE)
                     {
                         Thread thread = new Thread(new ThreadStart(() => Start()));
@@ -409,6 +521,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                             MessageBoxButton.OK,
                             MessageBoxImage.Error);
                     }
+#endif
                 }
 
                 handled = true;
@@ -427,6 +540,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             return null;
         }
-        #endregion
+#endregion
     }
 }

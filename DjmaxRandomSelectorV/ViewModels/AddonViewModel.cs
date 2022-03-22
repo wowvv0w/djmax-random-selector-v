@@ -104,9 +104,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                 case Level.Beginner:
                     LevelImage = GetBitmapImage("level_beginner");
                     break;
-                case Level.Standard:
-                    LevelImage = GetBitmapImage("level_standard");
-                    break;
                 case Level.Master:
                     LevelImage = GetBitmapImage("level_master");
                     break;

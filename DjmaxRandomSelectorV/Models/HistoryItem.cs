@@ -8,7 +8,7 @@ namespace DjmaxRandomSelectorV.Models
         public int Number { get; set; }
         public string Title { get; set; }
         public string Style { get; set; }
-        public int Level { get; set; }
+        public string Level { get; set; }
         public string Time { get; set; }
 
         public HistoryItem(Music music)

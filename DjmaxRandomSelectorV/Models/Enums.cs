@@ -23,7 +23,6 @@ namespace DjmaxRandomSelectorV.Models
     {
         Off,
         Beginner,
-        Standard,
         Master
     }
 }

@@ -17,35 +17,81 @@ namespace DjmaxRandomSelectorV.Models
         private static List<string> TitleList { get; set; }
         public static bool CanStart { get; set; } = true;
 
-        public static void SiftOut(Filter filter, List<string> favorite)
+        public static void SiftOut(Filter filter, List<string> favorite, Mode mode, Level level)
         {
-            List<string> Styles = new List<string>();
+            List<string> styles = new List<string>();
             foreach(string button in filter.ButtonTunes)
             {
                 foreach(string difficulty in filter.Difficulties)
                 {
-                    Styles.Add($"{button}{difficulty}");
+                    styles.Add($"{button}{difficulty}");
                 }
             }
-            var musicList = from track in TrackList
-                            from pattern in track.Patterns
-                            where (filter.Categories.Contains(track.Category) || favorite.Contains(track.Title))
-                            && Styles.Contains(pattern.Key)
-                            && pattern.Value >= filter.Levels[0]
-                            && pattern.Value <= filter.Levels[1]
-                            select new Music
-                            {
-                                Title = track.Title,
-                                Style = pattern.Key,
-                                Level = pattern.Value
-                            };
+
+            IEnumerable<Music> musicList;
+            if (mode == Mode.Freestyle)
+            {
+                if (level == Level.Off)
+                {
+                    musicList =
+                        from track in TrackList
+                        where filter.Categories.Contains(track.Category) || favorite.Contains(track.Title)
+                        from pattern in track.Patterns
+                        where styles.Contains(pattern.Key)
+                        && pattern.Value >= filter.Levels[0]
+                        && pattern.Value <= filter.Levels[1]
+                        select new Music
+                        {
+                            Title = track.Title,
+                            Style = pattern.Key,
+                            Level = pattern.Value.ToString()
+                        };
+                }
+                else
+                {
+                    bool getFirst = level == Level.Beginner;
+                    musicList =
+                        from track in TrackList
+                        where filter.Categories.Contains(track.Category) || favorite.Contains(track.Title)
+                        from bt in filter.ButtonTunes
+                        let _styles = styles.FindAll(x => x.Contains(bt))
+                        let _patterns = from pattern in track.Patterns
+                                        where _styles.Contains(pattern.Key)
+                                        && pattern.Value >= filter.Levels[0]
+                                        && pattern.Value <= filter.Levels[1]
+                                        select pattern
+                        where _patterns.Count() > 0
+                        let _pattern = getFirst ? _patterns.First() : _patterns.Last()
+                        select new Music
+                        {
+                            Title = track.Title,
+                            Style = _pattern.Key,
+                            Level = _pattern.Value.ToString()
+                        };
+                }
+            }
+            else
+            {
+                musicList = 
+                    from track in TrackList
+                    where (filter.Categories.Contains(track.Category) || favorite.Contains(track.Title))
+                    && track.Patterns.Any(x => styles.Contains(x.Key)
+                                               && x.Value >= filter.Levels[0]
+                                               && x.Value <= filter.Levels[1])
+                    select new Music
+                    {
+                        Title = track.Title,
+                        Style = "FREE",
+                        Level = "-"
+                    };
+            }
+
             MusicList = musicList.ToList();
 
             var titleList = from music in MusicList
                             select music.Title;
             TitleList = titleList.Distinct().ToList();
         }
-
 
         public static List<string> CheckRecents(List<string> recents, int count)
         {
@@ -139,24 +185,33 @@ namespace DjmaxRandomSelectorV.Models
                 inputVertical = count - whereIsIt;
             }
 
-            // Find right arrow input count
-            Track sameMusic = TrackList.Find(x => x.Title == selectedMusic.Title);
-            string selectedButton = selectedMusic.Style.Substring(0, 2);
-            var difficulties = new List<string> { "NM", "HD", "MX", "SC" };
-            int a = difficulties.FindIndex(x => x == selectedMusic.Style.Substring(2, 2));
-            var styles = new List<string>();
-
-            for(int i = 0; i <= a; i++)
+            int inputRight;
+            char inputButton;
+            if (selectedMusic.Style == "FREE")
             {
-                styles.Add($"{selectedButton}{difficulties[i]}");
+                inputRight = 0;
+                inputButton = '\0';
             }
-            var list2 = from pattern in sameMusic.Patterns
-                       where styles.Contains(pattern.Key)
-                       select pattern.Value;
-            int subCount = list2.Count(x => x == 0);
-            int inputRight = a - subCount;
+            else
+            {
+                Track sameMusic = TrackList.Find(x => x.Title == selectedMusic.Title);
+                string selectedButton = selectedMusic.Style.Substring(0, 2);
+                var difficulties = new List<string> { "NM", "HD", "MX", "SC" };
+                int a = difficulties.FindIndex(x => x == selectedMusic.Style.Substring(2, 2));
+                var styles = new List<string>();
 
-            char inputButton = selectedButton[0];
+                for (int i = 0; i <= a; i++)
+                {
+                    styles.Add($"{selectedButton}{difficulties[i]}");
+                }
+                var list2 = from pattern in sameMusic.Patterns
+                            where styles.Contains(pattern.Key)
+                            select pattern.Value;
+                int subCount = list2.Count(x => x == 0);
+                inputRight = a - subCount;
+
+                inputButton = selectedButton[0];
+            }
 
             var inputCommand = new InputCommand()
             {
@@ -213,10 +268,13 @@ namespace DjmaxRandomSelectorV.Models
                 Input(direction);
             }
 
-            Input((byte)button);
-            for(int i = 0; i < right; i++)
+            if (button != '\0')
             {
-                Input(39); // RIGHT
+                Input((byte)button);
+                for (int i = 0; i < right; i++)
+                {
+                    Input(39); // RIGHT
+                }
             }
 
             if (starts)

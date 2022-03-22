@@ -82,10 +82,17 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="30"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="FREESTYLE"
+                        <Button cal:Message.Attach="SwitchMode"
+                                Style="{StaticResource LeftArrowButton}"/>
+                        <TextBlock x:Name="ModeText"
+                                   Text="FREESTYLE"
+                                   Foreground="White"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    Grid.Column="1"/>
+                        <Button cal:Message.Attach="SwitchMode"
+                                Grid.Column="2"
+                                Style="{StaticResource RightArrowButton}"/>
                     </Grid>
                 </Grid>
                 <Grid>
@@ -104,6 +111,7 @@
                         <Button x:Name="PrevAider"
                                 Style="{StaticResource LeftArrowButton}"/>
                         <TextBlock x:Name="AiderText"
+                                   Text="OFF"
                                    Foreground="White"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
@@ -126,10 +134,17 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="30"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="OFF"
+                        <Button x:Name="PrevLevel"
+                                Style="{StaticResource LeftArrowButton}"/>
+                        <TextBlock x:Name="LevelText"
+                                   Text="OFF"
+                                   Foreground="White"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    Grid.Column="1"/>
+                        <Button x:Name="NextLevel"
+                                Grid.Column="2"
+                                Style="{StaticResource RightArrowButton}"/>
                     </Grid>
                 </Grid>
             </StackPanel>
