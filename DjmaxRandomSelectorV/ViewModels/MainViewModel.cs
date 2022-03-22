@@ -1,4 +1,4 @@
-﻿#define debug
+﻿//#define debug
 
 using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
@@ -175,11 +175,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 return;
             }
 
-            if (aider == Aider.Observe)
-            {
-
-            }
-            else
+            if (aider != Aider.Observe)
             {
                 InputCommand inputCommand = Find(selectedMusic);
                 inputCommand.Delay = Setting.InputDelay;
@@ -331,6 +327,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string FREESTYLE = "FREESTYLE";
         private const string ONLINE = "ONLINE";
         private const string AUTO_START = "AUTO START";
+        private const string OBSERVE = "OBSERVE";
         private const string BEGINNER = "BEGINNER";
         private const string MASTER = "MASTER";
         #endregion        
@@ -401,6 +398,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 case Aider.Off: AiderText = OFF; break;
                 case Aider.AutoStart: AiderText = AUTO_START; break;
+                case Aider.Observe: AiderText = OBSERVE; break;
             }
             AddonViewModel.SetBitmapImage(aider);
             AddonButton.SetBitmapImage(aider);
@@ -410,23 +408,23 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             if (Setting.Aider == Aider.Off)
             {
-                Setting.Aider = Aider.AutoStart;
+                Setting.Aider = Aider.Observe;
             }
             else
             {
-                Setting.Aider = Aider.Off;
+                Setting.Aider--;
             }
             UpdateAddon(Setting.Aider);
         }
         public void NextAider()
         {
-            if (Setting.Aider == Aider.AutoStart)
+            if (Setting.Aider == Aider.Observe)
             {
                 Setting.Aider = Aider.Off;
             }
             else
             {
-                Setting.Aider = Aider.AutoStart;
+                Setting.Aider++;
             }
             UpdateAddon(Setting.Aider);
         }
@@ -509,7 +507,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                     Thread thread = new Thread(new ThreadStart(() => Start()));
                     thread.Start();
 #else
-                    if (CanStart && windowTitle == DJMAX_TITLE)
+                    if (CanStart && windowTitle == DJMAX_TITLE || Setting.Aider == Aider.Observe)
                     {
                         Thread thread = new Thread(new ThreadStart(() => Start()));
                         thread.Start();
