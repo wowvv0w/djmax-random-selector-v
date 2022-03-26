@@ -14,6 +14,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private Setting _setting;
         private DockPanel _dockPanel;
 
+        public PresetViewModel PresetViewModel { get; set; }
         public FavoriteViewModel FavoriteViewModel { get; set; }
 
         public InventoryViewModel(Setting setting, DockPanel dockPanel)
@@ -21,9 +22,34 @@ namespace DjmaxRandomSelectorV.ViewModels
             _setting = setting;
             _dockPanel = dockPanel;
 
+            PresetViewModel = new PresetViewModel();
             FavoriteViewModel = new FavoriteViewModel(_setting.Favorite);
         }
 
+        #region Tab
+        private bool _isPresetTabSelected = true;
+        private bool _isFavoriteTabSelected = false;
+        public bool IsPresetTabSelected
+        {
+            get => _isPresetTabSelected;
+            set
+            {
+                _isPresetTabSelected = value;
+                NotifyOfPropertyChange(() => IsPresetTabSelected);
+            }
+        }
+        public bool IsFavoriteTabSelected
+        {
+            get => _isFavoriteTabSelected;
+            set
+            {
+                _isFavoriteTabSelected = value;
+                NotifyOfPropertyChange(() => IsFavoriteTabSelected);
+            }
+        }
+        public void LoadPresetTab() { IsPresetTabSelected = true; }
+        public void LoadFavoriteTab() { IsFavoriteTabSelected = true; }
+        #endregion
 
         public void OK()
         {

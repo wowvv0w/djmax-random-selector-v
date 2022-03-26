@@ -18,8 +18,13 @@
                        Style="{StaticResource DialogTitle}"/>
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right">
-                <RadioButton Content="FAVORITE"
+                <RadioButton x:Name="LoadPresetTab"
+                             Content="PRESET"
                              IsChecked="True"
+                             Style="{StaticResource DialogTabButton}"/>
+                <RadioButton x:Name="LoadFavoriteTab"
+                             Content="FAVORITE"
+                             IsChecked="False"
                              Style="{StaticResource DialogTabButton}"/>
             </StackPanel>
         </Grid>
@@ -45,7 +50,10 @@
             <TabControl Grid.Column="1"
                         Background="Transparent"
                         BorderThickness="0">
-                <TabItem Visibility="Collapsed" IsSelected="True">
+                <TabItem Visibility="Collapsed" IsSelected="{Binding IsPresetTabSelected}">
+                    <ContentControl x:Name="PresetViewModel"/>
+                </TabItem>
+                <TabItem Visibility="Collapsed" IsSelected="{Binding IsFavoriteTabSelected}">
                     <ContentControl x:Name="FavoriteViewModel"/>
                 </TabItem>
             </TabControl>
