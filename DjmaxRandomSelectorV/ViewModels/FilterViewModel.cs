@@ -123,6 +123,21 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         #endregion
 
+        #region Tool
+        public void AddPreset()
+        {
+            string presetName = Microsoft.VisualBasic.Interaction.InputBox("Preset Name: ", "Add Preset");
+            if (!String.IsNullOrEmpty(presetName))
+            {
+                Manager.SavePreset(Filter, presetName);
+                MessageBox.Show($"Preset {presetName} has been added.",
+                                "Preset",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Information);
+            }
+        }
+        #endregion
+
 
         #region Filter Elements
         #region Constants

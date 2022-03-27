@@ -347,20 +347,22 @@
     </Style>
     <Style x:Key="SettingWindowButton" TargetType="Button">
         <Setter Property="Width" Value="80"/>
+        <Setter Property="BorderThickness" Value="3"/>
+        <Setter Property="Border.CornerRadius" Value="6"/>
+        <Setter Property="FontSize" Value="15"/>
         <Setter Property="Margin" Value="10,0,0,0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border Background="#56000000"
                             BorderBrush="#818282"
-                            BorderThickness="3"
-                            CornerRadius="6">
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding Border.CornerRadius}">
                         <TextBlock Text="{TemplateBinding Content}"
                                    Foreground="#818282"
                                    FontFamily="{StaticResource Lato Black}"
-                                   FontSize="15"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
+                                   FontSize="{TemplateBinding FontSize}"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
