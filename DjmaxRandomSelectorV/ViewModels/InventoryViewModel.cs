@@ -17,12 +17,12 @@ namespace DjmaxRandomSelectorV.ViewModels
         public PresetViewModel PresetViewModel { get; set; }
         public FavoriteViewModel FavoriteViewModel { get; set; }
 
-        public InventoryViewModel(Setting setting, DockPanel dockPanel)
+        public InventoryViewModel(Setting setting, DockPanel dockPanel, Action<string> filterReloader)
         {
             _setting = setting;
             _dockPanel = dockPanel;
 
-            PresetViewModel = new PresetViewModel();
+            PresetViewModel = new PresetViewModel(filterReloader);
             FavoriteViewModel = new FavoriteViewModel(_setting.Favorite);
         }
 

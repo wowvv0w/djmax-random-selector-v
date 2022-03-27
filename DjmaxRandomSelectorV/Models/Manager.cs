@@ -15,7 +15,7 @@ namespace DjmaxRandomSelectorV.Models
         private const string ALL_TRACK_LIST = "Data/AllTrackList.csv";
         private const string CONFIG = "Data/Config.json";
         
-        private const string PRESET_DEFAULT = "Default.json";
+        private const string PRESET_DEFAULT = "Default";
 
         private const string VERSION_URL = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
         private const string ALL_TRACK_URL = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Data/AllTrackList.csv";
@@ -135,7 +135,7 @@ namespace DjmaxRandomSelectorV.Models
         public static Filter LoadPreset(string presetName = PRESET_DEFAULT)
         {
             Filter filter;
-            var path = $"Data/Preset/{presetName}";
+            var path = $"Data/Preset/{presetName}.json";
 
             try
             {
@@ -145,10 +145,7 @@ namespace DjmaxRandomSelectorV.Models
                     filter = JsonSerializer.Deserialize<Filter>(json);
                 }
             }
-            catch
-            {
-                filter = new Filter();
-            }
+            catch { filter = new Filter(); }
 
             return filter;
         }
@@ -157,12 +154,9 @@ namespace DjmaxRandomSelectorV.Models
         {
             var options = new JsonSerializerOptions() { WriteIndented = true, IgnoreReadOnlyProperties = false };
             string jsonString = JsonSerializer.Serialize(filter, options);
-            var path = $"Data/Preset/{presetName}";
+            var path = $"Data/Preset/{presetName}.json";
 
-            using (var writer = new StreamWriter(path))
-            {
-                writer.Write(jsonString);
-            }
+            using (var writer = new StreamWriter(path)) { writer.Write(jsonString); }
         }
     }
 }

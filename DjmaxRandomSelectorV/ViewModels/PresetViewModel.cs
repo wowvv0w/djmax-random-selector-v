@@ -11,11 +11,13 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class PresetViewModel : Screen
     {
         private const string PRESET_PATH = "Data/Preset";
+        private Action<string> filterReloader;
         public BindableCollection<string> PresetItems { get; set; }
 
-        public PresetViewModel()
+        public PresetViewModel(Action<string> filterReloader)
         {
             GetPresetList();
+            this.filterReloader = filterReloader;
         }
 
         public void GetPresetList()
@@ -34,15 +36,13 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
-        public void LoadPreset(string name)
-        {
-        }
+        public void LoadPreset(string presetName) => filterReloader.Invoke(presetName);
 
-        public void RemoveItem(string name)
+        public void RemoveItem(string presetName)
         {
-            string path = $"{PRESET_PATH}/{name}.json";
+            string path = $"{PRESET_PATH}/{presetName}.json";
             if (File.Exists(path)) File.Delete(path);
-            PresetItems.Remove(name);
+            PresetItems.Remove(presetName);
         }
     }
 }

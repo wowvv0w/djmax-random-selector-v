@@ -41,6 +41,16 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             Selector.IsFilterChanged = true;
         }
+        public void ReloadFilter(string presetName)
+        {
+            Filter = Manager.LoadPreset(presetName);
+            NotifyOfPropertyChange(String.Empty);
+            Selector.IsFilterChanged = true;
+            MessageBox.Show($"Preset {presetName} has been applied.",
+                            "Filter",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+        }
         #endregion
 
 
