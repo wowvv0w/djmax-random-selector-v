@@ -15,7 +15,7 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class SettingViewModel : Screen
     {
         private Setting _setting;
-        private DockPanel _dockPanel;
+        private readonly Action<bool> _blurSetter;
 
         private int _inputDelay;
         private bool _savesRecents;
@@ -26,17 +26,16 @@ namespace DjmaxRandomSelectorV.ViewModels
         private bool _updatesTrackList = false;
 
 
-        public SettingViewModel(Setting setting, DockPanel dockPanel)
+        public SettingViewModel(Setting setting, Action<bool> blurSetter)
         {
             _setting = setting;
+            _blurSetter = blurSetter;
 
             _inputDelay = setting.InputDelay;
             _savesRecents = setting.SavesRecents;
             _ownedDlcs = setting.OwnedDlcs.ConvertAll(x => x);
 
             UpdateInputDelayText();
-
-            _dockPanel = dockPanel;
         }
 
         public void Detect()
@@ -83,7 +82,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void Close()
         {
             TryCloseAsync();
-            _dockPanel.Effect = null;
+            _blurSetter.Invoke(false);
         }
         #endregion
 

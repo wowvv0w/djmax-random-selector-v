@@ -26,7 +26,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         private int _lastAllTrackVer;
 
         private DockPanel _dockPanel;
-        private BlurEffect _blur = new BlurEffect() { Radius = 75 };
 
         public FilterViewModel FilterViewModel { get; set; }
         public HistoryViewModel HistoryViewModel { get; set; }
@@ -119,7 +118,8 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         public void GetDockPanel(object source)
         {
-            _dockPanel = source as DockPanel;
+            var dockPanel = source as DockPanel;
+            _dockPanel = dockPanel;
         }
         #endregion
 
@@ -288,41 +288,35 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         #endregion
 
-        #region Bottom Bar
+        #region Another Windows
         IWindowManager windowManager = new WindowManager();
         public void ShowInfo()
         {
-            SetBlurEffect();
+            SetBlurEffect(true);
             var infoViewModel
-                = new InfoViewModel(SELECTOR_VERSION, _lastSelectorVer, Setting.AllTrackVersion, _dockPanel);
+                = new InfoViewModel(SELECTOR_VERSION, _lastSelectorVer, Setting.AllTrackVersion, SetBlurEffect);
             windowManager.ShowDialogAsync(infoViewModel);
         }
         public void ShowSetting()
         {
-            SetBlurEffect();
-            windowManager.ShowDialogAsync(new SettingViewModel(Setting, _dockPanel));
+            SetBlurEffect(true);
+            windowManager.ShowDialogAsync(new SettingViewModel(Setting, SetBlurEffect));
         }
         public void ShowInventory()
         {
-            SetBlurEffect();
-            windowManager.ShowDialogAsync(new InventoryViewModel(Setting, _dockPanel, FilterViewModel.ReloadFilter));
+            SetBlurEffect(true);
+            windowManager.ShowDialogAsync(new InventoryViewModel(Setting, SetBlurEffect, FilterViewModel.ReloadFilter));
         }
         #endregion
 
 
         #region Equipment
         #region Show/Hide
-        public void ShowEquipment()
+        public void ShowEquipment() => SetBlurEffect(true);
+        public void HideEquipment() => SetBlurEffect(false);
+        private void SetBlurEffect(bool turnsOn)
         {
-            SetBlurEffect();
-        }
-        public void HideEquipment()
-        {
-            SetBlurEffect(false);
-        }
-        public void SetBlurEffect(bool turnsOn = true)
-        {
-            _dockPanel.Effect = turnsOn ? _blur : null;
+            _dockPanel.Effect = turnsOn ? new BlurEffect() { Radius = 75 } : null;
         }
         #endregion
         #region Constants

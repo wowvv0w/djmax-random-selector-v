@@ -12,15 +12,15 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class InventoryViewModel : Screen
     {
         private Setting _setting;
-        private DockPanel _dockPanel;
+        private readonly Action<bool> _blurSetter;
 
         public PresetViewModel PresetViewModel { get; set; }
         public FavoriteViewModel FavoriteViewModel { get; set; }
 
-        public InventoryViewModel(Setting setting, DockPanel dockPanel, Action<string> filterReloader)
+        public InventoryViewModel(Setting setting, Action<bool> blurSetter, Action<string> filterReloader)
         {
             _setting = setting;
-            _dockPanel = dockPanel;
+            _blurSetter = blurSetter;
 
             PresetViewModel = new PresetViewModel(filterReloader);
             FavoriteViewModel = new FavoriteViewModel(_setting.Favorite);
@@ -55,7 +55,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             Manager.SaveSetting(_setting);
             TryCloseAsync();
-            _dockPanel.Effect = null;
+            _blurSetter.Invoke(false);
         }
     }
 }
