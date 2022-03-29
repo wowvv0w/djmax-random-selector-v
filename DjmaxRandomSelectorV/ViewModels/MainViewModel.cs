@@ -91,27 +91,30 @@ namespace DjmaxRandomSelectorV.ViewModels
 
 
         #region On Start Up
-        public void AddHotKey(object view)
+        public void ShowEvent(object view)
         {
             var window = view as Window;
-
+            AddHotKey(window);
+            SetPosition(window);
+        }
+        private void AddHotKey(Window window)
+        {
             HwndSource source;
             IntPtr handle = new WindowInteropHelper(window).Handle;
             source = HwndSource.FromHwnd(handle);
             source.AddHook(HwndHook);
-
             RegisterHotKey(handle, HOTKEY_ID, 0x0000, KEY_F7);
         }
-        public void SetPos(object view)
+        private void SetPosition(Window window)
         {
-            var window = view as Window;
-            
-            if (Setting.Position == null || Setting.Position.Length < 2)
+            if (Setting.Position.Length == 2)
+            {
+                window.Top = Setting.Position[0];
+                window.Left = Setting.Position[1];
+            }
+            else
             {
                 Setting.Position = new double[2] { window.Top, window.Left };
-            } else
-            {
-                window.Top = Setting.Position[0]; window.Left = Setting.Position[1];
             }
         }
         public void GetDockPanel(object source)
