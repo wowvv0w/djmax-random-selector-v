@@ -11,7 +11,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class InventoryViewModel : Screen
     {
-        private Setting _setting;
+        private readonly Setting _setting;
         private readonly Action<bool> _blurSetter;
 
         public PresetViewModel PresetViewModel { get; set; }
@@ -53,7 +53,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void OK()
         {
-            Manager.SaveSetting(_setting);
+            _setting.Export();
             TryCloseAsync();
             _blurSetter.Invoke(false);
         }
