@@ -41,6 +41,16 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             Selector.IsFilterChanged = true;
         }
+        public void ReloadFilter(string presetName)
+        {
+            Filter = Manager.LoadPreset(presetName);
+            NotifyOfPropertyChange(String.Empty);
+            Selector.IsFilterChanged = true;
+            MessageBox.Show($"Preset {presetName} has been applied.",
+                            "Filter",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+        }
         #endregion
 
 
@@ -109,6 +119,21 @@ namespace DjmaxRandomSelectorV.ViewModels
             for (int i = LevelMax + 1; i <= 15; i++)
             {
                 LevelIndicators[i].Value = false;
+            }
+        }
+        #endregion
+
+        #region Tool
+        public void AddPreset()
+        {
+            string presetName = Microsoft.VisualBasic.Interaction.InputBox("Preset Name: ", "Add Preset");
+            if (!String.IsNullOrEmpty(presetName))
+            {
+                Manager.SavePreset(Filter, presetName);
+                MessageBox.Show($"Preset {presetName} has been added.",
+                                "Preset",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Information);
             }
         }
         #endregion

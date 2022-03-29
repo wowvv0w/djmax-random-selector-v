@@ -326,11 +326,16 @@
                 </Grid.RowDefinitions>
                 <TabControl Grid.Row="1" Grid.Column="1"
                             Background="Transparent"
-                            BorderThickness="0">
-                    <TabItem Visibility="Collapsed" IsSelected="{Binding IsFilterTabSelected}">
+                            BorderThickness="0"
+                            Padding="0">
+                    <TabItem Visibility="Collapsed"
+                             Padding="0"
+                             IsSelected="{Binding IsFilterTabSelected}">
                         <ContentControl x:Name="FilterViewModel"/>
                     </TabItem>
-                    <TabItem Visibility="Collapsed" IsSelected="{Binding IsHistoryTabSelected}">
+                    <TabItem Visibility="Collapsed" 
+                             Padding="0"
+                             IsSelected="{Binding IsHistoryTabSelected}">
                         <ContentControl x:Name="HistoryViewModel"/>
                     </TabItem>
                 </TabControl>

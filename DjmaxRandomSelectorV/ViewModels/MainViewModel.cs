@@ -302,7 +302,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void ShowInventory()
         {
             SetBlurEffect();
-            windowManager.ShowDialogAsync(new InventoryViewModel(Setting, _dockPanel));
+            windowManager.ShowDialogAsync(new InventoryViewModel(Setting, _dockPanel, FilterViewModel.ReloadFilter));
         }
         #endregion
 
