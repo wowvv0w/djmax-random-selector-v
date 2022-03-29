@@ -194,7 +194,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 FilterViewModel.Filter.Recents.Clear();
             }
-            Manager.SavePreset(FilterViewModel.Filter);
+            FilterViewModel.Filter.Export();
 
             _setting.Position = new double[2] { (window.Top < 0 ? 0 : window.Top), (window.Left < 0 ? 0 : window.Left) };
             _setting.Export();

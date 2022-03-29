@@ -108,31 +108,6 @@ namespace DjmaxRandomSelectorV.Models
             }  
         }
 
-        public static Filter LoadPreset(string presetName = PRESET_DEFAULT)
-        {
-            Filter filter;
-            var path = $"Data/Preset/{presetName}.json";
 
-            try
-            {
-                using (var reader = new StreamReader(path))
-                {
-                    string json = reader.ReadToEnd();
-                    filter = JsonSerializer.Deserialize<Filter>(json);
-                }
-            }
-            catch { filter = new Filter(); }
-
-            return filter;
-        }
-
-        public static void SavePreset(Filter filter, string presetName = PRESET_DEFAULT)
-        {
-            var options = new JsonSerializerOptions() { WriteIndented = true, IgnoreReadOnlyProperties = false };
-            string jsonString = JsonSerializer.Serialize(filter, options);
-            var path = $"Data/Preset/{presetName}.json";
-
-            using (var writer = new StreamWriter(path)) { writer.Write(jsonString); }
-        }
     }
 }
