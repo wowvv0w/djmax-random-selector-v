@@ -2,9 +2,10 @@
 
 using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
-using static DjmaxRandomSelectorV.Models.Selector;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -12,18 +13,16 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media.Effects;
-using System.IO;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
     public class MainViewModel : Conductor<object>
     {
         private const int SELECTOR_VERSION = 110;
-
         private const string RELEASE_URL = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
+        private const string VersionUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
 
         private int _lastSelectorVer;
-        private int _lastAllTrackVer;
 
         private DockPanel _dockPanel;
 
@@ -33,6 +32,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public AddonViewModel AddonViewModel { get; set; }
         public AddonViewModel AddonButton { get; set; }
 
+        private readonly Selector _selector;
         private readonly Setting _setting;
 
         public MainViewModel()
@@ -40,9 +40,28 @@ namespace DjmaxRandomSelectorV.ViewModels
             _setting = new Setting();
             _setting.Import();
 
+            _selector = new Selector();
             try
             {
-                CheckUpdate();
+                int _lastAllTrackVer;
+                using (var client = new WebClient())
+                {
+                    var data = client.DownloadString(VersionUrl);
+                    var versions = data.Split(',');
+
+                    _lastSelectorVer = int.Parse(versions[0]);
+                    _lastAllTrackVer = int.Parse(versions[1]);
+                }
+
+                if (SELECTOR_VERSION < _lastSelectorVer)
+                    OpenReleasePageVisibility = Visibility.Visible;
+
+                if (_setting.AllTrackVersion != _lastAllTrackVer)
+                {
+                    _selector.DownloadAllTrackList();
+                    _setting.AllTrackVersion = _lastAllTrackVer;
+                    _setting.Export();
+                }
             }
             catch (Exception e)
             {
@@ -55,8 +74,8 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             try
             {
-                Manager.ReadAllTrackList();
-                Manager.UpdateTrackList(_setting.OwnedDlcs);
+                _selector.ReadAllTrackList();
+                _selector.UpdateTrackList(_setting.OwnedDlcs);
             }
             catch (FileNotFoundException)
             {
@@ -64,7 +83,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                     "Selector Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
-                Manager.UpdateAllTrackList();
+                _selector.DownloadAllTrackList();
             }
 
             FilterViewModel = new FilterViewModel();
@@ -113,27 +132,11 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         #endregion
 
-        private void CheckUpdate()
-        {
-            (_lastSelectorVer, _lastAllTrackVer) = Manager.GetLastVersions();
-
-            if (SELECTOR_VERSION < _lastSelectorVer)
-            {
-                OpenReleasePageVisibility = Visibility.Visible;
-            }
-
-            if (_setting.AllTrackVersion != _lastAllTrackVer)
-            {
-                Manager.UpdateAllTrackList();
-                _setting.AllTrackVersion = _lastAllTrackVer;
-                _setting.Export();
-            }
-        }
 
         #region Start Selector
         private void Start()
         {
-            CanStart = false;
+            Selector.CanStart = false;
             Filter filter = FilterViewModel.Filter;
 
             Mode mode = _setting.Mode;
@@ -143,21 +146,21 @@ namespace DjmaxRandomSelectorV.ViewModels
             var favorite = filter.IncludesFavorite ? _setting.Favorite : new List<string>();
             List<string> recents = filter.Recents;
 
-            if (IsFilterChanged)
+            if (Selector.IsFilterChanged)
             {
-                SiftOut(filter, favorite, mode, level);
+                _selector.SiftOut(filter, favorite, mode, level);
                 recents.Clear();
-                IsFilterChanged = false;
+                Selector.IsFilterChanged = false;
             }
             else
             {
-                recents = CheckRecents(recents, _setting.RecentsCount);
+                recents = _selector.CheckRecents(recents, _setting.RecentsCount);
             }
 
             Music selectedMusic;
             try
             {
-                selectedMusic = Pick(recents);
+                selectedMusic = _selector.Pick(recents);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -170,10 +173,10 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (aider != Aider.Observe)
             {
-                InputCommand inputCommand = Find(selectedMusic);
+                InputCommand inputCommand = _selector.Find(selectedMusic);
                 inputCommand.Delay = _setting.InputDelay;
                 inputCommand.Starts = mode == Mode.Freestyle && aider == Aider.AutoStart;
-                Select(inputCommand);
+                _selector.Select(inputCommand);
             }
 
             var historyItem = new HistoryItem(selectedMusic);
@@ -181,7 +184,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             
             recents.Add(selectedMusic.Title);
 
-            CanStart = true;
+            Selector.CanStart = true;
         }
         #endregion
 
@@ -290,12 +293,12 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void ShowSetting()
         {
             SetBlurEffect(true);
-            _windowManager.ShowDialogAsync(new SettingViewModel(_setting, SetBlurEffect));
+            _windowManager.ShowDialogAsync(new SettingViewModel(_setting, SetBlurEffect, _selector.UpdateTrackList));
         }
         public void ShowInventory()
         {
             SetBlurEffect(true);
-            _windowManager.ShowDialogAsync(new InventoryViewModel(_setting, SetBlurEffect, FilterViewModel.ReloadFilter));
+            _windowManager.ShowDialogAsync(new InventoryViewModel(_setting, _selector.GetTitleList(), SetBlurEffect, FilterViewModel.ReloadFilter));
         }
         #endregion
 
@@ -352,7 +355,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             AddonViewModel.SetBitmapImage(mode);
             AddonButton.SetBitmapImage(mode);
-            IsFilterChanged = true;
+            Selector.IsFilterChanged = true;
         }
         public void SwitchMode()
         {
@@ -438,7 +441,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             AddonViewModel.SetBitmapImage(level);
             AddonButton.SetBitmapImage(level);
-            IsFilterChanged = true;
+            Selector.IsFilterChanged = true;
         }
 
         public void PrevLevel()
@@ -494,7 +497,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                     Thread thread = new Thread(new ThreadStart(() => Start()));
                     thread.Start();
 #else
-                    if (CanStart && windowTitle == DJMAX_TITLE || _setting.Aider == Aider.Observe)
+                    if (Selector.CanStart && windowTitle == DJMAX_TITLE || _setting.Aider == Aider.Observe)
                     {
                         Thread thread = new Thread(new ThreadStart(() => Start()));
                         thread.Start();

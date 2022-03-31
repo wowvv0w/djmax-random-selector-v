@@ -16,6 +16,7 @@ namespace DjmaxRandomSelectorV.ViewModels
     {
         private readonly Setting _setting;
         private readonly Action<bool> _blurSetter;
+        private readonly Action<List<string>> _trackListUpdater;
 
         private int _inputDelay;
         private bool _savesRecents;
@@ -26,10 +27,11 @@ namespace DjmaxRandomSelectorV.ViewModels
         private bool _updatesTrackList = false;
 
 
-        public SettingViewModel(Setting setting, Action<bool> blurSetter)
+        public SettingViewModel(Setting setting, Action<bool> blurSetter, Action<List<string>> trackListUpdater)
         {
             _setting = setting;
             _blurSetter = blurSetter;
+            _trackListUpdater = trackListUpdater;
 
             _inputDelay = _setting.InputDelay;
             _savesRecents = _setting.SavesRecents;
@@ -69,7 +71,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _setting.Export();
             if (_updatesTrackList)
             {
-                Manager.UpdateTrackList(_ownedDlcs);
+                _trackListUpdater.Invoke(_ownedDlcs);
             }
             Selector.IsFilterChanged = true;
             Close();

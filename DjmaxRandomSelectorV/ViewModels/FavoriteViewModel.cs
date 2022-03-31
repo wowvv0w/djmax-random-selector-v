@@ -14,12 +14,14 @@ namespace DjmaxRandomSelectorV.ViewModels
     {
         private bool _searchesSuggestion = true;
         private List<string> _favorite;
+        private List<string> _titleList;
         public BindableCollection<string> FavoriteItems { get; set; }
         public BindableCollection<string> TitleSuggestions { get; set; }
 
-        public FavoriteViewModel(List<string> favorite)
+        public FavoriteViewModel(List<string> favorite, List<string> titleList)
         {
             _favorite = favorite;
+            _titleList = titleList;
 
             FavoriteItems = new BindableCollection<string>(favorite);
 
@@ -52,9 +54,9 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             OpensSuggestionBox = true;
 
-            var titles = from track in Selector.AllTrackList
-                         where track.Title.StartsWith(SearchBox, true, null)
-                         select track.Title;
+            var titles = from title in _titleList
+                         where title.StartsWith(SearchBox, true, null)
+                         select title;
             titles = titles.Count() < 8 ? titles.Take(titles.Count()) : titles.Take(8);
             TitleSuggestions.AddRange(titles);
 
@@ -91,7 +93,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         #region Favorite Item Adjustment
         public void AddItem()
         {
-            if (!Selector.AllTrackList.Any(x => x.Title.Equals(SearchBox)))
+            if (!_titleList.Any(x => x.Equals(SearchBox)))
             {
                 MessageBox.Show("Does not exist.",
                     "Favorite Error",
@@ -111,7 +113,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             FavoriteItems.Add(SearchBox);
             _favorite.Add(SearchBox);
 
-            SearchBox = String.Empty;
+            SearchBox = string.Empty;
             Selector.IsFilterChanged = true;
         }
         public void RemoveItem(string child)

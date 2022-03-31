@@ -254,7 +254,6 @@
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\Filter.cs" />
     <Compile Include="Models\InputCommand.cs" />
-    <Compile Include="Models\Manager.cs" />
     <Compile Include="Models\Music.cs" />
     <Compile Include="Models\HistoryItem.cs" />
     <Compile Include="Models\Selector.cs" />
