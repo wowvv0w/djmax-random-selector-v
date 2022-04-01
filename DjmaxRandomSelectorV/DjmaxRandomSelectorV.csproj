@@ -251,13 +251,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\FreestyleWithLevel.cs" />
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\Filter.cs" />
     <Compile Include="Models\InputCommand.cs" />
+    <Compile Include="Models\ISifter.cs" />
     <Compile Include="Models\Music.cs" />
     <Compile Include="Models\HistoryItem.cs" />
+    <Compile Include="Models\Online.cs" />
     <Compile Include="Models\Selector.cs" />
     <Compile Include="Models\Setting.cs" />
+    <Compile Include="Models\Freestyle.cs" />
     <Compile Include="Models\Track.cs" />
     <Compile Include="Models\TrackMap.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

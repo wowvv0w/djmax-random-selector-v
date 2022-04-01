@@ -161,7 +161,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (Selector.IsFilterChanged)
             {
-                _selector.SiftOut(filter, favorite, mode, level);
+                _selector.SiftOut(filter, favorite);
                 recents.Clear();
                 Selector.IsFilterChanged = false;
             }
@@ -369,6 +369,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             AddonViewModel.SetBitmapImage(mode);
             AddonButton.SetBitmapImage(mode);
+            _selector.SetSifter(mode, _setting.Level);
             Selector.IsFilterChanged = true;
         }
         public void SwitchMode()
@@ -455,6 +456,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             AddonViewModel.SetBitmapImage(level);
             AddonButton.SetBitmapImage(level);
+            _selector.SetSifter(_setting.Mode, level);
             Selector.IsFilterChanged = true;
         }
 

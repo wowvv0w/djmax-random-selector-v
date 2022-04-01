@@ -19,6 +19,7 @@ namespace DjmaxRandomSelectorV.Models
         private List<Track> _trackList;
         private List<Music> _musicList;
         private int _musicCount;
+        private ISifter _sifter;
         #endregion
 
         #region Properties
@@ -34,6 +35,21 @@ namespace DjmaxRandomSelectorV.Models
         public Selector()
         {
             IsRunning = false;
+        }
+
+        public void SetSifter(Mode mode, Level level)
+        {
+            if (mode.Equals(Mode.Freestyle))
+            {
+                if (level.Equals(Level.Off))
+                    _sifter = new Freestyle();
+                else
+                    _sifter = new FreestyleWithLevel(level);
+            }
+            else
+            {
+                _sifter = new Online();
+            }
         }
 
         #region Manage Track List
@@ -109,76 +125,19 @@ namespace DjmaxRandomSelectorV.Models
         #endregion
 
         #region Select Music
-        public void SiftOut(Filter filter, List<string> favorite, Mode mode, Level level)
+        public void SiftOut(Filter filter, List<string> favorite)
         {
             List<string> styles = new List<string>();
             foreach(string button in filter.ButtonTunes)
-            {
                 foreach(string difficulty in filter.Difficulties)
-                {
                     styles.Add($"{button}{difficulty}");
-                }
-            }
 
-            IEnumerable<Music> musicList;
-            if (mode == Mode.Freestyle)
-            {
-                if (level == Level.Off)
-                {
-                    musicList =
-                        from track in _trackList
-                        where filter.Categories.Contains(track.Category) || favorite.Contains(track.Title)
-                        from pattern in track.Patterns
-                        where styles.Contains(pattern.Key)
-                        && pattern.Value >= filter.Levels[0]
-                        && pattern.Value <= filter.Levels[1]
-                        select new Music
-                        {
-                            Title = track.Title,
-                            Style = pattern.Key,
-                            Level = pattern.Value.ToString()
-                        };
-                }
-                else
-                {
-                    bool getFirst = level == Level.Beginner;
-                    musicList =
-                        from track in _trackList
-                        where filter.Categories.Contains(track.Category) || favorite.Contains(track.Title)
-                        from bt in filter.ButtonTunes
-                        let _styles = styles.FindAll(x => x.Contains(bt))
-                        let _patterns = from pattern in track.Patterns
-                                        where _styles.Contains(pattern.Key)
-                                        && pattern.Value >= filter.Levels[0]
-                                        && pattern.Value <= filter.Levels[1]
-                                        select pattern
-                        where _patterns.Count() > 0
-                        let _pattern = getFirst ? _patterns.First() : _patterns.Last()
-                        select new Music
-                        {
-                            Title = track.Title,
-                            Style = _pattern.Key,
-                            Level = _pattern.Value.ToString()
-                        };
-                }
-            }
-            else
-            {
-                musicList = 
-                    from track in _trackList
-                    where (filter.Categories.Contains(track.Category) || favorite.Contains(track.Title))
-                    && track.Patterns.Any(x => styles.Contains(x.Key)
-                                               && x.Value >= filter.Levels[0]
-                                               && x.Value <= filter.Levels[1])
-                    select new Music
-                    {
-                        Title = track.Title,
-                        Style = "FREE",
-                        Level = "-"
-                    };
-            }
+            IEnumerable<Track> trackList = from track in _trackList
+                                           where filter.Categories.Contains(track.Category)
+                                                 || favorite.Contains(track.Title)
+                                           select track;
 
-            _musicList = musicList.ToList();
+            _musicList =  _sifter.Sift(trackList.ToList(), styles, filter);
 
             var titleList = from music in _musicList
                             select music.Title;
