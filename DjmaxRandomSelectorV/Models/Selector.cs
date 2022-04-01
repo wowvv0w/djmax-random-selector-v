@@ -23,7 +23,7 @@ namespace DjmaxRandomSelectorV.Models
 
         #region Properties
         public static bool IsFilterChanged { get; set; } = true;
-        public static bool CanStart { get; set; } = true;
+        public bool IsRunning { get; set; }
         #endregion
 
         #region Constants
@@ -33,7 +33,7 @@ namespace DjmaxRandomSelectorV.Models
 
         public Selector()
         {
-
+            IsRunning = false;
         }
 
         #region Manage Track List

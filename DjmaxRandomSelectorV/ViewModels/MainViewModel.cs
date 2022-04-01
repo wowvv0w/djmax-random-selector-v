@@ -8,7 +8,7 @@ using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
@@ -21,6 +21,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const int SELECTOR_VERSION = 110;
         private const string RELEASE_URL = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
         private const string VersionUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
+        private const string DjmaxTitle = "DJMAX RESPECT V";
 
         private int _lastSelectorVer;
 
@@ -134,9 +135,21 @@ namespace DjmaxRandomSelectorV.ViewModels
 
 
         #region Start Selector
+        private bool CanStart()
+        {
+            string windowTitle = GetActiveWindowTitle();
+            if (_setting.Aider.Equals(Aider.Observe))
+                return true;
+            else if (!windowTitle.Equals(DjmaxTitle))
+                throw new Exception("Foreground window is not DJMAX RESPECT V.");
+            else if (!_selector.IsRunning)
+                return true;
+            else
+                return false;
+        }
         private void Start()
         {
-            Selector.CanStart = false;
+            _selector.IsRunning = true;
             Filter filter = FilterViewModel.Filter;
 
             Mode mode = _setting.Mode;
@@ -168,6 +181,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                     "Filter Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
+                _selector.IsRunning = false;
                 return;
             }
 
@@ -184,7 +198,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             
             recents.Add(selectedMusic.Title);
 
-            Selector.CanStart = true;
+            _selector.IsRunning = false;
         }
         #endregion
 
@@ -476,7 +490,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const int WM_HOTKEY = 0x0312;
         private const int HOTKEY_ID = 9000;
         private const uint KEY_F7 = 118;
-        private const string DJMAX_TITLE = "DJMAX RESPECT V";
 
         [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
@@ -492,19 +505,28 @@ namespace DjmaxRandomSelectorV.ViewModels
                 int vkey = ((int)lParam >> 16) & 0xFFFF;
                 if (vkey == KEY_F7)
                 {
-                    string windowTitle = GetActiveWindowTitle();
 #if debug
-                    Thread thread = new Thread(new ThreadStart(() => Start()));
-                    thread.Start();
-#else
-                    if (Selector.CanStart && windowTitle == DJMAX_TITLE || _setting.Aider == Aider.Observe)
+                    if (!_selector.IsRunning)
                     {
-                        Thread thread = new Thread(new ThreadStart(() => Start()));
-                        thread.Start();
+                        Task task = new Task(() => Start());
+                        task.Start();
                     }
-                    else if (windowTitle != DJMAX_TITLE)
+                    else
                     {
-                        MessageBox.Show("Foreground window is not DJMAX RESPECT V.",
+                        Console.WriteLine("denied");
+                    }
+#else
+                    try
+                    {
+                        if (CanStart())
+                        {
+                            Task task = new Task(() => Start());
+                            task.Start();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message,
                             "Selector Error",
                             MessageBoxButton.OK,
                             MessageBoxImage.Error);
