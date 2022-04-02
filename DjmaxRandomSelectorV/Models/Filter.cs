@@ -7,6 +7,10 @@ namespace DjmaxRandomSelectorV.Models
 {
     public class Filter
     {
+        #region Fields
+        private readonly Func<string, string> presetPath = name => $"Data/Preset/{name}.json";
+        #endregion
+
         #region Properties
         public List<string> ButtonTunes { get; set; }
         public List<string> Difficulties { get; set; }
@@ -21,7 +25,24 @@ namespace DjmaxRandomSelectorV.Models
         #endregion
 
         #region Methods
-        private readonly Func<string, string> presetPath = name => $"Data/Preset/{name}.json";
+        public void UpdateRecents(int titleCount, int maxCount)
+        {
+            int recentsCount = Recents.Count;
+            if (recentsCount > maxCount)
+            {
+                Recents.RemoveRange(0, recentsCount - maxCount);
+            }
+            else if (recentsCount >= titleCount)
+            {
+                try
+                {
+                    Recents.RemoveRange(0, recentsCount - titleCount + 1);
+                }
+                catch (ArgumentException)
+                {
+                }
+            }
+        }
         public void Import(string presetName = null)
         {
             bool isNull = string.IsNullOrEmpty(presetName);
@@ -58,7 +79,6 @@ namespace DjmaxRandomSelectorV.Models
                 }
             }
         }
-
         public void Export(string presetName = null)
         {
             var options = new JsonSerializerOptions()

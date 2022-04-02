@@ -18,13 +18,14 @@ namespace DjmaxRandomSelectorV.Models
         private List<Track> _allTrackList;
         private List<Track> _trackList;
         private List<Music> _musicList;
-        private int _musicCount;
         private ISifter _sifter;
+        private int _titleCount;
         #endregion
 
         #region Properties
         public static bool IsFilterChanged { get; set; } = true;
         public bool IsRunning { get; set; }
+        public int TitleCount { get => _titleCount; }
         #endregion
 
         #region Constants
@@ -141,29 +142,7 @@ namespace DjmaxRandomSelectorV.Models
 
             var titleList = from music in _musicList
                             select music.Title;
-            _musicCount = titleList.Distinct().Count();
-        }
-
-        public List<string> CheckRecents(List<string> recents, int count)
-        {
-            int recentsCount = recents.Count;
-
-            if (recentsCount >= _musicCount)
-            {
-                try
-                {
-                    recents.RemoveRange(0, recentsCount - _musicCount + 1);
-                }
-                catch (ArgumentException)
-                {
-                }
-            }
-            else if (recentsCount > count)
-            {
-                recents.RemoveRange(0, recentsCount - count);
-            }
-
-            return recents;
+            _titleCount = titleList.Distinct().Count();
         }
 
         public Music Pick(List<string> recents)

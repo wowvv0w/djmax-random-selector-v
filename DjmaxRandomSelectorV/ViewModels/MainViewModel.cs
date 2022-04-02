@@ -33,6 +33,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public AddonViewModel AddonViewModel { get; set; }
         public AddonViewModel AddonButton { get; set; }
 
+        private readonly Filter _filter;
         private readonly Selector _selector;
         private readonly Setting _setting;
 
@@ -88,6 +89,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
 
             FilterViewModel = new FilterViewModel();
+            _filter = FilterViewModel.Filter;
             HistoryViewModel = new HistoryViewModel();
 
             AddonViewModel = new AddonViewModel(_setting);
@@ -150,24 +152,23 @@ namespace DjmaxRandomSelectorV.ViewModels
         private void Start()
         {
             _selector.IsRunning = true;
-            Filter filter = FilterViewModel.Filter;
 
             Mode mode = _setting.Mode;
             Aider aider = _setting.Aider;
             Level level = _setting.Level;
 
-            var favorite = filter.IncludesFavorite ? _setting.Favorite : new List<string>();
-            List<string> recents = filter.Recents;
+            var favorite = _filter.IncludesFavorite ? _setting.Favorite : new List<string>();
+            List<string> recents = _filter.Recents;
 
             if (Selector.IsFilterChanged)
             {
-                _selector.SiftOut(filter, favorite);
+                _selector.SiftOut(_filter, favorite);
                 recents.Clear();
                 Selector.IsFilterChanged = false;
             }
             else
             {
-                recents = _selector.CheckRecents(recents, _setting.RecentsCount);
+                _filter.UpdateRecents(_selector.TitleCount, _setting.RecentsCount);
             }
 
             Music selectedMusic;
