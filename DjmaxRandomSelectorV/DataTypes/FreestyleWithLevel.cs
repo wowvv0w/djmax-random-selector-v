@@ -1,5 +1,4 @@
-﻿using DjmaxRandomSelectorV.DataTypes.Enums;
-using DjmaxRandomSelectorV.DataTypes.Interfaces;
+﻿using DjmaxRandomSelectorV.DataTypes.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,18 +11,16 @@ namespace DjmaxRandomSelectorV.DataTypes
     {
         private bool _isBeginner;
 
-        public FreestyleWithLevel(Level level)
+        public FreestyleWithLevel(string level)
         {
             switch (level)
             {
-                case Level.Beginner:
+                case "BEGINNER":
                     _isBeginner = true;
                     break;
-                case Level.Master:
+                case "MASTER":
                     _isBeginner = false;
                     break;
-                default:
-                    throw new ArgumentException("level must be either Beginner or Master.", "level");
             }
         }
 

@@ -46,10 +46,18 @@ namespace DjmaxRandomSelectorV.Models
         {
             if (mode.Equals(Mode.Freestyle))
             {
-                if (level.Equals(Level.Off))
-                    _sifter = new Freestyle();
-                else
-                    _sifter = new FreestyleWithLevel(level);
+                switch (level)
+                {
+                    case Level.Off:
+                        _sifter = new Freestyle();
+                        break;
+                    case Level.Beginner:
+                        _sifter = new FreestyleWithLevel("BEGINNER");
+                        break;
+                    case Level.Master:
+                        _sifter = new FreestyleWithLevel("MASTER");
+                        break;
+                }
             }
             else
             {
