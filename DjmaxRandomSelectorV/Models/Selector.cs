@@ -158,6 +158,8 @@ namespace DjmaxRandomSelectorV.Models
                             select track;
 
             _musicList =  _sifter.Sift(trackList.ToList(), styles, filter.Levels);
+
+            SetTitleCount();
         }
 
         public Music Pick(List<string> recents)
