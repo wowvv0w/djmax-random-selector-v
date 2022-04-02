@@ -1,5 +1,4 @@
-﻿using DjmaxRandomSelectorV.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +8,6 @@ namespace DjmaxRandomSelectorV.DataTypes.Interfaces
 {
     public interface ISifter
     {
-        List<Music> Sift(List<Track> trackList, List<string> styles, Filter filter);
+        List<Music> Sift(List<Track> trackList, List<string> styles, int[] levels);
     }
 }

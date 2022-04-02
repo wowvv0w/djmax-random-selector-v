@@ -1,5 +1,4 @@
 ﻿using DjmaxRandomSelectorV.DataTypes.Interfaces;
-using DjmaxRandomSelectorV.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +9,12 @@ namespace DjmaxRandomSelectorV.DataTypes
 {
     public class Online : ISifter
     {
-        public List<Music> Sift(List<Track> trackList, List<string> styles, Filter filter)
+        public List<Music> Sift(List<Track> trackList, List<string> styles, int[] levels)
         {
             var musicList = from track in trackList
                             where track.Patterns.Any(x => styles.Contains(x.Key)
-                                                    && x.Value >= filter.Levels[0]
-                                                    && x.Value <= filter.Levels[1])
+                                                    && x.Value >= levels[0]
+                                                    && x.Value <= levels[1])
                             select new Music
                             {
                                 Title = track.Title,

@@ -1,6 +1,5 @@
 ﻿using DjmaxRandomSelectorV.DataTypes.Enums;
 using DjmaxRandomSelectorV.DataTypes.Interfaces;
-using DjmaxRandomSelectorV.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,15 +27,17 @@ namespace DjmaxRandomSelectorV.DataTypes
             }
         }
 
-        public List<Music> Sift(List<Track> trackList, List<string> styles, Filter filter)
+        public List<Music> Sift(List<Track> trackList, List<string> styles, int[] levels)
         {
+            var buttonTunes = new string[4] { "4B", "5B", "6B", "8B" };
+
             var musicList = from track in trackList
-                            from bt in filter.ButtonTunes
+                            from bt in buttonTunes
                             let _styles = styles.FindAll(x => x.Contains(bt))
                             let _patterns = from pattern in track.Patterns
                                             where _styles.Contains(pattern.Key)
-                                            && pattern.Value >= filter.Levels[0]
-                                            && pattern.Value <= filter.Levels[1]
+                                            && pattern.Value >= levels[0]
+                                            && pattern.Value <= levels[1]
                                             select pattern
                             where _patterns.Count() > 0
                             let _pattern = _isBeginner ? _patterns.First() : _patterns.Last()

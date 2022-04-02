@@ -57,6 +57,13 @@ namespace DjmaxRandomSelectorV.Models
             }
         }
 
+        private void SetTitleCount()
+        {
+            var titleList = from music in _musicList
+                            select music.Title;
+            _titleCount = titleList.Distinct().Count();
+        }
+
         #region Manage Track List
         public List<string> GetTitleList() => _allTrackList.ConvertAll(x => x.Title).Distinct().ToList();
         public void DownloadAllTrackList()
@@ -137,16 +144,12 @@ namespace DjmaxRandomSelectorV.Models
                 foreach(string difficulty in filter.Difficulties)
                     styles.Add($"{button}{difficulty}");
 
-            IEnumerable<Track> trackList = from track in _trackList
-                                           where filter.Categories.Contains(track.Category)
-                                                 || favorite.Contains(track.Title)
-                                           select track;
+            var trackList = from track in _trackList
+                            where filter.Categories.Contains(track.Category)
+                                || favorite.Contains(track.Title)
+                            select track;
 
-            _musicList =  _sifter.Sift(trackList.ToList(), styles, filter);
-
-            var titleList = from music in _musicList
-                            select music.Title;
-            _titleCount = titleList.Distinct().Count();
+            _musicList =  _sifter.Sift(trackList.ToList(), styles, filter.Levels);
         }
 
         public Music Pick(List<string> recents)
