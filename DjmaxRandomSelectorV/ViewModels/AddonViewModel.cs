@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using DjmaxRandomSelectorV.DataTypes.Enums;
 using DjmaxRandomSelectorV.Models;
 using System;
 using System.Collections.Generic;

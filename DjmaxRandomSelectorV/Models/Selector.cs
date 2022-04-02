@@ -1,4 +1,7 @@
 ﻿using CsvHelper;
+using DjmaxRandomSelectorV.DataTypes;
+using DjmaxRandomSelectorV.DataTypes.Enums;
+using DjmaxRandomSelectorV.DataTypes.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -19,6 +22,7 @@ namespace DjmaxRandomSelectorV.Models
         private List<Track> _trackList;
         private List<Music> _musicList;
         private ISifter _sifter;
+        
         private int _titleCount;
         #endregion
 

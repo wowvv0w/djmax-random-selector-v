@@ -1,10 +1,11 @@
-﻿using System;
+﻿using DjmaxRandomSelectorV.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DjmaxRandomSelectorV.Models
+namespace DjmaxRandomSelectorV.DataTypes.Interfaces
 {
     public interface ISifter
     {

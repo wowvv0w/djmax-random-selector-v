@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DjmaxRandomSelectorV.Models
+namespace DjmaxRandomSelectorV.DataTypes
 {
     public class HistoryItem
     {

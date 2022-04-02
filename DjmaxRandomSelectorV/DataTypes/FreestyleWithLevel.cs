@@ -1,10 +1,13 @@
-﻿using System;
+﻿using DjmaxRandomSelectorV.DataTypes.Enums;
+using DjmaxRandomSelectorV.DataTypes.Interfaces;
+using DjmaxRandomSelectorV.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DjmaxRandomSelectorV.Models
+namespace DjmaxRandomSelectorV.DataTypes
 {
     public class FreestyleWithLevel : ISifter
     {
