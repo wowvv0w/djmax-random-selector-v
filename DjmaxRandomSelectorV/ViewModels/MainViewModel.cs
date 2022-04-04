@@ -25,9 +25,9 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string VersionUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
         private const string DjmaxTitle = "DJMAX RESPECT V";
 
-        private int _lastSelectorVer;
+        private int lastSelectorVer;
 
-        private DockPanel _dockPanel;
+        private DockPanel dockPanel;
 
         public FilterViewModel FilterViewModel { get; set; }
         public HistoryViewModel HistoryViewModel { get; set; }
@@ -35,16 +35,16 @@ namespace DjmaxRandomSelectorV.ViewModels
         public AddonViewModel AddonViewModel { get; set; }
         public AddonViewModel AddonButton { get; set; }
 
-        private readonly Filter _filter;
-        private readonly Selector _selector;
-        private readonly Setting _setting;
+        private readonly Filter filter;
+        private readonly Selector selector;
+        private readonly Setting setting;
 
         public MainViewModel()
         {
-            _setting = new Setting();
-            _setting.Import();
+            setting = new Setting();
+            setting.Import();
 
-            _selector = new Selector();
+            selector = new Selector();
             try
             {
                 int _lastAllTrackVer;
@@ -53,18 +53,18 @@ namespace DjmaxRandomSelectorV.ViewModels
                     var data = client.DownloadString(VersionUrl);
                     var versions = data.Split(',');
 
-                    _lastSelectorVer = int.Parse(versions[0]);
+                    lastSelectorVer = int.Parse(versions[0]);
                     _lastAllTrackVer = int.Parse(versions[1]);
                 }
 
-                if (SELECTOR_VERSION < _lastSelectorVer)
+                if (SELECTOR_VERSION < lastSelectorVer)
                     OpenReleasePageVisibility = Visibility.Visible;
 
-                if (_setting.AllTrackVersion != _lastAllTrackVer)
+                if (setting.AllTrackVersion != _lastAllTrackVer)
                 {
-                    _selector.DownloadAllTrackList();
-                    _setting.AllTrackVersion = _lastAllTrackVer;
-                    _setting.Export();
+                    selector.DownloadAllTrackList();
+                    setting.AllTrackVersion = _lastAllTrackVer;
+                    setting.Export();
                 }
             }
             catch (Exception e)
@@ -73,13 +73,13 @@ namespace DjmaxRandomSelectorV.ViewModels
                     "Selector Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
-                _lastSelectorVer = SELECTOR_VERSION;
+                lastSelectorVer = SELECTOR_VERSION;
             }
 
             try
             {
-                _selector.ReadAllTrackList();
-                _selector.UpdateTrackList(_setting.OwnedDlcs);
+                selector.ReadAllTrackList();
+                selector.UpdateTrackList(setting.OwnedDlcs);
             }
             catch (FileNotFoundException)
             {
@@ -87,19 +87,19 @@ namespace DjmaxRandomSelectorV.ViewModels
                     "Selector Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
-                _selector.DownloadAllTrackList();
+                selector.DownloadAllTrackList();
             }
 
             FilterViewModel = new FilterViewModel();
-            _filter = FilterViewModel.Filter;
+            filter = FilterViewModel.Filter;
             HistoryViewModel = new HistoryViewModel();
 
-            AddonViewModel = new AddonViewModel(_setting);
-            AddonButton = new AddonViewModel(_setting);
+            AddonViewModel = new AddonViewModel(setting);
+            AddonButton = new AddonViewModel(setting);
 
-            UpdateAddon(_setting.Mode);
-            UpdateAddon(_setting.Aider);
-            UpdateAddon(_setting.Level);
+            UpdateAddon(setting.Mode);
+            UpdateAddon(setting.Aider);
+            UpdateAddon(setting.Level);
         }
 
 
@@ -120,20 +120,20 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         private void SetPosition(Window window)
         {
-            if (_setting.Position.Length == 2)
+            if (setting.Position.Length == 2)
             {
-                window.Top = _setting.Position[0];
-                window.Left = _setting.Position[1];
+                window.Top = setting.Position[0];
+                window.Left = setting.Position[1];
             }
             else
             {
-                _setting.Position = new double[2] { window.Top, window.Left };
+                setting.Position = new double[2] { window.Top, window.Left };
             }
         }
         public void GetDockPanel(object source)
         {
             var dockPanel = source as DockPanel;
-            _dockPanel = dockPanel;
+            this.dockPanel = dockPanel;
         }
         #endregion
 
@@ -142,41 +142,23 @@ namespace DjmaxRandomSelectorV.ViewModels
         private bool CanStart()
         {
             string windowTitle = GetActiveWindowTitle();
-            if (_setting.Aider.Equals(Aider.Observe))
+            if (setting.Aider.Equals(Aider.Observe))
                 return true;
             else if (!windowTitle.Equals(DjmaxTitle))
                 throw new Exception("Foreground window is not DJMAX RESPECT V.");
-            else if (!_selector.IsRunning)
+            else if (!selector.IsRunning)
                 return true;
             else
                 return false;
         }
         private void Start()
         {
-            _selector.IsRunning = true;
-
-            Mode mode = _setting.Mode;
-            Aider aider = _setting.Aider;
-            Level level = _setting.Level;
-
-            var favorite = _filter.IncludesFavorite ? _setting.Favorite : new List<string>();
-            List<string> recents = _filter.Recents;
-
-            if (Selector.IsFilterChanged)
-            {
-                _selector.SiftOut(_filter, favorite);
-                recents.Clear();
-                Selector.IsFilterChanged = false;
-            }
-            else
-            {
-                _filter.UpdateRecents(_selector.TitleCount, _setting.RecentsCount);
-            }
-
-            Music selectedMusic;
             try
             {
-                selectedMusic = _selector.Pick(recents);
+                Music selectedMusic = selector.Start(filter, setting);
+
+                var historyItem = new HistoryItem(selectedMusic);
+                HistoryViewModel.UpdateHistory(historyItem);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -184,24 +166,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                     "Filter Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
-                _selector.IsRunning = false;
-                return;
             }
-
-            if (aider != Aider.Observe)
-            {
-                InputCommand inputCommand = _selector.Find(selectedMusic);
-                inputCommand.Delay = _setting.InputDelay;
-                inputCommand.Starts = mode == Mode.Freestyle && aider == Aider.AutoStart;
-                _selector.Select(inputCommand);
-            }
-
-            var historyItem = new HistoryItem(selectedMusic);
-            HistoryViewModel.UpdateHistory(historyItem);
-            
-            recents.Add(selectedMusic.Title);
-
-            _selector.IsRunning = false;
         }
         #endregion
 
@@ -210,14 +175,14 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             var window = view as Window;
 
-            if (!_setting.SavesRecents)
+            if (!setting.SavesRecents)
             {
                 FilterViewModel.Filter.Recents.Clear();
             }
             FilterViewModel.Filter.Export();
 
-            _setting.Position = new double[2] { (window.Top < 0 ? 0 : window.Top), (window.Left < 0 ? 0 : window.Left) };
-            _setting.Export();
+            setting.Position = new double[2] { (window.Top < 0 ? 0 : window.Top), (window.Left < 0 ? 0 : window.Left) };
+            setting.Export();
         }
         #endregion
 
@@ -304,18 +269,18 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             SetBlurEffect(true);
             var infoViewModel
-                = new InfoViewModel(SELECTOR_VERSION, _lastSelectorVer, _setting.AllTrackVersion, SetBlurEffect);
+                = new InfoViewModel(SELECTOR_VERSION, lastSelectorVer, setting.AllTrackVersion, SetBlurEffect);
             _windowManager.ShowDialogAsync(infoViewModel);
         }
         public void ShowSetting()
         {
             SetBlurEffect(true);
-            _windowManager.ShowDialogAsync(new SettingViewModel(_setting, SetBlurEffect, _selector.UpdateTrackList));
+            _windowManager.ShowDialogAsync(new SettingViewModel(setting, SetBlurEffect, selector.UpdateTrackList));
         }
         public void ShowInventory()
         {
             SetBlurEffect(true);
-            _windowManager.ShowDialogAsync(new InventoryViewModel(_setting, _selector.GetTitleList(), SetBlurEffect, FilterViewModel.ReloadFilter));
+            _windowManager.ShowDialogAsync(new InventoryViewModel(setting, selector.GetTitleList(), SetBlurEffect, FilterViewModel.ReloadFilter));
         }
         #endregion
 
@@ -326,7 +291,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void HideEquipment() => SetBlurEffect(false);
         private void SetBlurEffect(bool turnsOn)
         {
-            _dockPanel.Effect = turnsOn ? new BlurEffect() { Radius = 75 } : null;
+            dockPanel.Effect = turnsOn ? new BlurEffect() { Radius = 75 } : null;
         }
         #endregion
         #region Constants
@@ -341,10 +306,10 @@ namespace DjmaxRandomSelectorV.ViewModels
         #region Except
         public int RecentsCount
         {
-            get => _setting.RecentsCount;
+            get => setting.RecentsCount;
             set
             {
-                _setting.RecentsCount = value;
+                setting.RecentsCount = value;
                 NotifyOfPropertyChange(() => RecentsCount);
                 AddonViewModel.ExceptCount = value;
                 AddonButton.ExceptCount = value;
@@ -372,20 +337,21 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             AddonViewModel.SetBitmapImage(mode);
             AddonButton.SetBitmapImage(mode);
-            _selector.SetSifter(mode, _setting.Level);
+            selector.SetSifter(mode, setting.Level);
+            selector.SetProvider(mode, setting.Aider);
             Selector.IsFilterChanged = true;
         }
         public void SwitchMode()
         {
-            if (_setting.Mode == Mode.Freestyle)
+            if (setting.Mode == Mode.Freestyle)
             {
-                _setting.Mode = Mode.Online;
+                setting.Mode = Mode.Online;
             }
             else
             {
-                _setting.Mode = Mode.Freestyle;
+                setting.Mode = Mode.Freestyle;
             }
-            UpdateAddon(_setting.Mode);
+            UpdateAddon(setting.Mode);
         }
         #endregion
         #region Aider
@@ -410,31 +376,32 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             AddonViewModel.SetBitmapImage(aider);
             AddonButton.SetBitmapImage(aider);
+            selector.SetProvider(setting.Mode, aider);
         }
 
         public void PrevAider()
         {
-            if (_setting.Aider == Aider.Off)
+            if (setting.Aider == Aider.Off)
             {
-                _setting.Aider = Aider.Observe;
+                setting.Aider = Aider.Observe;
             }
             else
             {
-                _setting.Aider--;
+                setting.Aider--;
             }
-            UpdateAddon(_setting.Aider);
+            UpdateAddon(setting.Aider);
         }
         public void NextAider()
         {
-            if (_setting.Aider == Aider.Observe)
+            if (setting.Aider == Aider.Observe)
             {
-                _setting.Aider = Aider.Off;
+                setting.Aider = Aider.Off;
             }
             else
             {
-                _setting.Aider++;
+                setting.Aider++;
             }
-            UpdateAddon(_setting.Aider);
+            UpdateAddon(setting.Aider);
         }
         #endregion
         #region Level
@@ -459,33 +426,33 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             AddonViewModel.SetBitmapImage(level);
             AddonButton.SetBitmapImage(level);
-            _selector.SetSifter(_setting.Mode, level);
+            selector.SetSifter(setting.Mode, level);
             Selector.IsFilterChanged = true;
         }
 
         public void PrevLevel()
         {
-            if (_setting.Level == Level.Off)
+            if (setting.Level == Level.Off)
             {
-                _setting.Level = Level.Master;
+                setting.Level = Level.Master;
             }
             else
             {
-                _setting.Level--;
+                setting.Level--;
             }
-            UpdateAddon(_setting.Level);
+            UpdateAddon(setting.Level);
         }
         public void NextLevel()
         {
-            if (_setting.Level == Level.Master)
+            if (setting.Level == Level.Master)
             {
-                _setting.Level = Level.Off;
+                setting.Level = Level.Off;
             }
             else
             {
-                _setting.Level++;
+                setting.Level++;
             }
-            UpdateAddon(_setting.Level);
+            UpdateAddon(setting.Level);
         }
         #endregion
         #endregion

@@ -18,18 +18,22 @@ namespace DjmaxRandomSelectorV.Models
     public class Selector
     {
         #region Fields
-        private List<Track> _allTrackList;
-        private List<Track> _trackList;
-        private List<Music> _musicList;
-        private ISifter _sifter;
-        
-        private int _titleCount;
+        private List<Track> allTrackList;
+        private List<Track> trackList;
+        private List<Music> musicList;
+        private ISifter sifter;
+        private IProvider provider;
+        private int titleCount;
+        private bool isRunning;
         #endregion
 
         #region Properties
         public static bool IsFilterChanged { get; set; } = true;
-        public bool IsRunning { get; set; }
-        public int TitleCount { get => _titleCount; }
+        public bool IsRunning
+        {
+            get { return isRunning; }
+            set { isRunning = value; }
+        }
         #endregion
 
         #region Constants
@@ -39,7 +43,46 @@ namespace DjmaxRandomSelectorV.Models
 
         public Selector()
         {
-            IsRunning = false;
+            isRunning = false;
+        }
+
+        public Music Start(Filter filter, Setting setting)
+        {
+            isRunning = true;
+
+            List<string> favorite = filter.IncludesFavorite ? setting.Favorite : new List<string>();
+            List<string> recents = filter.Recents;
+
+            if (IsFilterChanged)
+            {
+                Sift(filter, favorite);
+                SetTitleCount();
+                recents.Clear();
+                IsFilterChanged = false;
+            }
+            else
+            {
+                filter.UpdateRecents(titleCount, setting.RecentsCount);
+            }
+            var musicList = from music in this.musicList
+                            where !recents.Contains(music.Title)
+                            select music;
+
+            Music selectedMusic;
+            try
+            {
+                selectedMusic = Pick(musicList.ToList());
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                isRunning = false;
+                throw e;
+            }
+
+            Provide(selectedMusic, trackList, setting.InputDelay);
+            recents.Add(selectedMusic.Title);
+            isRunning = false;
+            return selectedMusic;
         }
 
         public void SetSifter(Mode mode, Level level)
@@ -49,31 +92,48 @@ namespace DjmaxRandomSelectorV.Models
                 switch (level)
                 {
                     case Level.Off:
-                        _sifter = new Freestyle();
+                        sifter = new Freestyle();
                         break;
                     case Level.Beginner:
-                        _sifter = new FreestyleWithLevel("BEGINNER");
+                        sifter = new FreestyleWithLevel("BEGINNER");
                         break;
                     case Level.Master:
-                        _sifter = new FreestyleWithLevel("MASTER");
+                        sifter = new FreestyleWithLevel("MASTER");
                         break;
                 }
             }
             else
             {
-                _sifter = new Online();
+                sifter = new Online();
             }
         }
-
+        public void SetProvider(Mode mode, Aider aider)
+        {
+            switch (aider)
+            {
+                case Aider.Off:
+                    provider = new Locator(false);
+                    break;
+                case Aider.AutoStart:
+                    if (mode.Equals(Mode.Freestyle))
+                        provider = new Locator(true);
+                    else
+                        provider = new Locator(false);
+                    break;
+                case Aider.Observe:
+                    provider = new Observer();
+                    break;
+            }
+        }
         private void SetTitleCount()
         {
-            var titleList = from music in _musicList
+            var titleList = from music in musicList
                             select music.Title;
-            _titleCount = titleList.Distinct().Count();
+            titleCount = titleList.Distinct().Count();
         }
 
         #region Manage Track List
-        public List<string> GetTitleList() => _allTrackList.ConvertAll(x => x.Title).Distinct().ToList();
+        public List<string> GetTitleList() => allTrackList.ConvertAll(x => x.Title).Distinct().ToList();
         public void DownloadAllTrackList()
         {
             string data;
@@ -96,19 +156,19 @@ namespace DjmaxRandomSelectorV.Models
             {
                 csv.Context.RegisterClassMap<TrackMap>();
                 var records = csv.GetRecords<Track>().ToList();
-                _allTrackList = records;
+                allTrackList = records;
             }
         }
         public void UpdateTrackList(List<string> ownedDlcs)
         {
             var basicCategories = new List<string>() { "RP", "P1", "P2", "GG" };
             var titleFilter = CreateTitleFilter(ownedDlcs);
-            var trackList = from track in _allTrackList
+            var trackList = from track in allTrackList
                             where (ownedDlcs.Contains(track.Category) || basicCategories.Contains(track.Category))
                             && !titleFilter.Contains(track.Title)
                             select track;
 
-            _trackList = trackList.ToList();
+            this.trackList = trackList.ToList();
         }
         private List<string> CreateTitleFilter(List<string> ownedDlcs)
         {
@@ -145,193 +205,31 @@ namespace DjmaxRandomSelectorV.Models
         #endregion
 
         #region Select Music
-        public void SiftOut(Filter filter, List<string> favorite)
+        public void Sift(Filter filter, List<string> favorite)
         {
             List<string> styles = new List<string>();
             foreach(string button in filter.ButtonTunes)
                 foreach(string difficulty in filter.Difficulties)
                     styles.Add($"{button}{difficulty}");
 
-            var trackList = from track in _trackList
+            var trackList = from track in this.trackList
                             where filter.Categories.Contains(track.Category)
                                 || favorite.Contains(track.Title)
                             select track;
 
-            _musicList =  _sifter.Sift(trackList.ToList(), styles, filter.Levels);
-
-            SetTitleCount();
+            musicList =  sifter.Sift(trackList.ToList(), styles, filter.Levels);
         }
-
-        public Music Pick(List<string> recents)
+        public Music Pick(List<Music> musicList)
         {
-            var musicList = (from music in _musicList
-                             where !recents.Contains(music.Title)
-                             select music).ToList();
-
             var random = new Random();
             var index = random.Next(musicList.Count - 1);
             var selectedMusic = musicList[index];
 
             return selectedMusic;
         }
-
-        public InputCommand Find(Music selectedMusic) 
+        private void Provide(Music selectedMusic, List<Track> trackList, int delay)
         {
-            // Check if title starts with alphabet or not
-            char initial = selectedMusic.Title[0];
-            bool isAlphabet = Regex.IsMatch(initial.ToString(), "[a-z]", RegexOptions.IgnoreCase);
-
-            // Create List of Tracks that have same initial with selected music
-            List<Track> sameInitialList;
-            if (isAlphabet)
-            {
-                var list = from track in _trackList
-                           let t = track.Title.Substring(0, 1)
-                           where String.Compare(t, initial.ToString(), true) == 0
-                           select track;
-                sameInitialList = list.ToList();
-            }
-            else
-            {
-                var list = from track in _trackList
-                           let t = track.Title.Substring(0, 1)
-                           where Regex.IsMatch(t, "[a-z]", RegexOptions.IgnoreCase) == false
-                           select track;
-                sameInitialList = list.ToList();
-            }
-
-            // Find which key should be pressed
-            int whereIsIt = sameInitialList.FindIndex(x => x.Title == selectedMusic.Title);
-            int count = sameInitialList.Count;
-            bool isForward = whereIsIt <= Math.Ceiling((double)count / 2) || "wxyzWXYZ".Contains(initial);
-
-            char inputInitial;
-            int inputVertical;
-            if (isForward)
-            {
-                if (isAlphabet)
-                {
-                    inputInitial = initial;
-                }
-                else
-                {
-                    inputInitial = 'a';
-                }
-                inputVertical = whereIsIt;
-            }
-            else
-            {
-                if (isAlphabet)
-                {
-                    inputInitial = (char)(initial + 1);
-                }
-                else
-                {
-                    inputInitial = 'a';
-                }
-                inputVertical = count - whereIsIt;
-            }
-
-            int inputRight;
-            char inputButton;
-            if (selectedMusic.Style == "FREE")
-            {
-                inputRight = 0;
-                inputButton = '\0';
-            }
-            else
-            {
-                Track sameMusic = _trackList.Find(x => x.Title == selectedMusic.Title);
-                string selectedButton = selectedMusic.Style.Substring(0, 2);
-                var difficulties = new List<string> { "NM", "HD", "MX", "SC" };
-                int a = difficulties.FindIndex(x => x == selectedMusic.Style.Substring(2, 2));
-                var styles = new List<string>();
-
-                for (int i = 0; i <= a; i++)
-                {
-                    styles.Add($"{selectedButton}{difficulties[i]}");
-                }
-                var list2 = from pattern in sameMusic.Patterns
-                            where styles.Contains(pattern.Key)
-                            select pattern.Value;
-                int subCount = list2.Count(x => x == 0);
-                inputRight = a - subCount;
-
-                inputButton = selectedButton[0];
-            }
-
-            var inputCommand = new InputCommand()
-            {
-                Initial = Char.ToUpper(inputInitial),
-                VerticalInputCount = inputVertical,
-                ButtonTune = inputButton,
-                RightInputCount = inputRight,
-                IsAlphabet = isAlphabet,
-                IsForward = isForward
-            };
-
-            return inputCommand;
-        }
-
-        public void Select(InputCommand inputCommand)
-        {
-            char initial = inputCommand.Initial;
-            int vertical = inputCommand.VerticalInputCount;
-            char button = inputCommand.ButtonTune;
-            int right = inputCommand.RightInputCount;
-            bool alphabet = inputCommand.IsAlphabet;
-            bool forward = inputCommand.IsForward;
-            int delay = inputCommand.Delay;
-            bool starts = inputCommand.Starts;
-            byte direction;
-
-
-            void Input(byte key)
-            {
-                keybd_event(key, 0x45, 0x00, UIntPtr.Zero);
-                keybd_event(key, 0x45, 0x02, UIntPtr.Zero);
-                Thread.Sleep(delay);
-            }
-
-            if (forward)
-            {
-                direction = 40; // DOWN
-            }
-            else
-            {
-                direction = 38; // UP
-            }
-
-            Input(33); // PAGE UP
-            Input((byte)initial);
-            if (alphabet == false && forward)
-            {
-                Input(33); // PAGE UP
-                Input(33); // PAGE UP
-                Input(34); // PAGE DOWN
-            }
-            for(int i = 0; i < vertical; i++)
-            {
-                Input(direction);
-            }
-
-            if (button != '\0')
-            {
-                Input((byte)button);
-                for (int i = 0; i < right; i++)
-                {
-                    Input(39); // RIGHT
-                }
-            }
-
-            if (starts)
-            {
-                int startDelay = 800 - delay * (right + 1);
-                startDelay = startDelay < 0 ? 0 : startDelay;
-
-                Thread.Sleep(startDelay);
-                Input(116); // F5
-            }
+            provider.Provide(selectedMusic, trackList, delay);
         }
         #endregion
 
