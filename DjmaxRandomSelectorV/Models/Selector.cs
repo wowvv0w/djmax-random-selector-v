@@ -15,7 +15,7 @@ using System.Threading;
 
 namespace DjmaxRandomSelectorV.Models
 {
-    public class Selector
+    public class Selector : IAddonObserver
     {
         #region Fields
         private List<Track> allTrackList;
@@ -85,7 +85,15 @@ namespace DjmaxRandomSelectorV.Models
             return selectedMusic;
         }
 
-        public void SetSifter(Mode mode, Level level)
+        #region IAddonObserver Methods
+        public void Update(IAddonObservable observable)
+        {
+            var setting = observable as Setting;
+
+            SetSifter(setting.Mode, setting.Level);
+            SetProvider(setting.Mode, setting.Aider);
+        }
+        private void SetSifter(Mode mode, Level level)
         {
             if (mode.Equals(Mode.Freestyle))
             {
@@ -107,7 +115,7 @@ namespace DjmaxRandomSelectorV.Models
                 sifter = new Online();
             }
         }
-        public void SetProvider(Mode mode, Aider aider)
+        private void SetProvider(Mode mode, Aider aider)
         {
             switch (aider)
             {
@@ -125,12 +133,16 @@ namespace DjmaxRandomSelectorV.Models
                     break;
             }
         }
+        #endregion
+
+        #region etc
         private void SetTitleCount()
         {
             var titleList = from music in musicList
                             select music.Title;
             titleCount = titleList.Distinct().Count();
         }
+        #endregion
 
         #region Manage Track List
         public List<string> GetTitleList() => allTrackList.ConvertAll(x => x.Title).Distinct().ToList();

@@ -32,7 +32,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public FilterViewModel FilterViewModel { get; set; }
         public HistoryViewModel HistoryViewModel { get; set; }
 
-        public AddonViewModel AddonViewModel { get; set; }
+        public AddonViewModel AddonPanel { get; set; }
         public AddonViewModel AddonButton { get; set; }
 
         private readonly Filter filter;
@@ -91,15 +91,21 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
 
             FilterViewModel = new FilterViewModel();
-            filter = FilterViewModel.Filter;
             HistoryViewModel = new HistoryViewModel();
+            filter = FilterViewModel.Filter;
 
-            AddonViewModel = new AddonViewModel(setting);
-            AddonButton = new AddonViewModel(setting);
+            AddonPanel = new AddonViewModel();
+            AddonButton = new AddonViewModel();
+            AddonPanel.ExceptCount = setting.RecentsCount;
+            AddonButton.ExceptCount = setting.RecentsCount;
+            SetAddonText(setting.Mode);
+            SetAddonText(setting.Aider);
+            SetAddonText(setting.Level);
 
-            UpdateAddon(setting.Mode);
-            UpdateAddon(setting.Aider);
-            UpdateAddon(setting.Level);
+            setting.Subscribe(selector);
+            setting.Subscribe(AddonPanel);
+            setting.Subscribe(AddonButton);
+            setting.Notify();
         }
 
 
@@ -286,6 +292,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
 
         #region Equipment
+
         #region Show/Hide
         public void ShowEquipment() => SetBlurEffect(true);
         public void HideEquipment() => SetBlurEffect(false);
@@ -303,158 +310,135 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string BEGINNER = "BEGINNER";
         private const string MASTER = "MASTER";
         #endregion        
-        #region Except
+
         public int RecentsCount
         {
-            get => setting.RecentsCount;
+            get { return setting.RecentsCount; }
             set
             {
                 setting.RecentsCount = value;
                 NotifyOfPropertyChange(() => RecentsCount);
-                AddonViewModel.ExceptCount = value;
+                AddonPanel.ExceptCount = value;
                 AddonButton.ExceptCount = value;
             }
         }
-        #endregion
-        #region Mode
-        private string _modeText;
+
+        private string modeText;
         public string ModeText
         {
-            get => _modeText;
+            get { return modeText; }
             set
             {
-                _modeText = value;
+                modeText = value;
                 NotifyOfPropertyChange(() => ModeText);
             }
         }
-
-        private void UpdateAddon(Mode mode)
+        private void SetAddonText(Mode mode)
         {
             switch (mode)
             {
-                case Mode.Freestyle: ModeText = FREESTYLE; break;
-                case Mode.Online: ModeText = ONLINE; break;
+                case Mode.Freestyle:
+                    ModeText = FREESTYLE;
+                    break;
+                case Mode.Online:
+                    ModeText = ONLINE;
+                    break;
             }
-            AddonViewModel.SetBitmapImage(mode);
-            AddonButton.SetBitmapImage(mode);
-            selector.SetSifter(mode, setting.Level);
-            selector.SetProvider(mode, setting.Aider);
             Selector.IsFilterChanged = true;
         }
         public void SwitchMode()
         {
-            if (setting.Mode == Mode.Freestyle)
-            {
+            if (setting.Mode.Equals(Mode.Freestyle))
                 setting.Mode = Mode.Online;
-            }
             else
-            {
                 setting.Mode = Mode.Freestyle;
-            }
-            UpdateAddon(setting.Mode);
+            SetAddonText(setting.Mode);
         }
-        #endregion
-        #region Aider
-        private string _aiderText;
+
+        private string aiderText;
         public string AiderText
         {
-            get => _aiderText;
+            get { return aiderText; }
             set
             {
-                _aiderText = value;
+                aiderText = value;
                 NotifyOfPropertyChange(() => AiderText);
             }
         }
-        
-        private void UpdateAddon(Aider aider)
+        private void SetAddonText(Aider aider)
         {
             switch (aider)
             {
-                case Aider.Off: AiderText = OFF; break;
-                case Aider.AutoStart: AiderText = AUTO_START; break;
-                case Aider.Observe: AiderText = OBSERVE; break;
+                case Aider.Off:
+                    AiderText = OFF;
+                    break;
+                case Aider.AutoStart:
+                    AiderText = AUTO_START;
+                    break;
+                case Aider.Observe:
+                    AiderText = OBSERVE;
+                    break;
             }
-            AddonViewModel.SetBitmapImage(aider);
-            AddonButton.SetBitmapImage(aider);
-            selector.SetProvider(setting.Mode, aider);
         }
-
         public void PrevAider()
         {
-            if (setting.Aider == Aider.Off)
-            {
+            if (setting.Aider.Equals(Aider.Off))
                 setting.Aider = Aider.Observe;
-            }
             else
-            {
                 setting.Aider--;
-            }
-            UpdateAddon(setting.Aider);
+            SetAddonText(setting.Aider);
         }
         public void NextAider()
         {
-            if (setting.Aider == Aider.Observe)
-            {
+            if (setting.Aider.Equals(Aider.Observe))
                 setting.Aider = Aider.Off;
-            }
             else
-            {
                 setting.Aider++;
-            }
-            UpdateAddon(setting.Aider);
+            SetAddonText(setting.Aider);
         }
-        #endregion
-        #region Level
-        private string _levelText;
+
+        private string levelText;
         public string LevelText
         {
-            get => _levelText;
+            get { return levelText; }
             set
             {
-                _levelText = value;
+                levelText = value;
                 NotifyOfPropertyChange(() => LevelText);
             }
         }
-        
-        private void UpdateAddon(Level level)
+        private void SetAddonText(Level level)
         {
             switch (level)
             {
-                case Level.Off: LevelText = OFF; break;
-                case Level.Beginner: LevelText = BEGINNER; break;
-                case Level.Master: LevelText = MASTER; break;
+                case Level.Off:
+                    LevelText = OFF;
+                    break;
+                case Level.Beginner:
+                    LevelText = BEGINNER;
+                    break;
+                case Level.Master:
+                    LevelText = MASTER;
+                    break;
             }
-            AddonViewModel.SetBitmapImage(level);
-            AddonButton.SetBitmapImage(level);
-            selector.SetSifter(setting.Mode, level);
             Selector.IsFilterChanged = true;
         }
-
         public void PrevLevel()
         {
-            if (setting.Level == Level.Off)
-            {
+            if (setting.Level.Equals(Level.Off))
                 setting.Level = Level.Master;
-            }
             else
-            {
                 setting.Level--;
-            }
-            UpdateAddon(setting.Level);
+            SetAddonText(setting.Level);
         }
         public void NextLevel()
         {
-            if (setting.Level == Level.Master)
-            {
+            if (setting.Level.Equals(Level.Master))
                 setting.Level = Level.Off;
-            }
             else
-            {
                 setting.Level++;
-            }
-            UpdateAddon(setting.Level);
+            SetAddonText(setting.Level);
         }
-        #endregion
         #endregion
 
 

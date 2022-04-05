@@ -1,27 +1,73 @@
 ﻿using DjmaxRandomSelectorV.DataTypes.Enums;
+using DjmaxRandomSelectorV.DataTypes.Interfaces;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 
 namespace DjmaxRandomSelectorV.Models
 {
-    public class Setting
+    public class Setting : IAddonObservable
     {
+        #region Fields
+        private Mode mode;
+        private Aider aider;
+        private Level level;
+        private readonly List<IAddonObserver> observers;
+        #endregion
+
         #region Constants
         private const string CONFIG = "Data/Config.json";
         #endregion
 
         #region Properties
         public int RecentsCount { get; set; }
-        public Mode Mode { get; set; }
-        public Aider Aider { get; set; }
-        public Level Level { get; set; }
+        public Mode Mode
+        {
+            get { return mode; }
+            set
+            {
+                mode = value;
+                Notify();
+            }
+        }
+        public Aider Aider
+        {
+            get { return aider; }
+            set
+            {
+                aider = value;
+                Notify();
+            }
+        }
+        public Level Level
+        {
+            get { return level; }
+            set
+            {
+                level = value;
+                Notify();
+            }
+        }
         public int InputDelay { get; set; }
         public bool SavesRecents { get; set; }
         public List<string> OwnedDlcs { get; set; }
         public double[] Position { get; set; }
         public List<string> Favorite { get; set; }
         public int AllTrackVersion { get; set; }
+        #endregion
+
+        public Setting()
+        {
+            observers = new List<IAddonObserver>();
+        }
+
+        #region IAddonObservable Methods
+        public void Subscribe(IAddonObserver observer) => observers.Add(observer);
+        public void Notify()
+        {
+            foreach (var observer in observers)
+                observer.Update(this);
+        }
         #endregion
 
         #region Methods

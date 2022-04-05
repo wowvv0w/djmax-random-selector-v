@@ -52,7 +52,7 @@
                 <Grid Style="{x:Null}"
                       Background="#7F584E46"
                       Height="90">
-                    <ContentControl x:Name="AddonViewModel"
+                    <ContentControl x:Name="AddonPanel"
                                     Height="55"/>
                 </Grid>
                 <Grid>

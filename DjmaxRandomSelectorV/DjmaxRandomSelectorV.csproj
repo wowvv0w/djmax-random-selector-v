@@ -255,6 +255,8 @@
     <Compile Include="DataTypes\Enums\Level.cs" />
     <Compile Include="DataTypes\FreestyleWithLevel.cs" />
     <Compile Include="DataTypes\Enums\Mode.cs" />
+    <Compile Include="DataTypes\Interfaces\IAddonObservable.cs" />
+    <Compile Include="DataTypes\Interfaces\IAddonObserver.cs" />
     <Compile Include="DataTypes\Interfaces\IProvider.cs" />
     <Compile Include="DataTypes\Locator.cs" />
     <Compile Include="DataTypes\Observer.cs" />

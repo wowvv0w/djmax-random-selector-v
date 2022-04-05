@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.DataTypes.Enums;
+using DjmaxRandomSelectorV.DataTypes.Interfaces;
 using DjmaxRandomSelectorV.Models;
 using System;
 using System.Collections.Generic;
@@ -10,71 +11,67 @@ using System.Windows.Media.Imaging;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class AddonViewModel : Screen
+    public class AddonViewModel : Screen, IAddonObserver
     {
-        private Mode _mode = Mode.Freestyle; 
-        private Aider _aider = Aider.Off;
-        private Level _level = Level.Off;
-
-        private bool _isFreestyle = true;
-
-        public AddonViewModel(Setting setting)
-        {
-            ExceptCount = setting.RecentsCount;
-            SetBitmapImage(setting.Aider);
-        }
-
         #region Add-on Elements
-        private int _exceptCount;
-        private BitmapImage _modeImage;
-        private BitmapImage _aiderImage;
-        private BitmapImage _levelImage;
+        private int exceptCount;
+        private BitmapImage modeImage;
+        private BitmapImage aiderImage;
+        private BitmapImage levelImage;
 
         public int ExceptCount
         {
-            get { return _exceptCount; }
+            get { return exceptCount; }
             set
             {
-                _exceptCount = value;
+                exceptCount = value;
                 NotifyOfPropertyChange(() => ExceptCount);
             }
         }
         public BitmapImage ModeImage
         {
-            get { return _modeImage; }
+            get { return modeImage; }
             set
             {
-                _modeImage = value;
+                modeImage = value;
                 NotifyOfPropertyChange(() => ModeImage);
             }
         }
         public BitmapImage AiderImage
         {
-            get { return _aiderImage; }
+            get { return aiderImage; }
             set
             {
-                _aiderImage = value;
+                aiderImage = value;
                 NotifyOfPropertyChange(() => AiderImage);
             }
         }
         public BitmapImage LevelImage
         {
-            get { return _levelImage; }
+            get { return levelImage; }
             set
             {
-                _levelImage = value;
+                levelImage = value;
                 NotifyOfPropertyChange(() => LevelImage);
             }
         }
         #endregion
 
         #region Image Modification
+        public void Update(IAddonObservable observable)
+        {
+            var setting = observable as Setting;
+            bool isFreestyle = setting.Mode.Equals(Mode.Freestyle);
+
+            SetBitmapImage(setting.Mode);
+            SetBitmapImage(setting.Aider, isFreestyle);
+            SetBitmapImage(setting.Level, isFreestyle);
+        }
         private BitmapImage GetBitmapImage(string file)
         {
             return new BitmapImage(new Uri($"pack://application:,,,/Images/{file}.png"));
         }
-
-        public void SetBitmapImage(Mode mode)
+        private void SetBitmapImage(Mode mode)
         {
             switch (mode)
             {
@@ -85,13 +82,8 @@ namespace DjmaxRandomSelectorV.ViewModels
                     ModeImage = GetBitmapImage("mode_on");
                     break;
             }
-
-            _mode = mode;
-            _isFreestyle = _mode == Mode.Freestyle;
-            if (_aider == Aider.AutoStart) SetBitmapImage(_aider);
-            if (_level != Level.Off) SetBitmapImage(_level);
         }
-        public void SetBitmapImage(Aider aider)
+        private void SetBitmapImage(Aider aider, bool isFreestyle)
         {
             switch (aider)
             {
@@ -99,15 +91,14 @@ namespace DjmaxRandomSelectorV.ViewModels
                     AiderImage = GetBitmapImage("addon_none");
                     break;
                 case Aider.AutoStart:
-                    AiderImage = GetBitmapImage(_isFreestyle ? "aider_auto" : "aider_auto_locked");
+                    AiderImage = GetBitmapImage(isFreestyle ? "aider_auto" : "aider_auto_locked");
                     break;
                 case Aider.Observe:
                     AiderImage = GetBitmapImage("aider_observe");
                     break;
             }
-            _aider = aider;
         }
-        public void SetBitmapImage(Level level)
+        private void SetBitmapImage(Level level, bool isFreestyle)
         {
             switch (level)
             {
@@ -115,13 +106,12 @@ namespace DjmaxRandomSelectorV.ViewModels
                     LevelImage = GetBitmapImage("addon_none");
                     break;
                 case Level.Beginner:
-                    LevelImage = GetBitmapImage(_isFreestyle ? "level_beginner" : "level_beginner_locked");
+                    LevelImage = GetBitmapImage(isFreestyle ? "level_beginner" : "level_beginner_locked");
                     break;
                 case Level.Master:
-                    LevelImage = GetBitmapImage(_isFreestyle ? "level_master" : "level_master_locked");
+                    LevelImage = GetBitmapImage(isFreestyle ? "level_master" : "level_master_locked");
                     break;
             }
-            _level = level;
         }
         #endregion
     }
