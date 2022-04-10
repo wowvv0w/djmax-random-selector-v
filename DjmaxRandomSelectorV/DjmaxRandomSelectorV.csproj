@@ -251,16 +251,26 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Enums.cs" />
+    <Compile Include="DataTypes\Enums\Aider.cs" />
+    <Compile Include="DataTypes\Enums\Level.cs" />
+    <Compile Include="DataTypes\FreestyleWithLevel.cs" />
+    <Compile Include="DataTypes\Enums\Mode.cs" />
+    <Compile Include="DataTypes\Interfaces\IAddonObservable.cs" />
+    <Compile Include="DataTypes\Interfaces\IAddonObserver.cs" />
+    <Compile Include="DataTypes\Interfaces\IProvider.cs" />
+    <Compile Include="DataTypes\Locator.cs" />
+    <Compile Include="DataTypes\Observer.cs" />
     <Compile Include="Models\Filter.cs" />
-    <Compile Include="Models\InputCommand.cs" />
-    <Compile Include="Models\Manager.cs" />
-    <Compile Include="Models\Music.cs" />
-    <Compile Include="Models\HistoryItem.cs" />
+    <Compile Include="DataTypes\InputCommand.cs" />
+    <Compile Include="DataTypes\Interfaces\ISifter.cs" />
+    <Compile Include="DataTypes\Music.cs" />
+    <Compile Include="DataTypes\HistoryItem.cs" />
+    <Compile Include="DataTypes\Online.cs" />
     <Compile Include="Models\Selector.cs" />
     <Compile Include="Models\Setting.cs" />
-    <Compile Include="Models\Track.cs" />
-    <Compile Include="Models\TrackMap.cs" />
+    <Compile Include="DataTypes\Freestyle.cs" />
+    <Compile Include="DataTypes\Track.cs" />
+    <Compile Include="DataTypes\TrackMap.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -327,6 +337,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Data\AllTrackList.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\CurrentFilter.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Data\Preset\Default.json">
@@ -449,6 +462,7 @@
     <Resource Include="Images\level_beginner_locked.png" />
     <Resource Include="Images\level_master_locked.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Text.Json.6.0.1\build\System.Text.Json.targets" Condition="Exists('..\packages\System.Text.Json.6.0.1\build\System.Text.Json.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

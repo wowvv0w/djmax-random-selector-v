@@ -2,6 +2,7 @@
 using DjmaxRandomSelectorV.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -15,7 +16,8 @@ namespace DjmaxRandomSelectorV.ViewModels
         public Filter Filter { get; set; }
         public FilterViewModel()
         {
-            Filter = Manager.LoadPreset();
+            Filter = new Filter();
+            Filter.Import();
             for(int i = 0; i < 16; i++)
             {
                 // DO NOT use index 0
@@ -39,17 +41,27 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 filter.Remove(value);
             }
-            Selector.IsFilterChanged = true;
+            Filter.IsUpdated = true;
         }
         public void ReloadFilter(string presetName)
         {
-            Filter = Manager.LoadPreset(presetName);
-            NotifyOfPropertyChange(String.Empty);
-            Selector.IsFilterChanged = true;
-            MessageBox.Show($"Preset {presetName} has been applied.",
-                            "Filter",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Information);
+            try
+            {
+                Filter.Import(presetName);
+                NotifyOfPropertyChange(string.Empty);
+                MessageBox.Show($"Preset {presetName} has been applied.",
+                                "Filter",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Information);
+                Filter.IsUpdated = true;
+            }
+            catch (FileNotFoundException)
+            {
+                MessageBox.Show($"Cannot find Preset {presetName}.",
+                                "Filter",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+            }
         }
         #endregion
 
@@ -127,9 +139,9 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void AddPreset()
         {
             string presetName = Microsoft.VisualBasic.Interaction.InputBox("Preset Name: ", "Add Preset");
-            if (!String.IsNullOrEmpty(presetName))
+            if (!string.IsNullOrEmpty(presetName))
             {
-                Manager.SavePreset(Filter, presetName);
+                Filter.Export(presetName);
                 MessageBox.Show($"Preset {presetName} has been added.",
                                 "Preset",
                                 MessageBoxButton.OK,
@@ -254,7 +266,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 Filter.Levels[0] = value;
                 NotifyOfPropertyChange(() => LevelMin);
                 UpdateLevelIndicators();
-                Selector.IsFilterChanged = true;
+                Filter.IsUpdated = true;
             }
         }
         public int LevelMax
@@ -265,7 +277,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 Filter.Levels[1] = value;
                 NotifyOfPropertyChange(() => LevelMax);
                 UpdateLevelIndicators();
-                Selector.IsFilterChanged = true;
+                Filter.IsUpdated = true;
             }
         }
         #endregion
@@ -467,7 +479,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 Filter.IncludesFavorite = value;
                 NotifyOfPropertyChange(() => CategoryFavorite);
-                Selector.IsFilterChanged = true;
+                Filter.IsUpdated = true;
             }
         }
         #endregion

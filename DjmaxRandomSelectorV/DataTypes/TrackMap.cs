@@ -1,6 +1,6 @@
 ﻿using CsvHelper.Configuration;
 
-namespace DjmaxRandomSelectorV.Models
+namespace DjmaxRandomSelectorV.DataTypes
 {
     public sealed class TrackMap : ClassMap<Track>
     {

@@ -13,15 +13,15 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string GITHUB_PAGE_URL = "https://github.com/wowvv0w/djmax-random-selector-v";
         private const string BUG_REPORT_URL = "https://github.com/wowvv0w/djmax-random-selector-v/issues";
 
-        private DockPanel _dockPanel;
+        private readonly Action<bool> _blurSetter;
 
-        public InfoViewModel(int currentVersion, int lastestVersion, int allTrackVersion, DockPanel dockPanel)
+        public InfoViewModel(int currentVersion, int lastestVersion, int allTrackVersion, Action<bool> blurSetter)
         {
             CurrentVersion = IntToString(currentVersion);
             LastestVersion = IntToString(lastestVersion);
             AllTrackVersion = allTrackVersion.ToString();
 
-            _dockPanel = dockPanel;
+            _blurSetter = blurSetter;
 
             string IntToString(int version)
             {
@@ -82,7 +82,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void Close()
         {
             TryCloseAsync();
-            _dockPanel.Effect = null;
+            _blurSetter.Invoke(false);
         }
     }
 }

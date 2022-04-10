@@ -14,8 +14,9 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class SettingViewModel : Screen
     {
-        private Setting _setting;
-        private DockPanel _dockPanel;
+        private readonly Setting _setting;
+        private readonly Action<bool> _blurSetter;
+        private readonly Action<List<string>> _trackListUpdater;
 
         private int _inputDelay;
         private bool _savesRecents;
@@ -26,17 +27,17 @@ namespace DjmaxRandomSelectorV.ViewModels
         private bool _updatesTrackList = false;
 
 
-        public SettingViewModel(Setting setting, DockPanel dockPanel)
+        public SettingViewModel(Setting setting, Action<bool> blurSetter, Action<List<string>> trackListUpdater)
         {
             _setting = setting;
+            _blurSetter = blurSetter;
+            _trackListUpdater = trackListUpdater;
 
-            _inputDelay = setting.InputDelay;
-            _savesRecents = setting.SavesRecents;
-            _ownedDlcs = setting.OwnedDlcs.ConvertAll(x => x);
+            _inputDelay = _setting.InputDelay;
+            _savesRecents = _setting.SavesRecents;
+            _ownedDlcs = _setting.OwnedDlcs.ConvertAll(x => x);
 
             UpdateInputDelayText();
-
-            _dockPanel = dockPanel;
         }
 
         public void Detect()
@@ -67,12 +68,12 @@ namespace DjmaxRandomSelectorV.ViewModels
             _setting.SavesRecents = _savesRecents;
             _setting.OwnedDlcs = _ownedDlcs;
 
-            Manager.SaveSetting(_setting);
+            _setting.Export();
             if (_updatesTrackList)
             {
-                Manager.UpdateTrackList(_ownedDlcs);
+                _trackListUpdater.Invoke(_ownedDlcs);
             }
-            Selector.IsFilterChanged = true;
+            
             Close();
         }
 
@@ -83,7 +84,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void Close()
         {
             TryCloseAsync();
-            _dockPanel.Effect = null;
+            _blurSetter.Invoke(false);
         }
         #endregion
 

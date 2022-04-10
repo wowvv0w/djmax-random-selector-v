@@ -1,5 +1,4 @@
-﻿
-namespace DjmaxRandomSelectorV.Models
+﻿namespace DjmaxRandomSelectorV.DataTypes
 {
     public class Music
     {

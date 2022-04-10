@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DjmaxRandomSelectorV.Models
+namespace DjmaxRandomSelectorV.DataTypes
 {
     public class Track
     {

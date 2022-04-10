@@ -11,7 +11,8 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         SnapsToDevicePixels="True"
-        cal:Message.Attach="[Event Loaded] = [Action AddHotKey($view)];[Event ContentRendered] = [Action SetPos($view)];[Event Closing] = [Action CloseEvent($view)]"
+        cal:Message.Attach="[Event Loaded] = [Action ShowEvent($view)];
+                            [Event Closing] = [Action CloseEvent($view)]"
         Icon="pack://application:,,,/Images/icon.png">
     <Window.Background>
         <LinearGradientBrush StartPoint="0.987,0.5" EndPoint="1,0.5" SpreadMethod="Repeat">
@@ -51,7 +52,7 @@
                 <Grid Style="{x:Null}"
                       Background="#7F584E46"
                       Height="90">
-                    <ContentControl x:Name="AddonViewModel"
+                    <ContentControl x:Name="AddonPanel"
                                     Height="55"/>
                 </Grid>
                 <Grid>

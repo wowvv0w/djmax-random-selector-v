@@ -11,19 +11,19 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class InventoryViewModel : Screen
     {
-        private Setting _setting;
-        private DockPanel _dockPanel;
+        private readonly Setting _setting;
+        private readonly Action<bool> _blurSetter;
 
         public PresetViewModel PresetViewModel { get; set; }
         public FavoriteViewModel FavoriteViewModel { get; set; }
 
-        public InventoryViewModel(Setting setting, DockPanel dockPanel, Action<string> filterReloader)
+        public InventoryViewModel(Setting setting, List<string> titleList, Action<bool> blurSetter, Action<string> filterReloader, Action<bool> setUpdated)
         {
             _setting = setting;
-            _dockPanel = dockPanel;
+            _blurSetter = blurSetter;
 
             PresetViewModel = new PresetViewModel(filterReloader);
-            FavoriteViewModel = new FavoriteViewModel(_setting.Favorite);
+            FavoriteViewModel = new FavoriteViewModel(_setting.Favorite, titleList, setUpdated);
         }
 
         #region Tab
@@ -53,9 +53,9 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void OK()
         {
-            Manager.SaveSetting(_setting);
+            _setting.Export();
             TryCloseAsync();
-            _dockPanel.Effect = null;
+            _blurSetter.Invoke(false);
         }
     }
 }
