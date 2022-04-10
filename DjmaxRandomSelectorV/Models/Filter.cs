@@ -2,41 +2,87 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DjmaxRandomSelectorV.Models
 {
     public class Filter
     {
         #region Fields
-        private readonly Func<string, string> presetPath = name => $"Data/Preset/{name}.json";
+        private List<string> buttonTunes;
+        private List<string> difficulties;
+        private List<string> categories;
+        private int[] levels;
+        private List<string> recents;
+        private bool includesFavorite;
+        private bool isUpdated;
         #endregion
 
         #region Properties
-        public List<string> ButtonTunes { get; set; }
-        public List<string> Difficulties { get; set; }
-        public List<string> Categories { get; set; }
-        public int[] Levels { get; set; } // 1 ~ 15
-        public List<string> Recents { get; set; }
-        public bool IncludesFavorite { get; set; }
+        public List<string> ButtonTunes
+        {
+            get { return buttonTunes; }
+            set { buttonTunes = value; }
+        }
+        public List<string> Difficulties
+        {
+            get { return difficulties; }
+            set { difficulties = value; }
+        }
+        public List<string> Categories
+        {
+            get { return categories; }
+            set { categories = value; }
+        }
+        public int[] Levels
+        {
+            get { return levels; }
+            set { levels = value; }
+        }
+        public List<string> Recents
+        {
+            get { return recents; }
+            set { recents = value; }
+        }
+        public bool IncludesFavorite
+        {
+            get { return includesFavorite; }
+            set { includesFavorite = value; }
+        }
+        [JsonIgnore]
+        public bool IsUpdated
+        {
+            get { return isUpdated; }
+            set { isUpdated = value; }
+        }
         #endregion
 
         #region Constants
         private const string CurrentFilterPath = "Data/CurrentFilter.json";
         #endregion
 
+        public Filter()
+        {
+            isUpdated = true;
+        }
+
+        #region Lambda Expressions
+        private readonly Func<string, string> presetPath = name => $"Data/Preset/{name}.json";
+        #endregion
+
         #region Methods
         public void UpdateRecents(int titleCount, int maxCount)
         {
-            int recentsCount = Recents.Count;
+            int recentsCount = recents.Count;
             if (recentsCount > maxCount)
             {
-                Recents.RemoveRange(0, recentsCount - maxCount);
+                recents.RemoveRange(0, recentsCount - maxCount);
             }
             else if (recentsCount >= titleCount)
             {
                 try
                 {
-                    Recents.RemoveRange(0, recentsCount - titleCount + 1);
+                    recents.RemoveRange(0, recentsCount - titleCount + 1);
                 }
                 catch (ArgumentException)
                 {

@@ -73,7 +73,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 _trackListUpdater.Invoke(_ownedDlcs);
             }
-            Selector.IsFilterChanged = true;
+            
             Close();
         }
 

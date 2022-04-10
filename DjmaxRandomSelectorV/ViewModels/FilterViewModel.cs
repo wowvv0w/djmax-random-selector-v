@@ -41,7 +41,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 filter.Remove(value);
             }
-            Selector.IsFilterChanged = true;
+            Filter.IsUpdated = true;
         }
         public void ReloadFilter(string presetName)
         {
@@ -49,11 +49,11 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 Filter.Import(presetName);
                 NotifyOfPropertyChange(string.Empty);
-                Selector.IsFilterChanged = true;
                 MessageBox.Show($"Preset {presetName} has been applied.",
                                 "Filter",
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Information);
+                Filter.IsUpdated = true;
             }
             catch (FileNotFoundException)
             {
@@ -266,7 +266,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 Filter.Levels[0] = value;
                 NotifyOfPropertyChange(() => LevelMin);
                 UpdateLevelIndicators();
-                Selector.IsFilterChanged = true;
+                Filter.IsUpdated = true;
             }
         }
         public int LevelMax
@@ -277,7 +277,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 Filter.Levels[1] = value;
                 NotifyOfPropertyChange(() => LevelMax);
                 UpdateLevelIndicators();
-                Selector.IsFilterChanged = true;
+                Filter.IsUpdated = true;
             }
         }
         #endregion
@@ -479,7 +479,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 Filter.IncludesFavorite = value;
                 NotifyOfPropertyChange(() => CategoryFavorite);
-                Selector.IsFilterChanged = true;
+                Filter.IsUpdated = true;
             }
         }
         #endregion

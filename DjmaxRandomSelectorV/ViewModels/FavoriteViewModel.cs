@@ -12,16 +12,20 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class FavoriteViewModel : Screen
     {
-        private bool _searchesSuggestion = true;
-        private List<string> _favorite;
-        private List<string> _titleList;
+        private bool searchesSuggestion;
+        private readonly List<string> favorite;
+        private readonly List<string> titleList;
+        private readonly Action<bool> setUpdated;
+
         public BindableCollection<string> FavoriteItems { get; set; }
         public BindableCollection<string> TitleSuggestions { get; set; }
 
-        public FavoriteViewModel(List<string> favorite, List<string> titleList)
+        public FavoriteViewModel(List<string> favorite, List<string> titleList, Action<bool> setUpdated)
         {
-            _favorite = favorite;
-            _titleList = titleList;
+            searchesSuggestion = true;
+            this.favorite = favorite;
+            this.titleList = titleList;
+            this.setUpdated = setUpdated;
 
             FavoriteItems = new BindableCollection<string>(favorite);
 
@@ -38,7 +42,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 _searchBox = value;
                 NotifyOfPropertyChange(() => SearchBox);
-                if (_searchesSuggestion) { SearchTitle(); }
+                if (searchesSuggestion) { SearchTitle(); }
             }
         }
 
@@ -54,7 +58,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             OpensSuggestionBox = true;
 
-            var titles = from title in _titleList
+            var titles = from title in titleList
                          where title.StartsWith(SearchBox, true, null)
                          select title;
             titles = titles.Count() < 8 ? titles.Take(titles.Count()) : titles.Take(8);
@@ -81,19 +85,19 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void SelectSuggestion(string title)
         {
-            _searchesSuggestion = false;
+            searchesSuggestion = false;
 
             SearchBox = title;
             OpensSuggestionBox = false;
 
-            _searchesSuggestion = true;
+            searchesSuggestion = true;
         }
         #endregion
 
         #region Favorite Item Adjustment
         public void AddItem()
         {
-            if (!_titleList.Any(x => x.Equals(SearchBox)))
+            if (!titleList.Any(x => x.Equals(SearchBox)))
             {
                 MessageBox.Show("Does not exist.",
                     "Favorite Error",
@@ -111,16 +115,16 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
 
             FavoriteItems.Add(SearchBox);
-            _favorite.Add(SearchBox);
+            favorite.Add(SearchBox);
 
+            setUpdated.Invoke(true);
             SearchBox = string.Empty;
-            Selector.IsFilterChanged = true;
         }
         public void RemoveItem(string child)
         {
             FavoriteItems.Remove(child);
-            _favorite.Remove(child);
-            Selector.IsFilterChanged = true;
+            favorite.Remove(child);
+            setUpdated.Invoke(true);
         }
         #endregion
     }

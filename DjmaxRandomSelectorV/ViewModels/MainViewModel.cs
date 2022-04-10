@@ -286,7 +286,8 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void ShowInventory()
         {
             SetBlurEffect(true);
-            _windowManager.ShowDialogAsync(new InventoryViewModel(setting, selector.GetTitleList(), SetBlurEffect, FilterViewModel.ReloadFilter));
+            Action<bool> setUpdated = value => filter.IsUpdated = value;
+            _windowManager.ShowDialogAsync(new InventoryViewModel(setting, selector.GetTitleList(), SetBlurEffect, FilterViewModel.ReloadFilter, setUpdated));
         }
         #endregion
 
@@ -344,7 +345,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                     ModeText = ONLINE;
                     break;
             }
-            Selector.IsFilterChanged = true;
         }
         public void SwitchMode()
         {
@@ -421,7 +421,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                     LevelText = MASTER;
                     break;
             }
-            Selector.IsFilterChanged = true;
         }
         public void PrevLevel()
         {

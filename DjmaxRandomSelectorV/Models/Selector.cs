@@ -25,10 +25,10 @@ namespace DjmaxRandomSelectorV.Models
         private IProvider provider;
         private int titleCount;
         private bool isRunning;
+        private bool isUpdated;
         #endregion
 
         #region Properties
-        public static bool IsFilterChanged { get; set; } = true;
         public bool IsRunning
         {
             get { return isRunning; }
@@ -44,6 +44,7 @@ namespace DjmaxRandomSelectorV.Models
         public Selector()
         {
             isRunning = false;
+            isUpdated = true;
         }
 
         public Music Start(Filter filter, Setting setting)
@@ -53,12 +54,13 @@ namespace DjmaxRandomSelectorV.Models
             List<string> favorite = filter.IncludesFavorite ? setting.Favorite : new List<string>();
             List<string> recents = filter.Recents;
 
-            if (IsFilterChanged)
+            if (filter.IsUpdated || this.isUpdated)
             {
                 Sift(filter, favorite);
                 SetTitleCount();
                 recents.Clear();
-                IsFilterChanged = false;
+                filter.IsUpdated = false;
+                this.isUpdated = false;
             }
             else
             {
@@ -92,6 +94,7 @@ namespace DjmaxRandomSelectorV.Models
 
             SetSifter(setting.Mode, setting.Level);
             SetProvider(setting.Mode, setting.Aider);
+            isUpdated = true;
         }
         private void SetSifter(Mode mode, Level level)
         {
@@ -181,6 +184,7 @@ namespace DjmaxRandomSelectorV.Models
                             select track;
 
             this.trackList = trackList.ToList();
+            isUpdated = true;
         }
         private List<string> CreateTitleFilter(List<string> ownedDlcs)
         {

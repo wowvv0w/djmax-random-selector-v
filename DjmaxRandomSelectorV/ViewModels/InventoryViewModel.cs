@@ -17,13 +17,13 @@ namespace DjmaxRandomSelectorV.ViewModels
         public PresetViewModel PresetViewModel { get; set; }
         public FavoriteViewModel FavoriteViewModel { get; set; }
 
-        public InventoryViewModel(Setting setting, List<string> titleList, Action<bool> blurSetter, Action<string> filterReloader)
+        public InventoryViewModel(Setting setting, List<string> titleList, Action<bool> blurSetter, Action<string> filterReloader, Action<bool> setUpdated)
         {
             _setting = setting;
             _blurSetter = blurSetter;
 
             PresetViewModel = new PresetViewModel(filterReloader);
-            FavoriteViewModel = new FavoriteViewModel(_setting.Favorite, titleList);
+            FavoriteViewModel = new FavoriteViewModel(_setting.Favorite, titleList, setUpdated);
         }
 
         #region Tab
