@@ -76,15 +76,25 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
+                        <Grid.Resources>
+                            <Style TargetType="Button" BasedOn="{StaticResource SettingWindowButton}">
+                                <Setter Property="BorderThickness" Value="2"/>
+                                <Setter Property="Border.CornerRadius" Value="4"/>
+                                <Setter Property="FontSize" Value="10"/>
+                                <Setter Property="Margin" Value="0 0 0 -5"/>
+                                <Setter Property="Width" Value="50"/>
+                                <Setter Property="Height" Value="20"/>
+                            </Style>
+                        </Grid.Resources>
                         <TextBlock Text="TRACK LIST SETTING"
                                    Foreground="#1FFFFFFF"
                                    FontFamily="{StaticResource Lato}"
                                    FontSize="23"
-                                   Margin="0,0,0,-5" Width="297"
+                                   Margin="0,0,0,-5"
                                    Grid.Column="0"/>
                         <Button x:Name="Detect"
-                                Grid.Column="2"
-                                Style="{StaticResource SettingDetectButton}"/>
+                                Content="DETECT"
+                                Grid.Column="2"/>
                     </Grid>
                   
                     <Grid>
@@ -214,6 +224,14 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="GIRLS' FRONTLINE"/>
                         <ToggleButton x:Name="SettingGF"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="MUSE DASH"/>
+                        <ToggleButton x:Name="SettingMD"/>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>

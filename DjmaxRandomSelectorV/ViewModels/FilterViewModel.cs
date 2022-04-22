@@ -181,6 +181,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string _ESTI = "ESTI";
         private const string _GC = "GC";
         private const string _GF = "GF";
+        private const string _MD = "MD";
         private const string _NXN = "NXN";
         #endregion
         #region ButtonTunes
@@ -460,6 +461,15 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 UpdateFilter(value, Filter.Categories, _GF);
                 NotifyOfPropertyChange(() => CategoryGF);
+            }
+        }
+        public bool CategoryMD
+        {
+            get { return CheckFilter(Filter.Categories, _MD); }
+            set
+            {
+                UpdateFilter(value, Filter.Categories, _MD);
+                NotifyOfPropertyChange(() => CategoryMD);
             }
         }
         public bool CategoryNXN

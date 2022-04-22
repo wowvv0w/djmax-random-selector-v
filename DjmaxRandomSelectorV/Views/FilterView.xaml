@@ -407,26 +407,18 @@
                                   Foreground="{StaticResource FgFavorite}">
                     </ToggleButton>
                 </UniformGrid>
-                <Grid Grid.Row="2"
-                      Grid.Column="1"
-                      Background="#56000000"
-                      Margin="0,5,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="COLLABORATION"
-                               FontFamily="{StaticResource Bebas Neue}"
-                               FontSize="20"
-                               HorizontalAlignment="Center"
-                               Margin="0,15">
-                    </TextBlock>
-                    <UniformGrid Columns="4"
-                                 Grid.Column="1"
-                                 Grid.ColumnSpan="4">
+                <Border Grid.Row="2"
+                        Grid.Column="1"
+                        Background="#56000000"
+                        Margin="0,5,0,0"
+                        Padding="0 2">
+                    <UniformGrid Columns="5"
+                                 Grid.ColumnSpan="5">
+                        <TextBlock Text="COLLABORATION"
+                                   FontFamily="{StaticResource Bebas Neue}"
+                                   FontSize="20"
+                                   HorizontalAlignment="Center">
+                        </TextBlock>
                         <ToggleButton x:Name="CategoryGG"
                                       Content="GUILTY GEAR"
                                       Style="{StaticResource CollaborationButton}"
@@ -462,13 +454,18 @@
                                       Style="{StaticResource CollaborationButton}"
                                       Background="{StaticResource BgGirlsFrontline}">
                         </ToggleButton>
+                        <ToggleButton x:Name="CategoryMD"
+                                      Content="MUSE DASH"
+                                      Style="{StaticResource CollaborationButton}"
+                                      Background="Magenta">
+                        </ToggleButton>
                         <ToggleButton x:Name="CategoryNXN"
                                       Content="NEXON"
                                       Style="{StaticResource CollaborationButton}"
                                       Background="{StaticResource BgNexon}">
                         </ToggleButton>
                     </UniformGrid>
-                </Grid>
+                </Border>
             </Grid>
         </Border>
         <!--#endregion-->

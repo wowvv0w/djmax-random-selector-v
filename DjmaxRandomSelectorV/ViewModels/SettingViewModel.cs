@@ -162,6 +162,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string _ESTI = "ESTI";
         private const string _GC = "GC";
         private const string _GF = "GF";
+        private const string _MD = "MD";
         private const string _NXN = "NXN";
         #endregion
         #region Setting
@@ -307,6 +308,15 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 UpdateOwnedDlcs(value, _GF);
                 NotifyOfPropertyChange(() => SettingGF);
+            }
+        }
+        public bool SettingMD
+        {
+            get { return CheckOwnedDlcs(_MD); }
+            set
+            {
+                UpdateOwnedDlcs(value, _MD);
+                NotifyOfPropertyChange(() => SettingMD);
             }
         }
         public bool SettingNXN
