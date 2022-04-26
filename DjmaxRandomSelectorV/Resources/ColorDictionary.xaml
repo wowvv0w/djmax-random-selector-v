@@ -162,4 +162,8 @@
         <GradientStop Color="#00A1E1" Offset="0.5"/>
         <GradientStop Color="#C3D600" Offset="0.51"/>
     </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgMuseDash" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#E2CE83" Offset="0.25"/>
+        <GradientStop Color="#A10056" Offset="0.75"/>
+    </LinearGradientBrush>
 </ResourceDictionary>

@@ -457,7 +457,7 @@
                         <ToggleButton x:Name="CategoryMD"
                                       Content="MUSE DASH"
                                       Style="{StaticResource CollaborationButton}"
-                                      Background="Magenta">
+                                      Background="{StaticResource BgMuseDash}">
                         </ToggleButton>
                         <ToggleButton x:Name="CategoryNXN"
                                       Content="NEXON"
