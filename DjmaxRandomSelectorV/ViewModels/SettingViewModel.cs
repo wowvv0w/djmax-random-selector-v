@@ -22,7 +22,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private bool _savesRecents;
         private List<string> _ownedDlcs;
 
-        private int dlcCount;
+        private int _dlcCount;
 
         private bool _updatesTrackList = false;
 
@@ -40,26 +40,56 @@ namespace DjmaxRandomSelectorV.ViewModels
             UpdateInputDelayText();
         }
 
+        #region Detect DLCs
         public void Detect()
         {
             SettingBS = SettingCE = SettingCHU = SettingCY = SettingDM = SettingES = SettingESTI= SettingGC = SettingGF
-                = SettingNXN = SettingP3 = SettingT1 = SettingT2 = SettingT3 = SettingTR = SettingVE = SettingVE2 = false;
+                = SettingMD = SettingNXN = SettingP3 = SettingT1 = SettingT2 = SettingT3 = SettingTR = SettingVE = SettingVE2 = false;
 
             string steamPath = (string)Registry.GetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Valve\\Steam", "InstallPath", null);
             
             DirectoryInfo libraryPath = new DirectoryInfo(steamPath + "\\appcache\\librarycache");
 
-            dlcCount = 0;
+            _dlcCount = 0;
             foreach (FileInfo file in libraryPath.GetFiles())
             {
                 if (file.Extension.ToLower().CompareTo(".jpg") == 0)
                 {
-                    if (FindDLCs(file.Name.Substring(0, file.Name.Length - 11)) == true) dlcCount++;
+                    if (FindDLCs(file.Name.Substring(0, file.Name.Length - 11)) == true) _dlcCount++;
                 }
             }
 
-            MessageBox.Show(dlcCount + " DLCs detected.", "Notice");
+            MessageBox.Show(_dlcCount + " DLCs detected.", "Notice");
         }
+
+        public bool FindDLCs(string name)
+        {
+            switch (name)
+            {
+                case "1568680": SettingP3 = true; break;
+                case "1271670": SettingTR = true; break;
+                case "1300210": SettingCE = true; break;
+                case "1300211": SettingBS = true; break;
+                case "1080550": SettingVE = true; break;
+                case "1843020": SettingVE2 = true; break;
+                case "1238760": SettingES = true; break;
+                case "1386610": SettingT1 = true; break;
+                case "1386611": SettingT2 = true; break;
+                case "1386612": SettingT3 = true; break;
+                case "1472190": SettingCHU = true; break;
+                case "1356221": SettingCY = true; break;
+                case "1356220": SettingDM = true; break;
+                case "1664550": SettingESTI = true; break;
+                case "1271671": SettingGC = true; break;
+                case "1472191": SettingGF = true; break;
+                case "1782170": SettingNXN = true; break;
+                case "1958170": SettingMD = true; break;
+                default: return false;
+            }
+
+            return true;
+        }
+        #endregion
 
         #region On Exit
         public void Apply()
@@ -327,33 +357,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                 UpdateOwnedDlcs(value, _NXN);
                 NotifyOfPropertyChange(() => SettingNXN);
             }
-        }
-        public bool FindDLCs(string name)
-        {
-            bool hasDLC = true;
-            switch (name)
-            {
-                case "1568680": SettingP3 = true; break;
-                case "1271670": SettingTR = true; break;
-                case "1300210": SettingCE = true; break;
-                case "1300211": SettingBS = true; break;
-                case "1080550": SettingVE = true; break;
-                case "1843020": SettingVE2 = true; break;
-                case "1238760": SettingES = true; break;
-                case "1386610": SettingT1 = true; break;
-                case "1386611": SettingT2 = true; break;
-                case "1386612": SettingT3 = true; break;
-                case "1472190": SettingCHU = true; break;
-                case "1356221": SettingCY = true; break;
-                case "1356220": SettingDM = true; break;
-                case "1664550": SettingESTI = true; break;
-                case "1271671": SettingGC = true; break;
-                case "1472191": SettingGF = true; break;
-                case "1782170": SettingNXN = true; break;
-                default: hasDLC = false; break;
-            }
-
-            return hasDLC;
         }
         #endregion
         #endregion
