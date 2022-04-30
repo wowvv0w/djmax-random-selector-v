@@ -62,7 +62,7 @@ namespace DjmaxRandomSelectorV.DataTypes
                 if (isAlphabet)
                     inputInitial = initial;
                 else
-                    inputInitial = 'a';
+                    inputInitial = 'A';
 
                 inputVertical = whereIsIt;
             }
@@ -71,10 +71,11 @@ namespace DjmaxRandomSelectorV.DataTypes
                 if (isAlphabet)
                     inputInitial = (char)(initial + 1);
                 else
-                    inputInitial = 'a';
+                    inputInitial = 'A';
 
                 inputVertical = count - whereIsIt;
             }
+            inputInitial = char.ToUpper(inputInitial);
 
             int inputRight;
             char inputButton;
@@ -119,7 +120,7 @@ namespace DjmaxRandomSelectorV.DataTypes
                 direction = UpArrow;
 
             Input(PageUp);
-            Input((byte)initial);
+            Input((byte)inputInitial);
             if (!isAlphabet && isForward)
             {
                 Input(PageUp);
