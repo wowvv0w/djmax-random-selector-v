@@ -65,6 +65,10 @@ namespace DjmaxRandomSelectorV.ViewModels
                     selector.DownloadAllTrackList();
                     setting.AllTrackVersion = _lastAllTrackVer;
                     setting.Export();
+                    MessageBox.Show($"All track list is updated to the version {_lastAllTrackVer}.",
+                        "DJMAX Random Selector V",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
                 }
             }
             catch (Exception e)
