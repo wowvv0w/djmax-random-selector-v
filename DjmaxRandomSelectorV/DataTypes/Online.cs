@@ -9,12 +9,14 @@ namespace DjmaxRandomSelectorV.DataTypes
 {
     public class Online : ISifter
     {
-        public List<Music> Sift(List<Track> trackList, List<string> styles, int[] levels)
+        public List<Music> Sift(List<Track> trackList, List<string> styles, int[] levels, int[] scLevels)
         {
             var musicList = from track in trackList
                             where track.Patterns.Any(x => styles.Contains(x.Key)
-                                                    && x.Value >= levels[0]
-                                                    && x.Value <= levels[1])
+                                                    && (
+                                                        (!x.Key.Equals("SC") && x.Value >= levels[0] && x.Value <= levels[1])
+                                                        || (x.Key.Equals("SC") && x.Value >= scLevels[0] && x.Value <= scLevels[1])
+                                                       ))
                             select new Music
                             {
                                 Title = track.Title,

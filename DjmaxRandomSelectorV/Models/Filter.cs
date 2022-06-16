@@ -13,6 +13,7 @@ namespace DjmaxRandomSelectorV.Models
         private List<string> difficulties;
         private List<string> categories;
         private int[] levels;
+        private int[] scLevels;
         private List<string> recents;
         private bool includesFavorite;
         private bool isUpdated;
@@ -38,6 +39,11 @@ namespace DjmaxRandomSelectorV.Models
         {
             get { return levels; }
             set { levels = value; }
+        }
+        public int[] ScLevels
+        {
+            get { return scLevels; }
+            set { scLevels = value; }
         }
         public List<string> Recents
         {
@@ -104,6 +110,7 @@ namespace DjmaxRandomSelectorV.Models
                     Difficulties = filter.Difficulties;
                     Categories = filter.Categories;
                     Levels = filter.Levels;
+                    ScLevels = filter.ScLevels;
                     Recents = filter.Recents;
                     IncludesFavorite = filter.IncludesFavorite;
                 }
@@ -116,6 +123,7 @@ namespace DjmaxRandomSelectorV.Models
                     Difficulties = new List<string>();
                     Categories = new List<string>();
                     Levels = new int[2] { 1, 15 };
+                    ScLevels = new int[2] { 1, 15 };
                     Recents = new List<string>();
                     IncludesFavorite = false;
                 }

@@ -233,7 +233,7 @@ namespace DjmaxRandomSelectorV.Models
                                 || favorite.Contains(track.Title)
                             select track;
 
-            musicList =  sifter.Sift(trackList.ToList(), styles, filter.Levels);
+            musicList =  sifter.Sift(trackList.ToList(), styles, filter.Levels, filter.ScLevels);
         }
         public Music Pick(List<Music> musicList)
         {

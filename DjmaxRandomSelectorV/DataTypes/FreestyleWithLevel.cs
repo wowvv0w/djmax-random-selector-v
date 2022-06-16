@@ -24,7 +24,7 @@ namespace DjmaxRandomSelectorV.DataTypes
             }
         }
 
-        public List<Music> Sift(List<Track> trackList, List<string> styles, int[] levels)
+        public List<Music> Sift(List<Track> trackList, List<string> styles, int[] levels, int[] scLevels)
         {
             var buttonTunes = new string[4] { "4B", "5B", "6B", "8B" };
 
@@ -33,8 +33,10 @@ namespace DjmaxRandomSelectorV.DataTypes
                             let _styles = styles.FindAll(x => x.Contains(bt))
                             let _patterns = from pattern in track.Patterns
                                             where _styles.Contains(pattern.Key)
-                                            && pattern.Value >= levels[0]
-                                            && pattern.Value <= levels[1]
+                                            && (
+                                                (!pattern.Key.Equals("SC") && pattern.Value >= levels[0] && pattern.Value <= levels[1])
+                                                || (pattern.Key.Equals("SC") && pattern.Value >= scLevels[0] && pattern.Value <= scLevels[1])
+                                               )
                                             select pattern
                             where _patterns.Count() > 0
                             let _pattern = _isBeginner ? _patterns.First() : _patterns.Last()

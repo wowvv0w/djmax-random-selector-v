@@ -95,6 +95,34 @@ namespace DjmaxRandomSelectorV.ViewModels
                 LevelMax--;
             }
         }
+        public void IncreaseScLevelMin()
+        {
+            if (ScLevelMin < 15 && ScLevelMin < ScLevelMax)
+            {
+                ScLevelMin++;
+            }
+        }
+        public void DecreaseScLevelMin()
+        {
+            if (ScLevelMin > 1)
+            {
+                ScLevelMin--;
+            }
+        }
+        public void IncreaseScLevelMax()
+        {
+            if (ScLevelMax < 15)
+            {
+                ScLevelMax++;
+            }
+        }
+        public void DecreaseScLevelMax()
+        {
+            if (ScLevelMax > 1 && ScLevelMax > ScLevelMin)
+            {
+                ScLevelMax--;
+            }
+        }
         #endregion
 
         #region Level Indicator
@@ -116,6 +144,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
         public List<LevelIndicator> LevelIndicators { get; set; }
+            = new List<LevelIndicator>();
+        public List<LevelIndicator> ScLevelIndicators { get; set; }
             = new List<LevelIndicator>();
 
         public void UpdateLevelIndicators()
@@ -277,6 +307,28 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 Filter.Levels[1] = value;
                 NotifyOfPropertyChange(() => LevelMax);
+                UpdateLevelIndicators();
+                Filter.IsUpdated = true;
+            }
+        }
+        public int ScLevelMin
+        {
+            get { return Filter.ScLevels[0]; }
+            set
+            {
+                Filter.ScLevels[0] = value;
+                NotifyOfPropertyChange(() => ScLevelMin);
+                UpdateLevelIndicators();
+                Filter.IsUpdated = true;
+            }
+        }
+        public int ScLevelMax
+        {
+            get { return Filter.ScLevels[1]; }
+            set
+            {
+                Filter.ScLevels[1] = value;
+                NotifyOfPropertyChange(() => ScLevelMax);
                 UpdateLevelIndicators();
                 Filter.IsUpdated = true;
             }

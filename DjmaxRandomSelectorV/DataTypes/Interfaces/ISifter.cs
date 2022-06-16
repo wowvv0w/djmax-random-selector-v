@@ -8,6 +8,6 @@ namespace DjmaxRandomSelectorV.DataTypes.Interfaces
 {
     public interface ISifter
     {
-        List<Music> Sift(List<Track> trackList, List<string> styles, int[] levels);
+        List<Music> Sift(List<Track> trackList, List<string> styles, int[] levels, int[] scLevels);
     }
 }
