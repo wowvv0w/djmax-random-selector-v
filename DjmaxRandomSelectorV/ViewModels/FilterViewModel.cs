@@ -22,8 +22,10 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 // DO NOT use index 0
                 LevelIndicators.Add(new LevelIndicator());
+                ScLevelIndicators.Add(new LevelIndicator());
             }
             UpdateLevelIndicators();
+            UpdateScLevelIndicators();
         }
 
         #region Filter Updater
@@ -161,6 +163,21 @@ namespace DjmaxRandomSelectorV.ViewModels
             for (int i = LevelMax + 1; i <= 15; i++)
             {
                 LevelIndicators[i].Value = false;
+            }
+        }
+        public void UpdateScLevelIndicators()
+        {
+            for (int i = 1; i < ScLevelMin; i++)
+            {
+                ScLevelIndicators[i].Value = false;
+            }
+            for (int i = ScLevelMin; i <= ScLevelMax; i++)
+            {
+                ScLevelIndicators[i].Value = true;
+            }
+            for (int i = ScLevelMax + 1; i <= 15; i++)
+            {
+                ScLevelIndicators[i].Value = false;
             }
         }
         #endregion
@@ -318,7 +335,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 Filter.ScLevels[0] = value;
                 NotifyOfPropertyChange(() => ScLevelMin);
-                UpdateLevelIndicators();
+                UpdateScLevelIndicators();
                 Filter.IsUpdated = true;
             }
         }
@@ -329,7 +346,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 Filter.ScLevels[1] = value;
                 NotifyOfPropertyChange(() => ScLevelMax);
-                UpdateLevelIndicators();
+                UpdateScLevelIndicators();
                 Filter.IsUpdated = true;
             }
         }
