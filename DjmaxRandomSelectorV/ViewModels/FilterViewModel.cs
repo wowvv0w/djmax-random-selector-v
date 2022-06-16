@@ -270,31 +270,15 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         #endregion
         #region Difficulty
-        public bool DifficultyNM
+        public bool Difficulty
         {
             get { return CheckFilter(Filter.Difficulties, _NM); }
             set
             {
                 UpdateFilter(value, Filter.Difficulties, _NM);
-                NotifyOfPropertyChange(() => DifficultyNM);
-            }
-        }
-        public bool DifficultyHD
-        {
-            get { return CheckFilter(Filter.Difficulties, _HD); }
-            set
-            {
                 UpdateFilter(value, Filter.Difficulties, _HD);
-                NotifyOfPropertyChange(() => DifficultyHD);
-            }
-        }
-        public bool DifficultyMX
-        {
-            get { return CheckFilter(Filter.Difficulties, _MX); }
-            set
-            {
                 UpdateFilter(value, Filter.Difficulties, _MX);
-                NotifyOfPropertyChange(() => DifficultyMX);
+                NotifyOfPropertyChange(() => Difficulty);
             }
         }
         public bool DifficultySC

@@ -177,6 +177,14 @@
                            IsEnabled="{Binding LevelIndicators[14].Value}"/>
                     <Image Style="{StaticResource LevelIndicatorRed}"
                            IsEnabled="{Binding LevelIndicators[15].Value}"/>
+                    <ToggleButton x:Name="Difficulty"
+                                  Width="50"
+                                  Height="18"
+                                  Margin="16 0"
+                                  IsChecked="True"
+                                  Style="{StaticResource DifficultyButton}"
+                                  Background="{StaticResource Normal}">
+                    </ToggleButton>
                 </StackPanel>
                 <Grid Grid.Row="2"
                       Grid.Column="1"
@@ -293,6 +301,14 @@
                            IsEnabled="{Binding ScLevelIndicators[14].Value}"/>
                     <Image Style="{StaticResource LevelIndicatorRed}"
                            IsEnabled="{Binding ScLevelIndicators[15].Value}"/>
+                    <ToggleButton x:Name="DifficultySC"
+                                  Width="50"
+                                  Height="18"
+                                  Margin="16 0"
+                                  IsChecked="True"
+                                  Style="{StaticResource DifficultyButton}"
+                                  Background="{StaticResource SC}">
+                    </ToggleButton>
                 </StackPanel>
                 <Grid Grid.Row="4"
                       Grid.Column="1"

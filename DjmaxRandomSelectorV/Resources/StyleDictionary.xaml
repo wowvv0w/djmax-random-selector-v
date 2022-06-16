@@ -86,26 +86,33 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Border BorderBrush="{TemplateBinding Background}"
+                    <Border x:Name="OuterBorder"
+                            BorderBrush="#5E5E5E"
                             BorderThickness="2">
                         <Border x:Name="Border"
                                 Background="Transparent"
                                 Margin="-1">
                             <TextBlock x:Name="TextBlock"
-                                   Text="{TemplateBinding Content}"
-                                   Foreground="{TemplateBinding Background}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
+                                       Text="OFF"
+                                       Foreground="#5E5E5E"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
                         </Border>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="BorderBrush"
+                                    TargetName="OuterBorder"
+                                    Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"/>
                             <Setter Property="Background"
                                     TargetName="Border"
                                     Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"/>
                             <Setter Property="Foreground"
                                     TargetName="TextBlock"
                                     Value="#242526"/>
+                            <Setter Property="Text"
+                                    TargetName="TextBlock"
+                                    Value="ON"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
