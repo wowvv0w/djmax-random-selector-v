@@ -14,8 +14,8 @@ namespace DjmaxRandomSelectorV.DataTypes
             var musicList = from track in trackList
                             where track.Patterns.Any(x => styles.Contains(x.Key)
                                                     && (
-                                                        (!x.Key.Equals("SC") && x.Value >= levels[0] && x.Value <= levels[1])
-                                                        || (x.Key.Equals("SC") && x.Value >= scLevels[0] && x.Value <= scLevels[1])
+                                                        (!x.Key.Contains("SC") && x.Value >= levels[0] && x.Value <= levels[1])
+                                                        || (x.Key.Contains("SC") && x.Value >= scLevels[0] && x.Value <= scLevels[1])
                                                        ))
                             select new Music
                             {

@@ -15,8 +15,8 @@ namespace DjmaxRandomSelectorV.DataTypes
                             from pattern in track.Patterns
                             where styles.Contains(pattern.Key)
                             && (
-                                (!pattern.Key.Equals("SC") && pattern.Value >= levels[0] && pattern.Value <= levels[1])
-                                || (pattern.Key.Equals("SC") && pattern.Value >= scLevels[0] && pattern.Value <= scLevels[1])
+                                (!pattern.Key.Contains("SC") && pattern.Value >= levels[0] && pattern.Value <= levels[1])
+                                || (pattern.Key.Contains("SC") && pattern.Value >= scLevels[0] && pattern.Value <= scLevels[1])
                                )
                             select new Music
                             {
