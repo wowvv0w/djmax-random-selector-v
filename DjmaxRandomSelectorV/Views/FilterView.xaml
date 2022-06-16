@@ -137,55 +137,16 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="DIFFICULTY"
                            Grid.Column="1"
-                           Grid.ColumnSpan="4"
-                           Margin="0 0 0 5"/>
-                <ToggleButton x:Name="DifficultyNM"
-                              Content="NORMAL"
-                              Grid.Row="1"
-                              Grid.Column="1"
-                              Margin="0,0,9,0"
-                              Style="{StaticResource DifficultyButton}"
-                              Background="{StaticResource Normal}">
-                </ToggleButton>
-                <ToggleButton x:Name="DifficultyHD"
-                              Content="HARD"
-                              Grid.Row="1"
-                              Grid.Column="2"
-                              Margin="3,0,6,0"
-                              Style="{StaticResource DifficultyButton}"
-                              Background="{StaticResource Hard}">
-                    <ToggleButton.Resources>
-                    </ToggleButton.Resources>
-                </ToggleButton>
-                <ToggleButton x:Name="DifficultyMX"
-                              Content="MAXIMUM"
-                              Grid.Row="1"
-                              Grid.Column="3"
-                              Margin="6,0,3,0"
-                              Style="{StaticResource DifficultyButton}"
-                              Background="{StaticResource Maximum}">
-                    <ToggleButton.Resources>
-                    </ToggleButton.Resources>
-                </ToggleButton>
-                <ToggleButton x:Name="DifficultySC"
-                              Content="SC"
-                              Grid.Row="1"
-                              Grid.Column="4"
-                              Margin="9,0,0,0"
-                              Style="{StaticResource DifficultyButton}"
-                              Background="{StaticResource SC}">
-                    <ToggleButton.Resources>
-                    </ToggleButton.Resources>
-                </ToggleButton>
-
-                <StackPanel Grid.Row="2"
+                           Grid.ColumnSpan="4"/>
+                <StackPanel Grid.Row="1"
                             Grid.Column="1"
                             Grid.ColumnSpan="4"
                             Orientation="Horizontal"
-                            Margin="0 7.5">
+                            Margin="0 0 0 2.5">
                     <Image Style="{StaticResource LevelIndicatorYellow}"
                            IsEnabled="{Binding LevelIndicators[1].Value}"/>
                     <Image Style="{StaticResource LevelIndicatorYellow}"
@@ -217,7 +178,7 @@
                     <Image Style="{StaticResource LevelIndicatorRed}"
                            IsEnabled="{Binding LevelIndicators[15].Value}"/>
                 </StackPanel>
-                <Grid Grid.Row="3"
+                <Grid Grid.Row="2"
                       Grid.Column="1"
                       Grid.ColumnSpan="2"
                       Margin="0 0 5 0"
@@ -257,7 +218,7 @@
                         </Button>
                     </Grid>
                 </Grid>
-                <Grid Grid.Row="3"
+                <Grid Grid.Row="2"
                       Grid.Column="3"
                       Grid.ColumnSpan="2"
                       Margin="5 0 0 0"
@@ -290,6 +251,122 @@
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"/>
                         <Button x:Name="IncreaseLevelMax"
+                                Style="{StaticResource LevelButton}"
+                                Grid.Column="2">
+                            <Image Source="pack://application:,,,/Images/btn_right.png"
+                                   Width="8"/>
+                        </Button>
+                    </Grid>
+                </Grid>
+                <StackPanel Grid.Row="3"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="4"
+                            Orientation="Horizontal"
+                            Margin="0 5 0 2.5">
+                    <Image Style="{StaticResource LevelIndicatorYellow}"
+                           IsEnabled="{Binding ScLevelIndicators[1].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorYellow}"
+                           IsEnabled="{Binding ScLevelIndicators[2].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorYellow}"
+                           IsEnabled="{Binding ScLevelIndicators[3].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorYellow}"
+                           IsEnabled="{Binding ScLevelIndicators[4].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorYellow}"
+                           IsEnabled="{Binding ScLevelIndicators[5].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorOrange}"
+                           IsEnabled="{Binding ScLevelIndicators[6].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorOrange}"
+                           IsEnabled="{Binding ScLevelIndicators[7].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorOrange}"
+                           IsEnabled="{Binding ScLevelIndicators[8].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorOrange}"
+                           IsEnabled="{Binding ScLevelIndicators[9].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorOrange}"
+                           IsEnabled="{Binding ScLevelIndicators[10].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorRed}"
+                           IsEnabled="{Binding ScLevelIndicators[11].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorRed}"
+                           IsEnabled="{Binding ScLevelIndicators[12].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorRed}"
+                           IsEnabled="{Binding ScLevelIndicators[13].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorRed}"
+                           IsEnabled="{Binding ScLevelIndicators[14].Value}"/>
+                    <Image Style="{StaticResource LevelIndicatorRed}"
+                           IsEnabled="{Binding ScLevelIndicators[15].Value}"/>
+                </StackPanel>
+                <Grid Grid.Row="4"
+                      Grid.Column="1"
+                      Grid.ColumnSpan="2"
+                      Margin="0 0 5 0"
+                      Background="{StaticResource SettingElement}"
+                      Height="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="MIN"
+                               FontSize="13"
+                               Margin="10,0,0,0"
+                               VerticalAlignment="Center"/>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="DecreaseScLevelMin"
+                                Style="{StaticResource LevelButton}">
+                            <Image Source="pack://application:,,,/Images/btn_left.png"
+                                   Width="8"/>
+                        </Button>
+                        <TextBlock x:Name="ScLevelMin"
+                                   Grid.Column="1"
+                                   FontFamily="{StaticResource Lato Black}"
+                                   FontSize="13"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                        <Button x:Name="IncreaseScLevelMin"
+                                Style="{StaticResource LevelButton}"
+                                Grid.Column="2">
+                            <Image Source="pack://application:,,,/Images/btn_right.png"
+                                   Width="8"/>
+                        </Button>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Row="4"
+                      Grid.Column="3"
+                      Grid.ColumnSpan="2"
+                      Margin="5 0 0 0"
+                      Background="{StaticResource SettingElement}"
+                      Height="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="MAX"
+                               FontSize="13"
+                               Margin="10,0,0,0"
+                               VerticalAlignment="Center"/>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="DecreaseScLevelMax"
+                                Style="{StaticResource LevelButton}">
+                            <Image Source="pack://application:,,,/Images/btn_left.png"
+                                   Width="8"/>
+                        </Button>
+                        <TextBlock x:Name="ScLevelMax"
+                                   Grid.Column="1"
+                                   FontFamily="{StaticResource Lato Black}"
+                                   FontSize="13"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                        <Button x:Name="IncreaseScLevelMax"
                                 Style="{StaticResource LevelButton}"
                                 Grid.Column="2">
                             <Image Source="pack://application:,,,/Images/btn_right.png"
