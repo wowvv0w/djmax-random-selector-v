@@ -22,10 +22,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private bool _savesRecents;
         private List<string> _ownedDlcs;
 
-        private int _dlcCount;
-
         private bool _updatesTrackList = false;
-
 
         public SettingViewModel(Setting setting, Action<bool> blurSetter, Action<List<string>> trackListUpdater)
         {
@@ -41,53 +38,60 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
 
         #region Detect DLCs
-        public void Detect()
+        public void DetectDlcs()
         {
-            SettingBS = SettingCE = SettingCHU = SettingCY = SettingDM = SettingES = SettingESTI= SettingGC = SettingGF
-                = SettingMD = SettingNXN = SettingP3 = SettingT1 = SettingT2 = SettingT3 = SettingTR = SettingVE = SettingVE2 = false;
+            _ownedDlcs.Clear();
 
-            string steamPath = (string)Registry.GetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Valve\\Steam", "InstallPath", null);
+            string steamKeyName = "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Valve\\Steam";
+            string steamPath = Registry.GetValue(steamKeyName, "InstallPath", null).ToString();
             
-            DirectoryInfo libraryPath = new DirectoryInfo(steamPath + "\\appcache\\librarycache");
+            DirectoryInfo libraryPath = new DirectoryInfo($"{steamPath}\\appcache\\librarycache");
 
-            _dlcCount = 0;
+            int dlcCount = 0;
             foreach (FileInfo file in libraryPath.GetFiles())
             {
-                if (file.Extension.ToLower().CompareTo(".jpg") == 0)
+                if (file.Extension.ToLower().Equals(".jpg"))
                 {
-                    if (FindDLCs(file.Name.Substring(0, file.Name.Length - 11)) == true) _dlcCount++;
+                    string dlc = FindDlcs(file.Name.Substring(0, file.Name.Length - 11));
+                    if (!string.IsNullOrEmpty(dlc))
+                    {
+                        _ownedDlcs.Add(dlc);
+                        dlcCount++;
+                    }
                 }
             }
-
-            MessageBox.Show(_dlcCount + " DLCs detected.", "Notice");
+            NotifyOfPropertyChange(string.Empty);
+            
+            MessageBox.Show($"{dlcCount} DLCs are detected.",
+                "Notice",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
 
-        public bool FindDLCs(string name)
+        public string FindDlcs(string name)
         {
             switch (name)
             {
-                case "1568680": SettingP3 = true; break;
-                case "1271670": SettingTR = true; break;
-                case "1300210": SettingCE = true; break;
-                case "1300211": SettingBS = true; break;
-                case "1080550": SettingVE = true; break;
-                case "1843020": SettingVE2 = true; break;
-                case "1238760": SettingES = true; break;
-                case "1386610": SettingT1 = true; break;
-                case "1386611": SettingT2 = true; break;
-                case "1386612": SettingT3 = true; break;
-                case "1472190": SettingCHU = true; break;
-                case "1356221": SettingCY = true; break;
-                case "1356220": SettingDM = true; break;
-                case "1664550": SettingESTI = true; break;
-                case "1271671": SettingGC = true; break;
-                case "1472191": SettingGF = true; break;
-                case "1782170": SettingNXN = true; break;
-                case "1958170": SettingMD = true; break;
-                default: return false;
+                case "1568680": return _P3;
+                case "1271670": return _TR;
+                case "1300210": return _CE;
+                case "1300211": return _BS;
+                case "1080550": return _VE;
+                case "1843020": return _VE2;
+                case "1238760": return _ES;
+                case "1386610": return _T1;
+                case "1386611": return _T2;
+                case "1386612": return _T3;
+                case "1472190": return _CHU;
+                case "1356221": return _CY;
+                case "1356220": return _DM;
+                case "1664550": return _ESTI;
+                case "1271671": return _GC;
+                case "1472191": return _GF;
+                case "1782170": return _NXN;
+                case "1958170": return _MD;
+                default: return null;
             }
-
-            return true;
         }
         #endregion
 
