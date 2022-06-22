@@ -462,7 +462,11 @@
     <Resource Include="Images\level_beginner_locked.png" />
     <Resource Include="Images\level_master_locked.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\d_scm.png" />
+    <Resource Include="Images\d_scr.png" />
+    <Resource Include="Images\d_scv.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Text.Json.6.0.1\build\System.Text.Json.targets" Condition="Exists('..\packages\System.Text.Json.6.0.1\build\System.Text.Json.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

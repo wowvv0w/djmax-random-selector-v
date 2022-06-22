@@ -191,7 +191,7 @@
                       Grid.ColumnSpan="2"
                       Margin="0 0 5 0"
                       Background="{StaticResource SettingElement}"
-                      Height="20">
+                      Height="18">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -231,7 +231,7 @@
                       Grid.ColumnSpan="2"
                       Margin="5 0 0 0"
                       Background="{StaticResource SettingElement}"
-                      Height="20">
+                      Height="18">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -271,35 +271,35 @@
                             Grid.ColumnSpan="4"
                             Orientation="Horizontal"
                             Margin="0 5 0 2.5">
-                    <Image Style="{StaticResource LevelIndicatorYellow}"
+                    <Image Style="{StaticResource LevelIndicatorScRed}"
                            IsEnabled="{Binding ScLevelIndicators[1].Value}"/>
-                    <Image Style="{StaticResource LevelIndicatorYellow}"
+                    <Image Style="{StaticResource LevelIndicatorScRed}"
                            IsEnabled="{Binding ScLevelIndicators[2].Value}"/>
-                    <Image Style="{StaticResource LevelIndicatorYellow}"
+                    <Image Style="{StaticResource LevelIndicatorScRed}"
                            IsEnabled="{Binding ScLevelIndicators[3].Value}"/>
-                    <Image Style="{StaticResource LevelIndicatorYellow}"
+                    <Image Style="{StaticResource LevelIndicatorScRed}"
                            IsEnabled="{Binding ScLevelIndicators[4].Value}"/>
-                    <Image Style="{StaticResource LevelIndicatorYellow}"
+                    <Image Style="{StaticResource LevelIndicatorScRed}"
                            IsEnabled="{Binding ScLevelIndicators[5].Value}"/>
-                    <Image Style="{StaticResource LevelIndicatorOrange}"
+                    <Image Style="{StaticResource LevelIndicatorScViolet}"
                            IsEnabled="{Binding ScLevelIndicators[6].Value}"/>
-                    <Image Style="{StaticResource LevelIndicatorOrange}"
+                    <Image Style="{StaticResource LevelIndicatorScViolet}"
                            IsEnabled="{Binding ScLevelIndicators[7].Value}"/>
-                    <Image Style="{StaticResource LevelIndicatorOrange}"
+                    <Image Style="{StaticResource LevelIndicatorScViolet}"
                            IsEnabled="{Binding ScLevelIndicators[8].Value}"/>
-                    <Image Style="{StaticResource LevelIndicatorOrange}"
+                    <Image Style="{StaticResource LevelIndicatorScViolet}"
                            IsEnabled="{Binding ScLevelIndicators[9].Value}"/>
-                    <Image Style="{StaticResource LevelIndicatorOrange}"
+                    <Image Style="{StaticResource LevelIndicatorScViolet}"
                            IsEnabled="{Binding ScLevelIndicators[10].Value}"/>
-                    <Image Style="{StaticResource LevelIndicatorRed}"
+                    <Image Style="{StaticResource LevelIndicatorScMagenta}"
                            IsEnabled="{Binding ScLevelIndicators[11].Value}"/>
-                    <Image Style="{StaticResource LevelIndicatorRed}"
+                    <Image Style="{StaticResource LevelIndicatorScMagenta}"
                            IsEnabled="{Binding ScLevelIndicators[12].Value}"/>
-                    <Image Style="{StaticResource LevelIndicatorRed}"
+                    <Image Style="{StaticResource LevelIndicatorScMagenta}"
                            IsEnabled="{Binding ScLevelIndicators[13].Value}"/>
-                    <Image Style="{StaticResource LevelIndicatorRed}"
+                    <Image Style="{StaticResource LevelIndicatorScMagenta}"
                            IsEnabled="{Binding ScLevelIndicators[14].Value}"/>
-                    <Image Style="{StaticResource LevelIndicatorRed}"
+                    <Image Style="{StaticResource LevelIndicatorScMagenta}"
                            IsEnabled="{Binding ScLevelIndicators[15].Value}"/>
                     <ToggleButton x:Name="DifficultySC"
                                   Width="50"
@@ -315,7 +315,7 @@
                       Grid.ColumnSpan="2"
                       Margin="0 0 5 0"
                       Background="{StaticResource SettingElement}"
-                      Height="20">
+                      Height="18">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -355,7 +355,7 @@
                       Grid.ColumnSpan="2"
                       Margin="5 0 0 0"
                       Background="{StaticResource SettingElement}"
-                      Height="20">
+                      Height="18">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>

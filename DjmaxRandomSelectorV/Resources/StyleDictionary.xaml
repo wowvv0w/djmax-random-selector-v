@@ -241,6 +241,18 @@
            BasedOn="{StaticResource LevelIndicator}">
         <Setter Property="Source" Value="pack://application:,,,/Images/d_red.png"/>
     </Style>
+    <Style x:Key="LevelIndicatorScRed" TargetType="Image"
+           BasedOn="{StaticResource LevelIndicator}">
+        <Setter Property="Source" Value="pack://application:,,,/Images/d_scr.png"/>
+    </Style>
+    <Style x:Key="LevelIndicatorScViolet" TargetType="Image"
+           BasedOn="{StaticResource LevelIndicator}">
+        <Setter Property="Source" Value="pack://application:,,,/Images/d_scv.png"/>
+    </Style>
+    <Style x:Key="LevelIndicatorScMagenta" TargetType="Image"
+           BasedOn="{StaticResource LevelIndicator}">
+        <Setter Property="Source" Value="pack://application:,,,/Images/d_scm.png"/>
+    </Style>
     <!--#endregion-->
 
     <!--#region Dialog-->
