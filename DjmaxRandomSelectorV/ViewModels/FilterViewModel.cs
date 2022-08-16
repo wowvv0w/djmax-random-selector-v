@@ -70,7 +70,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             Filter.Categories.Clear();
             Filter.Categories.AddRange(new List<string>() { 
                 _RP, _P1, _P2, _P3, _TR, _CE, _BS, _VE, _VE2, _ES,
-                _T1, _T2, _T3, _GG, _CHU, _CY, _DM, _ESTI, _GC, _GF, _MD, _NXN
+                _T1, _T2, _T3, _TQ, _GG, _CHU, _CY, _DM, _ESTI, _GC, _GF, _MD, _NXN
             });
             Filter.IncludesFavorite = true;
             NotifyOfPropertyChange(string.Empty);
