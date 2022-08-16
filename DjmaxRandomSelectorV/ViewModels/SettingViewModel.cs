@@ -82,6 +82,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 case "1386610": return _T1;
                 case "1386611": return _T2;
                 case "1386612": return _T3;
+                case "1958171": return _TQ;
                 case "1472190": return _CHU;
                 case "1356221": return _CY;
                 case "1356220": return _DM;
