@@ -12,17 +12,64 @@ namespace DjmaxRandomSelectorV.DataTypes
     public class Locator : IProvider
     {
         private readonly bool startsAutomatically;
-
-        private const byte PageUp = 33;
-        private const byte PageDown = 34;
-        private const byte UpArrow = 38;
-        private const byte RightArrow = 39;
-        private const byte DownArrow = 40;
-        private const byte F5 = 116;
+        private static bool keymap_initialized = false;
+        static Dictionary<string, ushort> KeyMap = new Dictionary<string, ushort>
+        {
+            {"1", 0x02},
+            {"2", 0x03},
+            {"3", 0x04},
+            {"4", 0x05},
+            {"5", 0x06},
+            {"6", 0x07},
+            {"7", 0x08},
+            {"8", 0x09},
+            {"9", 0x0A},
+            {"0", 0x0B},
+            {"q", 0x10},
+            {"w", 0x11},
+            {"e", 0x12},
+            {"r", 0x13},
+            {"t", 0x14},
+            {"y", 0x15},
+            {"u", 0x16},
+            {"i", 0x17},
+            {"o", 0x18},
+            {"p", 0x19},
+            {"a", 0x1E},
+            {"s", 0x1F},
+            {"d", 0x20},
+            {"f", 0x21},
+            {"g", 0x22},
+            {"h", 0x23},
+            {"j", 0x24},
+            {"k", 0x25},
+            {"l", 0x26},
+            {";", 0x27},
+            {"z", 0x2C},
+            {"x", 0x2D},
+            {"c", 0x2E},
+            {"v", 0x2F},
+            {"b", 0x30},
+            {"n", 0x31},
+            {"m", 0x32},
+            {"f5", 0x3F},
+            {"shiftleft", 0x2A},
+            {"shiftright", 0x36},
+            {"pageup", 0xC9 + 1024},
+            {"pagedown", 0xD1 + 1024},
+        };
 
         public Locator(bool startsAutomatically)
         {
             this.startsAutomatically = startsAutomatically;
+            if (!keymap_initialized)
+            {
+                KeyMap.Add("left", (ushort)MapVirtualKey(0x25, 0));
+                KeyMap.Add("up", (ushort)MapVirtualKey(0x26, 0));
+                KeyMap.Add("right", (ushort)MapVirtualKey(0x27, 0));
+                KeyMap.Add("down", (ushort)MapVirtualKey(0x28, 0));
+                keymap_initialized = true;
+            }
         }
 
         public void Provide(Music selectedMusic, List<Track> trackList, int delay)
@@ -62,7 +109,7 @@ namespace DjmaxRandomSelectorV.DataTypes
                 if (isAlphabet)
                     inputInitial = initial;
                 else
-                    inputInitial = 'A';
+                    inputInitial = 'a';
 
                 inputVertical = whereIsIt;
             }
@@ -71,11 +118,11 @@ namespace DjmaxRandomSelectorV.DataTypes
                 if (isAlphabet)
                     inputInitial = (char)(initial + 1);
                 else
-                    inputInitial = 'A';
+                    inputInitial = 'a';
 
                 inputVertical = count - whereIsIt;
             }
-            inputInitial = char.ToUpper(inputInitial);
+            inputInitial = char.ToLower(inputInitial);
 
             int inputRight;
             char inputButton;
@@ -106,38 +153,33 @@ namespace DjmaxRandomSelectorV.DataTypes
             }
 
             // Input
-            byte direction;
-            void Input(byte key)
+            void Input(ushort key, bool isArrowKey = false)
             {
-                keybd_event(key, 0x45, 0x00, UIntPtr.Zero);
-                keybd_event(key, 0x45, 0x02, UIntPtr.Zero);
+                KeyDown(key, isArrowKey);
+                Thread.Sleep(delay);
+                KeyUp(key, isArrowKey);
                 Thread.Sleep(delay);
             }
 
-            if (isForward)
-                direction = DownArrow;
-            else
-                direction = UpArrow;
+            string direction = isForward ? "down" : "up";
 
-            Input(PageUp);
-            Input((byte)inputInitial);
-            if (!isAlphabet && isForward)
+            ResetMusicCursor();
+            if (isAlphabet || !isForward)
             {
-                Input(PageUp);
-                Input(PageUp);
-                Input(PageDown);
+                Input(KeyMap[inputInitial.ToString()]);
             }
+
             for (int i = 0; i < inputVertical; i++)
             {
-                Input(direction);
+                Input(KeyMap[direction], true);
             }
 
             if (inputButton != '\0')
             {
-                Input((byte)inputButton);
+                BtnSelect(inputButton);
                 for (int i = 0; i < inputRight; i++)
                 {
-                    Input(RightArrow);
+                    Input(KeyMap["right"], true);
                 }
             }
 
@@ -146,11 +188,178 @@ namespace DjmaxRandomSelectorV.DataTypes
                 int startDelay = 800 - delay * (inputRight + 1);
                 startDelay = startDelay < 0 ? 0 : startDelay;
                 Thread.Sleep(startDelay);
-                Input(F5);
+                Input(KeyMap["f5"]);
             }
         }
 
+        static void BtnSelect(char btn)
+        {
+            ushort scancode = 0x52;
+            if (btn == '4') scancode = 0x4B;
+            else if (btn == '5') scancode = 0x4C;
+            else if (btn == '6') scancode = 0x4D;
+            else if (btn == '8') scancode = 0x48;
+
+            KeyDown(0x1D);
+            Thread.Sleep(20);
+            KeyDown(scancode);
+            Thread.Sleep(20);
+            KeyUp(scancode);
+            Thread.Sleep(20);
+            KeyUp(0x1D);
+            Thread.Sleep(20);
+        }
+
+        static void ResetMusicCursor()
+        {
+            KeyDown(KeyMap["shiftright"]);
+            Thread.Sleep(20);
+            KeyDown(KeyMap["shiftleft"]);
+            Thread.Sleep(20);
+            KeyUp(KeyMap["shiftright"]);
+            Thread.Sleep(20);
+            KeyUp(KeyMap["shiftleft"]);
+            Thread.Sleep(20);
+        }
+
+        static bool KeyDown(ushort ScanCode, bool isArrowKey = false)
+        {
+            // Original code from https://github.com/learncodebygaming/pydirectinput
+            // Copyright(c) 2020 Ben Johnson
+            uint insertedEvents = 0;
+            uint expectedEvents = 1;
+            uint Flags = 0x0008;    // KEYEVENTF_SCANCODE
+            INPUT input = new INPUT { Type = 1 };
+            input.Data.Keyboard = new KEYBDINPUT
+            {
+                Vk = 0,
+                Time = 0,
+                ExtraInfo = IntPtr.Zero
+            };
+
+            if (isArrowKey)
+            {
+                Flags |= 0x0001;    // KEYEVENTF_EXTENDEDKEY
+                if (GetKeyState(0x90) != 0)
+                {
+                    INPUT input2 = new INPUT { Type = 1 };
+                    input2.Data.Keyboard = new KEYBDINPUT
+                    {
+                        Vk = 0,
+                        Scan = 0xE0,
+                        Flags = 0x0008,
+                        Time = 0,
+                        ExtraInfo = IntPtr.Zero
+                    };
+                    INPUT[] inputs2 = new INPUT[] { input2 };
+                    expectedEvents = 2;
+                    insertedEvents += SendInput(1, inputs2, Marshal.SizeOf(typeof(INPUT)));
+                }
+            }
+            input.Data.Keyboard.Scan = ScanCode;
+            input.Data.Keyboard.Flags = Flags;
+
+            INPUT[] inputs = new INPUT[] { input };
+            insertedEvents += SendInput(1, inputs, Marshal.SizeOf(typeof(INPUT)));
+            return insertedEvents == expectedEvents;
+        }
+
+        static bool KeyUp(ushort ScanCode, bool isArrowKey = false)
+        {
+            uint insertedEvents = 0;
+            uint expectedEvents = 1;
+            uint Flags = 0x0008 | 0x0002;       // KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP
+            INPUT input = new INPUT { Type = 1 };
+            input.Data.Keyboard = new KEYBDINPUT
+            {
+                Vk = 0,
+                Time = 0,
+                ExtraInfo = IntPtr.Zero
+            };
+
+            if (isArrowKey)
+            {
+                Flags |= 0x0001;    // KEYEVENTF_EXTENDEDKEY
+            }
+
+            input.Data.Keyboard.Scan = ScanCode;
+            input.Data.Keyboard.Flags = Flags;
+
+            INPUT[] inputs = new INPUT[] { input };
+            insertedEvents += SendInput(1, inputs, Marshal.SizeOf(typeof(INPUT)));
+
+            if (isArrowKey && GetKeyState(0x90) != 0)
+            {
+                INPUT input2 = new INPUT { Type = 1 };
+                input2.Data.Keyboard = new KEYBDINPUT
+                {
+                    Vk = 0,
+                    Scan = 0xE0,
+                    Flags = 0x0008 | 0x0002,
+                    Time = 0,
+                    ExtraInfo = IntPtr.Zero
+                };
+                INPUT[] inputs2 = new INPUT[] { input2 };
+                expectedEvents = 2;
+                insertedEvents += SendInput(1, inputs2, Marshal.SizeOf(typeof(INPUT)));
+            }
+            return insertedEvents == expectedEvents;
+        }
+
         [DllImport("user32.dll")]
-        static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+        static extern uint MapVirtualKey(int wCode, int wMapType);
+
+        [DllImport("user32.dll")]
+        static extern uint SendInput(uint numberOfInputs, INPUT[] inputs, int sizeOfInputStructure);
+
+        [DllImport("user32.dll")]
+        static extern short GetKeyState(int nVirtKey);
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct KEYBDINPUT
+        {
+            public ushort Vk;
+            public ushort Scan;
+            public uint Flags;
+            public uint Time;
+            public IntPtr ExtraInfo;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct HARDWAREINPUT
+        {
+            public uint Msg;
+            public ushort ParamL;
+            public ushort ParamH;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct MOUSEINPUT
+        {
+            public int X;
+            public int Y;
+            public uint MouseData;
+            public uint Flags;
+            public uint Time;
+            public IntPtr ExtraInfo;
+        }
+
+        [StructLayout(LayoutKind.Explicit)]
+        internal struct MOUSEKEYBDHARDWAREINPUT
+        {
+            [FieldOffset(0)]
+            public HARDWAREINPUT Hardware;
+            [FieldOffset(0)]
+            public KEYBDINPUT Keyboard;
+            [FieldOffset(0)]
+            public MOUSEINPUT Mouse;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct INPUT
+        {
+            public uint Type;
+            public MOUSEKEYBDHARDWAREINPUT Data;
+        }
     }
 }
