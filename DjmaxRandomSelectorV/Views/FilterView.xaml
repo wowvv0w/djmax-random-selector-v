@@ -511,6 +511,51 @@
                                   Background="{StaticResource BgTechnika3}"
                                   Foreground="{StaticResource FgTechnika3}">
                     </ToggleButton>
+                    <ToggleButton x:Name="CategoryTQ"
+                                  Content="TECHNIKA T&amp;Q"
+                                  Background="{StaticResource BgTechnikaTQ2}"
+                                  BorderBrush="{StaticResource BgTechnikaTQ1}"
+                                  Foreground="{StaticResource FgTechnikaTQ}">
+                        <ToggleButton.Style>
+                        <Style TargetType="ToggleButton" BasedOn="{StaticResource CategoryButton}">
+                        <Setter Property="Template">
+                        <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Grid>
+                                <Border x:Name="Border"
+                                        Background="#56000000"
+                                        BorderThickness="0">
+                                    <Border x:Name="Border2"
+                                            Background="Transparent">
+                                        <TextBlock x:Name="TextBlock"
+                                                   Text="{TemplateBinding Content}"
+                                                   Foreground="{TemplateBinding Foreground}"
+                                                   Background="Transparent"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,2,0,0"/>                                        
+                                    </Border>
+                                </Border>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Background"
+                                            TargetName="Border"
+                                            Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                    <Setter Property="Foreground"
+                                            TargetName="TextBlock"
+                                            Value="Black"/>
+                                    <Setter Property="Background"
+                                            TargetName="Border2"
+                                            Value="{Binding BorderBrush, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                    </Trigger>
+                            </ControlTemplate.Triggers> 
+                        </ControlTemplate>
+                        </Setter.Value>
+                        </Setter>
+                        </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
                     <ToggleButton x:Name="CategoryFavorite"
                                   Content="FAVORITE ★"
                                   Style="{StaticResource CategoryButton}"

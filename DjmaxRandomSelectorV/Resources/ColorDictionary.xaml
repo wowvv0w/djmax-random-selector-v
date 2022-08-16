@@ -124,6 +124,20 @@
         <GradientStop Color="#3F42FF" Offset="0.286936"/>
         <GradientStop Color="#0C79FF" Offset="1"/>
     </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgTechnikaTQ1" StartPoint="0,0.5" EndPoint="1,0.5">
+        <LinearGradientBrush.RelativeTransform>
+            <RotateTransform Angle="-12" CenterX="0.5" CenterY="0.5"/>
+        </LinearGradientBrush.RelativeTransform>
+        <GradientStop Color="#c5c5c5" Offset="0.48"/>
+        <GradientStop Color="Transparent" Offset="0.481"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgTechnikaTQ2" StartPoint="0,0.5" EndPoint="1,0.5">
+        <LinearGradientBrush.RelativeTransform>
+            <RotateTransform Angle="-6" CenterX="0.5" CenterY="0.5"/>
+        </LinearGradientBrush.RelativeTransform>
+        <GradientStop Color="#777777" Offset="0.55"/>
+        <GradientStop Color="#1ad10b" Offset="0.551"/>
+    </LinearGradientBrush>
     <LinearGradientBrush x:Key="BgFavorite" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Color="#EBED19" Offset="0.45"/>
         <GradientStop Color="#F79421" Offset="1"/>
@@ -146,6 +160,15 @@
     <SolidColorBrush x:Key="FgTechnika1" Color="#5E275B"/>
     <SolidColorBrush x:Key="FgTechnika2" Color="#5E2B13"/>
     <SolidColorBrush x:Key="FgTechnika3" Color="#1D365E"/>
+    <LinearGradientBrush x:Key="FgTechnikaTQ" StartPoint="0,0.5" EndPoint="1,0.5">
+        <LinearGradientBrush.RelativeTransform>
+            <RotateTransform Angle="9" CenterX="0.5" CenterY="0.5"/>
+        </LinearGradientBrush.RelativeTransform>
+        <GradientStop Color="#4c4c4d" Offset="0.43"/>
+        <GradientStop Color="#353535" Offset="0.431"/>
+        <GradientStop Color="#353535" Offset="0.53"/>
+        <GradientStop Color="#195015" Offset="0.531"/>
+    </LinearGradientBrush>
     <SolidColorBrush x:Key="FgFavorite" Color="#686C19"/>
 
     <SolidColorBrush x:Key="BgGuiltyGear" Color="#E0480A"/>
