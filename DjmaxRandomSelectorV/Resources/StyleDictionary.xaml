@@ -250,15 +250,15 @@
         </Style.Triggers>
     </Style>
     <Style x:Key="ScLevelIndicatorRed" TargetType="Image"
-           BasedOn="{StaticResource LevelIndicator}">
+           BasedOn="{StaticResource ScLevelIndicator}">
         <Setter Property="Source" Value="pack://application:,,,/Images/d_scr.png"/>
     </Style>
     <Style x:Key="ScLevelIndicatorPurple" TargetType="Image"
-           BasedOn="{StaticResource LevelIndicator}">
+           BasedOn="{StaticResource ScLevelIndicator}">
         <Setter Property="Source" Value="pack://application:,,,/Images/d_scp.png"/>
     </Style>
     <Style x:Key="ScLevelIndicatorBlue" TargetType="Image"
-           BasedOn="{StaticResource LevelIndicator}">
+           BasedOn="{StaticResource ScLevelIndicator}">
         <Setter Property="Source" Value="pack://application:,,,/Images/d_scb.png"/>
     </Style>
     <!--#endregion-->
