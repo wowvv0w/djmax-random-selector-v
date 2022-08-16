@@ -190,6 +190,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string _T1 = "T1";
         private const string _T2 = "T2";
         private const string _T3 = "T3";
+        private const string _TQ = "TQ";
         private const string _CHU = "CHU";
         private const string _CY = "CY";
         private const string _DM = "DM";
@@ -288,6 +289,15 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 UpdateOwnedDlcs(value, _T3);
                 NotifyOfPropertyChange(() => SettingT3);
+            }
+        }
+        public bool SettingTQ
+        {
+            get { return CheckOwnedDlcs(_TQ); }
+            set
+            {
+                UpdateOwnedDlcs(value, _TQ);
+                NotifyOfPropertyChange(() => SettingTQ);
             }
         }
         public bool SettingCHU

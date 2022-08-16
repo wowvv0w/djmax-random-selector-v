@@ -239,6 +239,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string _T1 = "T1";
         private const string _T2 = "T2";
         private const string _T3 = "T3";
+        private const string _TQ = "TQ";
         private const string _GG = "GG";
         private const string _CHU = "CHU";
         private const string _CY = "CY";
@@ -469,6 +470,15 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 UpdateFilter(value, Filter.Categories, _T3);
                 NotifyOfPropertyChange(() => CategoryT3);
+            }
+        }
+        public bool CategoryTQ
+        {
+            get { return CheckFilter(Filter.Categories, _TQ); }
+            set
+            {
+                UpdateFilter(value, Filter.Categories, _TQ);
+                NotifyOfPropertyChange(() => CategoryTQ);
             }
         }
         public bool CategoryGG

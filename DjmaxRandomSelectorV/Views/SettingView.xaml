@@ -182,6 +182,14 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
+                        <TextBlock Text="TECHNIKA TUNE & Q"/>
+                        <ToggleButton x:Name="SettingTQ"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
                         <TextBlock Text="CHUNITHM"/>
                         <ToggleButton x:Name="SettingCHU"/>
                     </Grid>
