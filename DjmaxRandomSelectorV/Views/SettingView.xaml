@@ -182,7 +182,7 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="TECHNIKA TUNE & Q"/>
+                        <TextBlock Text="TECHNIKA TUNE &amp; Q"/>
                         <ToggleButton x:Name="SettingTQ"/>
                     </Grid>
                     <Grid>
