@@ -13,7 +13,7 @@
     <SolidColorBrush x:Key="Normal" Color="#FFCC25"/>
     <SolidColorBrush x:Key="Hard" Color="#FE7724"/>
     <SolidColorBrush x:Key="Maximum" Color="#F91C55"/>
-    <SolidColorBrush x:Key="SC" Color="#FF11E6"/>
+    <SolidColorBrush x:Key="SC" Color="#F21CC7"/>
 
     <LinearGradientBrush x:Key="SettingElement" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Color="#7F584E46" Offset="0.4999"/>

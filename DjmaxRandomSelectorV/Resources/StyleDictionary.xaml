@@ -241,17 +241,25 @@
            BasedOn="{StaticResource LevelIndicator}">
         <Setter Property="Source" Value="pack://application:,,,/Images/d_red.png"/>
     </Style>
-    <Style x:Key="LevelIndicatorScRed" TargetType="Image"
+    <Style x:Key="ScLevelIndicator" TargetType="Image">
+        <Setter Property="Width" Value="18"/>
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Source" Value="pack://application:,,,/Images/d_sck.png"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="ScLevelIndicatorRed" TargetType="Image"
            BasedOn="{StaticResource LevelIndicator}">
         <Setter Property="Source" Value="pack://application:,,,/Images/d_scr.png"/>
     </Style>
-    <Style x:Key="LevelIndicatorScViolet" TargetType="Image"
+    <Style x:Key="ScLevelIndicatorPurple" TargetType="Image"
            BasedOn="{StaticResource LevelIndicator}">
-        <Setter Property="Source" Value="pack://application:,,,/Images/d_scv.png"/>
+        <Setter Property="Source" Value="pack://application:,,,/Images/d_scp.png"/>
     </Style>
-    <Style x:Key="LevelIndicatorScMagenta" TargetType="Image"
+    <Style x:Key="ScLevelIndicatorBlue" TargetType="Image"
            BasedOn="{StaticResource LevelIndicator}">
-        <Setter Property="Source" Value="pack://application:,,,/Images/d_scm.png"/>
+        <Setter Property="Source" Value="pack://application:,,,/Images/d_scb.png"/>
     </Style>
     <!--#endregion-->
 
