@@ -132,7 +132,7 @@ namespace DjmaxRandomSelectorV.Models
                         provider = new Locator(false);
                     break;
                 case Aider.Observe:
-                    provider = new Observer();
+                    provider = new Observe();
                     break;
             }
         }

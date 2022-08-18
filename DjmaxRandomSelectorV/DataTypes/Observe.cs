@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DjmaxRandomSelectorV.DataTypes
 {
-    public class Observer : IProvider
+    public class Observe : IProvider
     {
         public void Provide(Music selectedMusic, List<Track> trackList, int delay)
         {

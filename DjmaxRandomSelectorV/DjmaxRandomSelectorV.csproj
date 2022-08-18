@@ -259,7 +259,7 @@
     <Compile Include="DataTypes\Interfaces\IAddonObserver.cs" />
     <Compile Include="DataTypes\Interfaces\IProvider.cs" />
     <Compile Include="DataTypes\Locator.cs" />
-    <Compile Include="DataTypes\Observer.cs" />
+    <Compile Include="DataTypes\Observe.cs" />
     <Compile Include="Models\Filter.cs" />
     <Compile Include="DataTypes\InputCommand.cs" />
     <Compile Include="DataTypes\Interfaces\ISifter.cs" />
