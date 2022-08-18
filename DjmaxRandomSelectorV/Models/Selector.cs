@@ -207,6 +207,8 @@ namespace DjmaxRandomSelectorV.Models
                 list.Add("End of Mythology");
             if (!ownedDlcs.Contains("T3"))
                 list.Add("ALiCE");
+            if (!ownedDlcs.Contains("TQ"))
+                list.Add("Techno Racer");
             if (ownedDlcs.Contains("CE") && !ownedDlcs.Contains("BS") && !ownedDlcs.Contains("T1"))
                 list.Add("Here in the Moment ~Extended Mix~");
             if (!ownedDlcs.Contains("CE") && ownedDlcs.Contains("BS") && !ownedDlcs.Contains("T1"))
