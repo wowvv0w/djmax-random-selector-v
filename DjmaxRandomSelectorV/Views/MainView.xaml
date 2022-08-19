@@ -306,9 +306,6 @@
                     <Button x:Name="ShowSetting">
                         <Image Source="pack://application:,,,/Images/setting.png"/>
                     </Button>
-                    <Button x:Name="ShowInventory">
-                        <Image Source="pack://application:,,,/Images/inventory.png"/>
-                    </Button>
                 </StackPanel>
             </Grid>
             <!--#endregion-->
