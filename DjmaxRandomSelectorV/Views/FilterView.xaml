@@ -29,26 +29,15 @@
         </Grid.RowDefinitions>
         
         <!--#region Tool-->
-        <Border Margin="0 0 0 2.5"
-                Grid.ColumnSpan="2">
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Left" VerticalAlignment="Center"
-                        Margin="10 0">
-                <StackPanel.Resources>
-                    <Style TargetType="Button" BasedOn="{StaticResource SettingWindowButton}">
-                        <Setter Property="BorderThickness" Value="2"/>
-                        <Setter Property="Border.CornerRadius" Value="4"/>
-                        <Setter Property="FontSize" Value="12"/>
-                        <Setter Property="Margin" Value="10 0 0 0"/>
-                    </Style>
-                </StackPanel.Resources>
-                <TextBlock Text="TOOL"
-                           FontSize="15"/>
-                <Button x:Name="AddPreset"
-                        Content="ADD PRESET"
-                        Width="90"/>
-            </StackPanel>
-        </Border>
+        <Menu Margin="0 0 0 2.5"
+              Grid.ColumnSpan="2">
+            <MenuItem Header="PRESET">
+                <MenuItem Header="Save"
+                          x:Name="SavePreset"/>
+                <MenuItem Header="Load"
+                          x:Name="LoadPreset"/>
+            </MenuItem>
+        </Menu>
         <!--#endregion-->
 
         <!--#region Button Tunes-->
