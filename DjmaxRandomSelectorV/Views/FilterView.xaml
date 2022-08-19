@@ -30,13 +30,16 @@
         
         <!--#region Tool-->
         <Menu Margin="0 0 0 2.5"
-              Grid.ColumnSpan="2">
+              Grid.ColumnSpan="2"
+              VerticalAlignment="Center">
             <MenuItem Header="PRESET">
                 <MenuItem Header="Save"
                           x:Name="SavePreset"/>
                 <MenuItem Header="Load"
                           x:Name="LoadPreset"/>
             </MenuItem>
+            <MenuItem Header="FAVORITE"
+                      x:Name="OpenFavoriteEditor"/>
         </Menu>
         <!--#endregion-->
 

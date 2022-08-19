@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
+using DjmaxRandomSelectorV.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,24 +14,34 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class FavoriteViewModel : Screen
     {
         private bool searchesSuggestion;
-        private readonly List<string> favorite;
+        private readonly Setting setting;
+        private readonly Action<bool> blurSetter;
         private readonly List<string> titleList;
         private readonly Action<bool> setUpdated;
+        private readonly List<string> favorite;
 
         public BindableCollection<string> FavoriteItems { get; set; }
         public BindableCollection<string> TitleSuggestions { get; set; }
 
-        public FavoriteViewModel(List<string> favorite, List<string> titleList, Action<bool> setUpdated)
+        public FavoriteViewModel(Setting setting, List<string> titleList, Action<bool> blurSetter, Action<bool> setUpdated)
         {
             searchesSuggestion = true;
-            this.favorite = favorite;
+            this.setting = setting;
+            this.blurSetter = blurSetter;
             this.titleList = titleList;
             this.setUpdated = setUpdated;
 
+            favorite = setting.Favorite;
             FavoriteItems = new BindableCollection<string>(favorite);
 
             TitleSuggestions = new BindableCollection<string>();
             OpensSuggestionBox = false;
+        }
+        public void OK()
+        {
+            setting.Export();
+            TryCloseAsync();
+            blurSetter.Invoke(false);
         }
 
         #region SearchBox

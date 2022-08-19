@@ -9,13 +9,15 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Action = System.Action;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
     public class FilterViewModel : Screen
     {
+        private Action openFavoriteEditor;
         public Filter Filter { get; set; }
-        public FilterViewModel()
+        public FilterViewModel(Action favoriteCallback)
         {
             Filter = new Filter();
             Filter.Import();
@@ -27,6 +29,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             UpdateLevelIndicators();
             UpdateScLevelIndicators();
+
+            openFavoriteEditor = favoriteCallback;
         }
 
         #region Filter Updater
@@ -230,6 +234,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (result == true)
                 ReloadFilter(dialog.FileName);
         }
+        public void OpenFavoriteEditor() => openFavoriteEditor.Invoke();
         #endregion
 
 
