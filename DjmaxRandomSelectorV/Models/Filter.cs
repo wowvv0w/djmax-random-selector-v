@@ -72,10 +72,6 @@ namespace DjmaxRandomSelectorV.Models
             isUpdated = true;
         }
 
-        #region Lambda Expressions
-        private readonly Func<string, string> presetPath = name => $"Data/Preset/{name}.json";
-        #endregion
-
         #region Methods
         public void UpdateRecents(int titleCount, int maxCount)
         {
@@ -95,10 +91,10 @@ namespace DjmaxRandomSelectorV.Models
                 }
             }
         }
-        public void Import(string presetName = null)
+        public void Import(string presetPath = null)
         {
-            bool isNull = string.IsNullOrEmpty(presetName);
-            var path = isNull ? CurrentFilterPath : presetPath(presetName);
+            bool isNull = string.IsNullOrEmpty(presetPath);
+            var path = isNull ? CurrentFilterPath : presetPath;
             try
             {
                 using (var reader = new StreamReader(path))
@@ -133,7 +129,7 @@ namespace DjmaxRandomSelectorV.Models
                 }
             }
         }
-        public void Export(string presetName = null)
+        public void Export(string presetPath = null)
         {
             var options = new JsonSerializerOptions()
             {
@@ -141,7 +137,7 @@ namespace DjmaxRandomSelectorV.Models
                 IgnoreReadOnlyProperties = false
             };
             string jsonString = JsonSerializer.Serialize(this, options);
-            var path = string.IsNullOrEmpty(presetName) ? CurrentFilterPath : presetPath(presetName);
+            var path = string.IsNullOrEmpty(presetPath) ? CurrentFilterPath : presetPath;
 
             using (var writer = new StreamWriter(path))
             { 
