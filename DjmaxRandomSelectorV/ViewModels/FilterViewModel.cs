@@ -204,7 +204,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         #region Tool
         public void SavePreset()
         {
-            string app = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string app = AppDomain.CurrentDomain.BaseDirectory;
             string path = Path.Combine(app, @"Data\Preset");
             var dialog = new SaveFileDialog()
             {
@@ -220,7 +220,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         public void LoadPreset()
         {
-            string app = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string app = AppDomain.CurrentDomain.BaseDirectory;
             string path = Path.Combine(app, @"Data\Preset");
             var dialog = new OpenFileDialog()
             {
