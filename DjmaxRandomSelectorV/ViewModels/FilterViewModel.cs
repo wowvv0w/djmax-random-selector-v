@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,13 +9,15 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Action = System.Action;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
     public class FilterViewModel : Screen
     {
+        private Action openFavoriteEditor;
         public Filter Filter { get; set; }
-        public FilterViewModel()
+        public FilterViewModel(Action favoriteCallback)
         {
             Filter = new Filter();
             Filter.Import();
@@ -26,6 +29,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             UpdateLevelIndicators();
             UpdateScLevelIndicators();
+
+            openFavoriteEditor = favoriteCallback;
         }
 
         #region Filter Updater
@@ -51,16 +56,12 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 Filter.Import(presetName);
                 NotifyOfPropertyChange(string.Empty);
-                MessageBox.Show($"Preset {presetName} has been applied.",
-                                "Filter",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Information);
                 Filter.IsUpdated = true;
             }
             catch (FileNotFoundException)
             {
-                MessageBox.Show($"Cannot find Preset {presetName}.",
-                                "Filter",
+                MessageBox.Show($"Cannot apply the preset.",
+                                "Filter Error",
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Error);
             }
@@ -201,18 +202,39 @@ namespace DjmaxRandomSelectorV.ViewModels
         #endregion
 
         #region Tool
-        public void AddPreset()
+        public void SavePreset()
         {
-            string presetName = Microsoft.VisualBasic.Interaction.InputBox("Preset Name: ", "Add Preset");
-            if (!string.IsNullOrEmpty(presetName))
+            string app = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string path = Path.Combine(app, @"Data\Preset");
+            var dialog = new SaveFileDialog()
             {
-                Filter.Export(presetName);
-                MessageBox.Show($"Preset {presetName} has been added.",
-                                "Preset",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Information);
-            }
+                InitialDirectory = path,
+                DefaultExt = ".json",
+                Filter = "JSON Files (*.json)|*.json"
+            };
+
+            bool? result = dialog.ShowDialog();
+
+            if (result == true)
+                Filter.Export(dialog.FileName);
         }
+        public void LoadPreset()
+        {
+            string app = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string path = Path.Combine(app, @"Data\Preset");
+            var dialog = new OpenFileDialog()
+            {
+                InitialDirectory = path,
+                DefaultExt = ".json",
+                Filter = "JSON Files (*.json)|*.json"
+            };
+
+            bool? result = dialog.ShowDialog();
+
+            if (result == true)
+                ReloadFilter(dialog.FileName);
+        }
+        public void OpenFavoriteEditor() => openFavoriteEditor.Invoke();
         #endregion
 
 

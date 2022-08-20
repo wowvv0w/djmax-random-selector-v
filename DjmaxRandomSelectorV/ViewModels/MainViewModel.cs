@@ -94,7 +94,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 selector.DownloadAllTrackList();
             }
 
-            FilterViewModel = new FilterViewModel();
+            FilterViewModel = new FilterViewModel(ShowFavorite);
             HistoryViewModel = new HistoryViewModel();
             filter = FilterViewModel.Filter;
 
@@ -287,11 +287,11 @@ namespace DjmaxRandomSelectorV.ViewModels
             SetBlurEffect(true);
             _windowManager.ShowDialogAsync(new SettingViewModel(setting, SetBlurEffect, selector.UpdateTrackList));
         }
-        public void ShowInventory()
+        public void ShowFavorite()
         {
             SetBlurEffect(true);
             Action<bool> setUpdated = value => filter.IsUpdated = value;
-            _windowManager.ShowDialogAsync(new InventoryViewModel(setting, selector.GetTitleList(), SetBlurEffect, FilterViewModel.ReloadFilter, setUpdated));
+            _windowManager.ShowDialogAsync(new FavoriteViewModel(setting, selector.GetTitleList(), SetBlurEffect, setUpdated));
         }
         #endregion
 
