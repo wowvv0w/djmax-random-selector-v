@@ -29,24 +29,38 @@
         </Grid.RowDefinitions>
         
         <!--#region Tool-->
-        <Menu Margin="0 0 0 2.5"
-              Grid.ColumnSpan="2"
-              VerticalAlignment="Center">
-            <MenuItem Header="PRESET">
-                <MenuItem Header="Save"
-                          x:Name="SavePreset"/>
-                <MenuItem Header="Load"
-                          x:Name="LoadPreset"/>
-            </MenuItem>
-            <MenuItem Header="FAVORITE"
-                      x:Name="OpenFavoriteEditor"/>
-        </Menu>
+        <StackPanel Margin="0 0 0 2.5"
+                    Grid.ColumnSpan="2"
+                    Orientation="Horizontal"
+                    Background="{StaticResource Widget}">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource WindowButton}">
+                    <Setter Property="Margin" Value="5 0"/>
+                    <Setter Property="Foreground" Value="{StaticResource Default}"/>
+                    <Setter Property="FontFamily" Value="{StaticResource Lato}"/>
+                    <Setter Property="FontSize" Value="10"/>
+                </Style>
+            </StackPanel.Resources>
+            <TextBlock Text="TOOL"
+                       FontSize="16"
+                       VerticalAlignment="Center"
+                       Margin="10 0 5 0"/>
+            <Button x:Name="SavePreset"
+                    Content="Save Preset"
+                    Width="60"/>
+            <Button x:Name="LoadPreset"
+                    Content="Load Preset"
+                    Width="60"/>
+            <Button x:Name="OpenFavoriteEditor"
+                    Content="Edit Favorite"
+                    Width="70"/>
+        </StackPanel>
         <!--#endregion-->
 
         <!--#region Button Tunes-->
         <Border Margin="0 2.5 2.5 2.5"
                 Grid.Row="1">
-            <Grid Margin="5,0">
+            <Grid Margin="5 0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="70"/>
