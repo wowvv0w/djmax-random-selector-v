@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media.Effects;
+using System.Net.Http;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -48,9 +49,9 @@ namespace DjmaxRandomSelectorV.ViewModels
             try
             {
                 int _lastAllTrackVer;
-                using (var client = new WebClient())
+                using (var client = new HttpClient())
                 {
-                    var data = client.DownloadString(VersionUrl);
+                    var data = client.GetStringAsync(VersionUrl).Result;
                     var versions = data.Split(',');
 
                     lastSelectorVer = int.Parse(versions[0]);

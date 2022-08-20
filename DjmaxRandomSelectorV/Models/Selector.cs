@@ -8,10 +8,12 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace DjmaxRandomSelectorV.Models
 {
@@ -151,18 +153,11 @@ namespace DjmaxRandomSelectorV.Models
         public List<string> GetTitleList() => allTrackList.ConvertAll(x => x.Title).Distinct().ToList();
         public void DownloadAllTrackList()
         {
-            string data;
+            var client = new HttpClient();
+            string data = client.GetStringAsync(AllTrackListUrl).Result;
 
-            using (var client = new WebClient())
-            {
-                client.Encoding = Encoding.UTF8;
-                data = client.DownloadString(AllTrackListUrl);
-            }
-
-            using (var writer = new StreamWriter(AllTrackListPath))
-            {
-                writer.Write(data);
-            }
+            using var writer = new StreamWriter(AllTrackListPath);
+            writer.Write(data);
         }
         public void ReadAllTrackList()
         {
