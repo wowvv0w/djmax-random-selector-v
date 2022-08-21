@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="DjmaxRandomSelectorV.Views.PlaylistView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
+             xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d" 
+             d:DesignHeight="340" d:DesignWidth="680">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--#region Playlist -->
+        <ListView x:Name="PlaylistItems">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="344"/>
+                    <GridViewColumn Header="Style" DisplayMemberBinding="{Binding Style}" Width="100"/>
+                    <GridViewColumn Header="Level" DisplayMemberBinding="{Binding Level}" Width="100"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <!--#endregion-->
+
+        <!--#region Tool-->
+        <StackPanel Grid.Column="1">
+            <Button x:Name="AddItem"
+                    Content="ADD" />
+            <Button x:Name="RemoveItem"
+                    Content="REMOVE" />
+            <Button x:Name="ConcatenateItems"
+                    Content="CONCAT" />
+            <Button x:Name="MoveUpItem"
+                    Content="MOVE UP"/>
+            <Button x:Name="MoveDownItem"
+                    Content="MOVE DOWN"/>
+        </StackPanel>
+        <!--#endregion-->
+    </Grid>
+</UserControl>

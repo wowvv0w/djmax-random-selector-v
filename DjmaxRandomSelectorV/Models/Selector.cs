@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace DjmaxRandomSelectorV.Models
 {
@@ -85,6 +86,43 @@ namespace DjmaxRandomSelectorV.Models
 
             Provide(selectedMusic, trackList, setting.InputDelay);
             recents.Add(selectedMusic.Title);
+            isRunning = false;
+            return selectedMusic;
+        }
+
+        public Music Start(Playlist playlist, Setting setting)
+        {
+            isRunning = true;
+
+            List<Music> recents = playlist.Recents;
+
+            if (playlist.IsUpdated || this.isUpdated)
+            {
+                recents.Clear();
+                playlist.IsUpdated = false;
+                this.isUpdated = false;
+            }
+            else
+            {
+                playlist.UpdateRecents(recents.Count, setting.RecentsCount);
+            }
+            var musicList = from music in playlist.MusicList
+                            where !recents.Contains(music)
+                            select music;
+
+            Music selectedMusic;
+            try
+            {
+                selectedMusic = Pick(musicList.ToList());
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                isRunning = false;
+                throw e;
+            }
+
+            Provide(selectedMusic, trackList, setting.InputDelay);
+            recents.Add(selectedMusic);
             isRunning = false;
             return selectedMusic;
         }

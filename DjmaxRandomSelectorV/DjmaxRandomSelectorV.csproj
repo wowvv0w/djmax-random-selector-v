@@ -102,4 +102,8 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\Playlist\" />
+  </ItemGroup>
+  <ProjectExtensions><VisualStudio><UserProperties data_4config_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>
