@@ -38,6 +38,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public AddonViewModel AddonButton { get; set; }
 
         private readonly Filter filter;
+        private readonly Playlist _playlist;
         private readonly Selector selector;
         private readonly Setting setting;
 
@@ -96,8 +97,11 @@ namespace DjmaxRandomSelectorV.ViewModels
                 selector.DownloadAllTrackList();
             }
 
+            _playlist = new Playlist();
+            _playlist.Import();
+
             FilterViewModel = new FilterViewModel(ShowFavorite);
-            PlaylistViewModel = new PlaylistViewModel();
+            PlaylistViewModel = new PlaylistViewModel(_playlist);
             HistoryViewModel = new HistoryViewModel();
             filter = FilterViewModel.Filter;
 
@@ -171,7 +175,11 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             try
             {
-                Music selectedMusic = selector.Start(filter, setting);
+                Music selectedMusic;
+                if (_isFilterType)
+                    selectedMusic = selector.Start(filter, setting);
+                else
+                    selectedMusic = selector.Start(_playlist, setting);
 
                 var historyItem = new HistoryItem(selectedMusic);
                 HistoryViewModel.UpdateHistory(historyItem);
@@ -194,8 +202,10 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (!setting.SavesRecents)
             {
                 FilterViewModel.Filter.Recents.Clear();
+                _playlist.Recents.Clear();
             }
             FilterViewModel.Filter.Export();
+            _playlist.Export();
 
             setting.Position = new double[2] { (window.Top < 0 ? 0 : window.Top), (window.Left < 0 ? 0 : window.Left) };
             setting.Export();

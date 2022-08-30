@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.DataTypes;
+using DjmaxRandomSelectorV.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,19 +11,20 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class PlaylistViewModel : Screen
     {
-        public BindableCollection<Music> PlaylistItems { get; set; }
-
-        public PlaylistViewModel()
+        private readonly Playlist _playlist;
+        public List<Music> PlaylistItems
         {
-            PlaylistItems = new BindableCollection<Music>()
+            get { return _playlist.MusicList; }
+            set
             {
-                new Music()
-                {
-                    Title = "ALiCE",
-                    Style = "5BMX",
-                    Level = "13"
-                }
-            };
+                _playlist.MusicList = value;
+                NotifyOfPropertyChange(() => PlaylistItems);
+            }
+        }
+
+        public PlaylistViewModel(Playlist playlist)
+        {
+            _playlist = playlist;
         }
     }
 }
