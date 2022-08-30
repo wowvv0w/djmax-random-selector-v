@@ -32,6 +32,7 @@ namespace DjmaxRandomSelectorV.Models
         #endregion
 
         #region Properties
+        public List<Track> TrackList { get => trackList; }
         public bool IsRunning
         {
             get { return isRunning; }

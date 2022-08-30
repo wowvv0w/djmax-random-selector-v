@@ -101,7 +101,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _playlist.Import();
 
             FilterViewModel = new FilterViewModel(ShowFavorite);
-            PlaylistViewModel = new PlaylistViewModel(_playlist);
+            PlaylistViewModel = new PlaylistViewModel(_playlist, selector.TrackList);
             HistoryViewModel = new HistoryViewModel();
             filter = FilterViewModel.Filter;
 
