@@ -31,6 +31,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private DockPanel dockPanel;
 
         public FilterViewModel FilterViewModel { get; set; }
+        public PlaylistViewModel PlaylistViewModel { get; set; }
         public HistoryViewModel HistoryViewModel { get; set; }
 
         public AddonViewModel AddonPanel { get; set; }
@@ -96,6 +97,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
 
             FilterViewModel = new FilterViewModel(ShowFavorite);
+            PlaylistViewModel = new PlaylistViewModel();
             HistoryViewModel = new HistoryViewModel();
             filter = FilterViewModel.Filter;
 
@@ -111,6 +113,9 @@ namespace DjmaxRandomSelectorV.ViewModels
             setting.Subscribe(AddonPanel);
             setting.Subscribe(AddonButton);
             setting.Notify();
+
+            _isFilterType = !setting.IsPlaylist;
+            _isPlaylistType = setting.IsPlaylist;
         }
 
 
@@ -197,6 +202,31 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         #endregion
 
+        private bool _isFilterType;
+        private bool _isPlaylistType;
+        public bool IsFilterType
+        {
+            get { return _isFilterType; }
+            set
+            {
+                _isFilterType = value;
+                NotifyOfPropertyChange(() => IsFilterType);
+            }
+        }
+        public bool IsPlaylistType
+        {
+            get { return _isPlaylistType; }
+            set
+            {
+                _isPlaylistType = value;
+                NotifyOfPropertyChange(() => IsPlaylistType);
+            }
+        }
+        public void ChangeTypeOfFilter(bool isPlaylist)
+        {
+            IsFilterType = !isPlaylist;
+            IsPlaylistType = isPlaylist;
+        }
 
         #region Window Top Bar
         private Visibility _openReleasePageVisibility = Visibility.Hidden;
@@ -286,7 +316,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void ShowSetting()
         {
             SetBlurEffect(true);
-            _windowManager.ShowDialogAsync(new SettingViewModel(setting, SetBlurEffect, selector.UpdateTrackList));
+            _windowManager.ShowDialogAsync(new SettingViewModel(setting, SetBlurEffect, selector.UpdateTrackList, ChangeTypeOfFilter));
         }
         public void ShowFavorite()
         {

@@ -49,6 +49,14 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
+                        <TextBlock Text="PLAYLIST MODE"/>
+                        <ToggleButton x:Name="IsPlaylist"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
                         <TextBlock Text="INPUT DELAY"/>
                         <TextBlock x:Name="InputDelayText"
                                    HorizontalAlignment="Right"

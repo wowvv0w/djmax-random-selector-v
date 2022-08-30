@@ -48,6 +48,7 @@ namespace DjmaxRandomSelectorV.Models
                 Notify();
             }
         }
+        public bool IsPlaylist { get; set; }
         public int InputDelay { get; set; }
         public bool SavesRecents { get; set; }
         public List<string> OwnedDlcs { get; set; }
@@ -84,6 +85,7 @@ namespace DjmaxRandomSelectorV.Models
                     Mode = setting.Mode;
                     Aider = setting.Aider;
                     Level = setting.Level;
+                    IsPlaylist = setting.IsPlaylist;
                     InputDelay = setting.InputDelay;
                     SavesRecents = setting.SavesRecents;
                     OwnedDlcs = setting.OwnedDlcs;
@@ -98,6 +100,7 @@ namespace DjmaxRandomSelectorV.Models
                 Mode = Mode.Freestyle;
                 Aider = Aider.Off;
                 Level = Level.Off;
+                IsPlaylist = false;
                 InputDelay = 30;
                 SavesRecents = false;
                 OwnedDlcs = new List<string>();

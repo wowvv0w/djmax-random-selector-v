@@ -9,7 +9,6 @@ using System.Windows.Controls;
 using Microsoft.Win32;
 using System.IO;
 
-
 namespace DjmaxRandomSelectorV.ViewModels
 {
     public class SettingViewModel : Screen
@@ -17,19 +16,23 @@ namespace DjmaxRandomSelectorV.ViewModels
         private readonly Setting _setting;
         private readonly Action<bool> _blurSetter;
         private readonly Action<List<string>> _trackListUpdater;
+        private readonly Action<bool> _typeOfFilterSetter;
 
+        private bool _isPlaylist;
         private int _inputDelay;
         private bool _savesRecents;
         private List<string> _ownedDlcs;
 
         private bool _updatesTrackList = false;
 
-        public SettingViewModel(Setting setting, Action<bool> blurSetter, Action<List<string>> trackListUpdater)
+        public SettingViewModel(Setting setting, Action<bool> blurSetter, Action<List<string>> trackListUpdater, Action<bool> typeOfFilterSetter)
         {
             _setting = setting;
             _blurSetter = blurSetter;
             _trackListUpdater = trackListUpdater;
+            _typeOfFilterSetter = typeOfFilterSetter;
 
+            _isPlaylist = _setting.IsPlaylist;
             _inputDelay = _setting.InputDelay;
             _savesRecents = _setting.SavesRecents;
             _ownedDlcs = _setting.OwnedDlcs.ConvertAll(x => x);
@@ -102,6 +105,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _setting.InputDelay = _inputDelay;
             _setting.SavesRecents = _savesRecents;
             _setting.OwnedDlcs = _ownedDlcs;
+            _setting.IsPlaylist = _isPlaylist;
 
             _setting.Export();
             if (_updatesTrackList)
@@ -109,6 +113,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 _trackListUpdater.Invoke(_ownedDlcs);
             }
             
+            _typeOfFilterSetter.Invoke(_isPlaylist);
             Close();
         }
 
@@ -124,6 +129,15 @@ namespace DjmaxRandomSelectorV.ViewModels
         #endregion
 
         #region Selector Setting
+        public bool IsPlaylist
+        {
+            get { return _isPlaylist; }
+            set
+            {
+                _isPlaylist = value;
+                NotifyOfPropertyChange(() => IsPlaylist);
+            }
+        }
         public int InputDelay
         {
             get { return _inputDelay; }
