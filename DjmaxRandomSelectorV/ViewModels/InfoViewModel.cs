@@ -44,7 +44,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             get { return _currentVersion; }
             set
             {
-                _currentVersion = $"Current Version: {value}";
+                _currentVersion = $"Current Version: {value}-preview1";
                 NotifyOfPropertyChange(() => CurrentVersion);
             }
         }

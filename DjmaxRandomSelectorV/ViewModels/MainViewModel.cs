@@ -21,7 +21,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class MainViewModel : Conductor<object>
     {
-        private const int SELECTOR_VERSION = 140;
+        private const int SELECTOR_VERSION = 150;
         private const string RELEASE_URL = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
         private const string VersionUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
         private const string DjmaxTitle = "DJMAX RESPECT V";
