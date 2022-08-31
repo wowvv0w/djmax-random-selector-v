@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace DjmaxRandomSelectorV.Models
@@ -31,12 +32,18 @@ namespace DjmaxRandomSelectorV.Models
             get { return _recents; }
             set { _recents = value; }
         }
+        [JsonIgnore]
         public bool IsUpdated
         {
             get { return _isUpdated; }
             set { _isUpdated = value; }
         }
         #endregion
+
+        public Playlist()
+        {
+            _isUpdated = true;
+        }
 
         #region Methods
         public void UpdateRecents(int musicCount, int maxCount)
@@ -70,7 +77,6 @@ namespace DjmaxRandomSelectorV.Models
 
                     MusicList = playlist.MusicList;
                     Recents = playlist.Recents;
-                    IsUpdated = playlist.IsUpdated;
                 }
             }
             catch (FileNotFoundException e)
@@ -79,7 +85,6 @@ namespace DjmaxRandomSelectorV.Models
                 {
                     MusicList = new List<Music>();
                     Recents = new List<Music>();
-                    IsUpdated = false;
                 }
                 else
                 {

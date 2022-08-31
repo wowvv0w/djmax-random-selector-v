@@ -105,7 +105,7 @@ namespace DjmaxRandomSelectorV.Models
             }
             else
             {
-                playlist.UpdateRecents(recents.Count, setting.RecentsCount);
+                playlist.UpdateRecents(playlist.MusicList.Count, setting.RecentsCount);
             }
             var musicList = from music in playlist.MusicList
                             where !recents.Contains(music)

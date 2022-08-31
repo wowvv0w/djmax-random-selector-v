@@ -1,8 +1,10 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.DataTypes;
 using DjmaxRandomSelectorV.Models;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,18 +41,18 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 Track track = _trackList.Find(x => x.Title.Equals(TitleSearchBox));
                 string key = StyleSearchBox.ToUpper();
-                item = new()
+                item = new Music()
                 {
                     Title = track.Title,
                     Style = key,
-                    Level = track.Patterns[key].ToString()
+                    Level = track.Patterns[key] > 0 ? track.Patterns[key].ToString() : throw new NullReferenceException()
                 };
             }
             catch (Exception ex)
             {
                 if (ex is NullReferenceException || ex is KeyNotFoundException)
                 {
-                    MessageBox.Show("Does not exist.",
+                    MessageBox.Show("Pattern does not exist.",
                         "Playlist Error",
                         MessageBoxButton.OK,
                         MessageBoxImage.Error);
@@ -64,6 +66,79 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             TitleSearchBox = string.Empty;
             StyleSearchBox = string.Empty;
+        }
+
+        public void RemoveItem(object item)
+        {
+            _playlist.MusicList.Remove(item as Music);
+            PlaylistItems.Remove(item as Music);
+        }
+
+        public void ConcatenateItems()
+        {
+            string app = AppDomain.CurrentDomain.BaseDirectory;
+            string path = Path.Combine(app, @"Data\Playlist");
+            var dialog = new OpenFileDialog()
+            {
+                InitialDirectory = path,
+                DefaultExt = ".json",
+                Filter = "JSON Files (*.json)|*.json"
+            };
+
+            bool? result = dialog.ShowDialog();
+
+            if (result == true)
+            {
+                Playlist concat = new Playlist();
+                concat.Import(dialog.FileName);
+                _playlist.MusicList.AddRange(concat.MusicList);
+                PlaylistItems.AddRange(concat.MusicList);
+            }
+        }
+        public void ClearItems()
+        {
+            _playlist.MusicList.Clear();
+            PlaylistItems.Clear();
+        }
+        public void SaveItems()
+        {
+            string app = AppDomain.CurrentDomain.BaseDirectory;
+            string path = Path.Combine(app, @"Data\Playlist");
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            var dialog = new SaveFileDialog()
+            {
+                InitialDirectory = path,
+                DefaultExt = ".json",
+                Filter = "JSON Files (*.json)|*.json"
+            };
+
+            bool? result = dialog.ShowDialog();
+
+            if (result == true)
+                _playlist.Export(dialog.FileName);
+        }
+        public void LoadItems()
+        {
+            string app = AppDomain.CurrentDomain.BaseDirectory;
+            string path = Path.Combine(app, @"Data\Playlist");
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            var dialog = new OpenFileDialog()
+            {
+                InitialDirectory = path,
+                DefaultExt = ".json",
+                Filter = "JSON Files (*.json)|*.json"
+            };
+
+            bool? result = dialog.ShowDialog();
+
+            if (result == true)
+            {
+                _playlist.Import(dialog.FileName);
+                PlaylistItems.Clear();
+                PlaylistItems.AddRange(_playlist.MusicList);
+            }
         }
 
         #region SearchBox

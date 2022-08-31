@@ -276,11 +276,12 @@
         <Setter Property="Margin" Value="10,0,0,0"/>
     </Style>
     <Style x:Key="DialogButton" TargetType="Button">
+        <Setter Property="Background" Value="#2D2D2D"/>
         <Setter Property="Height" Value="30"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border Background="#2D2D2D"
+                    <Border Background="{TemplateBinding Background}"
                             BorderThickness="0">
                         <TextBlock Text="{TemplateBinding Content}"
                                    Foreground="White"

@@ -10,13 +10,21 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="10" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
+            <RowDefinition Height="20" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+        <Grid.Resources>
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource DialogButton}">
+                <Setter Property="Margin" Value="0 5 0 5" />
+                <Setter Property="Background" Value="#1FFFFFFF" />
+            </Style>
+        </Grid.Resources>
+
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*" />
@@ -24,7 +32,7 @@
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
             <Grid Background="#1FFFFFFF"
-                  Margin="0,5">
+                  Margin="0 5">
                 <TextBox x:Name="TitleSearchBox"
                          Background="Transparent"
                          BorderThickness="0"
@@ -43,7 +51,7 @@
                 </Popup>
             </Grid>
             <Grid Background="#1FFFFFFF"
-                  Margin="0,5"
+                  Margin="0 5"
                   Grid.Column="2">
                 <TextBox x:Name="StyleSearchBox"
                          Background="Transparent"
@@ -55,32 +63,68 @@
                          FontSize="15" />
             </Grid>
         </Grid>
-        <Button x:Name="AddItem"
-                Content="ADD"
-                Grid.Column="1" />
-        
+
         <!--#region Playlist -->
+        <Grid Background="#1FFFFFFF"
+              Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="424"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="{StaticResource Default}"/>
+                    <Setter Property="FontFamily" Value="{StaticResource Lato Black}"/>
+                    <Setter Property="FontSize" Value="12"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+            </Grid.Resources>
+            <TextBlock Text="TITLE"/>
+            <TextBlock Text="STYLE" Grid.Column="2"/>
+        </Grid>
         <ListView x:Name="PlaylistItems"
-                  Grid.Row="1">
+                  Grid.Row="2"
+                  Padding="0"
+                  Foreground="{StaticResource Default}"
+                  Background="#56000000"
+                  BorderThickness="0"
+                  FontFamily="{StaticResource Lato}"
+                  FontSize="16"
+                  SelectionMode="Single">
+            <ListView.Resources>
+                <Style TargetType="{x:Type GridViewColumnHeader}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </Style>
+            </ListView.Resources>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="400" />
-                    <GridViewColumn Header="Style" DisplayMemberBinding="{Binding Style}" Width="100" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Title}" Width="424" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Style}" Width="100" />
                 </GridView>
             </ListView.View>
         </ListView>
         <!--#endregion-->
 
         <!--#region Tool-->
-        <StackPanel Grid.Column="1" Grid.Row="1">
-            <Button x:Name="RemoveItem"
+        <StackPanel Grid.Column="2" Grid.RowSpan="3">
+            <Button x:Name="AddItem"
+                    Content="ADD"
+                    Grid.Column="2" />
+            <Button cal:Message.Attach="RemoveItem(PlaylistItems.SelectedItem)"
                     Content="REMOVE" />
             <Button x:Name="ConcatenateItems"
                     Content="CONCAT" />
-            <Button x:Name="MoveUpItem"
-                    Content="MOVE UP" />
-            <Button x:Name="MoveDownItem"
-                    Content="MOVE DOWN" />
+            <Button x:Name="ClearItems"
+                    Content="CLEAR" />
+        </StackPanel>
+        <StackPanel Grid.Column="2" Grid.RowSpan="3"
+                    VerticalAlignment="Bottom">
+            <Button x:Name="SaveItems"
+                    Content="SAVE" />
+            <Button x:Name="LoadItems"
+                    Content="LOAD" />
         </StackPanel>
         <!--#endregion-->
     </Grid>
