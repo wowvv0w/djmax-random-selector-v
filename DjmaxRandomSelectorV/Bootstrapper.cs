@@ -10,9 +10,9 @@ namespace DjmaxRandomSelectorV
         {
             Initialize();
         }
-        protected override void OnStartup(object sender, StartupEventArgs e)
+        protected override async void OnStartup(object sender, StartupEventArgs e)
         {
-            DisplayRootViewFor<MainViewModel>();
+            await DisplayRootViewForAsync<MainViewModel>();
         }
     }
 }
