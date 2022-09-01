@@ -21,8 +21,8 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class MainViewModel : Conductor<object>
     {
-        private const int SELECTOR_VERSION = 150;
-        private const string RELEASE_URL = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
+        private const int SelectorVersion = 150;
+        private const string ReleasesUrl = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
         private const string VersionUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
         private const string DjmaxTitle = "DJMAX RESPECT V";
 
@@ -60,7 +60,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                     _lastAllTrackVer = int.Parse(versions[1]);
                 }
 
-                if (SELECTOR_VERSION < lastSelectorVer)
+                if (SelectorVersion < lastSelectorVer)
                     OpenReleasePageVisibility = Visibility.Visible;
 
                 if (setting.AllTrackVersion != _lastAllTrackVer)
@@ -80,7 +80,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                     "Selector Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
-                lastSelectorVer = SELECTOR_VERSION;
+                lastSelectorVer = SelectorVersion;
             }
 
             try
@@ -120,43 +120,45 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             _isFilterType = !setting.IsPlaylist;
             _isPlaylistType = setting.IsPlaylist;
+
+            SetPosition(setting.Position);
         }
 
 
         #region On Start Up
-        public void ShowEvent(object view)
+        public void AddHotkey(object view)
         {
             var window = view as Window;
-            AddHotKey(window);
-            SetPosition(window);
-        }
-        private void AddHotKey(Window window)
-        {
             HwndSource source;
             IntPtr handle = new WindowInteropHelper(window).Handle;
             source = HwndSource.FromHwnd(handle);
             source.AddHook(HwndHook);
             RegisterHotKey(handle, HOTKEY_ID, 0x0000, KEY_F7);
         }
-        private void SetPosition(Window window)
-        {
-            if (setting.Position.Length == 2)
-            {
-                window.Top = setting.Position[0];
-                window.Left = setting.Position[1];
-            }
-            else
-            {
-                setting.Position = new double[2] { window.Top, window.Left };
-            }
-        }
-        public void GetDockPanel(object source)
-        {
-            var dockPanel = source as DockPanel;
-            this.dockPanel = dockPanel;
-        }
         #endregion
 
+        #region Position
+        private double _top;
+        public double Top
+        {
+            get { return _top; }
+            set { _top = value; }
+        }
+        private double _left;
+        public double Left
+        {
+            get { return _left; }
+            set { _left = value; }
+        }
+        public void SetPosition(double[] position)
+        {
+            if (position.Length == 2)
+            {
+                Top = position[0];
+                Left = position[1];
+            }
+        }
+        #endregion
 
         #region Start Selector
         private bool CanStart()
@@ -195,7 +197,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         #endregion
 
         #region On Exit
-        public void CloseEvent(object view)
+        public void SaveConfig(object view)
         {
             var window = view as Window;
 
@@ -207,7 +209,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             FilterViewModel.Filter.Export();
             _playlist.Export();
 
-            setting.Position = new double[2] { (window.Top < 0 ? 0 : window.Top), (window.Left < 0 ? 0 : window.Left) };
+            setting.Position = new double[2] { Top, Left };
+
             setting.Export();
         }
         #endregion
@@ -252,7 +255,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void OpenReleasePage()
         {
-            System.Diagnostics.Process.Start(RELEASE_URL);
+            System.Diagnostics.Process.Start(ReleasesUrl);
         }
         public void MoveWindow(object view)
         {
@@ -320,7 +323,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             SetBlurEffect(true);
             var infoViewModel
-                = new InfoViewModel(SELECTOR_VERSION, lastSelectorVer, setting.AllTrackVersion, SetBlurEffect);
+                = new InfoViewModel(SelectorVersion, lastSelectorVer, setting.AllTrackVersion, SetBlurEffect);
             _windowManager.ShowDialogAsync(infoViewModel);
         }
         public void ShowSetting()
@@ -342,9 +345,19 @@ namespace DjmaxRandomSelectorV.ViewModels
         #region Show/Hide
         public void ShowEquipment() => SetBlurEffect(true);
         public void HideEquipment() => SetBlurEffect(false);
+        private Effect _blurEffect;
+        public Effect BlurEffect
+        {
+            get { return _blurEffect; }
+            set
+            {
+                _blurEffect = value;
+                NotifyOfPropertyChange(() => BlurEffect);
+            }
+        }
         private void SetBlurEffect(bool turnsOn)
         {
-            dockPanel.Effect = turnsOn ? new BlurEffect() { Radius = 75 } : null;
+            BlurEffect = turnsOn ? new BlurEffect() { Radius = 75 } : null;
         }
         #endregion
         #region Constants
