@@ -9,141 +9,63 @@ namespace DjmaxRandomSelectorV.Models
     public class Filter
     {
         #region Fields
-        private List<string> buttonTunes;
-        private List<string> difficulties;
-        private List<string> categories;
-        private int[] levels;
-        private int[] scLevels;
-        private List<string> recents;
-        private bool includesFavorite;
-        private bool isUpdated;
+        private List<string> _buttonTunes;
+        private List<string> _difficulties;
+        private List<string> _categories;
+        private int[] _levels;
+        private int[] _scLevels;
+        private List<string> _recents;
+        private bool _includesFavorite;
+        private bool _isUpdated;
         #endregion
 
         #region Properties
         public List<string> ButtonTunes
         {
-            get { return buttonTunes; }
-            set { buttonTunes = value; }
+            get { return _buttonTunes; }
+            set { _buttonTunes = value; }
         }
         public List<string> Difficulties
         {
-            get { return difficulties; }
-            set { difficulties = value; }
+            get { return _difficulties; }
+            set { _difficulties = value; }
         }
         public List<string> Categories
         {
-            get { return categories; }
-            set { categories = value; }
+            get { return _categories; }
+            set { _categories = value; }
         }
         public int[] Levels
         {
-            get { return levels; }
-            set { levels = value; }
+            get { return _levels; }
+            set { _levels = value; }
         }
         public int[] ScLevels
         {
-            get { return scLevels; }
-            set { scLevels = value; }
+            get { return _scLevels; }
+            set { _scLevels = value; }
         }
         public List<string> Recents
         {
-            get { return recents; }
-            set { recents = value; }
+            get { return _recents; }
+            set { _recents = value; }
         }
         public bool IncludesFavorite
         {
-            get { return includesFavorite; }
-            set { includesFavorite = value; }
+            get { return _includesFavorite; }
+            set { _includesFavorite = value; }
         }
         [JsonIgnore]
         public bool IsUpdated
         {
-            get { return isUpdated; }
-            set { isUpdated = value; }
+            get { return _isUpdated; }
+            set { _isUpdated = value; }
         }
-        #endregion
-
-        #region Constants
-        private const string CurrentFilterPath = "Data/CurrentFilter.json";
         #endregion
 
         public Filter()
         {
-            isUpdated = true;
+            _isUpdated = true;
         }
-
-        #region Methods
-        public void UpdateRecents(int titleCount, int maxCount)
-        {
-            int recentsCount = recents.Count;
-            if (recentsCount > maxCount)
-            {
-                recents.RemoveRange(0, recentsCount - maxCount);
-            }
-            else if (recentsCount >= titleCount)
-            {
-                try
-                {
-                    recents.RemoveRange(0, recentsCount - titleCount + 1);
-                }
-                catch (ArgumentException)
-                {
-                }
-            }
-        }
-        public void Import(string presetPath = null)
-        {
-            bool isNull = string.IsNullOrEmpty(presetPath);
-            var path = isNull ? CurrentFilterPath : presetPath;
-            try
-            {
-                using (var reader = new StreamReader(path))
-                {
-                    string json = reader.ReadToEnd();
-                    Filter filter = JsonSerializer.Deserialize<Filter>(json);
-
-                    ButtonTunes = filter.ButtonTunes;
-                    Difficulties = filter.Difficulties;
-                    Categories = filter.Categories;
-                    Levels = filter.Levels;
-                    ScLevels = filter.ScLevels;
-                    Recents = filter.Recents;
-                    IncludesFavorite = filter.IncludesFavorite;
-                }
-            }
-            catch (FileNotFoundException e)
-            {
-                if (isNull)
-                {
-                    ButtonTunes = new List<string>();
-                    Difficulties = new List<string>();
-                    Categories = new List<string>();
-                    Levels = new int[2] { 1, 15 };
-                    ScLevels = new int[2] { 1, 15 };
-                    Recents = new List<string>();
-                    IncludesFavorite = false;
-                }
-                else
-                {
-                    throw e;
-                }
-            }
-        }
-        public void Export(string presetPath = null)
-        {
-            var options = new JsonSerializerOptions()
-            {
-                WriteIndented = true,
-                IgnoreReadOnlyProperties = false
-            };
-            string jsonString = JsonSerializer.Serialize(this, options);
-            var path = string.IsNullOrEmpty(presetPath) ? CurrentFilterPath : presetPath;
-
-            using (var writer = new StreamWriter(path))
-            { 
-                writer.Write(jsonString);
-            }
-        }
-        #endregion
     }
 }

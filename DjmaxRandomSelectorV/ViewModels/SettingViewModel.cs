@@ -8,12 +8,13 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
 using System.IO;
+using DjmaxRandomSelectorV.Utilities;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
     public class SettingViewModel : Screen
     {
-        private readonly Setting _setting;
+        private readonly Config _setting;
         private readonly Action<bool> _blurSetter;
         private readonly Action<List<string>> _trackListUpdater;
         private readonly Action<bool> _typeOfFilterSetter;
@@ -25,7 +26,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private bool _updatesTrackList = false;
 
-        public SettingViewModel(Setting setting, Action<bool> blurSetter, Action<List<string>> trackListUpdater, Action<bool> typeOfFilterSetter)
+        public SettingViewModel(Config setting, Action<bool> blurSetter, Action<List<string>> trackListUpdater, Action<bool> typeOfFilterSetter)
         {
             _setting = setting;
             _blurSetter = blurSetter;
@@ -107,7 +108,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _setting.OwnedDlcs = _ownedDlcs;
             _setting.IsPlaylist = _isPlaylist;
 
-            _setting.Export();
+            FileManager.Export(_setting, "Data/Config.json");
             if (_updatesTrackList)
             {
                 _trackListUpdater.Invoke(_ownedDlcs);

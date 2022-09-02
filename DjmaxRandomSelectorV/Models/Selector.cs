@@ -18,6 +18,7 @@ using static System.Net.WebRequestMethods;
 
 namespace DjmaxRandomSelectorV.Models
 {
+    [Obsolete]
     public class Selector : IAddonObserver
     {
         #region Fields
@@ -51,7 +52,7 @@ namespace DjmaxRandomSelectorV.Models
             isUpdated = true;
         }
 
-        public Music Start(Filter filter, Setting setting)
+        public Music Start(Filter filter, Config setting)
         {
             isRunning = true;
 
@@ -68,7 +69,7 @@ namespace DjmaxRandomSelectorV.Models
             }
             else
             {
-                filter.UpdateRecents(titleCount, setting.RecentsCount);
+                //filter.UpdateRecents(titleCount, setting.RecentsCount);
             }
             var musicList = from music in this.musicList
                             where !recents.Contains(music.Title)
@@ -91,7 +92,7 @@ namespace DjmaxRandomSelectorV.Models
             return selectedMusic;
         }
 
-        public Music Start(Playlist playlist, Setting setting)
+        public Music Start(Playlist playlist, Config setting)
         {
             isRunning = true;
 
@@ -105,7 +106,7 @@ namespace DjmaxRandomSelectorV.Models
             }
             else
             {
-                playlist.UpdateRecents(playlist.MusicList.Count, setting.RecentsCount);
+                //playlist.UpdateRecents(playlist.MusicList.Count, setting.RecentsCount);
             }
             var musicList = from music in playlist.MusicList
                             where !recents.Contains(music)
@@ -131,7 +132,7 @@ namespace DjmaxRandomSelectorV.Models
         #region IAddonObserver Methods
         public void Update(IAddonObservable observable)
         {
-            var setting = observable as Setting;
+            var setting = observable as Config;
 
             SetSifter(setting.Mode, setting.Level);
             SetProvider(setting.Mode, setting.Aider);

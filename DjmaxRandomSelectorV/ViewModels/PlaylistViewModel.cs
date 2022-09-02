@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.DataTypes;
 using DjmaxRandomSelectorV.Models;
+using DjmaxRandomSelectorV.Utilities;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class PlaylistViewModel : Screen
     {
-        private readonly Playlist _playlist;
+        private Playlist _playlist;
         private readonly List<Track> _trackList;
 
 
@@ -89,8 +90,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                Playlist concat = new Playlist();
-                concat.Import(dialog.FileName);
+                var concat = FileManager.Import<Playlist>(dialog.FileName);
                 _playlist.MusicList.AddRange(concat.MusicList);
                 PlaylistItems.AddRange(concat.MusicList);
             }
@@ -116,7 +116,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             bool? result = dialog.ShowDialog();
 
             if (result == true)
-                _playlist.Export(dialog.FileName);
+                FileManager.Export(_playlist, dialog.FileName);
         }
         public void LoadItems()
         {
@@ -135,7 +135,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                _playlist.Import(dialog.FileName);
+                _playlist = FileManager.Import<Playlist>(dialog.FileName);
                 PlaylistItems.Clear();
                 PlaylistItems.AddRange(_playlist.MusicList);
             }

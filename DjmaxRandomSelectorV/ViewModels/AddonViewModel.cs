@@ -60,7 +60,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         #region Image Modification
         public void Update(IAddonObservable observable)
         {
-            var setting = observable as Setting;
+            var setting = observable as Config;
             bool isFreestyle = setting.Mode.Equals(Mode.Freestyle);
 
             SetBitmapImage(setting.Mode);

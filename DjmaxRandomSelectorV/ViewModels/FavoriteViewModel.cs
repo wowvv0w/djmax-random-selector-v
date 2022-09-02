@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
 using DjmaxRandomSelectorV.Properties;
+using DjmaxRandomSelectorV.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class FavoriteViewModel : Screen
     {
         private bool searchesSuggestion;
-        private readonly Setting setting;
+        private readonly Config setting;
         private readonly Action<bool> blurSetter;
         private readonly List<string> titleList;
         private readonly Action<bool> setUpdated;
@@ -23,7 +24,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public BindableCollection<string> FavoriteItems { get; set; }
         public BindableCollection<string> TitleSuggestions { get; set; }
 
-        public FavoriteViewModel(Setting setting, List<string> titleList, Action<bool> blurSetter, Action<bool> setUpdated)
+        public FavoriteViewModel(Config setting, List<string> titleList, Action<bool> blurSetter, Action<bool> setUpdated)
         {
             searchesSuggestion = true;
             this.setting = setting;
@@ -39,7 +40,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         public void OK()
         {
-            setting.Export();
+            FileManager.Export(setting, "Data/Config.json");
             TryCloseAsync();
             blurSetter.Invoke(false);
         }

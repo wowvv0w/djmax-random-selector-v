@@ -4,6 +4,7 @@ using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
 using DjmaxRandomSelectorV.DataTypes;
 using DjmaxRandomSelectorV.DataTypes.Enums;
+using DjmaxRandomSelectorV.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,113 +17,220 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media.Effects;
 using System.Net.Http;
+using CsvHelper;
+using System.Globalization;
+using System.Linq;
+using DjmaxRandomSelectorV.DataTypes.Interfaces;
+using System.Security.Policy;
+using DjmaxRandomSelectorV.Properties;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class MainViewModel : Conductor<object>
+    public class MainViewModel : Conductor<object>, IAddonObserver
     {
-        private const int SelectorVersion = 150;
-        private const string ReleasesUrl = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
-        private const string VersionUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
+        private const int ApplicationVersion = 150;
         private const string DjmaxTitle = "DJMAX RESPECT V";
+        
+        private const string ReleasesUrl = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
+        private const string VersionsUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
+        private const string AllTrackListUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Data/AllTrackList.csv";
 
-        private int lastSelectorVer;
-
-        private DockPanel dockPanel;
+        private const string ConfigPath = "Data/Config.json";
+        private const string CurrentFilterPath = "Data/CurrentFilter.json";
+        private const string CurrentPlaylistPath = "Data/CurrentPlaylist.json";
+        private const string AllTrackListPath = "Data/AllTrackList.csv";
 
         public FilterViewModel FilterViewModel { get; set; }
         public PlaylistViewModel PlaylistViewModel { get; set; }
         public HistoryViewModel HistoryViewModel { get; set; }
-
         public AddonViewModel AddonPanel { get; set; }
         public AddonViewModel AddonButton { get; set; }
 
-        private readonly Filter filter;
-        private readonly Playlist _playlist;
-        private readonly Selector selector;
-        private readonly Setting setting;
+        private InfoViewModel _infoViewModel;
 
-        public MainViewModel()
+        private Filter _filter;
+        private Playlist _playlist;
+        private Config _config;
+
+        private List<Track> _allTrackList;
+        private List<Track> _trackList;
+        private List<Music> _musicList;
+
+        private bool _isUpdated;
+        private bool _isRunning;
+
+        private ISifter _sifter;
+        private IProvider _provider;
+
+        #region Initializing
+        /// <summary>
+        /// Compare to lastest versions of application and track list file from GitHub repository.
+        /// </summary>
+        /// <returns>Two 32-bit signed integers.</returns>
+        private (int, int) CompareToLastestVersions()
         {
-            setting = new Setting();
-            setting.Import();
+            using var client = new HttpClient();
 
-            selector = new Selector();
+            string result = client.GetStringAsync(VersionsUrl).Result;
+            string[] versions = result.Split(',');
+
+            var lastestAppVersion = int.Parse(versions[0]);
+            var lastestTrackVersion = int.Parse(versions[1]);
+
+            int gapWithLastestApp = lastestAppVersion - ApplicationVersion;
+            int gapWithLastestTrack = lastestTrackVersion - _config.AllTrackVersion;
+
+            return (gapWithLastestApp, gapWithLastestTrack);
+        }
+        /// <summary>
+        /// Get track list file from GitHub repository.
+        /// </summary>
+        private void DownloadAllTrackList()
+        {
+            using var client = new HttpClient();
+            string result = client.GetStringAsync(AllTrackListUrl).Result;
+
+            using var writer = new StreamWriter(AllTrackListPath);
+            writer.Write(result);
+        }
+        /// <summary>
+        /// Get a list of all tracks from local track list file.
+        /// </summary>
+        /// <returns>A list of <see cref="Track"/>.</returns>
+        private void GetAllTrackList()
+        {
+            using var reader = new StreamReader(AllTrackListPath, Encoding.UTF8);
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+            csv.Context.RegisterClassMap<TrackMap>();
+            var records = csv.GetRecords<Track>().ToList();
+            
+            _allTrackList = records;
+        }
+        /// <summary>
+        /// Set <see cref="_trackList"/> according to <paramref name="ownedDlcs"/>.
+        /// </summary>
+        /// <param name="ownedDlcs">A list of <see cref="string"/> that contains categories.</param>
+        public void UpdateTrackList(List<string> ownedDlcs)
+        {
+            var basicCategories = new List<string>() { "RP", "P1", "P2", "GG" };
+            var titleFilter = CreateTitleFilter(ownedDlcs);
+            var trackList = from track in _allTrackList
+                            where (ownedDlcs.Contains(track.Category) || basicCategories.Contains(track.Category))
+                            && !titleFilter.Contains(track.Title)
+                            select track;
+
+            _trackList = trackList.ToList();
+            _isUpdated = true;
+        }
+        private List<string> CreateTitleFilter(List<string> ownedDlcs)
+        {
+            var list = new List<string>();
+
+            if (!ownedDlcs.Contains("P3"))
+            {
+                list.Add("glory day (Mintorment Remix)");
+                list.Add("glory day -JHS Remix-");
+            }
+            if (!ownedDlcs.Contains("TR"))
+                list.Add("Nevermind");
+            if (!ownedDlcs.Contains("CE"))
+                list.Add("Rising The Sonic");
+            if (!ownedDlcs.Contains("BS"))
+                list.Add("ANALYS");
+            if (!ownedDlcs.Contains("T1"))
+                list.Add("Do you want it");
+            if (!ownedDlcs.Contains("T2"))
+                list.Add("End of Mythology");
+            if (!ownedDlcs.Contains("T3"))
+                list.Add("ALiCE");
+            if (!ownedDlcs.Contains("TQ"))
+                list.Add("Techno Racer");
+            if (ownedDlcs.Contains("CE") && !ownedDlcs.Contains("BS") && !ownedDlcs.Contains("T1"))
+                list.Add("Here in the Moment ~Extended Mix~");
+            if (!ownedDlcs.Contains("CE") && ownedDlcs.Contains("BS") && !ownedDlcs.Contains("T1"))
+                list.Add("Airwave ~Extended Mix~");
+            if (!ownedDlcs.Contains("CE") && !ownedDlcs.Contains("BS") && ownedDlcs.Contains("T1"))
+                list.Add("SON OF SUN ~Extended Mix~");
+            if (!ownedDlcs.Contains("VE") && ownedDlcs.Contains("VE2"))
+                list.Add("너로피어오라 ~Original Ver.~");
+
+            return list;
+        }
+        /// <summary>
+        /// Initialize DJMAX Random Selector V.
+        /// </summary>
+        private void Initialize()
+        {
+            // Import Files.
+            _filter = FileManager.Import<Filter>(CurrentFilterPath);
+            _playlist = FileManager.Import<Playlist>(CurrentPlaylistPath);
+            _config = FileManager.Import<Config>(ConfigPath);
+
+            // Check if the files should be updated, and then create Info dialog.
             try
             {
-                int _lastAllTrackVer;
-                using (var client = new HttpClient())
+                (int gapWithLastestApp, int gapWithLastestTrack) = CompareToLastestVersions();
+                OpenReleasePageVisibility = gapWithLastestApp > 0 ? Visibility.Visible : Visibility.Hidden;
+                if (gapWithLastestTrack != 0 || !File.Exists(AllTrackListPath))
                 {
-                    var data = client.GetStringAsync(VersionUrl).Result;
-                    var versions = data.Split(',');
-
-                    lastSelectorVer = int.Parse(versions[0]);
-                    _lastAllTrackVer = int.Parse(versions[1]);
-                }
-
-                if (SelectorVersion < lastSelectorVer)
-                    OpenReleasePageVisibility = Visibility.Visible;
-
-                if (setting.AllTrackVersion != _lastAllTrackVer)
-                {
-                    selector.DownloadAllTrackList();
-                    setting.AllTrackVersion = _lastAllTrackVer;
-                    setting.Export();
-                    MessageBox.Show($"All track list is updated to the version {_lastAllTrackVer}.",
+                    DownloadAllTrackList();
+                    _config.AllTrackVersion += gapWithLastestTrack;
+                    FileManager.Export(_config, ConfigPath);
+                    MessageBox.Show($"All track list is updated to the version {_config.AllTrackVersion}.",
                         "DJMAX Random Selector V",
                         MessageBoxButton.OK,
                         MessageBoxImage.Information);
                 }
+
+                _infoViewModel = new InfoViewModel(ApplicationVersion, ApplicationVersion + gapWithLastestApp,
+                    _config.AllTrackVersion, SetBlurEffect);
             }
-            catch (Exception e)
+            catch (HttpRequestException)
             {
-                MessageBox.Show(e.Message,
+                MessageBox.Show("Cannot check available updates. Check the internet connection.",
                     "Selector Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
-                lastSelectorVer = SelectorVersion;
+
+                _infoViewModel = new InfoViewModel(ApplicationVersion, ApplicationVersion,
+                    _config.AllTrackVersion, SetBlurEffect);
             }
 
-            try
-            {
-                selector.ReadAllTrackList();
-                selector.UpdateTrackList(setting.OwnedDlcs);
-            }
-            catch (FileNotFoundException)
-            {
-                MessageBox.Show("Cannot Find AllTrackList.csv\nCreate new file.",
-                    "Selector Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
-                selector.DownloadAllTrackList();
-            }
+            // Set track list and filtered music list.
+            GetAllTrackList();
+            UpdateTrackList(_config.OwnedDlcs);
+        }
+        #endregion
 
-            _playlist = new Playlist();
-            _playlist.Import();
+        public MainViewModel()
+        {
+            Initialize();
 
-            FilterViewModel = new FilterViewModel(ShowFavorite);
-            PlaylistViewModel = new PlaylistViewModel(_playlist, selector.TrackList);
+            FilterViewModel = new FilterViewModel(_filter, ShowFavorite);
+            PlaylistViewModel = new PlaylistViewModel(_playlist, _trackList);
             HistoryViewModel = new HistoryViewModel();
-            filter = FilterViewModel.Filter;
 
             AddonPanel = new AddonViewModel();
             AddonButton = new AddonViewModel();
-            AddonPanel.ExceptCount = setting.RecentsCount;
-            AddonButton.ExceptCount = setting.RecentsCount;
-            SetAddonText(setting.Mode);
-            SetAddonText(setting.Aider);
-            SetAddonText(setting.Level);
+            AddonPanel.ExceptCount = _config.RecentsCount;
+            AddonButton.ExceptCount = _config.RecentsCount;
+            SetAddonText(_config.Mode);
+            SetAddonText(_config.Aider);
+            SetAddonText(_config.Level);
 
-            setting.Subscribe(selector);
-            setting.Subscribe(AddonPanel);
-            setting.Subscribe(AddonButton);
-            setting.Notify();
+            _config.Subscribe(this);
+            _config.Subscribe(AddonPanel);
+            _config.Subscribe(AddonButton);
+            _config.Notify();
 
-            _isFilterType = !setting.IsPlaylist;
-            _isPlaylistType = setting.IsPlaylist;
+            _isFilterType = !_config.IsPlaylist;
+            _isPlaylistType = _config.IsPlaylist;
 
-            SetPosition(setting.Position);
+            SetPosition(_config.Position);
         }
+
 
 
         #region On Start Up
@@ -161,14 +269,59 @@ namespace DjmaxRandomSelectorV.ViewModels
         #endregion
 
         #region Start Selector
+        private void UpdateRecents<T>(List<T> recents, int filteredCount)
+        {
+            int recentsCount = recents.Count;
+            int maxCount = _config.RecentsCount;
+            if (recentsCount > maxCount)
+            {
+                recents.RemoveRange(0, recentsCount - maxCount);
+            }
+            else if (recentsCount >= filteredCount)
+            {
+                try
+                {
+                    recents.RemoveRange(0, recentsCount - filteredCount + 1);
+                }
+                catch (ArgumentException)
+                {
+                }
+            }
+        }
+        private void Sift()
+        {
+            List<string> styles = new List<string>();
+            foreach (string button in _filter.ButtonTunes)
+                foreach (string difficulty in _filter.Difficulties)
+                    styles.Add($"{button}{difficulty}");
+
+            var trackList = from track in _trackList
+                            where _filter.Categories.Contains(track.Category)
+                                || _filter.IncludesFavorite && _config.Favorite.Contains(track.Title)
+            select track;
+
+            _musicList = _sifter.Sift(trackList.ToList(), styles, _filter.Levels, _filter.ScLevels);
+        }
+        private Music Pick(List<Music> musicList)
+        {
+            var random = new Random();
+            var index = random.Next(musicList.Count - 1);
+            var selectedMusic = musicList[index];
+
+            return selectedMusic;
+        }
+        private void Provide(Music selectedMusic)
+        {
+            _provider.Provide(selectedMusic, _trackList, _config.InputDelay);
+        }
         private bool CanStart()
         {
             string windowTitle = GetActiveWindowTitle();
-            if (setting.Aider.Equals(Aider.Observe))
+            if (_config.Aider.Equals(Aider.Observe))
                 return true;
             else if (!windowTitle.Equals(DjmaxTitle))
                 throw new Exception("Foreground window is not DJMAX RESPECT V.");
-            else if (!selector.IsRunning)
+            else if (!_isRunning)
                 return true;
             else
                 return false;
@@ -179,9 +332,9 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 Music selectedMusic;
                 if (_isFilterType)
-                    selectedMusic = selector.Start(filter, setting);
+                    selectedMusic = StartF();
                 else
-                    selectedMusic = selector.Start(_playlist, setting);
+                    selectedMusic = StartP();
 
                 var historyItem = new HistoryItem(selectedMusic);
                 HistoryViewModel.UpdateHistory(historyItem);
@@ -194,24 +347,148 @@ namespace DjmaxRandomSelectorV.ViewModels
                     MessageBoxImage.Error);
             }
         }
+        private Music StartF()
+        {
+            _isRunning = true;
+
+            List<string> recents = _filter.Recents;
+
+            if (_isUpdated || _filter.IsUpdated)
+            {
+                Sift();
+                recents.Clear();
+                _isUpdated = false;
+            }
+            else
+            {
+                var titleList = from music in _musicList
+                                select music.Title;
+                int titleCount = titleList.Distinct().Count();
+                UpdateRecents(_filter.Recents, titleCount);
+            }
+            var musicList = from music in _musicList
+                            where !recents.Contains(music.Title)
+                            select music;
+
+            Music selectedMusic;
+            try
+            {
+                selectedMusic = Pick(musicList.ToList());
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                _isRunning = false;
+                throw e;
+            }
+
+            Provide(selectedMusic);
+            recents.Add(selectedMusic.Title);
+            _isRunning = false;
+            return selectedMusic;
+        }
+        private Music StartP()
+        {
+            _isRunning = true;
+
+            List<Music> recents = _playlist.Recents;
+
+            if (_isUpdated || _playlist.IsUpdated)
+            {
+                _musicList = _playlist.MusicList;
+                recents.Clear();
+                _isUpdated = false;
+            }
+            else
+            {
+                UpdateRecents(_playlist.Recents, _playlist.MusicList.Count);
+            }
+            var musicList = from music in _musicList
+                            where !recents.Contains(music)
+                            select music;
+
+            Music selectedMusic;
+            try
+            {
+                selectedMusic = Pick(musicList.ToList());
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                _isRunning = false;
+                throw e;
+            }
+
+            Provide(selectedMusic);
+            recents.Add(selectedMusic);
+            _isRunning = false;
+            return selectedMusic;
+        }
         #endregion
 
+        #region IAddonObserver Methods
+        public void Update(IAddonObservable observable)
+        {
+            var setting = observable as Config;
+
+            SetSifter(setting.Mode, setting.Level);
+            SetProvider(setting.Mode, setting.Aider);
+            _isUpdated = true;
+        }
+        private void SetSifter(Mode mode, Level level)
+        {
+            if (mode.Equals(Mode.Freestyle))
+            {
+                switch (level)
+                {
+                    case Level.Off:
+                        _sifter = new Freestyle();
+                        break;
+                    case Level.Beginner:
+                        _sifter = new FreestyleWithLevel("BEGINNER");
+                        break;
+                    case Level.Master:
+                        _sifter = new FreestyleWithLevel("MASTER");
+                        break;
+                }
+            }
+            else
+            {
+                _sifter = new Online();
+            }
+        }
+        private void SetProvider(Mode mode, Aider aider)
+        {
+            switch (aider)
+            {
+                case Aider.Off:
+                    _provider = new Locator(false);
+                    break;
+                case Aider.AutoStart:
+                    if (mode.Equals(Mode.Freestyle))
+                        _provider = new Locator(true);
+                    else
+                        _provider = new Locator(false);
+                    break;
+                case Aider.Observe:
+                    _provider = new Observe();
+                    break;
+            }
+        }
+        #endregion
         #region On Exit
         public void SaveConfig(object view)
         {
             var window = view as Window;
 
-            if (!setting.SavesRecents)
+            FileManager.Export(_filter, CurrentFilterPath);
+            FileManager.Export(_playlist, CurrentPlaylistPath);
+
+            if (!_config.SavesRecents)
             {
-                FilterViewModel.Filter.Recents.Clear();
+                _filter.Recents.Clear();
                 _playlist.Recents.Clear();
             }
-            FilterViewModel.Filter.Export();
-            _playlist.Export();
-
-            setting.Position = new double[2] { Top, Left };
-
-            setting.Export();
+            _config.Position = new double[2] { Top, Left };
+            FileManager.Export(_config, ConfigPath);
         }
         #endregion
 
@@ -242,7 +519,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
 
         #region Window Top Bar
-        private Visibility _openReleasePageVisibility = Visibility.Hidden;
+        private Visibility _openReleasePageVisibility;
         public Visibility OpenReleasePageVisibility
         {
             get { return _openReleasePageVisibility; }
@@ -322,20 +599,19 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void ShowInfo()
         {
             SetBlurEffect(true);
-            var infoViewModel
-                = new InfoViewModel(SelectorVersion, lastSelectorVer, setting.AllTrackVersion, SetBlurEffect);
-            _windowManager.ShowDialogAsync(infoViewModel);
+            _windowManager.ShowDialogAsync(_infoViewModel);
         }
         public void ShowSetting()
         {
             SetBlurEffect(true);
-            _windowManager.ShowDialogAsync(new SettingViewModel(setting, SetBlurEffect, selector.UpdateTrackList, ChangeTypeOfFilter));
+            _windowManager.ShowDialogAsync(new SettingViewModel(_config, SetBlurEffect, UpdateTrackList, ChangeTypeOfFilter));
         }
         public void ShowFavorite()
         {
             SetBlurEffect(true);
-            Action<bool> setUpdated = value => filter.IsUpdated = value;
-            _windowManager.ShowDialogAsync(new FavoriteViewModel(setting, selector.GetTitleList(), SetBlurEffect, setUpdated));
+            Action<bool> setUpdated = value => _filter.IsUpdated = value;
+            var titleList = _allTrackList.ConvertAll(x => x.Title).Distinct().ToList();
+            _windowManager.ShowDialogAsync(new FavoriteViewModel(_config, titleList, SetBlurEffect, setUpdated));
         }
         #endregion
 
@@ -372,10 +648,10 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public int RecentsCount
         {
-            get { return setting.RecentsCount; }
+            get { return _config.RecentsCount; }
             set
             {
-                setting.RecentsCount = value;
+                _config.RecentsCount = value;
                 NotifyOfPropertyChange(() => RecentsCount);
                 AddonPanel.ExceptCount = value;
                 AddonButton.ExceptCount = value;
@@ -406,11 +682,11 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         public void SwitchMode()
         {
-            if (setting.Mode.Equals(Mode.Freestyle))
-                setting.Mode = Mode.Online;
+            if (_config.Mode.Equals(Mode.Freestyle))
+                _config.Mode = Mode.Online;
             else
-                setting.Mode = Mode.Freestyle;
-            SetAddonText(setting.Mode);
+                _config.Mode = Mode.Freestyle;
+            SetAddonText(_config.Mode);
         }
 
         private string aiderText;
@@ -440,19 +716,19 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         public void PrevAider()
         {
-            if (setting.Aider.Equals(Aider.Off))
-                setting.Aider = Aider.Observe;
+            if (_config.Aider.Equals(Aider.Off))
+                _config.Aider = Aider.Observe;
             else
-                setting.Aider--;
-            SetAddonText(setting.Aider);
+                _config.Aider--;
+            SetAddonText(_config.Aider);
         }
         public void NextAider()
         {
-            if (setting.Aider.Equals(Aider.Observe))
-                setting.Aider = Aider.Off;
+            if (_config.Aider.Equals(Aider.Observe))
+                _config.Aider = Aider.Off;
             else
-                setting.Aider++;
-            SetAddonText(setting.Aider);
+                _config.Aider++;
+            SetAddonText(_config.Aider);
         }
 
         private string levelText;
@@ -482,19 +758,19 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         public void PrevLevel()
         {
-            if (setting.Level.Equals(Level.Off))
-                setting.Level = Level.Master;
+            if (_config.Level.Equals(Level.Off))
+                _config.Level = Level.Master;
             else
-                setting.Level--;
-            SetAddonText(setting.Level);
+                _config.Level--;
+            SetAddonText(_config.Level);
         }
         public void NextLevel()
         {
-            if (setting.Level.Equals(Level.Master))
-                setting.Level = Level.Off;
+            if (_config.Level.Equals(Level.Master))
+                _config.Level = Level.Off;
             else
-                setting.Level++;
-            SetAddonText(setting.Level);
+                _config.Level++;
+            SetAddonText(_config.Level);
         }
         #endregion
 

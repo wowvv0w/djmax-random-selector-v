@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
+using DjmaxRandomSelectorV.Utilities;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -16,11 +17,10 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class FilterViewModel : Screen
     {
         private Action openFavoriteEditor;
-        public Filter Filter { get; set; }
-        public FilterViewModel(Action favoriteCallback)
+        private Filter _filter;
+        public FilterViewModel(Filter filter, Action favoriteCallback)
         {
-            Filter = new Filter();
-            Filter.Import();
+            _filter = filter;
             for(int i = 0; i < 16; i++)
             {
                 // DO NOT use index 0
@@ -48,15 +48,15 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 filter.Remove(value);
             }
-            Filter.IsUpdated = true;
+            _filter.IsUpdated = true;
         }
-        public void ReloadFilter(string presetName)
+        public void ReloadFilter(string presetPath)
         {
             try
             {
-                Filter.Import(presetName);
+                _filter = FileManager.Import<Filter>(presetPath);
                 NotifyOfPropertyChange(string.Empty);
-                Filter.IsUpdated = true;
+                _filter.IsUpdated = true;
             }
             catch (FileNotFoundException)
             {
@@ -68,21 +68,21 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         public void SelectAllCategories()
         {
-            Filter.Categories.Clear();
-            Filter.Categories.AddRange(new List<string>() { 
+            _filter.Categories.Clear();
+            _filter.Categories.AddRange(new List<string>() { 
                 _RP, _P1, _P2, _P3, _TR, _CE, _BS, _VE, _VE2, _ES,
                 _T1, _T2, _T3, _TQ, _GG, _CHU, _CY, _DM, _ESTI, _GC, _GF, _MD, _NXN
             });
-            Filter.IncludesFavorite = true;
+            _filter.IncludesFavorite = true;
             NotifyOfPropertyChange(string.Empty);
-            Filter.IsUpdated = true;
+            _filter.IsUpdated = true;
         }
         public void DeselectAllCategories()
         {
-            Filter.Categories.Clear();
-            Filter.IncludesFavorite = false;
+            _filter.Categories.Clear();
+            _filter.IncludesFavorite = false;
             NotifyOfPropertyChange(string.Empty);
-            Filter.IsUpdated = true;
+            _filter.IsUpdated = true;
         }
         #endregion
 
@@ -216,7 +216,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             bool? result = dialog.ShowDialog();
 
             if (result == true)
-                Filter.Export(dialog.FileName);
+                FileManager.Export(_filter, dialog.FileName);
         }
         public void LoadPreset()
         {
@@ -275,37 +275,37 @@ namespace DjmaxRandomSelectorV.ViewModels
         #region ButtonTunes
         public bool ButtonTune4B
         {
-            get { return CheckFilter(Filter.ButtonTunes, _4B); }
+            get { return CheckFilter(_filter.ButtonTunes, _4B); }
             set
             {
-                UpdateFilter(value, Filter.ButtonTunes, _4B);
+                UpdateFilter(value, _filter.ButtonTunes, _4B);
                 NotifyOfPropertyChange(() => ButtonTune4B);
             }
         }
         public bool ButtonTune5B
         {
-            get { return CheckFilter(Filter.ButtonTunes, _5B); }
+            get { return CheckFilter(_filter.ButtonTunes, _5B); }
             set
             {
-                UpdateFilter(value, Filter.ButtonTunes, _5B);
+                UpdateFilter(value, _filter.ButtonTunes, _5B);
                 NotifyOfPropertyChange(() => ButtonTune5B);
             }
         }
         public bool ButtonTune6B
         {
-            get { return CheckFilter(Filter.ButtonTunes, _6B); }
+            get { return CheckFilter(_filter.ButtonTunes, _6B); }
             set
             {
-                UpdateFilter(value, Filter.ButtonTunes, _6B);
+                UpdateFilter(value, _filter.ButtonTunes, _6B);
                 NotifyOfPropertyChange(() => ButtonTune6B);
             }
         }
         public bool ButtonTune8B
         {
-            get { return CheckFilter(Filter.ButtonTunes, _8B); }
+            get { return CheckFilter(_filter.ButtonTunes, _8B); }
             set
             {
-                UpdateFilter(value, Filter.ButtonTunes, _8B);
+                UpdateFilter(value, _filter.ButtonTunes, _8B);
                 NotifyOfPropertyChange(() => ButtonTune8B);
             }
         }
@@ -313,286 +313,286 @@ namespace DjmaxRandomSelectorV.ViewModels
         #region Difficulty
         public bool Difficulty
         {
-            get { return CheckFilter(Filter.Difficulties, _NM); }
+            get { return CheckFilter(_filter.Difficulties, _NM); }
             set
             {
-                UpdateFilter(value, Filter.Difficulties, _NM);
-                UpdateFilter(value, Filter.Difficulties, _HD);
-                UpdateFilter(value, Filter.Difficulties, _MX);
+                UpdateFilter(value, _filter.Difficulties, _NM);
+                UpdateFilter(value, _filter.Difficulties, _HD);
+                UpdateFilter(value, _filter.Difficulties, _MX);
                 NotifyOfPropertyChange(() => Difficulty);
             }
         }
         public bool DifficultySC
         {
-            get { return CheckFilter(Filter.Difficulties, _SC); }
+            get { return CheckFilter(_filter.Difficulties, _SC); }
             set
             {
-                UpdateFilter(value, Filter.Difficulties, _SC);
+                UpdateFilter(value, _filter.Difficulties, _SC);
                 NotifyOfPropertyChange(() => DifficultySC);
             }
         }
         public int LevelMin
         {
-            get { return Filter.Levels[0]; }
+            get { return _filter.Levels[0]; }
             set
             {
-                Filter.Levels[0] = value;
+                _filter.Levels[0] = value;
                 NotifyOfPropertyChange(() => LevelMin);
                 UpdateLevelIndicators();
-                Filter.IsUpdated = true;
+                _filter.IsUpdated = true;
             }
         }
         public int LevelMax
         {
-            get { return Filter.Levels[1]; }
+            get { return _filter.Levels[1]; }
             set
             {
-                Filter.Levels[1] = value;
+                _filter.Levels[1] = value;
                 NotifyOfPropertyChange(() => LevelMax);
                 UpdateLevelIndicators();
-                Filter.IsUpdated = true;
+                _filter.IsUpdated = true;
             }
         }
         public int ScLevelMin
         {
-            get { return Filter.ScLevels[0]; }
+            get { return _filter.ScLevels[0]; }
             set
             {
-                Filter.ScLevels[0] = value;
+                _filter.ScLevels[0] = value;
                 NotifyOfPropertyChange(() => ScLevelMin);
                 UpdateScLevelIndicators();
-                Filter.IsUpdated = true;
+                _filter.IsUpdated = true;
             }
         }
         public int ScLevelMax
         {
-            get { return Filter.ScLevels[1]; }
+            get { return _filter.ScLevels[1]; }
             set
             {
-                Filter.ScLevels[1] = value;
+                _filter.ScLevels[1] = value;
                 NotifyOfPropertyChange(() => ScLevelMax);
                 UpdateScLevelIndicators();
-                Filter.IsUpdated = true;
+                _filter.IsUpdated = true;
             }
         }
         #endregion
         #region Category
         public bool CategoryRP
         {
-            get { return CheckFilter(Filter.Categories, _RP); }
+            get { return CheckFilter(_filter.Categories, _RP); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _RP);
+                UpdateFilter(value, _filter.Categories, _RP);
                 NotifyOfPropertyChange(() => CategoryRP);
             }
         }
         public bool CategoryP1
         {
-            get { return CheckFilter(Filter.Categories, _P1); }
+            get { return CheckFilter(_filter.Categories, _P1); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _P1);
+                UpdateFilter(value, _filter.Categories, _P1);
                 NotifyOfPropertyChange(() => CategoryP1);
             }
         }
         public bool CategoryP2
         {
-            get { return CheckFilter(Filter.Categories, _P2); }
+            get { return CheckFilter(_filter.Categories, _P2); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _P2);
+                UpdateFilter(value, _filter.Categories, _P2);
                 NotifyOfPropertyChange(() => CategoryP2);
             }
         }
         public bool CategoryP3
         {
-            get { return CheckFilter(Filter.Categories, _P3); }
+            get { return CheckFilter(_filter.Categories, _P3); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _P3);
+                UpdateFilter(value, _filter.Categories, _P3);
                 NotifyOfPropertyChange(() => CategoryP3);
             }
         }
         public bool CategoryTR
         {
-            get { return CheckFilter(Filter.Categories, _TR); }
+            get { return CheckFilter(_filter.Categories, _TR); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _TR);
+                UpdateFilter(value, _filter.Categories, _TR);
                 NotifyOfPropertyChange(() => CategoryTR);
             }
         }
         public bool CategoryCE
         {
-            get { return CheckFilter(Filter.Categories, _CE); }
+            get { return CheckFilter(_filter.Categories, _CE); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _CE);
+                UpdateFilter(value, _filter.Categories, _CE);
                 NotifyOfPropertyChange(() => CategoryCE);
             }
         }
         public bool CategoryBS
         {
-            get { return CheckFilter(Filter.Categories, _BS); }
+            get { return CheckFilter(_filter.Categories, _BS); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _BS);
+                UpdateFilter(value, _filter.Categories, _BS);
                 NotifyOfPropertyChange(() => CategoryBS);
             }
         }
         public bool CategoryVE
         {
-            get { return CheckFilter(Filter.Categories, _VE); }
+            get { return CheckFilter(_filter.Categories, _VE); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _VE);
+                UpdateFilter(value, _filter.Categories, _VE);
                 NotifyOfPropertyChange(() => CategoryVE);
             }
         }
         public bool CategoryVE2
         {
-            get { return CheckFilter(Filter.Categories, _VE2); }
+            get { return CheckFilter(_filter.Categories, _VE2); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _VE2);
+                UpdateFilter(value, _filter.Categories, _VE2);
                 NotifyOfPropertyChange(() => CategoryVE2);
             }
         }
         public bool CategoryES
         {
-            get { return CheckFilter(Filter.Categories, _ES); }
+            get { return CheckFilter(_filter.Categories, _ES); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _ES);
+                UpdateFilter(value, _filter.Categories, _ES);
                 NotifyOfPropertyChange(() => CategoryES);
             }
         }
         public bool CategoryT1
         {
-            get { return CheckFilter(Filter.Categories, _T1); }
+            get { return CheckFilter(_filter.Categories, _T1); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _T1);
+                UpdateFilter(value, _filter.Categories, _T1);
                 NotifyOfPropertyChange(() => CategoryT1);
             }
         }
         public bool CategoryT2
         {
-            get { return CheckFilter(Filter.Categories, _T2); }
+            get { return CheckFilter(_filter.Categories, _T2); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _T2);
+                UpdateFilter(value, _filter.Categories, _T2);
                 NotifyOfPropertyChange(() => CategoryT2);
             }
         }
         public bool CategoryT3
         {
-            get { return CheckFilter(Filter.Categories, _T3); }
+            get { return CheckFilter(_filter.Categories, _T3); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _T3);
+                UpdateFilter(value, _filter.Categories, _T3);
                 NotifyOfPropertyChange(() => CategoryT3);
             }
         }
         public bool CategoryTQ
         {
-            get { return CheckFilter(Filter.Categories, _TQ); }
+            get { return CheckFilter(_filter.Categories, _TQ); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _TQ);
+                UpdateFilter(value, _filter.Categories, _TQ);
                 NotifyOfPropertyChange(() => CategoryTQ);
             }
         }
         public bool CategoryGG
         {
-            get { return CheckFilter(Filter.Categories, _GG); }
+            get { return CheckFilter(_filter.Categories, _GG); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _GG);
+                UpdateFilter(value, _filter.Categories, _GG);
                 NotifyOfPropertyChange(() => CategoryGG);
             }
         }
         public bool CategoryCHU
         {
-            get { return CheckFilter(Filter.Categories, _CHU); }
+            get { return CheckFilter(_filter.Categories, _CHU); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _CHU);
+                UpdateFilter(value, _filter.Categories, _CHU);
                 NotifyOfPropertyChange(() => CategoryCHU);
             }
         }
         public bool CategoryCY
         {
-            get { return CheckFilter(Filter.Categories, _CY); }
+            get { return CheckFilter(_filter.Categories, _CY); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _CY);
+                UpdateFilter(value, _filter.Categories, _CY);
                 NotifyOfPropertyChange(() => CategoryCY);
             }
         }
         public bool CategoryDM
         {
-            get { return CheckFilter(Filter.Categories, _DM); }
+            get { return CheckFilter(_filter.Categories, _DM); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _DM);
+                UpdateFilter(value, _filter.Categories, _DM);
                 NotifyOfPropertyChange(() => CategoryDM);
             }
         }
         public bool CategoryESTI
         {
-            get { return CheckFilter(Filter.Categories, _ESTI); }
+            get { return CheckFilter(_filter.Categories, _ESTI); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _ESTI);
+                UpdateFilter(value, _filter.Categories, _ESTI);
                 NotifyOfPropertyChange(() => CategoryESTI);
             }
         }
         public bool CategoryGC
         {
-            get { return CheckFilter(Filter.Categories, _GC); }
+            get { return CheckFilter(_filter.Categories, _GC); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _GC);
+                UpdateFilter(value, _filter.Categories, _GC);
                 NotifyOfPropertyChange(() => CategoryGC);
             }
         }
         public bool CategoryGF
         {
-            get { return CheckFilter(Filter.Categories, _GF); }
+            get { return CheckFilter(_filter.Categories, _GF); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _GF);
+                UpdateFilter(value, _filter.Categories, _GF);
                 NotifyOfPropertyChange(() => CategoryGF);
             }
         }
         public bool CategoryMD
         {
-            get { return CheckFilter(Filter.Categories, _MD); }
+            get { return CheckFilter(_filter.Categories, _MD); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _MD);
+                UpdateFilter(value, _filter.Categories, _MD);
                 NotifyOfPropertyChange(() => CategoryMD);
             }
         }
         public bool CategoryNXN
         {
-            get { return CheckFilter(Filter.Categories, _NXN); }
+            get { return CheckFilter(_filter.Categories, _NXN); }
             set
             {
-                UpdateFilter(value, Filter.Categories, _NXN);
+                UpdateFilter(value, _filter.Categories, _NXN);
                 NotifyOfPropertyChange(() => CategoryNXN);
             }
         }
         #endregion
         public bool CategoryFavorite
         {
-            get { return Filter.IncludesFavorite; }
+            get { return _filter.IncludesFavorite; }
             set
             {
-                Filter.IncludesFavorite = value;
+                _filter.IncludesFavorite = value;
                 NotifyOfPropertyChange(() => CategoryFavorite);
-                Filter.IsUpdated = true;
+                _filter.IsUpdated = true;
             }
         }
         #endregion
