@@ -21,9 +21,6 @@ using CsvHelper;
 using System.Globalization;
 using System.Linq;
 using DjmaxRandomSelectorV.DataTypes.Interfaces;
-using System.Security.Policy;
-using DjmaxRandomSelectorV.Properties;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -97,7 +94,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         /// <summary>
         /// Get a list of all tracks from local track list file.
         /// </summary>
-        /// <returns>A list of <see cref="Track"/>.</returns>
         private void GetAllTrackList()
         {
             using var reader = new StreamReader(AllTrackListPath, Encoding.UTF8);
