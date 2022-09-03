@@ -18,9 +18,9 @@ namespace DjmaxRandomSelectorV.Views
     /// <summary>
     /// AddonView.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class AddonView : UserControl
+    public partial class FilterOptionIndicatorView : UserControl
     {
-        public AddonView()
+        public FilterOptionIndicatorView()
         {
             InitializeComponent();
         }

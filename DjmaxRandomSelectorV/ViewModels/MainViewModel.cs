@@ -41,8 +41,8 @@ namespace DjmaxRandomSelectorV.ViewModels
         public FilterViewModel FilterViewModel { get; set; }
         public PlaylistViewModel PlaylistViewModel { get; set; }
         public HistoryViewModel HistoryViewModel { get; set; }
-        public AddonViewModel AddonPanel { get; set; }
-        public AddonViewModel AddonButton { get; set; }
+        public FilterOptionViewModel FilterOptionViewModel { get; set; }
+        public FilterOptionIndicatorViewModel FilterOptionIndicatorViewModel { get; set; }
 
         private InfoViewModel _infoViewModel;
 
@@ -207,18 +207,12 @@ namespace DjmaxRandomSelectorV.ViewModels
             FilterViewModel = new FilterViewModel(_filter, ShowFavorite);
             PlaylistViewModel = new PlaylistViewModel(_playlist, _trackList);
             HistoryViewModel = new HistoryViewModel();
+            FilterOptionViewModel = new FilterOptionViewModel(_config);
 
-            AddonPanel = new AddonViewModel();
-            AddonButton = new AddonViewModel();
-            AddonPanel.ExceptCount = _config.RecentsCount;
-            AddonButton.ExceptCount = _config.RecentsCount;
-            SetAddonText(_config.Mode);
-            SetAddonText(_config.Aider);
-            SetAddonText(_config.Level);
+            FilterOptionIndicatorViewModel = new FilterOptionIndicatorViewModel();
 
             _config.Subscribe(this);
-            _config.Subscribe(AddonPanel);
-            _config.Subscribe(AddonButton);
+            _config.Subscribe(FilterOptionIndicatorViewModel);
             _config.Notify();
 
             _isFilterType = !_config.IsPlaylist;
@@ -268,7 +262,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private void UpdateRecents<T>(List<T> recents, int filteredCount)
         {
             int recentsCount = recents.Count;
-            int maxCount = _config.RecentsCount;
+            int maxCount = _config.Except;
             if (recentsCount > maxCount)
             {
                 recents.RemoveRange(0, recentsCount - maxCount);
@@ -607,148 +601,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             _windowManager.ShowDialogAsync(new FavoriteViewModel(_config, titleList, setUpdated));
         }
         #endregion
-
-
-        #region Equipment
-
-        #region Constants
-        private const string OFF = "OFF";
-        private const string FREESTYLE = "FREESTYLE";
-        private const string ONLINE = "ONLINE";
-        private const string AUTO_START = "AUTO START";
-        private const string OBSERVE = "OBSERVE";
-        private const string BEGINNER = "BEGINNER";
-        private const string MASTER = "MASTER";
-        #endregion        
-
-        public int RecentsCount
-        {
-            get { return _config.RecentsCount; }
-            set
-            {
-                _config.RecentsCount = value;
-                NotifyOfPropertyChange(() => RecentsCount);
-                AddonPanel.ExceptCount = value;
-                AddonButton.ExceptCount = value;
-            }
-        }
-
-        private string modeText;
-        public string ModeText
-        {
-            get { return modeText; }
-            set
-            {
-                modeText = value;
-                NotifyOfPropertyChange(() => ModeText);
-            }
-        }
-        private void SetAddonText(Mode mode)
-        {
-            switch (mode)
-            {
-                case Mode.Freestyle:
-                    ModeText = FREESTYLE;
-                    break;
-                case Mode.Online:
-                    ModeText = ONLINE;
-                    break;
-            }
-        }
-        public void SwitchMode()
-        {
-            if (_config.Mode.Equals(Mode.Freestyle))
-                _config.Mode = Mode.Online;
-            else
-                _config.Mode = Mode.Freestyle;
-            SetAddonText(_config.Mode);
-        }
-
-        private string aiderText;
-        public string AiderText
-        {
-            get { return aiderText; }
-            set
-            {
-                aiderText = value;
-                NotifyOfPropertyChange(() => AiderText);
-            }
-        }
-        private void SetAddonText(Aider aider)
-        {
-            switch (aider)
-            {
-                case Aider.Off:
-                    AiderText = OFF;
-                    break;
-                case Aider.AutoStart:
-                    AiderText = AUTO_START;
-                    break;
-                case Aider.Observe:
-                    AiderText = OBSERVE;
-                    break;
-            }
-        }
-        public void PrevAider()
-        {
-            if (_config.Aider.Equals(Aider.Off))
-                _config.Aider = Aider.Observe;
-            else
-                _config.Aider--;
-            SetAddonText(_config.Aider);
-        }
-        public void NextAider()
-        {
-            if (_config.Aider.Equals(Aider.Observe))
-                _config.Aider = Aider.Off;
-            else
-                _config.Aider++;
-            SetAddonText(_config.Aider);
-        }
-
-        private string levelText;
-        public string LevelText
-        {
-            get { return levelText; }
-            set
-            {
-                levelText = value;
-                NotifyOfPropertyChange(() => LevelText);
-            }
-        }
-        private void SetAddonText(Level level)
-        {
-            switch (level)
-            {
-                case Level.Off:
-                    LevelText = OFF;
-                    break;
-                case Level.Beginner:
-                    LevelText = BEGINNER;
-                    break;
-                case Level.Master:
-                    LevelText = MASTER;
-                    break;
-            }
-        }
-        public void PrevLevel()
-        {
-            if (_config.Level.Equals(Level.Off))
-                _config.Level = Level.Master;
-            else
-                _config.Level--;
-            SetAddonText(_config.Level);
-        }
-        public void NextLevel()
-        {
-            if (_config.Level.Equals(Level.Master))
-                _config.Level = Level.Off;
-            else
-                _config.Level++;
-            SetAddonText(_config.Level);
-        }
-        #endregion
-
 
         #region Other Constants & Methods
         private const int WM_HOTKEY = 0x0312;

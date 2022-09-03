@@ -1,0 +1,128 @@
+﻿<UserControl x:Class="DjmaxRandomSelectorV.Views.FilterOptionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
+             xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d" 
+             d:DesignHeight="480" d:DesignWidth="500">
+    <Grid Width="500">
+        <Border Background="#DF221C15"
+                    BorderBrush="Gray"
+                    BorderThickness="2"
+                    Margin="-4,-4,0,-4">
+        </Border>
+        <StackPanel Margin="30,50">
+            <StackPanel.Resources>
+                <Style TargetType="Grid" BasedOn="{StaticResource SettingBar}"/>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource SettingText}"/>
+                <Style TargetType="ToggleButton" BasedOn="{StaticResource SettingToggleButton}"/>
+                <Style TargetType="Slider" BasedOn="{StaticResource SettingSlider}"/>
+            </StackPanel.Resources>
+
+            <TextBlock Text="FILTER OPTION"
+                       Margin="0"
+                       Style="{StaticResource SettingCategoryText}"/>
+            <Grid Style="{x:Null}"
+                  Background="#7F584E46"
+                  Height="90">
+                <ContentControl x:Name="FilterOptionIndicatorViewModel"
+                                Height="55"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="EXCLUDE RECENT MUSICS"/>
+                <TextBlock Text="{Binding ElementName=ExceptCount, Path=Value}"
+                           HorizontalAlignment="Right"
+                           Margin="0,0,10,0">
+                </TextBlock>
+                <Slider x:Name="ExceptCount"
+                        Margin="20,0"
+                        Minimum="0"
+                        Maximum="30"/>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="MODE"/>
+                <Grid Grid.Column="1"
+                      Style="{x:Null}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="30"/>
+                    </Grid.ColumnDefinitions>
+                    <Button cal:Message.Attach="SwitchMode"
+                            Style="{StaticResource LeftArrowButton}"/>
+                    <TextBlock x:Name="ModeText"
+                               Text="FREESTYLE"
+                               Foreground="White"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Grid.Column="1"/>
+                    <Button cal:Message.Attach="SwitchMode"
+                            Grid.Column="2"
+                            Style="{StaticResource RightArrowButton}"/>
+                </Grid>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="AIDER"/>
+                <Grid Grid.Column="1"
+                      Style="{x:Null}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="30"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="PrevAider"
+                            Style="{StaticResource LeftArrowButton}"/>
+                    <TextBlock x:Name="AiderText"
+                               Text="OFF"
+                               Foreground="White"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Grid.Column="1"/>
+                    <Button x:Name="NextAider"
+                            Grid.Column="2"
+                            Style="{StaticResource RightArrowButton}"/>
+                </Grid>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="LEVEL"/>
+                <Grid Grid.Column="1"
+                      Style="{x:Null}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="30"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="PrevLevel"
+                            Style="{StaticResource LeftArrowButton}"/>
+                    <TextBlock x:Name="LevelText"
+                               Text="OFF"
+                               Foreground="White"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Grid.Column="1"/>
+                    <Button x:Name="NextLevel"
+                            Grid.Column="2"
+                            Style="{StaticResource RightArrowButton}"/>
+                </Grid>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</UserControl>

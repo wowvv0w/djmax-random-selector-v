@@ -11,9 +11,9 @@ using System.Windows.Media.Imaging;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class AddonViewModel : Screen, IAddonObserver
+    public class FilterOptionIndicatorViewModel : Screen, IAddonObserver
     {
-        #region Add-on Elements
+        #region Filter Option Elements
         private int exceptCount;
         private BitmapImage modeImage;
         private BitmapImage aiderImage;
@@ -63,6 +63,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             var setting = observable as Config;
             bool isFreestyle = setting.Mode.Equals(Mode.Freestyle);
 
+            ExceptCount = setting.Except;
             SetBitmapImage(setting.Mode);
             SetBitmapImage(setting.Aider, isFreestyle);
             SetBitmapImage(setting.Level, isFreestyle);

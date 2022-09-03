@@ -11,34 +11,43 @@ namespace DjmaxRandomSelectorV.Models
     {
         private readonly List<IAddonObserver> observers;
 
-        public int RecentsCount { get; set; }
-        private Mode mode;
+        private int _except;
+        public int Except
+        { 
+            get { return _except; }
+            set
+            {
+                _except = value;
+                Notify();
+            }
+        }
+        private Mode _mode;
         public Mode Mode
         {
-            get { return mode; }
+            get { return _mode; }
             set
             {
-                mode = value;
+                _mode = value;
                 Notify();
             }
         }
-        private Aider aider;
+        private Aider _aider;
         public Aider Aider
         {
-            get { return aider; }
+            get { return _aider; }
             set
             {
-                aider = value;
+                _aider = value;
                 Notify();
             }
         }
-        private Level level;
+        private Level _level;
         public Level Level
         {
-            get { return level; }
+            get { return _level; }
             set
             {
-                level = value;
+                _level = value;
                 Notify();
             }
         }

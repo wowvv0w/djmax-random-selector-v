@@ -28,130 +28,12 @@
         </LinearGradientBrush>
     </Window.Background>
     <Grid>
-        
-        <!--#region Equipment-->
-        <Grid x:Name="Equipment"
-              Panel.ZIndex="2"
-              HorizontalAlignment="Left"
-              Margin="-500,0,0,0"
-              Width="500">
-            <Border Background="#DF221C15"
-                    BorderBrush="Gray"
-                    BorderThickness="2"
-                    Margin="-4,-4,0,-4">
-            </Border>
-            <StackPanel Margin="30,50">
-                <StackPanel.Resources>
-                    <Style TargetType="Grid" BasedOn="{StaticResource SettingBar}"/>
-                    <Style TargetType="TextBlock" BasedOn="{StaticResource SettingText}"/>
-                    <Style TargetType="ToggleButton" BasedOn="{StaticResource SettingToggleButton}"/>
-                    <Style TargetType="Slider" BasedOn="{StaticResource SettingSlider}"/>
-                </StackPanel.Resources>
-
-                <TextBlock Text="ADD-ON"
-                           Margin="0"
-                           Style="{StaticResource SettingCategoryText}"/>
-                <Grid Style="{x:Null}"
-                      Background="#7F584E46"
-                      Height="90">
-                    <ContentControl x:Name="AddonPanel"
-                                    Height="55"/>
-                </Grid>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="EXCLUDE RECENT MUSICS"/>
-                    <TextBlock Text="{Binding ElementName=RecentsCount, Path=Value}"
-                                HorizontalAlignment="Right"
-                                Margin="0,0,10,0">
-                    </TextBlock>
-                    <Slider x:Name="RecentsCount"
-                            Margin="20,0"
-                            Minimum="0"
-                            Maximum="30"/>
-                </Grid>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="MODE"/>
-                    <Grid Grid.Column="1"
-                          Style="{x:Null}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="30"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="30"/>
-                        </Grid.ColumnDefinitions>
-                        <Button cal:Message.Attach="SwitchMode"
-                                Style="{StaticResource LeftArrowButton}"/>
-                        <TextBlock x:Name="ModeText"
-                                   Text="FREESTYLE"
-                                   Foreground="White"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Grid.Column="1"/>
-                        <Button cal:Message.Attach="SwitchMode"
-                                Grid.Column="2"
-                                Style="{StaticResource RightArrowButton}"/>
-                    </Grid>
-                </Grid>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="AIDER"/>
-                    <Grid Grid.Column="1"
-                          Style="{x:Null}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="30"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="30"/>
-                        </Grid.ColumnDefinitions>
-                        <Button x:Name="PrevAider"
-                                Style="{StaticResource LeftArrowButton}"/>
-                        <TextBlock x:Name="AiderText"
-                                   Text="OFF"
-                                   Foreground="White"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Grid.Column="1"/>
-                        <Button x:Name="NextAider"
-                                Grid.Column="2"
-                                Style="{StaticResource RightArrowButton}"/>
-                    </Grid>
-                </Grid>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="LEVEL"/>
-                    <Grid Grid.Column="1"
-                          Style="{x:Null}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="30"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="30"/>
-                        </Grid.ColumnDefinitions>
-                        <Button x:Name="PrevLevel"
-                                Style="{StaticResource LeftArrowButton}"/>
-                        <TextBlock x:Name="LevelText"
-                                   Text="OFF"
-                                   Foreground="White"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Grid.Column="1"/>
-                        <Button x:Name="NextLevel"
-                                Grid.Column="2"
-                                Style="{StaticResource RightArrowButton}"/>
-                    </Grid>
-                </Grid>
-            </StackPanel>
-        </Grid>
+        <!--#region Filter Option -->
+        <ContentControl x:Name="FilterOptionViewModel"
+                        Panel.ZIndex="2"
+                        HorizontalAlignment="Left"
+                        Margin="-500 0 0 0"
+                        Width="500"/>
         <Button x:Name="HideFilterOptionWindow"
                 Panel.ZIndex="1"
                 Background="Transparent"
@@ -167,7 +49,7 @@
                 <EventTrigger RoutedEvent="Button.Click">
                     <BeginStoryboard>
                         <Storyboard>
-                            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="Equipment"
+                            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="FilterOptionViewModel"
                                                               Storyboard.TargetProperty="Margin"
                                                               BeginTime="0:0:0"
                                                               DecelerationRatio=".9">
@@ -196,7 +78,6 @@
         </Button>
         <!--#endregion-->
 
-        <!--#region MainWindow-->
         <DockPanel>
             <DockPanel.Effect>
                 <BlurEffect x:Name="BlurEffect" Radius="0"/>
@@ -238,7 +119,6 @@
                 </Button>
             </Grid>
             <!--#endregion-->
-            
             <!--#region Tab Bar-->
             <Grid Height="40" DockPanel.Dock="Top"
                         Background="{StaticResource Nav}">
@@ -265,7 +145,6 @@
                               Content="HISTORY" Margin="30,0,0,0"/>
             </Grid>
             <!--#endregion-->
-            
             <!--#region Bottom Bar-->
             <Grid Height="50" DockPanel.Dock="Bottom" Background="{StaticResource Nav}">
                 <Grid.Resources>
@@ -276,13 +155,13 @@
                         Margin="30,0,0,0"
                         HorizontalAlignment="Left">
                     <Grid>
-                        <ContentControl x:Name="AddonButton"/>
+                        <ContentControl x:Name="FilterOptionIndicatorViewModel"/>
                     </Grid>
                     <Button.Triggers>
                         <EventTrigger RoutedEvent="Button.Click">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="Equipment"
+                                    <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="FilterOptionViewModel"
                                                                       Storyboard.TargetProperty="Margin"
                                                                       BeginTime="0:0:0"
                                                                       DecelerationRatio=".9">
@@ -328,8 +207,7 @@
                 </StackPanel>
             </Grid>
             <!--#endregion-->
-            
-            <!--#region Center-->
+            <!--#region Filter-->
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="30"/>
@@ -373,8 +251,5 @@
             </Grid>
         </DockPanel>
         <!--#endregion-->
-        
-        <!--#endregion-->
-        
     </Grid>
 </Window>
