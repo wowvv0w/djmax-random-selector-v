@@ -181,7 +181,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 }
 
                 _infoViewModel = new InfoViewModel(ApplicationVersion, ApplicationVersion + gapWithLastestApp,
-                    _config.AllTrackVersion, SetBlurEffect);
+                    _config.AllTrackVersion);
             }
             catch (HttpRequestException)
             {
@@ -191,7 +191,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                     MessageBoxImage.Warning);
 
                 _infoViewModel = new InfoViewModel(ApplicationVersion, ApplicationVersion,
-                    _config.AllTrackVersion, SetBlurEffect);
+                    _config.AllTrackVersion);
             }
 
             // Set track list and filtered music list.
@@ -594,44 +594,23 @@ namespace DjmaxRandomSelectorV.ViewModels
         private readonly IWindowManager _windowManager = new WindowManager();
         public void ShowInfo()
         {
-            SetBlurEffect(true);
             _windowManager.ShowDialogAsync(_infoViewModel);
         }
         public void ShowSetting()
         {
-            SetBlurEffect(true);
-            _windowManager.ShowDialogAsync(new SettingViewModel(_config, SetBlurEffect, UpdateTrackList, ChangeTypeOfFilter));
+            _windowManager.ShowDialogAsync(new SettingViewModel(_config, UpdateTrackList, ChangeTypeOfFilter));
         }
         public void ShowFavorite()
         {
-            SetBlurEffect(true);
             Action<bool> setUpdated = value => _filter.IsUpdated = value;
             var titleList = _allTrackList.ConvertAll(x => x.Title).Distinct().ToList();
-            _windowManager.ShowDialogAsync(new FavoriteViewModel(_config, titleList, SetBlurEffect, setUpdated));
+            _windowManager.ShowDialogAsync(new FavoriteViewModel(_config, titleList, setUpdated));
         }
         #endregion
 
 
         #region Equipment
 
-        #region Show/Hide
-        public void ShowEquipment() => SetBlurEffect(true);
-        public void HideEquipment() => SetBlurEffect(false);
-        private Effect _blurEffect;
-        public Effect BlurEffect
-        {
-            get { return _blurEffect; }
-            set
-            {
-                _blurEffect = value;
-                NotifyOfPropertyChange(() => BlurEffect);
-            }
-        }
-        private void SetBlurEffect(bool turnsOn)
-        {
-            BlurEffect = turnsOn ? new BlurEffect() { Radius = 75 } : null;
-        }
-        #endregion
         #region Constants
         private const string OFF = "OFF";
         private const string FREESTYLE = "FREESTYLE";

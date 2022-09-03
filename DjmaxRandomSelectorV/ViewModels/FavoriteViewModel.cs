@@ -16,7 +16,6 @@ namespace DjmaxRandomSelectorV.ViewModels
     {
         private bool searchesSuggestion;
         private readonly Config setting;
-        private readonly Action<bool> blurSetter;
         private readonly List<string> titleList;
         private readonly Action<bool> setUpdated;
         private readonly List<string> favorite;
@@ -24,11 +23,10 @@ namespace DjmaxRandomSelectorV.ViewModels
         public BindableCollection<string> FavoriteItems { get; set; }
         public BindableCollection<string> TitleSuggestions { get; set; }
 
-        public FavoriteViewModel(Config setting, List<string> titleList, Action<bool> blurSetter, Action<bool> setUpdated)
+        public FavoriteViewModel(Config setting, List<string> titleList, Action<bool> setUpdated)
         {
             searchesSuggestion = true;
             this.setting = setting;
-            this.blurSetter = blurSetter;
             this.titleList = titleList;
             this.setUpdated = setUpdated;
 
@@ -42,7 +40,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             FileManager.Export(setting, "Data/Config.json");
             TryCloseAsync();
-            blurSetter.Invoke(false);
         }
 
         #region SearchBox

@@ -15,7 +15,6 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class SettingViewModel : Screen
     {
         private readonly Config _setting;
-        private readonly Action<bool> _blurSetter;
         private readonly Action<List<string>> _trackListUpdater;
         private readonly Action<bool> _typeOfFilterSetter;
 
@@ -26,10 +25,9 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private bool _updatesTrackList = false;
 
-        public SettingViewModel(Config setting, Action<bool> blurSetter, Action<List<string>> trackListUpdater, Action<bool> typeOfFilterSetter)
+        public SettingViewModel(Config setting, Action<List<string>> trackListUpdater, Action<bool> typeOfFilterSetter)
         {
             _setting = setting;
-            _blurSetter = blurSetter;
             _trackListUpdater = trackListUpdater;
             _typeOfFilterSetter = typeOfFilterSetter;
 
@@ -125,7 +123,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void Close()
         {
             TryCloseAsync();
-            _blurSetter.Invoke(false);
         }
         #endregion
 
