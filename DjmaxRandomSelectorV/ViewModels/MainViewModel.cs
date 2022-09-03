@@ -21,6 +21,7 @@ using CsvHelper;
 using System.Globalization;
 using System.Linq;
 using DjmaxRandomSelectorV.DataTypes.Interfaces;
+using DjmaxRandomSelectorV.Properties;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -217,8 +218,6 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             _isFilterType = !_config.IsPlaylist;
             _isPlaylistType = _config.IsPlaylist;
-
-            SetPosition(_config.Position);
         }
 
 
@@ -233,27 +232,17 @@ namespace DjmaxRandomSelectorV.ViewModels
             source.AddHook(HwndHook);
             RegisterHotKey(handle, HOTKEY_ID, 0x0000, KEY_F7);
         }
-        #endregion
-
-        #region Position
-        private double _top;
-        public double Top
+        public void SetPosition(object view)
         {
-            get { return _top; }
-            set { _top = value; }
-        }
-        private double _left;
-        public double Left
-        {
-            get { return _left; }
-            set { _left = value; }
-        }
-        public void SetPosition(double[] position)
-        {
-            if (position.Length == 2)
+            var window = view as Window;
+            if (_config.Position.Length == 2)
             {
-                Top = position[0];
-                Left = position[1];
+                window.Top = _config.Position[0];
+                window.Left = _config.Position[1];
+            }
+            else
+            {
+                _config.Position = new double[2] { window.Top, window.Left };
             }
         }
         #endregion
@@ -477,7 +466,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 _filter.Recents.Clear();
                 _playlist.Recents.Clear();
             }
-            _config.Position = new double[2] { Top, Left };
+            _config.Position = new double[2] { window.Top, window.Left };
             FileManager.Export(_config, ConfigPath);
         }
         #endregion

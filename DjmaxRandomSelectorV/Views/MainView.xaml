@@ -7,14 +7,14 @@
         mc:Ignorable="d"
         Title="DJMAX Random Selector V"
         Width="740" Height="480"
-        Top="{Binding Top, Mode=TwoWay}" Left="{Binding Left, Mode=TwoWay}"
         WindowStyle="None"
         FontFamily="{StaticResource Lato Black}"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         SnapsToDevicePixels="True"
         cal:Message.Attach="[Event Loaded] = [Action AddHotkey($view)];
-                            [Event Closing] = [Action SaveConfig($view)]"
+                            [Event Loaded] = [Action SetPosition($view)];
+                            [Event Closing] = [Action SaveConfig($view)];"
         Icon="pack://application:,,,/Images/icon.png">
     <Window.Background>
         <LinearGradientBrush StartPoint="0.987,0.5" EndPoint="1,0.5" SpreadMethod="Repeat">
