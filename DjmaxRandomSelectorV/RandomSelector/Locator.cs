@@ -1,13 +1,13 @@
-﻿using DjmaxRandomSelectorV.DataTypes.Interfaces;
+﻿using DjmaxRandomSelectorV.DataTypes;
+using DjmaxRandomSelectorV.RandomSelector.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace DjmaxRandomSelectorV.DataTypes
+namespace DjmaxRandomSelectorV.RandomSelector
 {
     public class Locator : IProvider
     {
