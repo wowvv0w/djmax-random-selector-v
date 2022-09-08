@@ -1,5 +1,5 @@
 ﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.DataTypes;
+using DjmaxRandomSelectorV.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;

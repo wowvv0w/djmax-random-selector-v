@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.DataTypes.Enums;
 using DjmaxRandomSelectorV.Models;
+using DjmaxRandomSelectorV.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,37 +22,36 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string MASTER = "MASTER";
         #endregion        
 
-        private Config _config;
         public FilterOptionIndicatorViewModel FilterOptionIndicatorViewModel { get; set; }
 
-        public FilterOptionViewModel(Config config)
+        public FilterOptionViewModel()
         {
-            _config = config;
+            FilterOption filterOption = FileManager.Import<Config>("Data/Config.json").FilterOption;
             FilterOptionIndicatorViewModel = new FilterOptionIndicatorViewModel();
-            _config.Subscribe(FilterOptionIndicatorViewModel);
 
-            SetAddonText(_config.Mode);
-            SetAddonText(_config.Aider);
-            SetAddonText(_config.Level);
+            SetAddonText(_mode = filterOption.Mode);
+            SetAddonText(_aider = filterOption.Aider);
+            SetAddonText(_level = filterOption.Level);
         }
 
+        private int _exceptCount;
         public int ExceptCount
         {
-            get { return _config.Except; }
+            get { return _exceptCount; }
             set
             {
-                _config.Except = value;
+                _exceptCount = value;
                 NotifyOfPropertyChange(() => ExceptCount);
             }
         }
 
-        private string modeText;
+        private string _modeText;
         public string ModeText
         {
-            get { return modeText; }
+            get { return _modeText; }
             set
             {
-                modeText = value;
+                _modeText = value;
                 NotifyOfPropertyChange(() => ModeText);
             }
         }
@@ -67,22 +67,24 @@ namespace DjmaxRandomSelectorV.ViewModels
                     break;
             }
         }
+
+        private Mode _mode;
         public void SwitchMode()
         {
-            if (_config.Mode.Equals(Mode.Freestyle))
-                _config.Mode = Mode.Online;
+            if (_mode.Equals(Mode.Freestyle))
+                _mode = Mode.Online;
             else
-                _config.Mode = Mode.Freestyle;
-            SetAddonText(_config.Mode);
+                _mode = Mode.Freestyle;
+            SetAddonText(_mode);
         }
 
-        private string aiderText;
+        private string _aiderText;
         public string AiderText
         {
-            get { return aiderText; }
+            get { return _aiderText; }
             set
             {
-                aiderText = value;
+                _aiderText = value;
                 NotifyOfPropertyChange(() => AiderText);
             }
         }
@@ -101,30 +103,32 @@ namespace DjmaxRandomSelectorV.ViewModels
                     break;
             }
         }
+
+        private Aider _aider;
         public void PrevAider()
         {
-            if (_config.Aider.Equals(Aider.Off))
-                _config.Aider = Aider.Observe;
+            if (_aider.Equals(Aider.Off))
+                _aider = Aider.Observe;
             else
-                _config.Aider--;
-            SetAddonText(_config.Aider);
+                _aider--;
+            SetAddonText(_aider);
         }
         public void NextAider()
         {
-            if (_config.Aider.Equals(Aider.Observe))
-                _config.Aider = Aider.Off;
+            if (_aider.Equals(Aider.Observe))
+                _aider = Aider.Off;
             else
-                _config.Aider++;
-            SetAddonText(_config.Aider);
+                _aider++;
+            SetAddonText(_aider);
         }
 
-        private string levelText;
+        private string _levelText;
         public string LevelText
         {
-            get { return levelText; }
+            get { return _levelText; }
             set
             {
-                levelText = value;
+                _levelText = value;
                 NotifyOfPropertyChange(() => LevelText);
             }
         }
@@ -143,21 +147,23 @@ namespace DjmaxRandomSelectorV.ViewModels
                     break;
             }
         }
+
+        private Level _level;
         public void PrevLevel()
         {
-            if (_config.Level.Equals(Level.Off))
-                _config.Level = Level.Master;
+            if (_level.Equals(Level.Off))
+                _level = Level.Master;
             else
-                _config.Level--;
-            SetAddonText(_config.Level);
+                _level--;
+            SetAddonText(_level);
         }
         public void NextLevel()
         {
-            if (_config.Level.Equals(Level.Master))
-                _config.Level = Level.Off;
+            if (_level.Equals(Level.Master))
+                _level = Level.Off;
             else
-                _config.Level++;
-            SetAddonText(_config.Level);
+                _level++;
+            SetAddonText(_level);
         }
     }
 }

@@ -18,14 +18,6 @@ namespace DjmaxRandomSelectorV.RandomSelector
     {
         private const string DjmaxTitle = "DJMAX RESPECT V";
 
-        private const string ReleasesUrl = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
-        private const string VersionsUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
-        
-
-        private const string ConfigPath = "Data/Config.json";
-        private const string CurrentFilterPath = "Data/CurrentFilter.json";
-        private const string CurrentPlaylistPath = "Data/CurrentPlaylist.json";
-
         private List<Track> _tracks;
         private List<Music> _musics;
         private List<string> _titles;
@@ -123,8 +115,8 @@ namespace DjmaxRandomSelectorV.RandomSelector
             }
 
             var filteredList = from music in _musics
-                            where !_exclusions.Contains(music.Title)
-                            select music;
+                               where !_exclusions.Contains(music.Title)
+                               select music;
             if (filteredList.Any())
             {
                 selectedMusic = Pick(filteredList.ToList());

@@ -13,23 +13,21 @@ using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class PlaylistViewModel : Screen
+    public class SelectiveFilterViewModel : Screen
     {
-        private Playlist _playlist;
         private readonly List<Track> _trackList;
-
 
         private bool _searchesSuggestion;
         public BindableCollection<string> TitleSuggestions { get; set; }
         public BindableCollection<Music> PlaylistItems { get; set; }
 
-        public PlaylistViewModel(Playlist playlist, List<Track> trackList)
+        public SelectiveFilterViewModel()
         {
             _searchesSuggestion = true;
-            _playlist = playlist;
-            _trackList = trackList;
+            //_trackList = trackList;
 
-            PlaylistItems = new BindableCollection<Music>(_playlist.MusicList);
+            List<Music> playlist = FileManager.Import<SelectiveFilter>("Data/CurrentPlaylist.json").Playlist;
+            PlaylistItems = new BindableCollection<Music>(playlist);
             TitleSuggestions = new BindableCollection<string>();
             OpensSuggestionBox = false;
         }
@@ -62,19 +60,12 @@ namespace DjmaxRandomSelectorV.ViewModels
                 throw;
             }
 
-            _playlist.MusicList.Add(item);
             PlaylistItems.Add(item);
 
             TitleSearchBox = string.Empty;
             StyleSearchBox = string.Empty;
         }
-
-        public void RemoveItem(object item)
-        {
-            _playlist.MusicList.Remove(item as Music);
-            PlaylistItems.Remove(item as Music);
-        }
-
+        public void RemoveItem(object item) => PlaylistItems.Remove(item as Music);
         public void ConcatenateItems()
         {
             string app = AppDomain.CurrentDomain.BaseDirectory;
@@ -90,16 +81,11 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                var concat = FileManager.Import<Playlist>(dialog.FileName);
-                _playlist.MusicList.AddRange(concat.MusicList);
-                PlaylistItems.AddRange(concat.MusicList);
+                var concat = FileManager.Import<SelectiveFilter>(dialog.FileName).Playlist;
+                PlaylistItems.AddRange(concat);
             }
         }
-        public void ClearItems()
-        {
-            _playlist.MusicList.Clear();
-            PlaylistItems.Clear();
-        }
+        public void ClearItems() => PlaylistItems.Clear();
         public void SaveItems()
         {
             string app = AppDomain.CurrentDomain.BaseDirectory;
@@ -116,7 +102,13 @@ namespace DjmaxRandomSelectorV.ViewModels
             bool? result = dialog.ShowDialog();
 
             if (result == true)
-                FileManager.Export(_playlist, dialog.FileName);
+            {
+                var selectiveFilter = new SelectiveFilter()
+                {
+                    Playlist = PlaylistItems.ToList(),
+                };
+                FileManager.Export(selectiveFilter, dialog.FileName);
+            }
         }
         public void LoadItems()
         {
@@ -135,9 +127,9 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                _playlist = FileManager.Import<Playlist>(dialog.FileName);
+                List<Music> playlist = FileManager.Import<SelectiveFilter>(dialog.FileName).Playlist;
                 PlaylistItems.Clear();
-                PlaylistItems.AddRange(_playlist.MusicList);
+                PlaylistItems.AddRange(playlist);
             }
         }
 

@@ -17,13 +17,7 @@
     <Resource Include="Fonts\Lato-Light.ttf" />
     <Resource Include="Fonts\Lato-Regular.ttf" />
     <Resource Include="Fonts\Lato-Thin.ttf" />
-    <None Update="Data\Config.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Data\AllTrackList.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\CurrentFilter.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Data\Preset\Default.json">

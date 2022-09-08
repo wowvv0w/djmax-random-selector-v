@@ -15,22 +15,16 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class FavoriteViewModel : Screen
     {
         private bool searchesSuggestion;
-        private readonly Config setting;
-        private readonly List<string> titleList;
-        private readonly Action<bool> setUpdated;
-        private readonly List<string> favorite;
+        private readonly List<string> _titleList;
 
         public BindableCollection<string> FavoriteItems { get; set; }
         public BindableCollection<string> TitleSuggestions { get; set; }
 
-        public FavoriteViewModel(Config setting, List<string> titleList, Action<bool> setUpdated)
+        public FavoriteViewModel(List<string> favorite, List<string> titleList)
         {
             searchesSuggestion = true;
-            this.setting = setting;
-            this.titleList = titleList;
-            this.setUpdated = setUpdated;
+            _titleList = titleList;
 
-            favorite = setting.Favorite;
             FavoriteItems = new BindableCollection<string>(favorite);
 
             TitleSuggestions = new BindableCollection<string>();
@@ -38,7 +32,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         public void OK()
         {
-            FileManager.Export(setting, "Data/Config.json");
             TryCloseAsync();
         }
 
@@ -67,7 +60,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             OpensSuggestionBox = true;
 
-            var titles = from title in titleList
+            var titles = from title in _titleList
                          where title.StartsWith(SearchBox, true, null)
                          select title;
             titles = titles.Count() < 8 ? titles.Take(titles.Count()) : titles.Take(8);
@@ -106,7 +99,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         #region Favorite Item Adjustment
         public void AddItem()
         {
-            if (!titleList.Any(x => x.Equals(SearchBox)))
+            if (!_titleList.Any(x => x.Equals(SearchBox)))
             {
                 MessageBox.Show("Does not exist.",
                     "Favorite Error",
@@ -124,17 +117,10 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
 
             FavoriteItems.Add(SearchBox);
-            favorite.Add(SearchBox);
 
-            setUpdated.Invoke(true);
             SearchBox = string.Empty;
         }
-        public void RemoveItem(string child)
-        {
-            FavoriteItems.Remove(child);
-            favorite.Remove(child);
-            setUpdated.Invoke(true);
-        }
+        public void RemoveItem(string child) => FavoriteItems.Remove(child);
         #endregion
     }
 }

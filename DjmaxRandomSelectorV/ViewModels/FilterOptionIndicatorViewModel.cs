@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.DataTypes.Enums;
-using DjmaxRandomSelectorV.DataTypes.Interfaces;
 using DjmaxRandomSelectorV.Models;
 using System;
 using System.Collections.Generic;
@@ -11,7 +10,7 @@ using System.Windows.Media.Imaging;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class FilterOptionIndicatorViewModel : Screen, IAddonObserver
+    public class FilterOptionIndicatorViewModel : Screen
     {
         #region Filter Option Elements
         private int exceptCount;
@@ -58,16 +57,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         #endregion
 
         #region Image Modification
-        public void Update(IAddonObservable observable)
-        {
-            var setting = observable as Config;
-            bool isFreestyle = setting.Mode.Equals(Mode.Freestyle);
-
-            ExceptCount = setting.Except;
-            SetBitmapImage(setting.Mode);
-            SetBitmapImage(setting.Aider, isFreestyle);
-            SetBitmapImage(setting.Level, isFreestyle);
-        }
         private BitmapImage GetBitmapImage(string file)
         {
             return new BitmapImage(new Uri($"pack://application:,,,/Images/{file}.png"));

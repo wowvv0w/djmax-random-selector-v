@@ -14,13 +14,13 @@ using Action = System.Action;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class FilterViewModel : Screen
+    public class ConditionalFilterViewModel : Screen
     {
-        private Action openFavoriteEditor;
-        private Filter _filter;
-        public FilterViewModel(Filter filter, Action favoriteCallback)
+        private ConditionalFilter _filter;
+
+        public ConditionalFilterViewModel()
         {
-            _filter = filter;
+            _filter = FileManager.Import<ConditionalFilter>("Data/CurrentFilter.json");
             for(int i = 0; i < 16; i++)
             {
                 // DO NOT use index 0
@@ -29,8 +29,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             UpdateLevelIndicators();
             UpdateScLevelIndicators();
-
-            openFavoriteEditor = favoriteCallback;
         }
 
         #region Filter Updater
@@ -48,22 +46,18 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 filter.Remove(value);
             }
-            _filter.IsUpdated = true;
         }
         public void ReloadFilter(string presetPath)
         {
             try
             {
-                _filter = FileManager.Import<Filter>(presetPath);
+                _filter = FileManager.Import<ConditionalFilter>(presetPath);
                 NotifyOfPropertyChange(string.Empty);
-                _filter.IsUpdated = true;
             }
             catch (FileNotFoundException)
             {
                 MessageBox.Show($"Cannot apply the preset.",
-                                "Filter Error",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
+                                "Filter Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         public void SelectAllCategories()
@@ -75,14 +69,12 @@ namespace DjmaxRandomSelectorV.ViewModels
             });
             _filter.IncludesFavorite = true;
             NotifyOfPropertyChange(string.Empty);
-            _filter.IsUpdated = true;
         }
         public void DeselectAllCategories()
         {
             _filter.Categories.Clear();
             _filter.IncludesFavorite = false;
             NotifyOfPropertyChange(string.Empty);
-            _filter.IsUpdated = true;
         }
         #endregion
 
@@ -234,7 +226,12 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (result == true)
                 ReloadFilter(dialog.FileName);
         }
-        public void OpenFavoriteEditor() => openFavoriteEditor.Invoke();
+
+        public void OpenFavoriteEditor()
+        {
+            //var titleList = _allTrackList.ConvertAll(x => x.Title).Distinct().ToList();
+            //_windowManager.ShowDialogAsync(new FavoriteViewModel(titleList));
+        }
         #endregion
 
 
@@ -339,7 +336,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                 _filter.Levels[0] = value;
                 NotifyOfPropertyChange(() => LevelMin);
                 UpdateLevelIndicators();
-                _filter.IsUpdated = true;
             }
         }
         public int LevelMax
@@ -350,7 +346,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                 _filter.Levels[1] = value;
                 NotifyOfPropertyChange(() => LevelMax);
                 UpdateLevelIndicators();
-                _filter.IsUpdated = true;
             }
         }
         public int ScLevelMin
@@ -361,7 +356,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                 _filter.ScLevels[0] = value;
                 NotifyOfPropertyChange(() => ScLevelMin);
                 UpdateScLevelIndicators();
-                _filter.IsUpdated = true;
             }
         }
         public int ScLevelMax
@@ -372,7 +366,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                 _filter.ScLevels[1] = value;
                 NotifyOfPropertyChange(() => ScLevelMax);
                 UpdateScLevelIndicators();
-                _filter.IsUpdated = true;
             }
         }
         #endregion
@@ -592,7 +585,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 _filter.IncludesFavorite = value;
                 NotifyOfPropertyChange(() => CategoryFavorite);
-                _filter.IsUpdated = true;
             }
         }
         #endregion

@@ -14,27 +14,21 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class SettingViewModel : Screen
     {
-        private readonly Config _setting;
-        private readonly Action<List<string>> _trackListUpdater;
-        private readonly Action<bool> _typeOfFilterSetter;
+        private const string ConfigPath = "Data/Config.json";
 
         private bool _isPlaylist;
-        private int _inputDelay;
-        private bool _savesRecents;
+        private int _inputInterval;
+        private bool _savesExclusion;
         private List<string> _ownedDlcs;
 
-        private bool _updatesTrackList = false;
-
-        public SettingViewModel(Config setting, Action<List<string>> trackListUpdater, Action<bool> typeOfFilterSetter)
+        public SettingViewModel()
         {
-            _setting = setting;
-            _trackListUpdater = trackListUpdater;
-            _typeOfFilterSetter = typeOfFilterSetter;
+            SelectorOption selectorOption = FileManager.Import<Config>(ConfigPath).SelectorOption;
 
-            _isPlaylist = _setting.IsPlaylist;
-            _inputDelay = _setting.InputDelay;
-            _savesRecents = _setting.SavesRecents;
-            _ownedDlcs = _setting.OwnedDlcs.ConvertAll(x => x);
+            _isPlaylist = selectorOption.IsPlaylist;
+            _inputInterval = selectorOption.InputInterval;
+            _savesExclusion = selectorOption.SavesExclusion;
+            _ownedDlcs = selectorOption.OwnedDlcs.ConvertAll(x => x);
 
             UpdateInputDelayText();
         }
@@ -101,29 +95,22 @@ namespace DjmaxRandomSelectorV.ViewModels
         #region On Exit
         public void Apply()
         {
-            _setting.InputDelay = _inputDelay;
-            _setting.SavesRecents = _savesRecents;
-            _setting.OwnedDlcs = _ownedDlcs;
-            _setting.IsPlaylist = _isPlaylist;
-
-            FileManager.Export(_setting, "Data/Config.json");
-            if (_updatesTrackList)
+            var selectorOption = new SelectorOption()
             {
-                _trackListUpdater.Invoke(_ownedDlcs);
-            }
-            
-            _typeOfFilterSetter.Invoke(_isPlaylist);
-            Close();
-        }
+                InputInterval = _inputInterval,
+                SavesExclusion = _savesExclusion,
+                OwnedDlcs = _ownedDlcs,
+            };
 
-        public void Cancel()
-        {
-            Close();
-        }
-        public void Close()
-        {
+            // publish
+
+            Config config = FileManager.Import<Config>(ConfigPath);
+            config.SelectorOption = selectorOption;
+            FileManager.Export(selectorOption, ConfigPath);
             TryCloseAsync();
         }
+
+        public void Cancel() => TryCloseAsync();
         #endregion
 
         #region Selector Setting
@@ -138,10 +125,10 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         public int InputDelay
         {
-            get { return _inputDelay; }
+            get { return _inputInterval; }
             set
             {
-                _inputDelay = value;
+                _inputInterval = value;
                 NotifyOfPropertyChange(() => InputDelay);
                 UpdateInputDelayText();
             }
@@ -163,10 +150,10 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public bool SavesRecents
         {
-            get { return _savesRecents; }
+            get { return _savesExclusion; }
             set
             {
-                _savesRecents = value;
+                _savesExclusion = value;
                 NotifyOfPropertyChange(() => SavesRecents);
             }
         }
@@ -187,7 +174,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 _ownedDlcs.Remove(value);
             }
-            _updatesTrackList = true;
         }
         #endregion
 
