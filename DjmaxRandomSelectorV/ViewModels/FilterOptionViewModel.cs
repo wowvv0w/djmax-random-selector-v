@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DjmaxRandomSelectorV.ViewModels
@@ -24,24 +25,40 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public FilterOptionIndicatorViewModel FilterOptionIndicatorViewModel { get; set; }
 
-        public FilterOptionViewModel()
-        {
-            FilterOption filterOption = FileManager.Import<Config>("Data/Config.json").FilterOption;
-            FilterOptionIndicatorViewModel = new FilterOptionIndicatorViewModel();
+        private readonly FilterOption _filterOption;
+        private readonly IEventAggregator _eventAggregator;
 
-            SetAddonText(_mode = filterOption.Mode);
-            SetAddonText(_aider = filterOption.Aider);
-            SetAddonText(_level = filterOption.Level);
+        public FilterOption FilterOption
+        {
+            get { return _filterOption; }
+        }
+        public FilterOptionViewModel(IEventAggregator eventAggregator)
+        {
+            _eventAggregator = eventAggregator;
+
+            _filterOption = FileManager.Import<Config>("Data/Config.json").FilterOption;
+            FilterOptionIndicatorViewModel = new FilterOptionIndicatorViewModel(_eventAggregator);
+
+            SetAddonText(_filterOption.Mode);
+            SetAddonText(_filterOption.Aider);
+            SetAddonText(_filterOption.Level);
+
+            Publish();
         }
 
-        private int _exceptCount;
+        private void Publish()
+        {
+            _eventAggregator.PublishOnUIThreadAsync(_filterOption);
+        }
+
         public int ExceptCount
         {
-            get { return _exceptCount; }
+            get { return _filterOption.Except; }
             set
             {
-                _exceptCount = value;
+                _filterOption.Except = value;
                 NotifyOfPropertyChange(() => ExceptCount);
+                Publish();
             }
         }
 
@@ -68,14 +85,14 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
-        private Mode _mode;
         public void SwitchMode()
         {
-            if (_mode.Equals(Mode.Freestyle))
-                _mode = Mode.Online;
+            if (_filterOption.Mode == Mode.Freestyle)
+                _filterOption.Mode = Mode.Online;
             else
-                _mode = Mode.Freestyle;
-            SetAddonText(_mode);
+                _filterOption.Mode = Mode.Freestyle;
+            SetAddonText(_filterOption.Mode);
+            Publish();
         }
 
         private string _aiderText;
@@ -104,22 +121,23 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
-        private Aider _aider;
         public void PrevAider()
         {
-            if (_aider.Equals(Aider.Off))
-                _aider = Aider.Observe;
+            if (_filterOption.Aider == Aider.Off)
+                _filterOption.Aider = Aider.Observe;
             else
-                _aider--;
-            SetAddonText(_aider);
+                _filterOption.Aider--;
+            SetAddonText(_filterOption.Aider);
+            Publish();
         }
         public void NextAider()
         {
-            if (_aider.Equals(Aider.Observe))
-                _aider = Aider.Off;
+            if (_filterOption.Aider == Aider.Observe)
+                _filterOption.Aider = Aider.Off;
             else
-                _aider++;
-            SetAddonText(_aider);
+                _filterOption.Aider++;
+            SetAddonText(_filterOption.Aider);
+            Publish();
         }
 
         private string _levelText;
@@ -148,22 +166,23 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
-        private Level _level;
         public void PrevLevel()
         {
-            if (_level.Equals(Level.Off))
-                _level = Level.Master;
+            if (_filterOption.Level == Level.Off)
+                _filterOption.Level = Level.Master;
             else
-                _level--;
-            SetAddonText(_level);
+                _filterOption.Level--;
+            SetAddonText(_filterOption.Level);
+            Publish();
         }
         public void NextLevel()
         {
-            if (_level.Equals(Level.Master))
-                _level = Level.Off;
+            if (_filterOption.Level == Level.Master)
+                _filterOption.Level = Level.Off;
             else
-                _level++;
-            SetAddonText(_level);
+                _filterOption.Level++;
+            SetAddonText(_filterOption.Level);
+            Publish();
         }
     }
 }

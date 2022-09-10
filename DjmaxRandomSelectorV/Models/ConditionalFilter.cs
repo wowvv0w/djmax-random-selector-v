@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using DjmaxRandomSelectorV.Models.Interfaces;
+using System.Collections.Generic;
 
 namespace DjmaxRandomSelectorV.Models
 {
-    public class ConditionalFilter : Filter
+    public class ConditionalFilter : IFilter
     {
         public List<string> ButtonTunes { get; set; } = new() { "4B", "5B", "6B", "8B" };
         public List<string> Difficulties { get; set; } = new() { "NM", "HD", "MX", "SC" };

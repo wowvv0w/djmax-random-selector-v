@@ -1,29 +1,17 @@
-﻿//#define debug
-
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
-using DjmaxRandomSelectorV.DataTypes;
-using DjmaxRandomSelectorV.DataTypes.Enums;
 using DjmaxRandomSelectorV.Utilities;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Interop;
-using System.Windows.Media.Effects;
 using System.Net.Http;
-using CsvHelper;
-using System.Globalization;
-using System.Linq;
+using DjmaxRandomSelectorV.RandomSelector;
+using System.Threading;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class MainViewModel : Conductor<object>
+    public class MainViewModel : Conductor<object>, IHandle<SelectorOption>
     {
         private const int ApplicationVersion = 150;
         private const string DjmaxTitle = "DJMAX RESPECT V";
@@ -35,8 +23,16 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string ConfigPath = "Data/Config.json";
         private const string AllTrackListPath = "Data/AllTrackList.csv";
 
-        public ConditionalFilterViewModel ConditionalFilterViewModel { get; set; }
-        public SelectiveFilterViewModel SelectiveFilterViewModel { get; set; }
+        private FilterBaseViewModel _filterViewModel;
+        public FilterBaseViewModel FilterViewModel
+        {
+            get { return _filterViewModel; }
+            set
+            {
+                _filterViewModel = value;
+                NotifyOfPropertyChange(() => FilterViewModel);
+            }
+        }
         public HistoryViewModel HistoryViewModel { get; set; }
         public FilterOptionViewModel FilterOptionViewModel { get; set; }
         public FilterOptionIndicatorViewModel FilterOptionIndicatorViewModel { get; set; }
@@ -59,9 +55,8 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             return (gapWithLastestApp, gapWithLastestTrack);
         }
-        private void Initialize()
+        private void Initialize(Config config)
         {
-            Config config = FileManager.Import<Config>(ConfigPath);
             // Check if the files should be updated, and then create Info dialog.
             try
             {
@@ -69,7 +64,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 OpenReleasePageVisibility = gapWithLastestApp > 0 ? Visibility.Visible : Visibility.Hidden;
                 if (gapWithLastestTrack != 0 || !File.Exists(AllTrackListPath))
                 {
-                    //DownloadAllTrackList();
+                    FileManager.DownloadAllTrackList();
                     config.AllTrackVersion += gapWithLastestTrack;
                     FileManager.Export(config, ConfigPath);
                     MessageBox.Show($"All track list is updated to the version {config.AllTrackVersion}.",
@@ -89,83 +84,72 @@ namespace DjmaxRandomSelectorV.ViewModels
                 _infoViewModel = new InfoViewModel(ApplicationVersion, ApplicationVersion,
                     config.AllTrackVersion);
             }
-        }
-        #endregion
-
-        private IEventAggregator _eventAggregator;
-        public MainViewModel()
-        {
-            _eventAggregator = new EventAggregator();
-
-            ConditionalFilterViewModel = new ConditionalFilterViewModel();
-            SelectiveFilterViewModel = new SelectiveFilterViewModel();
-            HistoryViewModel = new HistoryViewModel();
-            FilterOptionViewModel = new FilterOptionViewModel();
-
-            FilterOptionIndicatorViewModel = new FilterOptionIndicatorViewModel();
-        }
-
-
-
-        #region On Start Up
-        public void SetPosition(double[] position)
-        {
+            // Set position.
+            double[] position = config.Position;
             Window window = Application.Current.MainWindow;
             if (position?.Length == 2)
             {
                 window.Top = position[0];
                 window.Left = position[1];
             }
-            else
-            {
-                position = new double[2] { window.Top, window.Left };
-            }
         }
         #endregion
 
-        //#region On Exit
-        //public void SaveConfig(object view)
-        //{
-        //    var window = view as Window;
-
-        //    FileManager.Export(_filter, CurrentFilterPath);
-        //    FileManager.Export(_playlist, CurrentPlaylistPath);
-
-        //    if (!_config.SavesRecents)
-        //    {
-        //        _filter.Recents.Clear();
-        //        _playlist.Recents.Clear();
-        //    }
-        //    _config.Position = new double[2] { window.Top, window.Left };
-        //    FileManager.Export(_config, ConfigPath);
-        //}
-        //#endregion
-
-        private bool _isFilterType = true;
-        private bool _isPlaylistType = false;
-        public bool IsFilterType
+        private readonly IEventAggregator _eventAggregator;
+        private readonly IWindowManager _windowManager;
+        private readonly Selector _selector;
+        public MainViewModel(IEventAggregator eventAggregator, IWindowManager windowManager)
         {
-            get { return _isFilterType; }
-            set
+            _eventAggregator = eventAggregator;
+            _eventAggregator.SubscribeOnUIThread(this);
+            _windowManager = windowManager;
+
+            _selector = new Selector(_eventAggregator);
+
+            Config config = FileManager.Import<Config>(ConfigPath);
+            Initialize(config);
+            _eventAggregator.PublishOnUIThreadAsync(config.SelectorOption);
+            HistoryViewModel = new HistoryViewModel(_eventAggregator);
+            FilterOptionViewModel = new FilterOptionViewModel(_eventAggregator);
+            FilterOptionIndicatorViewModel = new FilterOptionIndicatorViewModel(_eventAggregator);
+
+            _selector.Exclusions = config.Exclusions;
+        }
+
+        public Task HandleAsync(SelectorOption message, CancellationToken cancellationToken)
+        {
+            ChangeFilterView(message.FilterType);
+            return Task.CompletedTask;
+        }
+
+        private void ChangeFilterView(string filterType)
+        {
+            FilterViewModel = filterType switch
             {
-                _isFilterType = value;
-                NotifyOfPropertyChange(() => IsFilterType);
-            }
+                nameof(ConditionalFilter) => new ConditionalFilterViewModel(_eventAggregator, _windowManager),
+                nameof(SelectiveFilter) => new SelectiveFilterViewModel(_eventAggregator),
+                _ => throw new NotSupportedException(),
+            };
         }
-        public bool IsPlaylistType
+
+        protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            get { return _isPlaylistType; }
-            set
-            {
-                _isPlaylistType = value;
-                NotifyOfPropertyChange(() => IsPlaylistType);
-            }
+            //_selector.AddHotKey();
+            return Task.FromResult(true);
         }
-        public void ChangeTypeOfFilter(bool isPlaylist)
+        #region On Exit
+        public void SaveConfig(object view)
         {
-            IsFilterType = !isPlaylist;
-            IsPlaylistType = isPlaylist;
+            var window = view as Window;
+
+            Config config = FileManager.Import<Config>(ConfigPath);
+
+            config.FilterOption = FilterOptionViewModel.FilterOption;
+            config.Exclusions = _selector.Exclusions;
+            config.Position = new double[2] { window.Top, window.Left };
+            FileManager.Export(config, ConfigPath);
         }
+        #endregion
 
         #region Window Top Bar
         private Visibility _openReleasePageVisibility;
@@ -244,14 +228,13 @@ namespace DjmaxRandomSelectorV.ViewModels
         #endregion
 
         #region Another Windows
-        private readonly IWindowManager _windowManager = new WindowManager();
         public void ShowInfo()
         {
             _windowManager.ShowDialogAsync(_infoViewModel);
         }
         public void ShowSetting()
         {
-            _windowManager.ShowDialogAsync(new SettingViewModel());
+            _windowManager.ShowDialogAsync(new SettingViewModel(_eventAggregator));
         }
         #endregion
     }

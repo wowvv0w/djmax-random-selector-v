@@ -5,58 +5,77 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class FilterOptionIndicatorViewModel : Screen
+    public class FilterOptionIndicatorViewModel : Screen, IHandle<FilterOption>
     {
         #region Filter Option Elements
-        private int exceptCount;
-        private BitmapImage modeImage;
-        private BitmapImage aiderImage;
-        private BitmapImage levelImage;
+        private int _exceptCount;
+        private BitmapImage _modeImage;
+        private BitmapImage _aiderImage;
+        private BitmapImage _levelImage;
 
         public int ExceptCount
         {
-            get { return exceptCount; }
+            get { return _exceptCount; }
             set
             {
-                exceptCount = value;
+                _exceptCount = value;
                 NotifyOfPropertyChange(() => ExceptCount);
             }
         }
         public BitmapImage ModeImage
         {
-            get { return modeImage; }
+            get { return _modeImage; }
             set
             {
-                modeImage = value;
+                _modeImage = value;
                 NotifyOfPropertyChange(() => ModeImage);
             }
         }
         public BitmapImage AiderImage
         {
-            get { return aiderImage; }
+            get { return _aiderImage; }
             set
             {
-                aiderImage = value;
+                _aiderImage = value;
                 NotifyOfPropertyChange(() => AiderImage);
             }
         }
         public BitmapImage LevelImage
         {
-            get { return levelImage; }
+            get { return _levelImage; }
             set
             {
-                levelImage = value;
+                _levelImage = value;
                 NotifyOfPropertyChange(() => LevelImage);
             }
         }
         #endregion
 
+        private IEventAggregator _eventAggregator;
+        public FilterOptionIndicatorViewModel(IEventAggregator eventAggregator)
+        {
+            _eventAggregator = eventAggregator;
+            _eventAggregator.SubscribeOnUIThread(this);
+        }
+
         #region Image Modification
+        public Task HandleAsync(FilterOption message, CancellationToken cancellationToken)
+        {
+            bool isFreestyle = message.Mode == Mode.Freestyle;
+
+            ExceptCount = message.Except;
+            SetBitmapImage(message.Mode);
+            SetBitmapImage(message.Aider, isFreestyle);
+            SetBitmapImage(message.Level, isFreestyle);
+
+            return Task.CompletedTask;
+        }
         private BitmapImage GetBitmapImage(string file)
         {
             return new BitmapImage(new Uri($"pack://application:,,,/Images/{file}.png"));

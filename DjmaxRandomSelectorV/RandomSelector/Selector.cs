@@ -11,10 +11,14 @@ using System.Windows;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
+using Caliburn.Micro;
+using System.Threading;
+using DjmaxRandomSelectorV.Models.Interfaces;
+using DjmaxRandomSelectorV.Utilities;
 
 namespace DjmaxRandomSelectorV.RandomSelector
 {
-    public class Selector
+    public class Selector : IHandle<IFilter>, IHandle<FilterOption>, IHandle<SelectorOption>
     {
         private const string DjmaxTitle = "DJMAX RESPECT V";
 
@@ -24,25 +28,36 @@ namespace DjmaxRandomSelectorV.RandomSelector
 
         private int _maxExclusionCount;
         private int _inputInterval;
+        private bool _savesExclusion;
         private List<string> _exclusions;
 
         private bool _isUpdated;
         private bool _isRunning;
         private bool _canExecuteWithoutGame;
 
+        private IFilter _filter;
         private ISifter _sifter;
         private IProvider _provider;
 
         private readonly Executor _executor;
-        private readonly TrackHandler _trackHandler;
 
-        private Filter _filter;
+        private readonly IEventAggregator _eventAggregator;
 
-        public Selector()
+        public List<string> Exclusions
         {
-            _executor = new Executor(CanStart, Start);
-            _trackHandler = new TrackHandler();
+            get { return _savesExclusion ? _exclusions : new List<string>(); }
+            set { _exclusions = value; }
         }
+
+        public Selector(IEventAggregator eventAggregator)
+        {
+            _eventAggregator = eventAggregator;
+            _eventAggregator.SubscribeOnUIThread(this);
+
+            _executor = new Executor(CanStart, Start);
+        }
+
+        public void AddHotKey() => _executor.AddHotkey();
 
         private void UpdateExclusions()
         {
@@ -78,9 +93,9 @@ namespace DjmaxRandomSelectorV.RandomSelector
         }
         private void Provide(Music music)
         {
-            _provider.Provide(music, _tracks, _inputInterval);
+            _provider?.Provide(music, _tracks, _inputInterval);
         }
-        public bool CanStart()
+        private bool CanStart()
         {
             if (_canExecuteWithoutGame)
                 return true;
@@ -95,7 +110,7 @@ namespace DjmaxRandomSelectorV.RandomSelector
             else
                 return false;
         }
-        public void Start()
+        private void Start()
         {
             _isRunning = true;
 
@@ -131,6 +146,7 @@ namespace DjmaxRandomSelectorV.RandomSelector
 
             Provide(selectedMusic);
             _exclusions.Add(selectedMusic.Title);
+            _eventAggregator.PublishOnUIThreadAsync(selectedMusic);
             _isRunning = false;
         }
 
@@ -153,25 +169,103 @@ namespace DjmaxRandomSelectorV.RandomSelector
         }
 
         #region Sifter, Provider
-        private void ChangeSifter()
+        private void ChangeSifter(string filterType)
         {
-            _sifter = _filter switch
+            string currentMethod = _sifter.CurrentMethod;
+            _sifter = filterType switch
             {
-                ConditionalFilter => new QuerySifter(),
-                SelectiveFilter => throw new NotImplementedException(),
+                nameof(ConditionalFilter) => new QuerySifter(),
+                nameof(SelectiveFilter) => throw new NotImplementedException(),
                 _ => throw new NotSupportedException(),
             };
+            _sifter.SetMethod(currentMethod);
         }
         private void ChangeProvider(Mode mode, Aider aider)
         {
+            bool isFreestyle = mode == Mode.Freestyle;
             _provider = aider switch
             {
-                Aider.Off => new Locator(true),
-                Aider.AutoStart => mode == Mode.Freestyle ? new Locator(true) : new Locator(false),
+                Aider.Off => new Locator(false),
+                Aider.AutoStart => new Locator(isFreestyle),
                 Aider.Observe => null,
                 _ => throw new NotSupportedException(),
             };
         }
+
+        public Task HandleAsync(IFilter message, CancellationToken cancellationToken)
+        {
+            _filter = message;
+            _isUpdated = true;
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(FilterOption message, CancellationToken cancellationToken)
+        {
+            _maxExclusionCount = message.Except;
+            _sifter.ChangeMethod(message);
+            ChangeProvider(message.Mode, message.Aider);
+            _canExecuteWithoutGame = message.Aider == Aider.Observe;
+            _isUpdated = true;
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(SelectorOption message, CancellationToken cancellationToken)
+        {
+            ChangeSifter(message.FilterType);
+            _inputInterval = message.InputInterval;
+            _savesExclusion = message.SavesExclusion;
+            UpdateTrackList(message.OwnedDlcs);
+            _isUpdated = true;
+            return Task.CompletedTask;
+        }
         #endregion
+
+        private void UpdateTrackList(List<string> ownedDlcs)
+        {
+            var allTrackList = FileManager.GetAllTrackList();
+            var categories = ownedDlcs.Concat(new List<string>() { "RP", "P1", "P2", "GG" });
+            var titleFilter = CreateTitleFilter(ownedDlcs);
+
+            var trackQuery = from track in allTrackList
+                            where categories.Contains(track.Category)
+                            && !titleFilter.Contains(track.Title)
+                            select track;
+
+            _tracks = trackQuery.ToList();
+        }
+        private List<string> CreateTitleFilter(List<string> ownedDlcs)
+        {
+            var list = new List<string>();
+
+            if (!ownedDlcs.Contains("P3"))
+            {
+                list.Add("glory day (Mintorment Remix)");
+                list.Add("glory day -JHS Remix-");
+            }
+            if (!ownedDlcs.Contains("TR"))
+                list.Add("Nevermind");
+            if (!ownedDlcs.Contains("CE"))
+                list.Add("Rising The Sonic");
+            if (!ownedDlcs.Contains("BS"))
+                list.Add("ANALYS");
+            if (!ownedDlcs.Contains("T1"))
+                list.Add("Do you want it");
+            if (!ownedDlcs.Contains("T2"))
+                list.Add("End of Mythology");
+            if (!ownedDlcs.Contains("T3"))
+                list.Add("ALiCE");
+            if (!ownedDlcs.Contains("TQ"))
+                list.Add("Techno Racer");
+            if (ownedDlcs.Contains("CE") && !ownedDlcs.Contains("BS") && !ownedDlcs.Contains("T1"))
+                list.Add("Here in the Moment ~Extended Mix~");
+            if (!ownedDlcs.Contains("CE") && ownedDlcs.Contains("BS") && !ownedDlcs.Contains("T1"))
+                list.Add("Airwave ~Extended Mix~");
+            if (!ownedDlcs.Contains("CE") && !ownedDlcs.Contains("BS") && ownedDlcs.Contains("T1"))
+                list.Add("SON OF SUN ~Extended Mix~");
+            if (!ownedDlcs.Contains("VE") && ownedDlcs.Contains("VE2"))
+                list.Add("너로피어오라 ~Original Ver.~");
+
+            return list;
+        }
     }
 }

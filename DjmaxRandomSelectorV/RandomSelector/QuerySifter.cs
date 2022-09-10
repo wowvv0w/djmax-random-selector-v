@@ -5,6 +5,8 @@ using DjmaxRandomSelectorV.RandomSelector.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DjmaxRandomSelectorV.Models.Interfaces;
+using System.Reflection;
 
 namespace DjmaxRandomSelectorV.RandomSelector
 {
@@ -12,6 +14,11 @@ namespace DjmaxRandomSelectorV.RandomSelector
     {
         private delegate List<Music> SiftingMethod(IEnumerable<Track> tracks, Predicate<KeyValuePair<string, int>> satisfies);
         private SiftingMethod _method;
+
+        public string CurrentMethod
+        {
+            get { return _method.Method.Name; }
+        }
         public void ChangeMethod(FilterOption filterOption)
         {
             if (filterOption.Mode == Mode.Freestyle)
@@ -32,6 +39,10 @@ namespace DjmaxRandomSelectorV.RandomSelector
             {
                 throw new NotSupportedException();
             }
+        }
+        public void SetMethod(string methodName)
+        {
+            _method = (SiftingMethod)Delegate.CreateDelegate(typeof(SiftingMethod), this, methodName);
         }
         private List<Music> SiftAll(IEnumerable<Track> tracks, Predicate<KeyValuePair<string, int>> satisfies)
         {
@@ -87,7 +98,7 @@ namespace DjmaxRandomSelectorV.RandomSelector
             return musics.ToList();
         }
 
-        public List<Music> Sift(List<Track> tracks, Filter filterToConvert)
+        public List<Music> Sift(List<Track> tracks, IFilter filterToConvert)
         {
             var filter = filterToConvert as ConditionalFilter;
 

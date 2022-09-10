@@ -8,19 +8,26 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using Action = System.Action;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class ConditionalFilterViewModel : Screen
+    public class ConditionalFilterViewModel : FilterBaseViewModel
     {
+        private const string CurrentFilterPath = "Data/CurrentFilter.json";
+
         private ConditionalFilter _filter;
 
-        public ConditionalFilterViewModel()
+        private readonly IEventAggregator _eventAggregator;
+        private readonly IWindowManager _windowManager;
+        public ConditionalFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager)
         {
-            _filter = FileManager.Import<ConditionalFilter>("Data/CurrentFilter.json");
+            _eventAggregator = eventAggregator;
+            _windowManager = windowManager;
+
+            _filter = FileManager.Import<ConditionalFilter>(CurrentFilterPath);
             for(int i = 0; i < 16; i++)
             {
                 // DO NOT use index 0
@@ -29,6 +36,12 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             UpdateLevelIndicators();
             UpdateScLevelIndicators();
+            Publish();
+        }
+
+        protected override void Publish()
+        {
+            _eventAggregator.PublishOnUIThreadAsync(_filter);
         }
 
         #region Filter Updater
@@ -46,6 +59,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 filter.Remove(value);
             }
+            Publish();
         }
         public void ReloadFilter(string presetPath)
         {
@@ -59,6 +73,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 MessageBox.Show($"Cannot apply the preset.",
                                 "Filter Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            Publish();
         }
         public void SelectAllCategories()
         {
@@ -69,15 +84,22 @@ namespace DjmaxRandomSelectorV.ViewModels
             });
             _filter.IncludesFavorite = true;
             NotifyOfPropertyChange(string.Empty);
+            Publish();
         }
         public void DeselectAllCategories()
         {
             _filter.Categories.Clear();
             _filter.IncludesFavorite = false;
             NotifyOfPropertyChange(string.Empty);
+            Publish();
         }
         #endregion
 
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            FileManager.Export(_filter, CurrentFilterPath);
+            return Task.FromResult(true);
+        }
 
         #region Level Adjustment
         public void IncreaseLevelMin()
@@ -227,10 +249,11 @@ namespace DjmaxRandomSelectorV.ViewModels
                 ReloadFilter(dialog.FileName);
         }
 
-        public void OpenFavoriteEditor()
+        public async void OpenFavoriteEditor()
         {
-            //var titleList = _allTrackList.ConvertAll(x => x.Title).Distinct().ToList();
-            //_windowManager.ShowDialogAsync(new FavoriteViewModel(titleList));
+            bool? result = await _windowManager.ShowDialogAsync(new FavoriteViewModel(_filter.Favorites));
+            if (result == true)
+                Publish();
         }
         #endregion
 

@@ -22,10 +22,9 @@ namespace DjmaxRandomSelectorV.RandomSelector
         {
             _canExecute = canExecute;
             _execute = execute;
-            AddHotkey();
         }
 
-        private void AddHotkey()
+        public void AddHotkey()
         {
             var window = Application.Current.MainWindow;
             HwndSource source;

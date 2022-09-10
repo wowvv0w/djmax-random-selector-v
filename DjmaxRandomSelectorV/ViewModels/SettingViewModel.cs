@@ -21,11 +21,13 @@ namespace DjmaxRandomSelectorV.ViewModels
         private bool _savesExclusion;
         private List<string> _ownedDlcs;
 
-        public SettingViewModel()
+        private IEventAggregator _eventAggregator;
+        public SettingViewModel(IEventAggregator eventAggregator)
         {
+            _eventAggregator = eventAggregator;
             SelectorOption selectorOption = FileManager.Import<Config>(ConfigPath).SelectorOption;
 
-            _isPlaylist = selectorOption.IsPlaylist;
+            _isPlaylist = selectorOption.FilterType.Equals(nameof(SelectiveFilter));
             _inputInterval = selectorOption.InputInterval;
             _savesExclusion = selectorOption.SavesExclusion;
             _ownedDlcs = selectorOption.OwnedDlcs.ConvertAll(x => x);
@@ -41,7 +43,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             string steamKeyName = "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Valve\\Steam";
             string steamPath = Registry.GetValue(steamKeyName, "InstallPath", null).ToString();
             
-            DirectoryInfo libraryPath = new DirectoryInfo($"{steamPath}\\appcache\\librarycache");
+            var libraryPath = new DirectoryInfo($"{steamPath}\\appcache\\librarycache");
 
             int dlcCount = 0;
             foreach (FileInfo file in libraryPath.GetFiles())
@@ -97,12 +99,13 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             var selectorOption = new SelectorOption()
             {
+                FilterType = _isPlaylist ? nameof(SelectiveFilter) : nameof(ConditionalFilter),
                 InputInterval = _inputInterval,
                 SavesExclusion = _savesExclusion,
                 OwnedDlcs = _ownedDlcs,
             };
 
-            // publish
+            _eventAggregator.PublishOnUIThreadAsync(selectorOption);
 
             Config config = FileManager.Import<Config>(ConfigPath);
             config.SelectorOption = selectorOption;

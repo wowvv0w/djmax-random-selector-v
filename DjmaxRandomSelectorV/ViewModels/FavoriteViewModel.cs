@@ -16,22 +16,26 @@ namespace DjmaxRandomSelectorV.ViewModels
     {
         private bool searchesSuggestion;
         private readonly List<string> _titleList;
+        private readonly List<string> _favorites;
 
         public BindableCollection<string> FavoriteItems { get; set; }
         public BindableCollection<string> TitleSuggestions { get; set; }
 
-        public FavoriteViewModel(List<string> favorite, List<string> titleList)
+        public FavoriteViewModel(List<string> favorites)
         {
             searchesSuggestion = true;
-            _titleList = titleList;
+            _titleList = FileManager.GetAllTrackList().ToList().ConvertAll(x => x.Title);
+            _favorites = favorites;
 
-            FavoriteItems = new BindableCollection<string>(favorite);
+            FavoriteItems = new BindableCollection<string>(favorites);
 
             TitleSuggestions = new BindableCollection<string>();
             OpensSuggestionBox = false;
         }
         public void OK()
         {
+            _favorites.Clear();
+            _favorites.AddRange(FavoriteItems);
             TryCloseAsync();
         }
 
