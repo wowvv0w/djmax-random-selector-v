@@ -109,7 +109,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             Config config = FileManager.Import<Config>(ConfigPath);
             config.SelectorOption = selectorOption;
-            FileManager.Export(selectorOption, ConfigPath);
+            FileManager.Export(config, ConfigPath);
             TryCloseAsync();
         }
 
