@@ -43,6 +43,12 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             _eventAggregator.PublishOnUIThreadAsync(new SelectiveFilter() { Playlist = PlaylistItems.ToList() });
         }
+        public override void ExportFilter()
+        {
+            var filter = new SelectiveFilter() { Playlist = PlaylistItems.ToList() };
+            FileManager.Export(filter, CurrentFilterPath);
+        }
+
 
         public void AddItem()
         {

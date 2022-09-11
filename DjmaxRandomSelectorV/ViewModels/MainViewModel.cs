@@ -118,6 +118,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private void ChangeFilterView(string filterType)
         {
+            FilterViewModel?.ExportFilter();
             FilterViewModel = filterType switch
             {
                 nameof(ConditionalFilter) => new ConditionalFilterViewModel(_eventAggregator, _windowManager),
@@ -147,6 +148,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             var window = view as Window;
 
+            FilterViewModel.ExportFilter();
             Config config = FileManager.Import<Config>(ConfigPath);
 
             config.FilterOption = FilterOptionViewModel.FilterOption;

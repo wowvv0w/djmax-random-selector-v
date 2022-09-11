@@ -43,6 +43,10 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             _eventAggregator.PublishOnUIThreadAsync(_filter);
         }
+        public override void ExportFilter()
+        {
+            FileManager.Export(_filter, CurrentFilterPath);
+        }
 
         #region Filter Updater
         private bool CheckFilter(List<string> filter, string value)

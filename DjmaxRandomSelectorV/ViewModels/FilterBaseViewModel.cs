@@ -12,5 +12,8 @@ namespace DjmaxRandomSelectorV.ViewModels
         protected virtual void Publish()
         {
         }
+        public virtual void ExportFilter()
+        {
+        }
     }
 }
