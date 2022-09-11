@@ -171,14 +171,16 @@ namespace DjmaxRandomSelectorV.RandomSelector
         #region Sifter, Provider
         private void ChangeSifter(string filterType)
         {
-            string currentMethod = _sifter.CurrentMethod;
+            string currentMethod = _sifter?.CurrentMethod;
             _sifter = filterType switch
             {
                 nameof(ConditionalFilter) => new QuerySifter(),
                 nameof(SelectiveFilter) => throw new NotImplementedException(),
                 _ => throw new NotSupportedException(),
             };
-            _sifter.SetMethod(currentMethod);
+
+            if (!string.IsNullOrEmpty(currentMethod))
+                _sifter.SetMethod(currentMethod);
         }
         private void ChangeProvider(Mode mode, Aider aider)
         {

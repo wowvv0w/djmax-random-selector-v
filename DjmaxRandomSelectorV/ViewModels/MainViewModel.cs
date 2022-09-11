@@ -84,14 +84,8 @@ namespace DjmaxRandomSelectorV.ViewModels
                 _infoViewModel = new InfoViewModel(ApplicationVersion, ApplicationVersion,
                     config.AllTrackVersion);
             }
-            // Set position.
-            double[] position = config.Position;
-            Window window = Application.Current.MainWindow;
-            if (position?.Length == 2)
-            {
-                window.Top = position[0];
-                window.Left = position[1];
-            }
+
+            _position = config.Position;
         }
         #endregion
 
@@ -110,8 +104,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             Initialize(config);
             _eventAggregator.PublishOnUIThreadAsync(config.SelectorOption);
             HistoryViewModel = new HistoryViewModel(_eventAggregator);
-            FilterOptionViewModel = new FilterOptionViewModel(_eventAggregator);
             FilterOptionIndicatorViewModel = new FilterOptionIndicatorViewModel(_eventAggregator);
+            FilterOptionViewModel = new FilterOptionViewModel(_eventAggregator);
 
             _selector.Exclusions = config.Exclusions;
         }
@@ -132,11 +126,22 @@ namespace DjmaxRandomSelectorV.ViewModels
             };
         }
 
-        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        protected override void OnViewLoaded(object view)
         {
-            //_selector.AddHotKey();
-            return Task.FromResult(true);
+            _selector.AddHotKey();
         }
+
+        private double[] _position;
+        public void SetPosition(object view)
+        {
+            var window = view as Window;
+            if (_position?.Length == 2)
+            {
+                window.Top = _position[0];
+                window.Left = _position[1];
+            }
+        } 
+
         #region On Exit
         public void SaveConfig(object view)
         {

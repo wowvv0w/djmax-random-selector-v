@@ -44,13 +44,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator.PublishOnUIThreadAsync(new SelectiveFilter() { Playlist = PlaylistItems.ToList() });
         }
 
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
-        {
-            var filter = new SelectiveFilter() { Playlist = PlaylistItems.ToList() };
-            FileManager.Export(filter, CurrentFilterPath);
-            return Task.FromResult(true);
-        }
-
         public void AddItem()
         {
             Music item;

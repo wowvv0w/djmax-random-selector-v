@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="DjmaxRandomSelectorV.Views.FilterView"
+﻿<UserControl x:Class="DjmaxRandomSelectorV.Views.ConditionalFilterView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -27,7 +27,7 @@
             <RowDefinition Height="120"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
         <!--#region Tool-->
         <StackPanel Margin="0 0 0 2.5"
                     Grid.ColumnSpan="2"
@@ -73,7 +73,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                
+
                 <TextBlock Text="BUTTON TUNES"
                            Grid.Column="1"
                            Grid.ColumnSpan="4"
@@ -125,7 +125,7 @@
             </Grid>
         </Border>
         <!--#endregion-->
-        
+
         <!--#region Difficulty-->
         <Border Grid.Column="1" Grid.Row="1"
                 Margin="2.5 2.5 0 2.5">
@@ -399,7 +399,7 @@
             </Grid>
         </Border>
         <!--#endregion-->
-        
+
         <!--#region Category-->
         <Border Grid.Row="2"
                 Grid.ColumnSpan="2"
@@ -523,43 +523,43 @@
                                   BorderBrush="{StaticResource BgTechnikaTQ1}"
                                   Foreground="{StaticResource FgTechnikaTQ}">
                         <ToggleButton.Style>
-                        <Style TargetType="ToggleButton" BasedOn="{StaticResource CategoryButton}">
-                        <Setter Property="Template">
-                        <Setter.Value>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Grid>
-                                <Border x:Name="Border"
+                            <Style TargetType="ToggleButton" BasedOn="{StaticResource CategoryButton}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ToggleButton">
+                                            <Grid>
+                                                <Border x:Name="Border"
                                         Background="#56000000"
                                         BorderThickness="0">
-                                    <Border x:Name="Border2"
+                                                    <Border x:Name="Border2"
                                             Background="Transparent">
-                                        <TextBlock x:Name="TextBlock"
+                                                        <TextBlock x:Name="TextBlock"
                                                    Text="{TemplateBinding Content}"
                                                    Foreground="{TemplateBinding Foreground}"
                                                    Background="Transparent"
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center"
-                                                   Margin="0,2,0,0"/>                                        
-                                    </Border>
-                                </Border>
-                            </Grid>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter Property="Background"
+                                                   Margin="0,2,0,0"/>
+                                                    </Border>
+                                                </Border>
+                                            </Grid>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsChecked" Value="True">
+                                                    <Setter Property="Background"
                                             TargetName="Border"
                                             Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"/>
-                                    <Setter Property="Foreground"
+                                                    <Setter Property="Foreground"
                                             TargetName="TextBlock"
                                             Value="Black"/>
-                                    <Setter Property="Background"
+                                                    <Setter Property="Background"
                                             TargetName="Border2"
                                             Value="{Binding BorderBrush, RelativeSource={RelativeSource TemplatedParent}}"/>
-                                    </Trigger>
-                            </ControlTemplate.Triggers> 
-                        </ControlTemplate>
-                        </Setter.Value>
-                        </Setter>
-                        </Style>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
                         </ToggleButton.Style>
                     </ToggleButton>
                     <ToggleButton x:Name="CategoryFavorite"
@@ -631,6 +631,6 @@
             </Grid>
         </Border>
         <!--#endregion-->
-        
+
     </Grid>
 </UserControl>

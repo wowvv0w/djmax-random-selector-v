@@ -21,6 +21,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public HistoryViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
+            _eventAggregator.SubscribeOnUIThread(this);
             _number = 0;
             History = new BindableCollection<HistoryItem>();
         }

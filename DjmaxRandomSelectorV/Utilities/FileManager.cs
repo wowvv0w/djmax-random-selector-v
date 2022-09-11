@@ -62,7 +62,7 @@ namespace DjmaxRandomSelectorV.Utilities
             csv.Context.RegisterClassMap<TrackMap>();
             var records = csv.GetRecords<Track>();
 
-            return records;
+            return records.ToList();
         }
     }
 }

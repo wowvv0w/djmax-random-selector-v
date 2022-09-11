@@ -12,8 +12,7 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         SnapsToDevicePixels="True"
-        cal:Message.Attach="[Event Loaded] = [Action AddHotkey($view)];
-                            [Event Loaded] = [Action SetPosition($view)];
+        cal:Message.Attach="[Event Loaded] = [Action SetPosition($view)];
                             [Event Closing] = [Action SaveConfig($view)];"
         Icon="pack://application:,,,/Images/icon.png">
     <Window.Background>
@@ -226,21 +225,7 @@
                     <TabItem Visibility="Collapsed"
                              Padding="0"
                              IsSelected="{Binding IsFilterTabSelected}">
-                        <TabControl Grid.Row="1" Grid.Column="1"
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    Padding="0">
-                            <TabItem Visibility="Collapsed"
-                                     Padding="0"
-                                     IsSelected="{Binding IsFilterType}">
-                                <ContentControl x:Name="FilterViewModel"/>
-                            </TabItem>
-                            <TabItem Visibility="Collapsed"
-                                     Padding="0"
-                                     IsSelected="{Binding IsPlaylistType}">
-                                <ContentControl x:Name="PlaylistViewModel"/>
-                            </TabItem>
-                        </TabControl>
+                        <ContentControl x:Name="FilterViewModel"/>
                     </TabItem>
                     <TabItem Visibility="Collapsed" 
                              Padding="0"

@@ -95,12 +95,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         #endregion
 
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
-        {
-            FileManager.Export(_filter, CurrentFilterPath);
-            return Task.FromResult(true);
-        }
-
         #region Level Adjustment
         public void IncreaseLevelMin()
         {
