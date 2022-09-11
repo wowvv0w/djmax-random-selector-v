@@ -37,6 +37,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public Task HandleAsync(Music message, CancellationToken cancellationToken)
         {
+            _number++;
             var historyItem = new HistoryItem()
             {
                 Number = _number,
