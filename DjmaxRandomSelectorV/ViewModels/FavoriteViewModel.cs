@@ -36,7 +36,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             _favorites.Clear();
             _favorites.AddRange(FavoriteItems);
-            TryCloseAsync();
+            TryCloseAsync(true);
         }
 
         #region SearchBox
