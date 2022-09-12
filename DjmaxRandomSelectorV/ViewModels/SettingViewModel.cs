@@ -96,17 +96,12 @@ namespace DjmaxRandomSelectorV.ViewModels
         #region On Exit
         public void Apply()
         {
-            var selectorOption = new SelectorOption()
-            {
-                FilterType = _isPlaylist ? nameof(SelectiveFilter) : nameof(ConditionalFilter),
-                InputInterval = _inputInterval,
-                SavesExclusion = _savesExclusion,
-                OwnedDlcs = _ownedDlcs,
-            };
+            _selectorOption.FilterType = _isPlaylist ? nameof(SelectiveFilter) : nameof(ConditionalFilter);
+            _selectorOption.InputInterval = _inputInterval;
+            _selectorOption.SavesExclusion = _savesExclusion;
+            _selectorOption.OwnedDlcs = _ownedDlcs;
 
-            _eventAggregator.PublishOnUIThreadAsync(selectorOption);
-
-            _selectorOption = selectorOption;
+            _eventAggregator.PublishOnUIThreadAsync(_selectorOption);
             TryCloseAsync(true);
         }
 
