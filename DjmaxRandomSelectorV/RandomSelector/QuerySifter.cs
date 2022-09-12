@@ -67,7 +67,7 @@ namespace DjmaxRandomSelectorV.RandomSelector
                              Title = track.Title,
                              Style = pattern.Key,
                              Level = pattern.Value.ToString()
-                         } by pattern.Key[..2] into buttonGroup
+                         } by new { title = track.Title, button = pattern.Key[..2] } into buttonGroup
                          select buttonGroup.First();
             return musics.ToList();
         }
@@ -81,7 +81,7 @@ namespace DjmaxRandomSelectorV.RandomSelector
                              Title = track.Title,
                              Style = pattern.Key,
                              Level = pattern.Value.ToString()
-                         } by pattern.Key[..2] into buttonGroup
+                         } by new { title = track.Title, button = pattern.Key[..2] } into buttonGroup
                          select buttonGroup.Last();
             return musics.ToList();
         }
