@@ -28,7 +28,6 @@ namespace DjmaxRandomSelectorV.RandomSelector
 
         private int _maxExclusionCount;
         private int _inputInterval;
-        private bool _savesExclusion;
         private List<string> _exclusions;
 
         private bool _isUpdated;
@@ -43,18 +42,17 @@ namespace DjmaxRandomSelectorV.RandomSelector
 
         private readonly IEventAggregator _eventAggregator;
 
-        public List<string> Exclusions
+        private void Initialize(Configuration configuration)
         {
-            get { return _savesExclusion ? _exclusions : new List<string>(); }
-            set { _exclusions = value; }
+            HandleAsync(configuration.SelectorOption, CancellationToken.None);
+            _exclusions = configuration.Exclusions;
         }
-
-        public Selector(IEventAggregator eventAggregator)
+        public Selector(IEventAggregator eventAggregator, Configuration configuration)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
-
             _executor = new Executor(CanStart, Start);
+            Initialize(configuration);
         }
 
         public void AddHotKey() => _executor.AddHotkey();
@@ -200,7 +198,6 @@ namespace DjmaxRandomSelectorV.RandomSelector
         {
             ChangeSifter(message.FilterType);
             _inputInterval = message.InputInterval;
-            _savesExclusion = message.SavesExclusion;
             UpdateTrackList(message.OwnedDlcs);
             _isUpdated = true;
             return Task.CompletedTask;

@@ -28,15 +28,11 @@ namespace DjmaxRandomSelectorV.ViewModels
         private readonly FilterOption _filterOption;
         private readonly IEventAggregator _eventAggregator;
 
-        public FilterOption FilterOption
-        {
-            get { return _filterOption; }
-        }
-        public FilterOptionViewModel(IEventAggregator eventAggregator)
+        public FilterOptionViewModel(IEventAggregator eventAggregator, FilterOption filterOption)
         {
             _eventAggregator = eventAggregator;
+            _filterOption = filterOption;
 
-            _filterOption = FileManager.Import<Config>("Data/Config.json").FilterOption;
             FilterOptionIndicatorViewModel = new FilterOptionIndicatorViewModel(_eventAggregator);
 
             SetAddonText(_filterOption.Mode);

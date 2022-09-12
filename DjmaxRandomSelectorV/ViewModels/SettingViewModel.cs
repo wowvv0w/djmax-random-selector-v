@@ -14,18 +14,17 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class SettingViewModel : Screen
     {
-        private const string ConfigPath = "Data/Config.json";
-
+        private SelectorOption _selectorOption;
         private bool _isPlaylist;
         private int _inputInterval;
         private bool _savesExclusion;
         private List<string> _ownedDlcs;
 
         private IEventAggregator _eventAggregator;
-        public SettingViewModel(IEventAggregator eventAggregator)
+        public SettingViewModel(IEventAggregator eventAggregator, SelectorOption selectorOption)
         {
             _eventAggregator = eventAggregator;
-            SelectorOption selectorOption = FileManager.Import<Config>(ConfigPath).SelectorOption;
+            _selectorOption = selectorOption;
 
             _isPlaylist = selectorOption.FilterType.Equals(nameof(SelectiveFilter));
             _inputInterval = selectorOption.InputInterval;
@@ -107,13 +106,11 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             _eventAggregator.PublishOnUIThreadAsync(selectorOption);
 
-            Config config = FileManager.Import<Config>(ConfigPath);
-            config.SelectorOption = selectorOption;
-            FileManager.Export(config, ConfigPath);
-            TryCloseAsync();
+            _selectorOption = selectorOption;
+            TryCloseAsync(true);
         }
 
-        public void Cancel() => TryCloseAsync();
+        public void Cancel() => TryCloseAsync(false);
         #endregion
 
         #region Selector Setting

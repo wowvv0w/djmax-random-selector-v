@@ -1,5 +1,6 @@
 ﻿using DjmaxRandomSelectorV.Models.Interfaces;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace DjmaxRandomSelectorV.Models
 {
@@ -15,6 +16,8 @@ namespace DjmaxRandomSelectorV.Models
         public int[] Levels { get; set; } = { 1, 15 };
         public int[] ScLevels { get; set; } = { 1, 15 };
         public bool IncludesFavorite { get; set; } = false;
+
+        [JsonIgnore]
         public List<string> Favorites { get; set; } = new();
     }
 }

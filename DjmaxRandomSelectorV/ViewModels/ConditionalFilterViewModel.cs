@@ -24,11 +24,12 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
-        public ConditionalFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager)
+        public ConditionalFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, List<string> favorites)
         {
             _eventAggregator = eventAggregator;
             _windowManager = windowManager;
             _filter = FileManager.Import<ConditionalFilter>(CurrentFilterPath);
+            _filter.Favorites = favorites;
             _favoriteViewModel = new FavoriteViewModel(_filter.Favorites);
             for(int i = 0; i < 16; i++)
             {
@@ -253,7 +254,9 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             bool? result = await _windowManager.ShowDialogAsync(_favoriteViewModel);
             if (result == true)
+            {
                 Publish();
+            }
         }
         #endregion
 

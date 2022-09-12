@@ -55,26 +55,26 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             return (gapWithLastestApp, gapWithLastestTrack);
         }
-        private void Initialize(Config config)
+        private void Initialize()
         {
             // Check if the files should be updated, and then create Info dialog.
             try
             {
-                (int gapWithLastestApp, int gapWithLastestTrack) = CompareToLastestVersions(config.AllTrackVersion);
+                (int gapWithLastestApp, int gapWithLastestTrack) = CompareToLastestVersions(_configuration.AllTrackVersion);
                 OpenReleasePageVisibility = gapWithLastestApp > 0 ? Visibility.Visible : Visibility.Hidden;
                 if (gapWithLastestTrack != 0 || !File.Exists(AllTrackListPath))
                 {
                     FileManager.DownloadAllTrackList();
-                    config.AllTrackVersion += gapWithLastestTrack;
-                    FileManager.Export(config, ConfigPath);
-                    MessageBox.Show($"All track list is updated to the version {config.AllTrackVersion}.",
+                    _configuration.AllTrackVersion += gapWithLastestTrack;
+                    FileManager.Export(_configuration, ConfigPath);
+                    MessageBox.Show($"All track list is updated to the version {_configuration.AllTrackVersion}.",
                         "DJMAX Random Selector V",
                         MessageBoxButton.OK,
                         MessageBoxImage.Information);
                 }
 
                 _infoViewModel = new InfoViewModel(ApplicationVersion, ApplicationVersion + gapWithLastestApp,
-                    config.AllTrackVersion);
+                    _configuration.AllTrackVersion);
             }
             catch (HttpRequestException)
             {
@@ -82,15 +82,14 @@ namespace DjmaxRandomSelectorV.ViewModels
                     "Selector Error", MessageBoxButton.OK, MessageBoxImage.Warning);
 
                 _infoViewModel = new InfoViewModel(ApplicationVersion, ApplicationVersion,
-                    config.AllTrackVersion);
+                    _configuration.AllTrackVersion);
             }
-
-            _position = config.Position;
         }
         #endregion
 
         private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
+        private readonly Configuration _configuration;
         private readonly Selector _selector;
         public MainViewModel(IEventAggregator eventAggregator, IWindowManager windowManager)
         {
@@ -98,16 +97,14 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator.SubscribeOnUIThread(this);
             _windowManager = windowManager;
 
-            _selector = new Selector(_eventAggregator);
+            _configuration = FileManager.Import<Configuration>(ConfigPath);
+            _selector = new Selector(_eventAggregator, _configuration);
 
-            Config config = FileManager.Import<Config>(ConfigPath);
-            Initialize(config);
-            _eventAggregator.PublishOnUIThreadAsync(config.SelectorOption);
+            Initialize();
+            ChangeFilterView(_configuration.SelectorOption.FilterType);
             HistoryViewModel = new HistoryViewModel(_eventAggregator);
             FilterOptionIndicatorViewModel = new FilterOptionIndicatorViewModel(_eventAggregator);
-            FilterOptionViewModel = new FilterOptionViewModel(_eventAggregator);
-
-            _selector.Exclusions = config.Exclusions;
+            FilterOptionViewModel = new FilterOptionViewModel(_eventAggregator, _configuration.FilterOption);
         }
 
         public Task HandleAsync(SelectorOption message, CancellationToken cancellationToken)
@@ -121,7 +118,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             FilterViewModel?.ExportFilter();
             FilterViewModel = filterType switch
             {
-                nameof(ConditionalFilter) => new ConditionalFilterViewModel(_eventAggregator, _windowManager),
+                nameof(ConditionalFilter) => new ConditionalFilterViewModel(_eventAggregator, _windowManager, _configuration.Favorites),
                 nameof(SelectiveFilter) => new SelectiveFilterViewModel(_eventAggregator),
                 _ => throw new NotSupportedException(),
             };
@@ -132,14 +129,13 @@ namespace DjmaxRandomSelectorV.ViewModels
             _selector.AddHotKey();
         }
 
-        private double[] _position;
         public void SetPosition(object view)
         {
             var window = view as Window;
-            if (_position?.Length == 2)
+            if (_configuration.Position?.Length == 2)
             {
-                window.Top = _position[0];
-                window.Left = _position[1];
+                window.Top = _configuration.Position[0];
+                window.Left = _configuration.Position[1];
             }
         } 
 
@@ -147,14 +143,9 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void SaveConfig(object view)
         {
             var window = view as Window;
-
             FilterViewModel.ExportFilter();
-            Config config = FileManager.Import<Config>(ConfigPath);
-
-            config.FilterOption = FilterOptionViewModel.FilterOption;
-            config.Exclusions = _selector.Exclusions;
-            config.Position = new double[2] { window.Top, window.Left };
-            FileManager.Export(config, ConfigPath);
+            _configuration.Position = new double[2] { window.Top, window.Left };
+            FileManager.Export(_configuration, ConfigPath);
         }
         #endregion
 
@@ -239,9 +230,13 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             _windowManager.ShowDialogAsync(_infoViewModel);
         }
-        public void ShowSetting()
+        public async void ShowSetting()
         {
-            _windowManager.ShowDialogAsync(new SettingViewModel(_eventAggregator));
+            bool? result = await _windowManager.ShowDialogAsync(new SettingViewModel(_eventAggregator, _configuration.SelectorOption));
+            if (result == true)
+            {
+                FileManager.Export(_configuration, ConfigPath);
+            }
         }
         #endregion
     }
