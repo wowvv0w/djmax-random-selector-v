@@ -79,22 +79,6 @@ namespace DjmaxRandomSelectorV.RandomSelector
                 }
             }
         }
-        private void Sift()
-        {
-            _musics = _sifter.Sift(_tracks, _filter);
-        }
-        private Music Pick(List<Music> musicList)
-        {
-            var random = new Random();
-            var index = random.Next(musicList.Count - 1);
-            var selectedMusic = musicList[index];
-
-            return selectedMusic;
-        }
-        private void Provide(Music music)
-        {
-            _provider?.Provide(music, _tracks, _inputInterval);
-        }
         private bool CanStart()
         {
             if (_canExecuteWithoutGame)
@@ -114,10 +98,9 @@ namespace DjmaxRandomSelectorV.RandomSelector
         {
             _isRunning = true;
 
-            Music selectedMusic;
             if (_isUpdated)
             {
-                Sift();
+                _musics = _sifter.Sift(_tracks, _filter);
                 _exclusions.Clear();
                 var titleList = from music in _musics
                                 select music.Title;
@@ -132,21 +115,23 @@ namespace DjmaxRandomSelectorV.RandomSelector
             var filteredList = from music in _musics
                                where !_exclusions.Contains(music.Title)
                                select music;
+
             if (filteredList.Any())
             {
-                selectedMusic = Pick(filteredList.ToList());
+                var random = new Random();
+                int index = random.Next(_musics.Count - 1);
+                Music selectedMusic = _musics[index];
+
+                _provider?.Provide(selectedMusic, _tracks, _inputInterval);
+                _exclusions.Add(selectedMusic.Title);
+                _eventAggregator.PublishOnUIThreadAsync(selectedMusic);
             }
             else
             {
                 MessageBox.Show("There is no music in filtered list.",
                     "Filter Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                _isRunning = false;
-                return;
             }
 
-            Provide(selectedMusic);
-            _exclusions.Add(selectedMusic.Title);
-            _eventAggregator.PublishOnUIThreadAsync(selectedMusic);
             _isRunning = false;
         }
 
