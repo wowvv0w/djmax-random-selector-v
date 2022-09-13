@@ -6,6 +6,6 @@ namespace DjmaxRandomSelectorV.Models
 {
     public class SelectiveFilter : IFilter
     {
-        public List<Music> Playlist { get; set; } = new();
+        public List<PlaylistItem> Playlist { get; set; } = new();
     }
 }

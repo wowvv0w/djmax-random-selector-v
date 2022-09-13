@@ -19,21 +19,29 @@ namespace DjmaxRandomSelectorV.ViewModels
     {
         private const string CurrentFilterPath = "Data/CurrentPlaylist.json";
 
-        private readonly List<Track> _allTracks;
+        private readonly List<PlaylistItem> _allPlaylistItems;
+        private readonly List<string> _allTitles;
 
         private bool _searchesSuggestion;
         public BindableCollection<string> TitleSuggestions { get; set; }
-        public BindableCollection<Music> PlaylistItems { get; set; }
+        public BindableCollection<PlaylistItem> PlaylistItems { get; set; }
 
         private readonly IEventAggregator _eventAggregator;
         public SelectiveFilterViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
             _searchesSuggestion = true;
-            _allTracks = FileManager.GetAllTrackList().ToList();
 
-            List<Music> playlist = FileManager.Import<SelectiveFilter>(CurrentFilterPath).Playlist;
-            PlaylistItems = new BindableCollection<Music>(playlist);
+            var allTracks = FileManager.GetAllTrackList().ToList();
+            var playlistItemsQuery = from track in allTracks
+                                     from pattern in track.Patterns
+                                     where pattern.Value > 0
+                                     select new PlaylistItem(track.Title, pattern.Key);
+            _allPlaylistItems = playlistItemsQuery.ToList();
+            _allTitles = _allPlaylistItems.Select(x => x.Title).Distinct().ToList();
+
+            List<PlaylistItem> playlist = FileManager.Import<SelectiveFilter>(CurrentFilterPath).Playlist;
+            PlaylistItems = new BindableCollection<PlaylistItem>(playlist);
             TitleSuggestions = new BindableCollection<string>();
             OpensSuggestionBox = false;
 
@@ -52,40 +60,23 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void AddItem()
         {
-            Music item;
-
-            try
+            PlaylistItem item = _allPlaylistItems.Find(x => x.Title.Equals(TitleSearchBox) && x.Style.Equals(StyleSearchBox.ToUpper()));
+            if (!item.IsNull)
             {
-                Track track = _allTracks.Find(x => x.Title.Equals(TitleSearchBox));
-                string key = StyleSearchBox.ToUpper();
-                item = new Music()
-                {
-                    Title = track.Title,
-                    Style = key,
-                    Level = track.Patterns[key] > 0 ? null : throw new NullReferenceException()
-                };
+                PlaylistItems.Add(item);
+                TitleSearchBox = string.Empty;
+                StyleSearchBox = string.Empty;
+                Publish();
             }
-            catch (Exception ex)
+            else
             {
-                if (ex is NullReferenceException || ex is KeyNotFoundException)
-                {
-                    MessageBox.Show("Pattern does not exist.", "Playlist Error",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-                throw;
+                MessageBox.Show("No such music found.", "Filter Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-            PlaylistItems.Add(item);
-
-            TitleSearchBox = string.Empty;
-            StyleSearchBox = string.Empty;
-
-            Publish();
         }
         public void RemoveItem(object item)
         {
-            PlaylistItems.Remove(item as Music);
+            PlaylistItems.Remove((PlaylistItem)item);
             Publish();
         }
 
@@ -152,7 +143,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                List<Music> playlist = FileManager.Import<SelectiveFilter>(dialog.FileName).Playlist;
+                List<PlaylistItem> playlist = FileManager.Import<SelectiveFilter>(dialog.FileName).Playlist;
                 PlaylistItems.Clear();
                 PlaylistItems.AddRange(playlist);
             }
@@ -194,9 +185,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
 
             OpensSuggestionBox = true;
-
-            var titles = from track in _allTracks
-                         let title = track.Title
+            
+            var titles = from title in _allTitles
                          where title.StartsWith(TitleSearchBox, true, null)
                          select title;
             titles = titles.Count() < 8 ? titles.Take(titles.Count()) : titles.Take(8);
