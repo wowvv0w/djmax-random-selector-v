@@ -158,7 +158,7 @@ namespace DjmaxRandomSelectorV.RandomSelector
             _sifter = filterType switch
             {
                 nameof(ConditionalFilter) => new QuerySifter(),
-                nameof(SelectiveFilter) => throw new NotImplementedException(),
+                nameof(SelectiveFilter) => new PlaylistConverter(),
                 _ => throw new NotSupportedException(),
             };
 
