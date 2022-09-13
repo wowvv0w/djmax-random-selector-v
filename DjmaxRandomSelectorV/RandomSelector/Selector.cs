@@ -110,15 +110,15 @@ namespace DjmaxRandomSelectorV.RandomSelector
                 UpdateExclusions();
             }
 
-            var filteredList = from music in _musics
+            var filteredList = (from music in _musics
                                where !_exclusions.Contains(music.Title)
-                               select music;
+                               select music).ToList();
 
             if (filteredList.Any())
             {
                 var random = new Random();
-                int index = random.Next(_musics.Count - 1);
-                Music selectedMusic = _musics[index];
+                int index = random.Next(filteredList.Count - 1);
+                Music selectedMusic = filteredList[index];
 
                 _provider?.Provide(selectedMusic, _tracks, _inputInterval);
                 _exclusions.Add(selectedMusic.Title);
