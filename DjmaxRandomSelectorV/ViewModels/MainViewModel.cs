@@ -14,14 +14,10 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class MainViewModel : Conductor<object>, IHandle<SelectorOption>
     {
         private const int ApplicationVersion = 150;
-        private const string DjmaxTitle = "DJMAX RESPECT V";
-        
         private const string ReleasesUrl = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
         private const string VersionsUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
         private const string AllTrackListUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Data/AllTrackList.csv";
-
         private const string ConfigPath = "Data/Config.json";
-        private const string AllTrackListPath = "Data/AllTrackList.csv";
 
         private FilterBaseViewModel _filterViewModel;
         public FilterBaseViewModel FilterViewModel
@@ -39,54 +35,6 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private InfoViewModel _infoViewModel;
 
-        #region Initializing
-        private (int, int) CompareToLastestVersions(int allTrackVersion)
-        {
-            using var client = new HttpClient();
-
-            string result = client.GetStringAsync(VersionsUrl).Result;
-            string[] versions = result.Split(',');
-
-            var lastestAppVersion = int.Parse(versions[0]);
-            var lastestTrackVersion = int.Parse(versions[1]);
-
-            int gapWithLastestApp = lastestAppVersion - ApplicationVersion;
-            int gapWithLastestTrack = lastestTrackVersion - allTrackVersion;
-
-            return (gapWithLastestApp, gapWithLastestTrack);
-        }
-        private void Initialize()
-        {
-            // Check if the files should be updated, and then create Info dialog.
-            try
-            {
-                (int gapWithLastestApp, int gapWithLastestTrack) = CompareToLastestVersions(_configuration.AllTrackVersion);
-                OpenReleasePageVisibility = gapWithLastestApp > 0 ? Visibility.Visible : Visibility.Hidden;
-                if (gapWithLastestTrack != 0 || !File.Exists(AllTrackListPath))
-                {
-                    FileManager.DownloadAllTrackList();
-                    _configuration.AllTrackVersion += gapWithLastestTrack;
-                    FileManager.Export(_configuration, ConfigPath);
-                    MessageBox.Show($"All track list is updated to the version {_configuration.AllTrackVersion}.",
-                        "DJMAX Random Selector V",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
-                }
-
-                _infoViewModel = new InfoViewModel(ApplicationVersion, ApplicationVersion + gapWithLastestApp,
-                    _configuration.AllTrackVersion);
-            }
-            catch (HttpRequestException)
-            {
-                MessageBox.Show("Cannot check available updates. Check the internet connection.",
-                    "Selector Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-
-                _infoViewModel = new InfoViewModel(ApplicationVersion, ApplicationVersion,
-                    _configuration.AllTrackVersion);
-            }
-        }
-        #endregion
-
         private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
         private readonly Configuration _configuration;
@@ -100,11 +48,46 @@ namespace DjmaxRandomSelectorV.ViewModels
             _configuration = FileManager.Import<Configuration>(ConfigPath);
             _selector = new Selector(_eventAggregator, _configuration);
 
-            Initialize();
+            CheckUpdates();
             ChangeFilterView(_configuration.SelectorOption.FilterType);
             HistoryViewModel = new HistoryViewModel(_eventAggregator);
             FilterOptionIndicatorViewModel = new FilterOptionIndicatorViewModel(_eventAggregator);
             FilterOptionViewModel = new FilterOptionViewModel(_eventAggregator, _configuration.FilterOption);
+        }
+
+        private void CheckUpdates()
+        {
+            try
+            {
+                using var client = new HttpClient();
+                string result = client.GetStringAsync(VersionsUrl).Result;
+                string[] versions = result.Split(',');
+                var lastestAppVersion = int.Parse(versions[0]);
+                var lastestTrackVersion = int.Parse(versions[1]);
+
+                bool hasAppUpdate = lastestAppVersion > ApplicationVersion;
+                OpenReleasePageVisibility = hasAppUpdate ? Visibility.Visible : Visibility.Hidden;
+                bool hasTrackUpdate = lastestTrackVersion != _configuration.AllTrackVersion;
+                if (hasTrackUpdate || !File.Exists("Data/AllTrackList.csv"))
+                {
+                    FileManager.DownloadAllTrackList();
+                    _configuration.AllTrackVersion = lastestTrackVersion;
+                    FileManager.Export(_configuration, ConfigPath);
+                    MessageBox.Show($"All track list is updated to the version {_configuration.AllTrackVersion}.",
+                        "DJMAX Random Selector V", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+                _infoViewModel = new InfoViewModel(ApplicationVersion, lastestAppVersion,
+                    _configuration.AllTrackVersion);
+            }
+            catch (HttpRequestException)
+            {
+                MessageBox.Show("Cannot check available updates. Check the internet connection.",
+                    "Selector Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                _infoViewModel = new InfoViewModel(ApplicationVersion, ApplicationVersion,
+                    _configuration.AllTrackVersion);
+            }
         }
 
         public Task HandleAsync(SelectorOption message, CancellationToken cancellationToken)
