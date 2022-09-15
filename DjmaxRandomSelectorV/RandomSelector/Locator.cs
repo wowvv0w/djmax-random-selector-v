@@ -11,9 +11,9 @@ namespace DjmaxRandomSelectorV.RandomSelector
 {
     public class Locator : IProvider
     {
-        private readonly bool startsAutomatically;
-        private static bool keymap_initialized = false;
-        static Dictionary<string, ushort> KeyMap = new Dictionary<string, ushort>
+        private readonly bool _startsAutomatically;
+        private static bool _isKeyMapInitialized = false;
+        private static Dictionary<string, ushort> KeyMap = new Dictionary<string, ushort>
         {
             {"1", 0x02},
             {"2", 0x03},
@@ -61,14 +61,14 @@ namespace DjmaxRandomSelectorV.RandomSelector
 
         public Locator(bool startsAutomatically)
         {
-            this.startsAutomatically = startsAutomatically;
-            if (!keymap_initialized)
+            this._startsAutomatically = startsAutomatically;
+            if (!_isKeyMapInitialized)
             {
                 KeyMap.Add("left", (ushort)MapVirtualKey(0x25, 0));
                 KeyMap.Add("up", (ushort)MapVirtualKey(0x26, 0));
                 KeyMap.Add("right", (ushort)MapVirtualKey(0x27, 0));
                 KeyMap.Add("down", (ushort)MapVirtualKey(0x28, 0));
-                keymap_initialized = true;
+                _isKeyMapInitialized = true;
             }
         }
 
@@ -183,7 +183,7 @@ namespace DjmaxRandomSelectorV.RandomSelector
                 }
             }
 
-            if (startsAutomatically)
+            if (_startsAutomatically)
             {
                 int startDelay = 800 - delay * (inputRight + 1);
                 startDelay = startDelay < 0 ? 0 : startDelay;
@@ -192,7 +192,7 @@ namespace DjmaxRandomSelectorV.RandomSelector
             }
         }
 
-        static void BtnSelect(char btn)
+        private static void BtnSelect(char btn)
         {
             ushort scancode = 0x52;
             if (btn == '4') scancode = 0x4B;
@@ -210,7 +210,7 @@ namespace DjmaxRandomSelectorV.RandomSelector
             Thread.Sleep(20);
         }
 
-        static void ResetMusicCursor()
+        private static void ResetMusicCursor()
         {
             KeyDown(KeyMap["shiftright"]);
             Thread.Sleep(20);
@@ -222,7 +222,7 @@ namespace DjmaxRandomSelectorV.RandomSelector
             Thread.Sleep(20);
         }
 
-        static bool KeyDown(ushort ScanCode, bool isArrowKey = false)
+        private static bool KeyDown(ushort ScanCode, bool isArrowKey = false)
         {
             // Original code from https://github.com/learncodebygaming/pydirectinput
             // Copyright(c) 2020 Ben Johnson
@@ -264,7 +264,7 @@ namespace DjmaxRandomSelectorV.RandomSelector
             return insertedEvents == expectedEvents;
         }
 
-        static bool KeyUp(ushort ScanCode, bool isArrowKey = false)
+        private static bool KeyUp(ushort ScanCode, bool isArrowKey = false)
         {
             uint insertedEvents = 0;
             uint expectedEvents = 1;
@@ -307,13 +307,13 @@ namespace DjmaxRandomSelectorV.RandomSelector
         }
 
         [DllImport("user32.dll")]
-        static extern uint MapVirtualKey(int wCode, int wMapType);
+        private static extern uint MapVirtualKey(int wCode, int wMapType);
 
         [DllImport("user32.dll")]
-        static extern uint SendInput(uint numberOfInputs, INPUT[] inputs, int sizeOfInputStructure);
+        private static extern uint SendInput(uint numberOfInputs, INPUT[] inputs, int sizeOfInputStructure);
 
         [DllImport("user32.dll")]
-        static extern short GetKeyState(int nVirtKey);
+        private static extern short GetKeyState(int nVirtKey);
 
         [StructLayout(LayoutKind.Sequential)]
         internal struct KEYBDINPUT
