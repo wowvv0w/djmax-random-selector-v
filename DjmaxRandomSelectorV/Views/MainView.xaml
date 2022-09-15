@@ -12,8 +12,6 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         SnapsToDevicePixels="True"
-        cal:Message.Attach="[Event Loaded] = [Action SetPosition($view)];
-                            [Event Closing] = [Action SaveConfig($view)];"
         Icon="pack://application:,,,/Images/icon.png">
     <Window.Background>
         <LinearGradientBrush StartPoint="0.987,0.5" EndPoint="1,0.5" SpreadMethod="Repeat">

@@ -109,28 +109,19 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         protected override void OnViewLoaded(object view)
         {
+            var window = view as Window;
             _selector.AddHotKey();
+            SetPosition(window);
         }
 
-        public void SetPosition(object view)
+        public void SetPosition(Window window)
         {
-            var window = view as Window;
             if (_configuration.Position?.Length == 2)
             {
                 window.Top = _configuration.Position[0];
                 window.Left = _configuration.Position[1];
             }
-        } 
-
-        #region On Exit
-        public void SaveConfig(object view)
-        {
-            var window = view as Window;
-            FilterViewModel.ExportFilter();
-            _configuration.Position = new double[2] { window.Top, window.Left };
-            FileManager.Export(_configuration, ConfigPath);
         }
-        #endregion
 
         #region Window Top Bar
         private Visibility _openReleasePageVisibility;
@@ -143,7 +134,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                 NotifyOfPropertyChange(() => OpenReleasePageVisibility);
             }
         }
-
         public void OpenReleasePage()
         {
             System.Diagnostics.Process.Start(ReleasesUrl);
@@ -161,7 +151,14 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void CloseWindow(object view)
         {
             var window = view as Window;
+            SaveConfiguration(window);
             window.Close();
+        }
+        private void SaveConfiguration(Window window)
+        {
+            FilterViewModel.ExportFilter();
+            _configuration.Position = new double[2] { window.Top, window.Left };
+            FileManager.Export(_configuration, ConfigPath);
         }
         #endregion
 
