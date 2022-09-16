@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DjmaxRandomSelectorV.RandomSelector
 {
-    public class PlaylistConverter : ISifter
+    public class PlaylistSifter : ISifter
     {
         private delegate List<Music> SiftingMethod(List<Track> tracks, List<PlaylistItem> playlist);
         private SiftingMethod _method;
