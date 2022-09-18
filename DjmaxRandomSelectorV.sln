@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DjmaxRandomSelectorV", "DjmaxRandomSelectorV\DjmaxRandomSelectorV.csproj", "{9E7B4681-5399-4F1F-BE21-49CCA80C088F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DjmaxRandomSelectorV", "DjmaxRandomSelectorV\DjmaxRandomSelectorV.csproj", "{9E7B4681-5399-4F1F-BE21-49CCA80C088F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dmrsv.Data", "Dmrsv.Data\Dmrsv.Data.csproj", "{D8E723FE-5972-4670-A8F8-257A3DE6D5FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{9E7B4681-5399-4F1F-BE21-49CCA80C088F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E7B4681-5399-4F1F-BE21-49CCA80C088F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E7B4681-5399-4F1F-BE21-49CCA80C088F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8E723FE-5972-4670-A8F8-257A3DE6D5FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8E723FE-5972-4670-A8F8-257A3DE6D5FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8E723FE-5972-4670-A8F8-257A3DE6D5FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8E723FE-5972-4670-A8F8-257A3DE6D5FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
