@@ -8,7 +8,7 @@ namespace Dmrsv.Data.Context.Schema
         internal Mode Mode { get; set; } = Mode.Freestyle;
         internal Aider Aider { get; set; } = Aider.Off;
         internal Level Level { get; set; } = Level.Off;
-        internal bool IsPlaylist { get; set; } = false;
+        internal string FilterType { get; set; } = nameof(ConditionalFilter);
         internal int InputDelay { get; set; } = 30;
         internal bool SavesRecents { get; set; } = false;
         internal List<string> OwnedDlcs { get; set; } = new();
