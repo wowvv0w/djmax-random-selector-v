@@ -110,6 +110,10 @@
     <Folder Include="Data\Playlist\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Dmrsv.Data\Dmrsv.Data.csproj" />
+    <ProjectReference Include="..\Dmrsv.RandomSelector\Dmrsv.RandomSelector.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
