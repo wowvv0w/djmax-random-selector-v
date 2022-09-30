@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Dmrsv.Data.Controller
 {
-    public class TrackApi : DmrsvDataContext
+    public class TrackApi
     {
         private const string AllTrackListUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Data/AllTrackList.csv";
         private const string AllTrackListPath = "Data/AllTrackList.csv";
