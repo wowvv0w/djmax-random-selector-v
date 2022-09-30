@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using Dmrsv.Data.DataTypes;
 
 namespace Dmrsv.Data.Interfaces
 {
