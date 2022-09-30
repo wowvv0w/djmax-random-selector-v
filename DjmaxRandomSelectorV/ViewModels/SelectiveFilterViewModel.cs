@@ -1,24 +1,18 @@
 ﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.DataTypes;
-using DjmaxRandomSelectorV.Models;
-using DjmaxRandomSelectorV.Models.Interfaces;
-using DjmaxRandomSelectorV.Utilities;
+using Dmrsv.Data.Context.Schema;
+using Dmrsv.Data.Controller;
+using Dmrsv.Data.DataTypes;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
     public class SelectiveFilterViewModel : FilterBaseViewModel
     {
-        private const string CurrentFilterPath = "Data/CurrentPlaylist.json";
-
         private readonly List<PlaylistItem> _allPlaylistItems;
         private readonly List<string> _allTitles;
 
@@ -32,7 +26,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator = eventAggregator;
             _searchesSuggestion = true;
 
-            var allTracks = FileManager.GetAllTrackList().ToList();
+            var allTracks = new TrackApi().GetAllTrackList().ToList();
             var playlistItemsQuery = from track in allTracks
                                      from pattern in track.Patterns
                                      where pattern.Value > 0
@@ -40,7 +34,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _allPlaylistItems = playlistItemsQuery.ToList();
             _allTitles = _allPlaylistItems.Select(x => x.Title).Distinct().ToList();
 
-            List<PlaylistItem> playlist = FileManager.Import<SelectiveFilter>(CurrentFilterPath).Playlist;
+            List<PlaylistItem> playlist = new FilterApi().GetSelectiveFilter().Playlist;
             PlaylistItems = new BindableCollection<PlaylistItem>(playlist);
             TitleSuggestions = new BindableCollection<string>();
             OpensSuggestionBox = false;
@@ -54,14 +48,14 @@ namespace DjmaxRandomSelectorV.ViewModels
         public override void ExportFilter()
         {
             var filter = new SelectiveFilter() { Playlist = PlaylistItems.ToList() };
-            FileManager.Export(filter, CurrentFilterPath);
+            new FilterApi().SetSelectiveFilter(filter);
         }
 
 
         public void AddItem()
         {
             PlaylistItem item = _allPlaylistItems.Find(x => x.Title.Equals(TitleSearchBox) && x.Style.Equals(StyleSearchBox.ToUpper()));
-            if (!item.IsNull)
+            if (item.Title != null || item.Style != null)
             {
                 PlaylistItems.Add(item);
                 TitleSearchBox = string.Empty;
@@ -95,7 +89,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                var concat = FileManager.Import<SelectiveFilter>(dialog.FileName).Playlist;
+                var concat = new FilterApi().GetPlaylist(dialog.FileName).Playlist;
                 PlaylistItems.AddRange(concat);
             }
 
@@ -123,7 +117,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 {
                     Playlist = PlaylistItems.ToList(),
                 };
-                FileManager.Export(selectiveFilter, dialog.FileName);
+                new FilterApi().SetPlaylist(selectiveFilter, dialog.FileName);
             }
         }
         public void LoadItems()
@@ -143,7 +137,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                List<PlaylistItem> playlist = FileManager.Import<SelectiveFilter>(dialog.FileName).Playlist;
+                List<PlaylistItem> playlist = new FilterApi().GetPlaylist(dialog.FileName).Playlist;
                 PlaylistItems.Clear();
                 PlaylistItems.AddRange(playlist);
             }

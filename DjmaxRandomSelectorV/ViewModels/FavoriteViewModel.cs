@@ -1,7 +1,5 @@
 ﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.Models;
-using DjmaxRandomSelectorV.Properties;
-using DjmaxRandomSelectorV.Utilities;
+using Dmrsv.Data.Controller;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +22,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public FavoriteViewModel(List<string> favorites)
         {
             searchesSuggestion = true;
-            _titleList = FileManager.GetAllTrackList().ToList().ConvertAll(x => x.Title);
+            _titleList = new TrackApi().GetAllTrackList().ToList().ConvertAll(x => x.Title);
             _favorites = favorites;
 
             FavoriteItems = new BindableCollection<string>(favorites);

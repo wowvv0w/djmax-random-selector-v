@@ -1,30 +1,28 @@
 ﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.Models;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
 using System.IO;
-using DjmaxRandomSelectorV.Utilities;
+using Dmrsv.Data.Context.Schema;
+using Dmrsv.Data.Controller;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
     public class SettingViewModel : Screen
     {
-        private SelectorOption _selectorOption;
         private bool _isPlaylist;
         private int _inputInterval;
         private bool _savesExclusion;
         private List<string> _ownedDlcs;
 
         private IEventAggregator _eventAggregator;
-        public SettingViewModel(IEventAggregator eventAggregator, SelectorOption selectorOption)
+        public SettingViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            _selectorOption = selectorOption;
+            var selectorOption = new OptionApi().GetSelectorOption();
 
             _isPlaylist = selectorOption.FilterType.Equals(nameof(SelectiveFilter));
             _inputInterval = selectorOption.InputInterval;
@@ -96,12 +94,15 @@ namespace DjmaxRandomSelectorV.ViewModels
         #region On Exit
         public void Apply()
         {
-            _selectorOption.FilterType = _isPlaylist ? nameof(SelectiveFilter) : nameof(ConditionalFilter);
-            _selectorOption.InputInterval = _inputInterval;
-            _selectorOption.SavesExclusion = _savesExclusion;
-            _selectorOption.OwnedDlcs = _ownedDlcs;
-
-            _eventAggregator.PublishOnUIThreadAsync(_selectorOption);
+            var selectorOption = new SelectorOption()
+            {
+                FilterType = _isPlaylist ? nameof(SelectiveFilter) : nameof(ConditionalFilter),
+                InputInterval = _inputInterval,
+                SavesExclusion = _savesExclusion,
+                OwnedDlcs = _ownedDlcs,
+            };
+            new OptionApi().SetSelectorOption(selectorOption);
+            _eventAggregator.PublishOnUIThreadAsync(selectorOption);
             TryCloseAsync(true);
         }
 

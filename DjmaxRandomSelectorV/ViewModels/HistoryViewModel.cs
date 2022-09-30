@@ -1,14 +1,11 @@
 ﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.DataTypes;
-using DjmaxRandomSelectorV.DataTypes.Enums;
 using DjmaxRandomSelectorV.Models;
+using Dmrsv.Data.DataTypes;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
-using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {

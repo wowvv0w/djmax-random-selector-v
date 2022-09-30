@@ -1,7 +1,7 @@
 ﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.DataTypes.Enums;
-using DjmaxRandomSelectorV.Models;
-using DjmaxRandomSelectorV.Utilities;
+using Dmrsv.Data.Context.Schema;
+using Dmrsv.Data.Controller;
+using Dmrsv.Data.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,18 +28,16 @@ namespace DjmaxRandomSelectorV.ViewModels
         private readonly FilterOption _filterOption;
         private readonly IEventAggregator _eventAggregator;
 
-        public FilterOptionViewModel(IEventAggregator eventAggregator, FilterOption filterOption)
+        public FilterOptionViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            _filterOption = filterOption;
+            _filterOption = new OptionApi().GetFilterOption();
 
             FilterOptionIndicatorViewModel = new FilterOptionIndicatorViewModel(_eventAggregator);
 
             SetAddonText(_filterOption.Mode);
             SetAddonText(_filterOption.Aider);
             SetAddonText(_filterOption.Level);
-
-            Publish();
         }
 
         private void Publish()

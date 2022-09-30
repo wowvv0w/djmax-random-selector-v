@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.DataTypes.Enums;
-using DjmaxRandomSelectorV.Models;
+using Dmrsv.Data.Context.Schema;
+using Dmrsv.Data.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

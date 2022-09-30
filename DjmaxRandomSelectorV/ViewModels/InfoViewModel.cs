@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Dmrsv.Data.Controller;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,11 +14,11 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string GITHUB_PAGE_URL = "https://github.com/wowvv0w/djmax-random-selector-v";
         private const string BUG_REPORT_URL = "https://github.com/wowvv0w/djmax-random-selector-v/issues";
 
-        public InfoViewModel(int currentVersion, int lastestVersion, int allTrackVersion)
+        public InfoViewModel(int currentVersion, int lastestVersion)
         {
             CurrentVersion = IntToString(currentVersion);
             LastestVersion = IntToString(lastestVersion);
-            AllTrackVersion = allTrackVersion.ToString();
+            AllTrackVersion = new OptionApi().GetAppOption().AllTrackVersion.ToString();
 
             string IntToString(int version)
             {

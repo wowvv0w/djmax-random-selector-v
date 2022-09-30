@@ -1,35 +1,30 @@
 ﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.Models;
-using DjmaxRandomSelectorV.Utilities;
+using Dmrsv.Data.Context.Schema;
+using Dmrsv.Data.Controller;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
     public class ConditionalFilterViewModel : FilterBaseViewModel
     {
-        private const string CurrentFilterPath = "Data/CurrentFilter.json";
-
         private ConditionalFilter _filter;
 
         private readonly FavoriteViewModel _favoriteViewModel;
 
         private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
-        public ConditionalFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, List<string> favorites)
+        public ConditionalFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager)
         {
             _eventAggregator = eventAggregator;
             _windowManager = windowManager;
-            _filter = FileManager.Import<ConditionalFilter>(CurrentFilterPath);
-            _filter.Favorites = favorites;
+
+            var api = new FilterApi();
+            _filter = api.GetConditionalFilter();
+            _filter.Favorites = api.GetExtraFilter().Favorites;
             _favoriteViewModel = new FavoriteViewModel(_filter.Favorites);
             for(int i = 0; i < 16; i++)
             {
@@ -39,7 +34,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             UpdateLevelIndicators();
             UpdateScLevelIndicators();
-            Publish();
         }
 
         protected override void Publish()
@@ -48,7 +42,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         public override void ExportFilter()
         {
-            FileManager.Export(_filter, CurrentFilterPath);
+            new FilterApi().SetConditionalFilter(_filter);
         }
 
         #region Filter Updater
@@ -72,7 +66,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             try
             {
-                _filter = FileManager.Import<ConditionalFilter>(presetPath);
+                _filter = new FilterApi().GetPreset(presetPath);
                 NotifyOfPropertyChange(string.Empty);
             }
             catch (FileNotFoundException)
@@ -231,7 +225,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             bool? result = dialog.ShowDialog();
 
             if (result == true)
-                FileManager.Export(_filter, dialog.FileName);
+                new FilterApi().SetPreset(_filter, dialog.FileName);
         }
         public void LoadPreset()
         {
