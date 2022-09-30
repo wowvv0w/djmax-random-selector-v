@@ -14,7 +14,33 @@ namespace Dmrsv.Data.Context.Static
 
         private DmrsvDataManager()
         {
+            _cdtFilter = Import<ConditionalFilter>(GetJsonPath("CurrentFilter"));
+            _slcFilter = Import<SelectiveFilter>(GetJsonPath("CurrentPlaylist"));
             _config = Import<Config>(GetJsonPath("Config"));
+            _filterOption = new FilterOption()
+            {
+                Except = _config.RecentsCount,
+                Mode = _config.Mode,
+                Aider = _config.Aider,
+                Level = _config.Level,
+            };
+            _selectorOption = new SelectorOption()
+            {
+                FilterType = _config.FilterType,
+                InputInterval = _config.InputDelay,
+                OwnedDlcs = _config.OwnedDlcs,
+                SavesExclusion = _config.SavesRecents,
+            };
+            _extraFilter = new ExtraFilter()
+            {
+                Exclusions = _config.Exclusions,
+                Favorites = _config.Favorite,
+            };
+            _appOption ??= new AppOption()
+            {
+                AllTrackVersion = _config.AllTrackVersion,
+                Position = _config.Position,
+            };
         }
 
         #region Import
@@ -26,9 +52,9 @@ namespace Dmrsv.Data.Context.Static
                 using var reader = new StreamReader(path);
 
                 string json = reader.ReadToEnd();
-                T instance = JsonSerializer.Deserialize<T>(json);
+                T? instance = JsonSerializer.Deserialize<T>(json);
 
-                return instance;
+                return instance ?? new T();
             }
             catch (FileNotFoundException)
             {
@@ -64,8 +90,8 @@ namespace Dmrsv.Data.Context.Static
 
         #region Fields
 
-        private ConditionalFilter _conditionalFilter;
-        private SelectiveFilter _selectiveFilter;
+        private ConditionalFilter _cdtFilter;
+        private SelectiveFilter _slcFilter;
         private Config _config;
         private FilterOption _filterOption;
         private SelectorOption _selectorOption;
@@ -75,36 +101,27 @@ namespace Dmrsv.Data.Context.Static
 
         internal ConditionalFilter ConditionalFilter
         {
-            get { return _conditionalFilter ??= Import<ConditionalFilter>(GetJsonPath(nameof(ConditionalFilter))); }
+            get { return _cdtFilter; }
             set
             {
-                _conditionalFilter = value;
-                Export(_conditionalFilter, GetJsonPath(nameof(ConditionalFilter)));
+                _cdtFilter = value;
+                Export(_cdtFilter, GetJsonPath(nameof(ConditionalFilter)));
             }
         }
 
         internal SelectiveFilter SelectiveFilter
         {
-            get { return _selectiveFilter ??= Import<SelectiveFilter>(GetJsonPath(nameof(SelectiveFilter))); }
+            get { return _slcFilter; }
             set
             {
-                _selectiveFilter = value;
-                Export(_selectiveFilter, GetJsonPath(nameof(SelectiveFilter)));
+                _slcFilter = value;
+                Export(_slcFilter, GetJsonPath(nameof(SelectiveFilter)));
             }
         }
 
         internal FilterOption FilterOption
         {
-            get 
-            {
-                return _filterOption ??= new FilterOption()
-                {
-                    Except = _config.RecentsCount,
-                    Mode = _config.Mode,
-                    Aider = _config.Aider,
-                    Level = _config.Level,
-                };
-            }
+            get { return _filterOption; }
             set
             {
                 _filterOption.Except = value.Except;
@@ -116,16 +133,7 @@ namespace Dmrsv.Data.Context.Static
 
         internal SelectorOption SelectorOption
         {
-            get 
-            {
-                return _selectorOption ??= new SelectorOption()
-                {
-                    FilterType = _config.FilterType,
-                    InputInterval = _config.InputDelay,
-                    OwnedDlcs = _config.OwnedDlcs,
-                    SavesExclusion = _config.SavesRecents,
-                }; 
-            }
+            get { return _selectorOption; }
             set
             {
                 _selectorOption.FilterType = value.FilterType;
@@ -137,14 +145,7 @@ namespace Dmrsv.Data.Context.Static
 
         internal ExtraFilter ExtraFilter
         {
-            get
-            { 
-                return _extraFilter ??= new ExtraFilter()
-                {
-                    Exclusions = _config.Exclusions,
-                    Favorites = _config.Favorite,
-                };
-            }
+            get { return _extraFilter; }
             set
             {
                 _extraFilter.Exclusions = value.Exclusions;
@@ -154,14 +155,7 @@ namespace Dmrsv.Data.Context.Static
 
         internal AppOption AppOption
         {
-            get
-            { 
-                return _appOption ??= new AppOption()
-                {
-                    AllTrackVersion = _config.AllTrackVersion,
-                    Position = _config.Position,
-                };
-            }
+            get { return _appOption; }
             set
             {
                 _appOption.AllTrackVersion = value.AllTrackVersion;
