@@ -48,7 +48,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator.SubscribeOnUIThread(this);
             _windowManager = windowManager;
 
-            _selector = new Selector();
+            _selector = new Selector(m => _eventAggregator.PublishOnUIThreadAsync(m));
             _executor = new Executor(_selector.CanStart, _selector.Start);
 
             CheckUpdates();
