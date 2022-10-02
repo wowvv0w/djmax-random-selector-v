@@ -2,19 +2,19 @@
 
 namespace Dmrsv.Data.Context.Schema
 {
-    internal class Config
+    public class Config
     {
-        internal int RecentsCount { get; set; } = 5;
-        internal Mode Mode { get; set; } = Mode.Freestyle;
-        internal Aider Aider { get; set; } = Aider.Off;
-        internal Level Level { get; set; } = Level.Off;
-        internal string FilterType { get; set; } = nameof(ConditionalFilter);
-        internal int InputDelay { get; set; } = 30;
-        internal bool SavesRecents { get; set; } = false;
-        internal List<string> OwnedDlcs { get; set; } = new();
-        internal double[] Position { get; set; } = Array.Empty<double>();
-        internal List<string> Exclusions { get; set; } = new();
-        internal List<string> Favorite { get; set; } = new();
-        internal int AllTrackVersion { get; set; } = 0;
+        public int RecentsCount { get; set; } = 5;
+        public Mode Mode { get; set; } = Mode.Freestyle;
+        public Aider Aider { get; set; } = Aider.Off;
+        public Level Level { get; set; } = Level.Off;
+        public string FilterType { get; set; } = nameof(ConditionalFilter);
+        public int InputDelay { get; set; } = 30;
+        public bool SavesRecents { get; set; } = false;
+        public List<string> OwnedDlcs { get; set; } = new();
+        public double[] Position { get; set; } = Array.Empty<double>();
+        public List<string> Exclusions { get; set; } = new();
+        public List<string> Favorite { get; set; } = new();
+        public int AllTrackVersion { get; set; } = 0;
     }
 }

@@ -69,5 +69,10 @@ namespace Dmrsv.Data.Controller
                 AllTrackVersion = option.AllTrackVersion,
             };
         }
+
+        public void SaveConfig()
+        {
+            Data.Export(Data.Config, "Data/Config.json");
+        }
     }
 }

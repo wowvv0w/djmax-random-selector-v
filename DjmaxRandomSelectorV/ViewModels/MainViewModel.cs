@@ -77,9 +77,9 @@ namespace DjmaxRandomSelectorV.ViewModels
                 if (hasTrackUpdate || !File.Exists("Data/AllTrackList.csv"))
                 {
                     new TrackApi().DownloadAllTrackList();
-                    currentTrackVersion = lastestTrackVersion;
+                    appOption.AllTrackVersion = lastestTrackVersion;
                     new OptionApi().SetAppOption(appOption);
-                    MessageBox.Show($"All track list is updated to the version {currentTrackVersion}.",
+                    MessageBox.Show($"All track list is updated to the version {lastestTrackVersion}.",
                         "DJMAX Random Selector V", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
@@ -114,7 +114,6 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private void ChangeFilterView(string filterType)
         {
-            FilterViewModel?.ExportFilter();
             FilterViewModel = filterType switch
             {
                 nameof(ConditionalFilter) => new ConditionalFilterViewModel(_eventAggregator, _windowManager),
@@ -179,9 +178,11 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         private void SaveConfig(Window window)
         {
-            FilterViewModel.ExportFilter();
-            //_config.Position = new double[2] { window.Top, window.Left };
-            //FileManager.Export(_config, ConfigPath);
+            var api = new OptionApi();
+            var appOpt = api.GetAppOption();
+            appOpt.Position = new double[2] { window.Top, window.Left };
+            api.SetAppOption(appOpt);
+            api.SaveConfig();
         }
         #endregion
 

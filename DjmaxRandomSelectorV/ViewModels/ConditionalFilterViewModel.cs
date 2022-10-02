@@ -12,6 +12,7 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class ConditionalFilterViewModel : FilterBaseViewModel
     {
         private ConditionalFilter _filter;
+        private readonly FilterApi _api;
 
         private readonly FavoriteViewModel _favoriteViewModel;
 
@@ -21,10 +22,10 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             _eventAggregator = eventAggregator;
             _windowManager = windowManager;
+            _api = new FilterApi();
 
-            var api = new FilterApi();
-            _filter = api.GetConditionalFilter();
-            _filter.Favorites = api.GetExtraFilter().Favorites;
+            _filter = _api.GetConditionalFilter();
+            _filter.Favorites = _api.GetExtraFilter().Favorites;
             _favoriteViewModel = new FavoriteViewModel(_filter.Favorites);
             for(int i = 0; i < 16; i++)
             {
@@ -40,11 +41,8 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         protected override void Publish()
         {
+            _api.SetConditionalFilter(_filter);
             _eventAggregator.PublishOnUIThreadAsync(_filter);
-        }
-        public override void ExportFilter()
-        {
-            new FilterApi().SetConditionalFilter(_filter);
         }
 
         #region Filter Updater
@@ -68,7 +66,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             try
             {
-                _filter = new FilterApi().GetPreset(presetPath);
+                _filter = _api.GetPreset(presetPath);
                 NotifyOfPropertyChange(string.Empty);
             }
             catch (FileNotFoundException)
@@ -227,7 +225,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             bool? result = dialog.ShowDialog();
 
             if (result == true)
-                new FilterApi().SetPreset(_filter, dialog.FileName);
+                _api.SetPreset(_filter, dialog.FileName);
         }
         public void LoadPreset()
         {

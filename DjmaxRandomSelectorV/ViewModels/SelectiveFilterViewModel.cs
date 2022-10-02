@@ -15,6 +15,7 @@ namespace DjmaxRandomSelectorV.ViewModels
     {
         private readonly List<PlaylistItem> _allPlaylistItems;
         private readonly List<string> _allTitles;
+        private readonly FilterApi _api;
 
         private bool _searchesSuggestion;
         public BindableCollection<string> TitleSuggestions { get; set; }
@@ -25,6 +26,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             _eventAggregator = eventAggregator;
             _searchesSuggestion = true;
+            _api = new FilterApi();
 
             var allTracks = new TrackApi().GetAllTrackList().ToList();
             var playlistItemsQuery = from track in allTracks
@@ -34,7 +36,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _allPlaylistItems = playlistItemsQuery.ToList();
             _allTitles = _allPlaylistItems.Select(x => x.Title).Distinct().ToList();
 
-            List<PlaylistItem> playlist = new FilterApi().GetSelectiveFilter().Playlist;
+            List<PlaylistItem> playlist = _api.GetSelectiveFilter().Playlist;
             PlaylistItems = new BindableCollection<PlaylistItem>(playlist);
             TitleSuggestions = new BindableCollection<string>();
             OpensSuggestionBox = false;
@@ -43,14 +45,10 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         protected override void Publish()
         {
-            _eventAggregator.PublishOnUIThreadAsync(new SelectiveFilter() { Playlist = PlaylistItems.ToList() });
-        }
-        public override void ExportFilter()
-        {
             var filter = new SelectiveFilter() { Playlist = PlaylistItems.ToList() };
-            new FilterApi().SetSelectiveFilter(filter);
+            _api.SetSelectiveFilter(filter);
+            _eventAggregator.PublishOnUIThreadAsync(filter);
         }
-
 
         public void AddItem()
         {
@@ -89,7 +87,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                var concat = new FilterApi().GetPlaylist(dialog.FileName).Playlist;
+                var concat = _api.GetPlaylist(dialog.FileName).Playlist;
                 PlaylistItems.AddRange(concat);
             }
 
@@ -117,7 +115,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 {
                     Playlist = PlaylistItems.ToList(),
                 };
-                new FilterApi().SetPlaylist(selectiveFilter, dialog.FileName);
+                _api.SetPlaylist(selectiveFilter, dialog.FileName);
             }
         }
         public void LoadItems()
@@ -137,7 +135,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                List<PlaylistItem> playlist = new FilterApi().GetPlaylist(dialog.FileName).Playlist;
+                List<PlaylistItem> playlist = _api.GetPlaylist(dialog.FileName).Playlist;
                 PlaylistItems.Clear();
                 PlaylistItems.AddRange(playlist);
             }
