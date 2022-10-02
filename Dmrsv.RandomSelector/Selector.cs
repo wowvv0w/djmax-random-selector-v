@@ -37,16 +37,13 @@ namespace Dmrsv.RandomSelector
         private ISifter? _sifter;
         private IProvider? _provider;
 
-        private Action<Music> _publish;
-
-        public Selector(Action<Music> publish)
+        public Selector()
         {
             UpdateTrackList(new OptionApi().GetSelectorOption().OwnedDlcs);
             _exclusions = new FilterApi().GetExtraFilter().Exclusions;
             _isUpdated = true;
             _isRunning = false;
             Handle(new OptionApi().GetSelectorOption());
-            _publish = publish;
         }
 
         private void UpdateExclusions()
@@ -84,7 +81,7 @@ namespace Dmrsv.RandomSelector
                 return false;
         }
 
-        public void Start()
+        public Music Start()
         {
             _isRunning = true;
 
@@ -106,15 +103,15 @@ namespace Dmrsv.RandomSelector
                                where !_exclusions.Contains(music.Title)
                                select music).ToList();
 
+            Music selectedMusic;
             if (filteredList.Any())
             {
                 var random = new Random();
                 int index = random.Next(filteredList.Count - 1);
-                Music selectedMusic = filteredList[index];
+                selectedMusic = filteredList[index];
 
                 _provider?.Provide(selectedMusic, _tracks!, _inputInterval);
                 _exclusions.Add(selectedMusic.Title);
-                _publish.Invoke(selectedMusic);
             }
             else
             {
@@ -122,6 +119,7 @@ namespace Dmrsv.RandomSelector
             }
 
             _isRunning = false;
+            return selectedMusic;
         }
 
         [DllImport("user32.dll")]

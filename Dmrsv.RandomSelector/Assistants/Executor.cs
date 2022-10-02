@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using Dmrsv.Data.DataTypes;
+using System.Runtime.InteropServices;
 
 namespace Dmrsv.RandomSelector.Assistants
 {
@@ -10,12 +11,14 @@ namespace Dmrsv.RandomSelector.Assistants
         private uint _keyCode;
 
         private readonly Func<bool> _canExecute;
-        private readonly Action _execute;
+        private readonly Func<Music> _execute;
 
-        public delegate void ExecutorEventHandler(string e);
-        public event ExecutorEventHandler? ExecutionFailed;
+        public delegate void MessageEventHandler(string e);
+        public delegate void MusicEventHandler(Music e);
+        public event MessageEventHandler? ExecutionFailed;
+        public event MusicEventHandler? ExecutionComplete;
 
-        public Executor(Func<bool> canExecute, Action execute)
+        public Executor(Func<bool> canExecute, Func<Music> execute)
         {
             _canExecute = canExecute;
             _execute = execute;
@@ -48,6 +51,10 @@ namespace Dmrsv.RandomSelector.Assistants
                                 var ex = t.Exception!.InnerException!;
                                 ExecutionFailed?.Invoke(ex.Message);
                             }, TaskContinuationOptions.OnlyOnFaulted);
+                            task.ContinueWith(t =>
+                            {
+                                ExecutionComplete?.Invoke(t.Result);
+                            }, TaskContinuationOptions.OnlyOnRanToCompletion);
                         }
                     }
                     catch (Exception ex)

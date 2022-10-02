@@ -48,9 +48,10 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator.SubscribeOnUIThread(this);
             _windowManager = windowManager;
 
-            _selector = new Selector(m => _eventAggregator.PublishOnUIThreadAsync(m));
+            _selector = new Selector();
             _executor = new Executor(_selector.CanStart, _selector.Start);
             _executor.ExecutionFailed += ShowMessageBox;
+            _executor.ExecutionComplete += m => _eventAggregator.PublishOnUIThreadAsync(m);
 
             CheckUpdates();
             ChangeFilterView(new OptionApi().GetSelectorOption().FilterType);
