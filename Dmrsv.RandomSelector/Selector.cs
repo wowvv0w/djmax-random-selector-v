@@ -76,7 +76,7 @@ namespace Dmrsv.RandomSelector
                 return true;
             else if (!GetActiveWindowTitle().Equals(DjmaxTitle))
             {
-                throw new Exception();
+                throw new Exception("The foreground window is not \"DJMAX RESPECT V\".\nPress start key in the game.");
             }
             else if (!_isRunning)
                 return true;
@@ -118,7 +118,7 @@ namespace Dmrsv.RandomSelector
             }
             else
             {
-                throw new Exception();
+                throw new Exception("There is no music that meets the filter conditions.");
             }
 
             _isRunning = false;

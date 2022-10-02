@@ -12,6 +12,9 @@ namespace Dmrsv.RandomSelector.Assistants
         private readonly Func<bool> _canExecute;
         private readonly Action _execute;
 
+        public delegate void ExecutorEventHandler(string e);
+        public event ExecutorEventHandler? ExecutionFailed;
+
         public Executor(Func<bool> canExecute, Action execute)
         {
             _canExecute = canExecute;
@@ -35,10 +38,21 @@ namespace Dmrsv.RandomSelector.Assistants
                 int vkey = (int)lParam >> 16 & 0xFFFF;
                 if (vkey == _keyCode)
                 {
-                    if (_canExecute.Invoke())
+                    try
                     {
-                        var task = new Task(() => _execute.Invoke());
-                        task.Start();
+                        if (_canExecute.Invoke())
+                        {
+                            var task = Task.Run(() => _execute.Invoke());
+                            task.ContinueWith(t =>
+                            {
+                                var ex = t.Exception!.InnerException!;
+                                ExecutionFailed?.Invoke(ex.Message);
+                            }, TaskContinuationOptions.OnlyOnFaulted);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ExecutionFailed?.Invoke(ex.Message);
                     }
                 }
                 handled = true;

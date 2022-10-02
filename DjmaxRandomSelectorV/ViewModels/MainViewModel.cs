@@ -50,12 +50,18 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             _selector = new Selector(m => _eventAggregator.PublishOnUIThreadAsync(m));
             _executor = new Executor(_selector.CanStart, _selector.Start);
+            _executor.ExecutionFailed += ShowMessageBox;
 
             CheckUpdates();
             ChangeFilterView(new OptionApi().GetSelectorOption().FilterType);
             HistoryViewModel = new HistoryViewModel(_eventAggregator);
             FilterOptionIndicatorViewModel = new FilterOptionIndicatorViewModel(_eventAggregator);
             FilterOptionViewModel = new FilterOptionViewModel(_eventAggregator);
+        }
+
+        private void ShowMessageBox(string e)
+        {
+            MessageBox.Show(e, "Selector Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void CheckUpdates()
