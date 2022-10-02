@@ -38,6 +38,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             SetAddonText(_filterOption.Mode);
             SetAddonText(_filterOption.Aider);
             SetAddonText(_filterOption.Level);
+
+            Publish();
         }
 
         private void Publish()

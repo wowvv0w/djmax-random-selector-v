@@ -34,6 +34,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             UpdateLevelIndicators();
             UpdateScLevelIndicators();
+
+            Publish();
         }
 
         protected override void Publish()
