@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,8 +13,9 @@ namespace Dmrsv.RandomSelector.Assistants
     public class Executor
     {
         private const int WM_HOTKEY = 0x0312;
-        private const int HOTKEY_ID = 9000;
-        private const uint KEY_F7 = 118;
+
+        private int _hotkeyID;
+        private uint _keyCode;
 
         private readonly Func<bool> _canExecute;
         private readonly Action _execute;
@@ -23,25 +26,28 @@ namespace Dmrsv.RandomSelector.Assistants
             _execute = execute;
         }
 
-        public void AddHotkey(IntPtr handle)
+        public void AddHotkey(IntPtr hWnd, int id, uint fsModifiers, uint vk)
         {
-            //var window = Application.Current.MainWindow;
-            //HwndSource source;
-            //IntPtr handle = new WindowInteropHelper(window).Handle;
-            //source = HwndSource.FromHwnd(handle);
-            //source.AddHook(HwndHook);
-            RegisterHotKey(handle, HOTKEY_ID, 0x0000, KEY_F7);
+            _hotkeyID = id;
+            _keyCode = vk;
+            RegisterHotKey(hWnd, id, fsModifiers, vk);
         }
 
         [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
 
+        public Delegate GetHook()
+        {
+            MethodInfo methodInfo = GetType().GetMethod(nameof(HwndHook))!;
+            return Delegate.CreateDelegate(typeof(Delegate), methodInfo);
+        }
+
         private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            if (msg == WM_HOTKEY && wParam.ToInt32() == HOTKEY_ID)
+            if (msg == WM_HOTKEY && wParam.ToInt32() == _hotkeyID)
             {
                 int vkey = (int)lParam >> 16 & 0xFFFF;
-                if (vkey == KEY_F7)
+                if (vkey == _keyCode)
                 {
                     if (_canExecute.Invoke())
                     {

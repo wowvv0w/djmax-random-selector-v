@@ -9,6 +9,7 @@ using Dmrsv.Data.Context.Schema;
 using Dmrsv.RandomSelector;
 using Dmrsv.Data.Controller;
 using Dmrsv.RandomSelector.Assistants;
+using System.Windows.Interop;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -47,6 +48,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _windowManager = windowManager;
 
             _selector = new Selector();
+            _executor = new Executor(_selector.CanStart, _selector.Start);
 
             CheckUpdates();
             ChangeFilterView(new OptionApi().GetSelectorOption().FilterType);
@@ -111,7 +113,14 @@ namespace DjmaxRandomSelectorV.ViewModels
         protected override void OnViewLoaded(object view)
         {
             var window = view as Window;
-            //_selector.AddHotKey();
+
+            HwndSource source;
+            IntPtr handle = new WindowInteropHelper(window).Handle;
+            source = HwndSource.FromHwnd(handle);
+            Delegate hook = _executor.GetHook();
+            source.AddHook((HwndSourceHook)hook);
+            _executor.AddHotkey(handle, 9000, 0x0000, 118);
+
             SetPosition(window);
         }
 
