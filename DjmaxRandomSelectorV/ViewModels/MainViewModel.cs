@@ -10,10 +10,11 @@ using Dmrsv.RandomSelector;
 using Dmrsv.Data.Controller;
 using Dmrsv.RandomSelector.Assistants;
 using System.Windows.Interop;
+using Dmrsv.Data.Interfaces;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class MainViewModel : Conductor<object>, IHandle<SelectorOption>
+    public class MainViewModel : Conductor<object>, IHandle<IFilter>, IHandle<FilterOption>, IHandle<SelectorOption>
     {
         private const int ApplicationVersion = 150;
         private const string ReleasesUrl = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
@@ -93,8 +94,20 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
+
+        public Task HandleAsync(IFilter message, CancellationToken cancellationToken)
+        {
+            _selector.Handle(message);
+            return Task.CompletedTask;
+        }
+        public Task HandleAsync(FilterOption message, CancellationToken cancellationToken)
+        {
+            _selector.Handle(message);
+            return Task.CompletedTask;
+        }
         public Task HandleAsync(SelectorOption message, CancellationToken cancellationToken)
         {
+            _selector.Handle(message);
             ChangeFilterView(message.FilterType);
             return Task.CompletedTask;
         }
@@ -117,8 +130,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             HwndSource source;
             IntPtr handle = new WindowInteropHelper(window).Handle;
             source = HwndSource.FromHwnd(handle);
-            Delegate hook = _executor.GetHook();
-            source.AddHook((HwndSourceHook)hook);
+            source.AddHook(_executor.HwndHook);
             _executor.AddHotkey(handle, 9000, 0x0000, 118);
 
             SetPosition(window);

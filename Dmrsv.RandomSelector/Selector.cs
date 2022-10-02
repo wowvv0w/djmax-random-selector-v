@@ -11,10 +11,8 @@ using System.Windows;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading;
 using Dmrsv.RandomSelector.Sifters;
 using Dmrsv.RandomSelector.Providers;
-using Dmrsv.RandomSelector.Assistants;
 using Dmrsv.Data.Controller;
 
 namespace Dmrsv.RandomSelector
@@ -23,9 +21,9 @@ namespace Dmrsv.RandomSelector
     {
         private const string DjmaxTitle = "DJMAX RESPECT V";
 
-        private List<Track> _tracks;
-        private List<Music> _musics;
-        private List<string> _titles;
+        private List<Track>? _tracks;
+        private List<Music>? _musics;
+        private List<string>? _titles;
 
         private int _maxExclusionCount;
         private int _inputInterval;
@@ -35,21 +33,23 @@ namespace Dmrsv.RandomSelector
         private bool _isRunning;
         private bool _canExecuteWithoutGame;
 
-        private IFilter _filter;
-        private ISifter _sifter;
-        private IProvider _provider;
-
-        private readonly Executor _executor;
+        private IFilter? _filter;
+        private ISifter? _sifter;
+        private IProvider? _provider;
 
         public Selector()
         {
-            var filterApi = new FilterApi();
+            UpdateTrackList(new OptionApi().GetSelectorOption().OwnedDlcs);
+            _exclusions = new FilterApi().GetExtraFilter().Exclusions;
+            _isUpdated = true;
+            _isRunning = false;
+            Handle(new OptionApi().GetSelectorOption());
         }
 
         private void UpdateExclusions()
         {
             int exclusionsCount = _exclusions.Count;
-            int titleCount = _titles.Count;
+            int titleCount = _titles!.Count;
             int maxCount = _maxExclusionCount;
             if (exclusionsCount > maxCount)
             {
@@ -66,7 +66,8 @@ namespace Dmrsv.RandomSelector
                 }
             }
         }
-        private bool CanStart()
+
+        public bool CanStart()
         {
             if (_canExecuteWithoutGame)
                 return true;
@@ -79,13 +80,15 @@ namespace Dmrsv.RandomSelector
             else
                 return false;
         }
-        private void Start()
+
+
+        public void Start()
         {
             _isRunning = true;
 
             if (_isUpdated)
             {
-                _musics = _sifter.Sift(_tracks, _filter);
+                _musics = _sifter!.Sift(_tracks!, _filter!);
                 _exclusions.Clear();
                 var titleList = from music in _musics
                                 select music.Title;
@@ -107,7 +110,7 @@ namespace Dmrsv.RandomSelector
                 int index = random.Next(filteredList.Count - 1);
                 Music selectedMusic = filteredList[index];
 
-                _provider?.Provide(selectedMusic, _tracks, _inputInterval);
+                _provider?.Provide(selectedMusic, _tracks!, _inputInterval);
                 _exclusions.Add(selectedMusic.Title);
                 //_eventAggregator.PublishOnUIThreadAsync(selectedMusic);
             }
@@ -134,13 +137,13 @@ namespace Dmrsv.RandomSelector
             {
                 return Buff.ToString();
             }
-            return null;
+            return string.Empty;
         }
 
         #region Sifter, Provider
         private void ChangeSifter(string filterType)
         {
-            string currentMethod = _sifter.CurrentMethod;
+            string? currentMethod = _sifter?.CurrentMethod;
             _sifter = filterType switch
             {
                 nameof(ConditionalFilter) => new QuerySifter(),
@@ -163,36 +166,33 @@ namespace Dmrsv.RandomSelector
             };
         }
 
-        public Task HandleAsync(IFilter message, CancellationToken cancellationToken)
+        public void Handle(IFilter message)
         {
             _filter = message;
             _isUpdated = true;
-            return Task.CompletedTask;
         }
 
-        public Task HandleAsync(FilterOption message, CancellationToken cancellationToken)
+        public void Handle(FilterOption message)
         {
             _maxExclusionCount = message.Except;
-            _sifter.ChangeMethod(message);
+            _sifter?.ChangeMethod(message);
             ChangeProvider(message.Mode, message.Aider);
             _canExecuteWithoutGame = message.Aider == Aider.Observe;
             _isUpdated = true;
-            return Task.CompletedTask;
         }
 
-        public Task HandleAsync(SelectorOption message, CancellationToken cancellationToken)
+        public void Handle(SelectorOption message)
         {
             ChangeSifter(message.FilterType);
             _inputInterval = message.InputInterval;
             UpdateTrackList(message.OwnedDlcs);
             _isUpdated = true;
-            return Task.CompletedTask;
         }
         #endregion
 
         private void UpdateTrackList(List<string> ownedDlcs)
         {
-            var allTrackList = FileManager.GetAllTrackList();
+            var allTrackList = new TrackApi().GetAllTrackList();
             var categories = ownedDlcs.Concat(new List<string>() { "RP", "P1", "P2", "GG" });
             var titleFilter = CreateTitleFilter(ownedDlcs);
 

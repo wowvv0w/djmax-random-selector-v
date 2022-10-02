@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Runtime.InteropServices;
 
 namespace Dmrsv.RandomSelector.Assistants
 {
@@ -36,13 +28,7 @@ namespace Dmrsv.RandomSelector.Assistants
         [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
 
-        public Delegate GetHook()
-        {
-            MethodInfo methodInfo = GetType().GetMethod(nameof(HwndHook))!;
-            return Delegate.CreateDelegate(typeof(Delegate), methodInfo);
-        }
-
-        private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        public IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             if (msg == WM_HOTKEY && wParam.ToInt32() == _hotkeyID)
             {

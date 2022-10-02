@@ -1,7 +1,4 @@
-﻿using System;
-using DjmaxRandomSelectorV.DataTypes;
-
-namespace DjmaxRandomSelectorV.Models
+﻿namespace DjmaxRandomSelectorV.Models
 {
     public class HistoryItem
     {
