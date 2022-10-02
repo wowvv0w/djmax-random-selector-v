@@ -20,7 +20,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string ReleasesUrl = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
         private const string VersionsUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
         private const string AllTrackListUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Data/AllTrackList.csv";
-        private const string ConfigPath = "Data/Config.json";
 
         private FilterBaseViewModel _filterViewModel;
         public FilterBaseViewModel FilterViewModel
@@ -50,19 +49,14 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             _selector = new Selector();
             _executor = new Executor(_selector.CanStart, _selector.Start);
-            _executor.ExecutionFailed += ShowMessageBox;
-            _executor.ExecutionComplete += m => _eventAggregator.PublishOnUIThreadAsync(m);
+            _executor.ExecutionFailed += e => MessageBox.Show(e, "Selector Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            _executor.ExecutionComplete += e => _eventAggregator.PublishOnUIThreadAsync(e);
 
             CheckUpdates();
             ChangeFilterView(new OptionApi().GetSelectorOption().FilterType);
             HistoryViewModel = new HistoryViewModel(_eventAggregator);
             FilterOptionIndicatorViewModel = new FilterOptionIndicatorViewModel(_eventAggregator);
             FilterOptionViewModel = new FilterOptionViewModel(_eventAggregator);
-        }
-
-        private void ShowMessageBox(string e)
-        {
-            MessageBox.Show(e, "Selector Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void CheckUpdates()
