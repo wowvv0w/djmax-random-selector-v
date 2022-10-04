@@ -10,10 +10,6 @@ namespace Dmrsv.RandomSelector.Sifters
         private delegate List<Music> SiftingMethod(IEnumerable<Track> tracks, Predicate<KeyValuePair<string, int>> satisfies);
         private SiftingMethod? _method;
 
-        public string CurrentMethod
-        {
-            get { return _method!.Method.Name; }
-        }
         public void ChangeMethod(FilterOption filterOption)
         {
             if (filterOption.Mode == Mode.Freestyle)
@@ -34,63 +30,6 @@ namespace Dmrsv.RandomSelector.Sifters
             {
                 throw new NotSupportedException();
             }
-        }
-        public void SetMethod(string methodName)
-        {
-            _method = (SiftingMethod)Delegate.CreateDelegate(typeof(SiftingMethod), this, methodName);
-        }
-        private List<Music> SiftAll(IEnumerable<Track> tracks, Predicate<KeyValuePair<string, int>> satisfies)
-        {
-            var musics = from track in tracks
-                         from pattern in track.Patterns
-                         where satisfies.Invoke(pattern)
-                         select new Music
-                         {
-                             Title = track.Title,
-                             Style = pattern.Key,
-                             Level = pattern.Value.ToString()
-                         };
-            return musics.ToList();
-        }
-        private List<Music> SiftEasiest(IEnumerable<Track> tracks, Predicate<KeyValuePair<string, int>> satisfies)
-        {
-            var musics = from track in tracks
-                         from pattern in track.Patterns
-                         where satisfies.Invoke(pattern)
-                         group new Music
-                         {
-                             Title = track.Title,
-                             Style = pattern.Key,
-                             Level = pattern.Value.ToString()
-                         } by new { title = track.Title, button = pattern.Key[..2] } into buttonGroup
-                         select buttonGroup.First();
-            return musics.ToList();
-        }
-        private List<Music> SiftHardest(IEnumerable<Track> tracks, Predicate<KeyValuePair<string, int>> satisfies)
-        {
-            var musics = from track in tracks
-                         from pattern in track.Patterns
-                         where satisfies.Invoke(pattern)
-                         group new Music
-                         {
-                             Title = track.Title,
-                             Style = pattern.Key,
-                             Level = pattern.Value.ToString()
-                         } by new { title = track.Title, button = pattern.Key[..2] } into buttonGroup
-                         select buttonGroup.Last();
-            return musics.ToList();
-        }
-        private List<Music> SiftAllAsFree(IEnumerable<Track> tracks, Predicate<KeyValuePair<string, int>> satisfies)
-        {
-            var musics = from track in tracks
-                         where track.Patterns.Any(pattern => satisfies.Invoke(pattern))
-                         select new Music
-                         {
-                             Title = track.Title,
-                             Style = "FREE",
-                             Level = "-"
-                         };
-            return musics.ToList();
         }
 
         public List<Music> Sift(List<Track> tracks, IFilter filterToConvert)
@@ -119,6 +58,63 @@ namespace Dmrsv.RandomSelector.Sifters
             }
 
             return _method!(siftedTracks, Satisfies);
+        }
+
+        private List<Music> SiftAll(IEnumerable<Track> tracks, Predicate<KeyValuePair<string, int>> satisfies)
+        {
+            var musics = from track in tracks
+                         from pattern in track.Patterns
+                         where satisfies.Invoke(pattern)
+                         select new Music
+                         {
+                             Title = track.Title,
+                             Style = pattern.Key,
+                             Level = pattern.Value.ToString()
+                         };
+            return musics.ToList();
+        }
+
+        private List<Music> SiftEasiest(IEnumerable<Track> tracks, Predicate<KeyValuePair<string, int>> satisfies)
+        {
+            var musics = from track in tracks
+                         from pattern in track.Patterns
+                         where satisfies.Invoke(pattern)
+                         group new Music
+                         {
+                             Title = track.Title,
+                             Style = pattern.Key,
+                             Level = pattern.Value.ToString()
+                         } by new { title = track.Title, button = pattern.Key[..2] } into buttonGroup
+                         select buttonGroup.First();
+            return musics.ToList();
+        }
+
+        private List<Music> SiftHardest(IEnumerable<Track> tracks, Predicate<KeyValuePair<string, int>> satisfies)
+        {
+            var musics = from track in tracks
+                         from pattern in track.Patterns
+                         where satisfies.Invoke(pattern)
+                         group new Music
+                         {
+                             Title = track.Title,
+                             Style = pattern.Key,
+                             Level = pattern.Value.ToString()
+                         } by new { title = track.Title, button = pattern.Key[..2] } into buttonGroup
+                         select buttonGroup.Last();
+            return musics.ToList();
+        }
+
+        private List<Music> SiftAllAsFree(IEnumerable<Track> tracks, Predicate<KeyValuePair<string, int>> satisfies)
+        {
+            var musics = from track in tracks
+                         where track.Patterns.Any(pattern => satisfies.Invoke(pattern))
+                         select new Music
+                         {
+                             Title = track.Title,
+                             Style = "FREE",
+                             Level = "-"
+                         };
+            return musics.ToList();
         }
     }
 }

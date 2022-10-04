@@ -9,10 +9,6 @@ namespace Dmrsv.RandomSelector.Sifters
     {
         private delegate List<Music> SiftingMethod(List<Track> tracks, List<PlaylistItem> playlist);
         private SiftingMethod? _method;
-        public string CurrentMethod
-        {
-            get { return _method!.Method.Name; }
-        }
 
         public void ChangeMethod(FilterOption filterOption)
         {
@@ -22,11 +18,6 @@ namespace Dmrsv.RandomSelector.Sifters
                 Mode.Online => SiftAllAsFree,
                 _ => throw new NotSupportedException(),
             };
-        }
-
-        public void SetMethod(string methodName)
-        {
-            _method = (SiftingMethod)Delegate.CreateDelegate(typeof(SiftingMethod), this, methodName);
         }
 
         public List<Music> Sift(List<Track> tracks, IFilter filterToConvert)

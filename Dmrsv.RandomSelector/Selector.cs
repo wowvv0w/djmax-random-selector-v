@@ -143,16 +143,13 @@ namespace Dmrsv.RandomSelector
         #region Sifter, Provider
         private void ChangeSifter(string filterType)
         {
-            string? currentMethod = _sifter?.CurrentMethod;
             _sifter = filterType switch
             {
                 nameof(ConditionalFilter) => new QuerySifter(),
                 nameof(SelectiveFilter) => new PlaylistSifter(),
                 _ => throw new NotSupportedException(),
             };
-
-            if (!string.IsNullOrEmpty(currentMethod))
-                _sifter.SetMethod(currentMethod);
+            Handle(new OptionApi().GetFilterOption());
         }
         private void ChangeProvider(Mode mode, Aider aider)
         {
