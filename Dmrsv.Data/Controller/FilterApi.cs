@@ -88,5 +88,15 @@ namespace Dmrsv.Data.Controller
                 Favorites = new List<string>(filter.Favorites),
             };
         }
+
+        public void SaveConditionalFilter()
+        {
+            Data.Export(Data.ConditionalFilter, "Data/CurrentFilter.json");
+        }
+
+        public void SaveSelectiveFilter()
+        {
+            Data.Export(Data.SelectiveFilter, "Data/CurrentFilter.json");
+        }
     }
 }

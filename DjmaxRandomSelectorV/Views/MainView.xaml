@@ -12,7 +12,8 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         SnapsToDevicePixels="True"
-        Icon="pack://application:,,,/Images/icon.png">
+        Icon="pack://application:,,,/Images/icon.png"
+        cal:Message.Attach="[Event Closing] = [Action OnClosing($view)]">
     <Window.Background>
         <LinearGradientBrush StartPoint="0.987,0.5" EndPoint="1,0.5" SpreadMethod="Repeat">
             <LinearGradientBrush.RelativeTransform>

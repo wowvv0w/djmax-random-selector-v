@@ -115,11 +115,11 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private void ChangeFilterView(string filterType)
         {
+            SaveFilter(filterType);
             FilterViewModel = filterType switch
             {
-                nameof(ConditionalFilter) => new ConditionalFilterViewModel(_eventAggregator, _windowManager),
                 nameof(SelectiveFilter) => new SelectiveFilterViewModel(_eventAggregator),
-                _ => throw new NotSupportedException(),
+                _ => new ConditionalFilterViewModel(_eventAggregator, _windowManager),
             };
         }
 
@@ -134,6 +134,17 @@ namespace DjmaxRandomSelectorV.ViewModels
             _executor.AddHotkey(handle, 9000, 0x0000, 118);
 
             SetPosition(window);
+        }
+
+        public void OnClosing(object view)
+        {
+            var window = view as Window;
+            var api = new OptionApi();
+            SaveFilter(api.GetSelectorOption().FilterType);
+            var appOpt = api.GetAppOption();
+            appOpt.Position = new double[2] { window.Top, window.Left };
+            api.SetAppOption(appOpt);
+            api.SaveConfig();
         }
 
         public void SetPosition(Window window)
@@ -174,16 +185,19 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void CloseWindow(object view)
         {
             var window = view as Window;
-            SaveConfig(window);
             window.Close();
         }
-        private void SaveConfig(Window window)
+        private void SaveFilter(string filterType)
         {
-            var api = new OptionApi();
-            var appOpt = api.GetAppOption();
-            appOpt.Position = new double[2] { window.Top, window.Left };
-            api.SetAppOption(appOpt);
-            api.SaveConfig();
+            var api = new FilterApi();
+            if (filterType.Equals(nameof(SelectiveFilter)))
+            {
+                api.SaveSelectiveFilter();
+            }
+            else
+            {
+                api.SaveConditionalFilter();
+            }
         }
         #endregion
 

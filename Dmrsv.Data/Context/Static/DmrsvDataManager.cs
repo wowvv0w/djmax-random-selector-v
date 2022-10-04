@@ -74,21 +74,18 @@ namespace Dmrsv.Data.Context.Static
         internal ConditionalFilter ConditionalFilter
         {
             get { return _cdtFilter; }
-            set
-            {
-                _cdtFilter = value;
-                Export(_cdtFilter, GetJsonPath("CurrentFilter"));
-            }
+            set { _cdtFilter = value; }
         }
 
         internal SelectiveFilter SelectiveFilter
         {
             get { return _slcFilter; }
-            set
-            {
-                _slcFilter = value;
-                Export(_slcFilter, GetJsonPath("CurrentPlaylist"));
-            }
+            set { _slcFilter = value; }
+        }
+
+        internal Config Config
+        {
+            get { return _config; }
         }
 
         internal FilterOption FilterOption
@@ -165,11 +162,6 @@ namespace Dmrsv.Data.Context.Static
                 _config.AllTrackVersion = value.AllTrackVersion;
                 _config.Position = value.Position;
             }
-        }
-
-        internal Config Config
-        {
-            get { return _config; }
         }
     }
 }
