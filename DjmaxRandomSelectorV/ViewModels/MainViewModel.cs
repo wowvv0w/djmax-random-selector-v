@@ -41,11 +41,11 @@ namespace DjmaxRandomSelectorV.ViewModels
         private readonly IWindowManager _windowManager;
         private readonly Selector _selector;
         private readonly Executor _executor;
-        public MainViewModel(IEventAggregator eventAggregator, IWindowManager windowManager)
+        public MainViewModel()
         {
-            _eventAggregator = eventAggregator;
+            _eventAggregator = new EventAggregator();
             _eventAggregator.SubscribeOnUIThread(this);
-            _windowManager = windowManager;
+            _windowManager = new WindowManager();
 
             _selector = new Selector();
             _executor = new Executor(_selector.CanStart, _selector.Start);
