@@ -8,6 +8,7 @@ using Microsoft.Win32;
 using System.IO;
 using Dmrsv.Data.Context.Schema;
 using Dmrsv.Data.Controller;
+using Dmrsv.Data.Enums;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -24,7 +25,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator = eventAggregator;
             var selectorOption = new OptionApi().GetSelectorOption();
 
-            _isPlaylist = selectorOption.FilterType.Equals(nameof(SelectiveFilter));
+            _isPlaylist = selectorOption.FilterType == FilterType.Playlist;
             _inputInterval = selectorOption.InputInterval;
             _savesExclusion = selectorOption.SavesExclusion;
             _ownedDlcs = selectorOption.OwnedDlcs.ConvertAll(x => x);
@@ -96,7 +97,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             var selectorOption = new SelectorOption()
             {
-                FilterType = _isPlaylist ? nameof(SelectiveFilter) : nameof(ConditionalFilter),
+                FilterType = _isPlaylist ? FilterType.Playlist : FilterType.Query,
                 InputInterval = _inputInterval,
                 SavesExclusion = _savesExclusion,
                 OwnedDlcs = _ownedDlcs,

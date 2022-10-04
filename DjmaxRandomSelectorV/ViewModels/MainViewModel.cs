@@ -11,6 +11,7 @@ using Dmrsv.Data.Controller;
 using Dmrsv.RandomSelector.Assistants;
 using System.Windows.Interop;
 using Dmrsv.Data.Interfaces;
+using Dmrsv.Data.Enums;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -113,13 +114,14 @@ namespace DjmaxRandomSelectorV.ViewModels
             return Task.CompletedTask;
         }
 
-        private void ChangeFilterView(string filterType)
+        private void ChangeFilterView(FilterType filterType)
         {
             SaveFilter(filterType);
             FilterViewModel = filterType switch
             {
-                nameof(SelectiveFilter) => new SelectiveFilterViewModel(_eventAggregator),
-                _ => new ConditionalFilterViewModel(_eventAggregator, _windowManager),
+                FilterType.Query => new ConditionalFilterViewModel(_eventAggregator, _windowManager),
+                FilterType.Playlist => new SelectiveFilterViewModel(_eventAggregator),
+                _ => throw new NotSupportedException(),
             };
         }
 
@@ -145,6 +147,17 @@ namespace DjmaxRandomSelectorV.ViewModels
             appOpt.Position = new double[2] { window.Top, window.Left };
             api.SetAppOption(appOpt);
             api.SaveConfig();
+        }
+
+        private void SaveFilter(FilterType filterType)
+        {
+            var api = new FilterApi();
+            if (filterType == FilterType.Query)
+                api.SaveConditionalFilter();
+            else if (filterType == FilterType.Playlist)
+                api.SaveSelectiveFilter();
+            else
+                throw new NotSupportedException();
         }
 
         public void SetPosition(Window window)
@@ -186,18 +199,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             var window = view as Window;
             window.Close();
-        }
-        private void SaveFilter(string filterType)
-        {
-            var api = new FilterApi();
-            if (filterType.Equals(nameof(SelectiveFilter)))
-            {
-                api.SaveSelectiveFilter();
-            }
-            else
-            {
-                api.SaveConditionalFilter();
-            }
         }
         #endregion
 

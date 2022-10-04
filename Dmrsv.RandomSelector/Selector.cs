@@ -141,12 +141,12 @@ namespace Dmrsv.RandomSelector
         }
 
         #region Sifter, Provider
-        private void ChangeSifter(string filterType)
+        private void ChangeSifter(FilterType filterType)
         {
             _sifter = filterType switch
             {
-                nameof(ConditionalFilter) => new QuerySifter(),
-                nameof(SelectiveFilter) => new PlaylistSifter(),
+                FilterType.Query => new QuerySifter(),
+                FilterType.Playlist => new PlaylistSifter(),
                 _ => throw new NotSupportedException(),
             };
             Handle(new OptionApi().GetFilterOption());

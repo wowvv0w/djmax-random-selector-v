@@ -1,8 +1,10 @@
-﻿namespace Dmrsv.Data.Context.Schema
+﻿using Dmrsv.Data.Enums;
+
+namespace Dmrsv.Data.Context.Schema
 {
     public class SelectorOption
     {
-        public string FilterType { get; set; } = nameof(ConditionalFilter);
+        public FilterType FilterType { get; set; } = FilterType.Query;
         public int InputInterval { get; set; } = 30;
         public bool SavesExclusion { get; set; } = false;
         public List<string> OwnedDlcs { get; set; } = new();
