@@ -9,22 +9,22 @@ using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class ConditionalFilterViewModel : FilterBaseViewModel
+    public class QueryFilterViewModel : FilterBaseViewModel
     {
-        private ConditionalFilter _filter;
+        private QueryFilter _filter;
         private readonly FilterApi _api;
 
         private readonly FavoriteViewModel _favoriteViewModel;
 
         private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
-        public ConditionalFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager)
+        public QueryFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager)
         {
             _eventAggregator = eventAggregator;
             _windowManager = windowManager;
             _api = new FilterApi();
 
-            _filter = _api.GetConditionalFilter();
+            _filter = _api.GetQueryFilter();
             _filter.Favorites = _api.GetExtraFilter().Favorites;
             _favoriteViewModel = new FavoriteViewModel(_filter.Favorites);
             for(int i = 0; i < 16; i++)
@@ -41,7 +41,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         protected override void Publish()
         {
-            _api.SetConditionalFilter(_filter);
+            _api.SetQueryFilter(_filter);
             _eventAggregator.PublishOnUIThreadAsync(_filter);
         }
 

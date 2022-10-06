@@ -34,7 +34,7 @@ namespace Dmrsv.RandomSelector.Sifters
 
         public List<Music> Sift(List<Track> tracks, IFilter filterToConvert)
         {
-            var filter = (ConditionalFilter)filterToConvert;
+            var filter = (QueryFilter)filterToConvert;
 
             var styles = new List<string>();
             foreach (string button in filter.ButtonTunes)

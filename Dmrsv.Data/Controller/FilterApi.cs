@@ -6,10 +6,10 @@ namespace Dmrsv.Data.Controller
 {
     public class FilterApi : DmrsvDataContext
     {
-        public ConditionalFilter GetConditionalFilter()
+        public QueryFilter GetQueryFilter()
         {
-            var filter = Data.ConditionalFilter;
-            return new ConditionalFilter()
+            var filter = Data.QueryFilter;
+            return new QueryFilter()
             {
                 ButtonTunes = new List<string>(filter.ButtonTunes),
                 Difficulties = new List<string>(filter.Difficulties),
@@ -20,9 +20,9 @@ namespace Dmrsv.Data.Controller
             };
         }
 
-        public void SetConditionalFilter(ConditionalFilter filter)
+        public void SetQueryFilter(QueryFilter filter)
         {
-            Data.ConditionalFilter = new ConditionalFilter()
+            Data.QueryFilter = new QueryFilter()
             {
                 ButtonTunes = new List<string>(filter.ButtonTunes),
                 Difficulties = new List<string>(filter.Difficulties),
@@ -33,39 +33,39 @@ namespace Dmrsv.Data.Controller
             };
         }
 
-        public ConditionalFilter GetPreset(string path)
+        public QueryFilter GetPreset(string path)
         {
-            return Data.Import<ConditionalFilter>(path);
+            return Data.Import<QueryFilter>(path);
         }
 
-        public void SetPreset(ConditionalFilter filter, string path)
+        public void SetPreset(QueryFilter filter, string path)
         {
             Data.Export(filter, path);
         }
 
-        public SelectiveFilter GetSelectiveFilter()
+        public PlaylistFilter GetPlaylistFilter()
         {
-            var filter = Data.SelectiveFilter;
-            return new SelectiveFilter()
+            var filter = Data.PlaylistFilter;
+            return new PlaylistFilter()
             {
                 Playlist = new List<PlaylistItem>(filter.Playlist),
             };
         }
 
-        public void SetSelectiveFilter(SelectiveFilter filter)
+        public void SetPlaylistFilter(PlaylistFilter filter)
         {
-            Data.SelectiveFilter = new SelectiveFilter()
+            Data.PlaylistFilter = new PlaylistFilter()
             {
                 Playlist = new List<PlaylistItem>(filter.Playlist),
             };
         }
 
-        public SelectiveFilter GetPlaylist(string path)
+        public PlaylistFilter GetPlaylist(string path)
         {
-            return Data.Import<SelectiveFilter>(path);
+            return Data.Import<PlaylistFilter>(path);
         }
 
-        public void SetPlaylist(SelectiveFilter filter, string path)
+        public void SetPlaylist(PlaylistFilter filter, string path)
         {
             Data.Export(filter, path);
         }
@@ -89,14 +89,14 @@ namespace Dmrsv.Data.Controller
             };
         }
 
-        public void SaveConditionalFilter()
+        public void SaveQueryFilter()
         {
-            Data.Export(Data.ConditionalFilter, "Data/CurrentFilter.json");
+            Data.Export(Data.QueryFilter, "Data/CurrentFilter.json");
         }
 
-        public void SaveSelectiveFilter()
+        public void SavePlaylistFilter()
         {
-            Data.Export(Data.SelectiveFilter, "Data/CurrentFilter.json");
+            Data.Export(Data.PlaylistFilter, "Data/CurrentFilter.json");
         }
     }
 }

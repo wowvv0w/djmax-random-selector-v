@@ -3,7 +3,7 @@ using Dmrsv.Data.Interfaces;
 
 namespace Dmrsv.Data.Context.Schema
 {
-    public class SelectiveFilter : IFilter
+    public class PlaylistFilter : IFilter
     {
         public List<PlaylistItem> Playlist { get; set; } = new();
     }

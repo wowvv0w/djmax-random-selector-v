@@ -119,8 +119,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             SaveFilter(filterType);
             FilterViewModel = filterType switch
             {
-                FilterType.Query => new ConditionalFilterViewModel(_eventAggregator, _windowManager),
-                FilterType.Playlist => new SelectiveFilterViewModel(_eventAggregator),
+                FilterType.Query => new QueryFilterViewModel(_eventAggregator, _windowManager),
+                FilterType.Playlist => new PlaylistFilterViewModel(_eventAggregator),
                 _ => throw new NotSupportedException(),
             };
         }
@@ -153,9 +153,9 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             var api = new FilterApi();
             if (filterType == FilterType.Query)
-                api.SaveConditionalFilter();
+                api.SaveQueryFilter();
             else if (filterType == FilterType.Playlist)
-                api.SaveSelectiveFilter();
+                api.SavePlaylistFilter();
             else
                 throw new NotSupportedException();
         }

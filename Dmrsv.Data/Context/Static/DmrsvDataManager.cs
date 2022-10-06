@@ -14,8 +14,8 @@ namespace Dmrsv.Data.Context.Static
 
         private DmrsvDataManager()
         {
-            _cdtFilter = Import<ConditionalFilter>(GetJsonPath("CurrentFilter"));
-            _slcFilter = Import<SelectiveFilter>(GetJsonPath("CurrentPlaylist"));
+            _queryFilter = Import<QueryFilter>(GetJsonPath("CurrentFilter"));
+            _playlistFilter = Import<PlaylistFilter>(GetJsonPath("CurrentPlaylist"));
             _config = Import<Config>(GetJsonPath("Config"));
         }
 
@@ -66,21 +66,21 @@ namespace Dmrsv.Data.Context.Static
 
         #region Fields
 
-        private ConditionalFilter _cdtFilter;
-        private SelectiveFilter _slcFilter;
+        private QueryFilter _queryFilter;
+        private PlaylistFilter _playlistFilter;
         private Config _config;
         #endregion
 
-        internal ConditionalFilter ConditionalFilter
+        internal QueryFilter QueryFilter
         {
-            get { return _cdtFilter; }
-            set { _cdtFilter = value; }
+            get { return _queryFilter; }
+            set { _queryFilter = value; }
         }
 
-        internal SelectiveFilter SelectiveFilter
+        internal PlaylistFilter PlaylistFilter
         {
-            get { return _slcFilter; }
-            set { _slcFilter = value; }
+            get { return _playlistFilter; }
+            set { _playlistFilter = value; }
         }
 
         internal Config Config

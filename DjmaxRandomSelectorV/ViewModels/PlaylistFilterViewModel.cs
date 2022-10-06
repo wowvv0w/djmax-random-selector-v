@@ -11,7 +11,7 @@ using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class SelectiveFilterViewModel : FilterBaseViewModel
+    public class PlaylistFilterViewModel : FilterBaseViewModel
     {
         private readonly List<PlaylistItem> _allPlaylistItems;
         private readonly List<string> _allTitles;
@@ -22,7 +22,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public BindableCollection<PlaylistItem> PlaylistItems { get; set; }
 
         private readonly IEventAggregator _eventAggregator;
-        public SelectiveFilterViewModel(IEventAggregator eventAggregator)
+        public PlaylistFilterViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
             _searchesSuggestion = true;
@@ -36,7 +36,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _allPlaylistItems = playlistItemsQuery.ToList();
             _allTitles = _allPlaylistItems.Select(x => x.Title).Distinct().ToList();
 
-            List<PlaylistItem> playlist = _api.GetSelectiveFilter().Playlist;
+            List<PlaylistItem> playlist = _api.GetPlaylistFilter().Playlist;
             PlaylistItems = new BindableCollection<PlaylistItem>(playlist);
             TitleSuggestions = new BindableCollection<string>();
             OpensSuggestionBox = false;
@@ -45,8 +45,8 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         protected override void Publish()
         {
-            var filter = new SelectiveFilter() { Playlist = PlaylistItems.ToList() };
-            _api.SetSelectiveFilter(filter);
+            var filter = new PlaylistFilter() { Playlist = PlaylistItems.ToList() };
+            _api.SetPlaylistFilter(filter);
             _eventAggregator.PublishOnUIThreadAsync(filter);
         }
 
@@ -111,7 +111,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                var selectiveFilter = new SelectiveFilter()
+                var selectiveFilter = new PlaylistFilter()
                 {
                     Playlist = PlaylistItems.ToList(),
                 };

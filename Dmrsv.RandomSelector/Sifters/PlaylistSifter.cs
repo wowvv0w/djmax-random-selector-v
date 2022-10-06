@@ -22,7 +22,7 @@ namespace Dmrsv.RandomSelector.Sifters
 
         public List<Music> Sift(List<Track> tracks, IFilter filterToConvert)
         {
-            var filter = (SelectiveFilter)filterToConvert;
+            var filter = (PlaylistFilter)filterToConvert;
             return _method!.Invoke(tracks, filter.Playlist);
         }
 

@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace DjmaxRandomSelectorV.Views
 {
     /// <summary>
-    /// ConditionalFilterView.xaml에 대한 상호 작용 논리
+    /// QueryFilterView.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class ConditionalFilterView : UserControl
+    public partial class QueryFilterView : UserControl
     {
-        public ConditionalFilterView()
+        public QueryFilterView()
         {
             InitializeComponent();
         }

@@ -2,7 +2,7 @@
 
 namespace Dmrsv.Data.Context.Schema
 {
-    public class ConditionalFilter : IFilter
+    public class QueryFilter : IFilter
     {
         public List<string> ButtonTunes { get; set; } = new() { "4B", "5B", "6B", "8B" };
         public List<string> Difficulties { get; set; } = new() { "NM", "HD", "MX", "SC" };
