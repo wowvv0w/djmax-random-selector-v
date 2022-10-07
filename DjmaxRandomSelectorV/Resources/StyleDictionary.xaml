@@ -9,7 +9,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="Border"
-                            Background="{TemplateBinding Background}">
+                            Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}">
                         <ContentPresenter HorizontalAlignment="Center"
                                           VerticalAlignment="Center"/>
                     </Border>

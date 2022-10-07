@@ -7,7 +7,7 @@ namespace Dmrsv.RandomSelector.Sifters
 {
     public class PlaylistSifter : ISifter
     {
-        private delegate List<Music> SiftingMethod(List<Track> tracks, List<PlaylistItem> playlist);
+        private delegate List<Music> SiftingMethod(List<Track> tracks, List<Music> playlist);
         private SiftingMethod? _method;
 
         public void ChangeMethod(FilterOption filterOption)
@@ -26,7 +26,7 @@ namespace Dmrsv.RandomSelector.Sifters
             return _method!.Invoke(tracks, filter.Playlist);
         }
 
-        private List<Music> SiftAll(List<Track> tracks, List<PlaylistItem> playlist)
+        private List<Music> SiftAll(List<Track> tracks, List<Music> playlist)
         {
             Track? track;
             var musics = new List<Music>();
@@ -46,7 +46,7 @@ namespace Dmrsv.RandomSelector.Sifters
             return musics;
         }
 
-        private List<Music> SiftAllAsFree(List<Track> tracks, List<PlaylistItem> playlist)
+        private List<Music> SiftAllAsFree(List<Track> tracks, List<Music> playlist)
         {
             Track? track;
             var musics = new List<Music>();

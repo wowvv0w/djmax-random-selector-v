@@ -5,6 +5,6 @@ namespace Dmrsv.Data.Context.Schema
 {
     public class PlaylistFilter : IFilter
     {
-        public List<PlaylistItem> Playlist { get; set; } = new();
+        public List<Music> Playlist { get; set; } = new();
     }
 }

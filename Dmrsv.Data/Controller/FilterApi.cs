@@ -48,7 +48,7 @@ namespace Dmrsv.Data.Controller
             var filter = Data.PlaylistFilter;
             return new PlaylistFilter()
             {
-                Playlist = new List<PlaylistItem>(filter.Playlist),
+                Playlist = new List<Music>(filter.Playlist),
             };
         }
 
@@ -56,7 +56,7 @@ namespace Dmrsv.Data.Controller
         {
             Data.PlaylistFilter = new PlaylistFilter()
             {
-                Playlist = new List<PlaylistItem>(filter.Playlist),
+                Playlist = new List<Music>(filter.Playlist),
             };
         }
 
