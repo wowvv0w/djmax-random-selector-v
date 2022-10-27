@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Dmrsv.Data.Context.Schema;
 using Dmrsv.Data.Controller;
 using System;
 using System.Collections.Generic;
@@ -14,26 +15,30 @@ namespace DjmaxRandomSelectorV.ViewModels
     {
         private bool searchesSuggestion;
         private readonly List<string> _titleList;
-        private readonly List<string> _favorites;
+        private readonly ExtraFilter _extraFilter;
 
         public BindableCollection<string> FavoriteItems { get; set; }
+        public BindableCollection<string> BlacklistItems { get; set; }
         public BindableCollection<string> TitleSuggestions { get; set; }
 
         public FavoriteViewModel(List<string> favorites)
         {
             searchesSuggestion = true;
             _titleList = new TrackApi().GetAllTrackList().ToList().ConvertAll(x => x.Title);
-            _favorites = favorites;
 
-            FavoriteItems = new BindableCollection<string>(favorites);
+            _extraFilter = new FilterApi().GetExtraFilter();
+
+            FavoriteItems = new BindableCollection<string>(_extraFilter.Favorites);
+            BlacklistItems = new BindableCollection<string>(_extraFilter.Blacklist);
 
             TitleSuggestions = new BindableCollection<string>();
             OpensSuggestionBox = false;
         }
         public void OK()
         {
-            _favorites.Clear();
-            _favorites.AddRange(FavoriteItems);
+            _extraFilter.Favorites = FavoriteItems.ToList();
+            _extraFilter.Blacklist = BlacklistItems.ToList();
+            new FilterApi().SetExtraFilter(_extraFilter);
             TryCloseAsync(true);
         }
 
@@ -108,7 +113,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         #endregion
 
         #region Favorite Item Adjustment
-        public void AddItem()
+        public void AddToFavorite()
         {
             if (!_titleList.Any(x => x.Equals(SearchBox)))
             {
@@ -118,7 +123,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                     MessageBoxImage.Error);
                 return;
             }
-            else if (FavoriteItems.Contains(SearchBox))
+            else if (FavoriteItems.Contains(SearchBox) || BlacklistItems.Contains(SearchBox))
             {
                 MessageBox.Show("Already exists.",
                     "Favorite Error",
@@ -131,7 +136,34 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             SearchBox = string.Empty;
         }
-        public void RemoveItem(string child) => FavoriteItems.Remove(child);
+        public void RemoveFromFavorite(string child) => FavoriteItems.Remove(child);
+        #endregion
+
+        #region Blacklist Item Adjustment
+        public void AddToBlacklist()
+        {
+            if (!_titleList.Any(x => x.Equals(SearchBox)))
+            {
+                MessageBox.Show("Does not exist.",
+                    "Favorite Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
+            else if (BlacklistItems.Contains(SearchBox) || BlacklistItems.Contains(SearchBox))
+            {
+                MessageBox.Show("Already exists.",
+                    "Favorite Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
+
+            BlacklistItems.Add(SearchBox);
+
+            SearchBox = string.Empty;
+        }
+        public void RemoveFromBlacklist(string child) => BlacklistItems.Remove(child);
         #endregion
     }
 }
