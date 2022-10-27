@@ -62,6 +62,10 @@
                            StaysOpen="False"
                            Placement="Bottom">
                         <ListBox x:Name="SuggestionBox"
+                                 Width="490"
+                                 MaxHeight="189"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 FontFamily="{StaticResource Lato}"
                                  ItemsSource="{Binding TitleSuggestions}"
                                  cal:Message.Attach="[Event SelectionChanged] = [Action SelectSuggestion(SuggestionBox.SelectedItem)]"/>
                     </Popup>

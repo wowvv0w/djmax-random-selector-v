@@ -54,7 +54,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             TitleSuggestions.Clear();
 
-            if (string.IsNullOrEmpty(SearchBox))
+            if (string.IsNullOrEmpty(_searchBox))
             {
                 OpensSuggestionBox = false;
                 return;
@@ -62,11 +62,20 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             OpensSuggestionBox = true;
 
-            var titles = from title in _titleList
-                         where title.StartsWith(SearchBox, true, null)
-                         select title;
-            titles = titles.Count() < 8 ? titles.Take(titles.Count()) : titles.Take(8);
-            TitleSuggestions.AddRange(titles);
+            if (_searchBox.Equals("#"))
+            {
+                var titles = from title in _titleList
+                             where !Regex.IsMatch(title, "[a-z]", RegexOptions.IgnoreCase)
+                             select title;
+                TitleSuggestions.AddRange(titles);
+            }
+            else
+            {
+                var titles = from title in _titleList
+                             where title.StartsWith(_searchBox, true, null)
+                             select title;
+                TitleSuggestions.AddRange(titles);
+            }
 
             if (TitleSuggestions.Count == 0)
             {
