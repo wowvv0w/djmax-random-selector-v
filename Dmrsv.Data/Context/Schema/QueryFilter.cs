@@ -14,6 +14,5 @@ namespace Dmrsv.Data.Context.Schema
         public int[] Levels { get; set; } = { 1, 15 };
         public int[] ScLevels { get; set; } = { 1, 15 };
         public bool IncludesFavorite { get; set; } = false;
-        public List<string> Favorites { get; set; } = new();
     }
 }

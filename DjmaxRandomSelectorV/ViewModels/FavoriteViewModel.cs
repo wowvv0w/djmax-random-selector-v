@@ -21,7 +21,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public BindableCollection<string> BlacklistItems { get; set; }
         public BindableCollection<string> TitleSuggestions { get; set; }
 
-        public FavoriteViewModel(List<string> favorites)
+        public FavoriteViewModel()
         {
             searchesSuggestion = true;
             _titleList = new TrackApi().GetAllTrackList().ToList().ConvertAll(x => x.Title);

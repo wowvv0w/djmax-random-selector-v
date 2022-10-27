@@ -25,8 +25,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _api = new FilterApi();
 
             _filter = _api.GetQueryFilter();
-            _filter.Favorites = _api.GetExtraFilter().Favorites;
-            _favoriteViewModel = new FavoriteViewModel(_filter.Favorites);
+            _favoriteViewModel = new FavoriteViewModel();
             for(int i = 0; i < 16; i++)
             {
                 // DO NOT use index 0

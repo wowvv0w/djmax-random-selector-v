@@ -1,4 +1,5 @@
 ﻿using Dmrsv.Data.Context.Schema;
+using Dmrsv.Data.Controller;
 using Dmrsv.Data.DataTypes;
 using Dmrsv.Data.Enums;
 using Dmrsv.Data.Interfaces;
@@ -41,9 +42,13 @@ namespace Dmrsv.RandomSelector.Sifters
                 foreach (string difficulty in filter.Difficulties)
                     styles.Add($"{button}{difficulty}");
 
+            var extraFilter = new FilterApi().GetExtraFilter();
+            Predicate<string> isInFavorites = t => filter.IncludesFavorite && extraFilter.Favorites.Contains(t);
+            Predicate<string> isInBlacklist = t => extraFilter.Blacklist.Contains(t);
+
             var siftedTracks = from track in tracks
-                               where filter.Categories.Contains(track.Category)
-                               || filter.IncludesFavorite && filter.Favorites.Contains(track.Title)
+                               where (filter.Categories.Contains(track.Category) || isInFavorites(track.Title))
+                               && !isInBlacklist(track.Title)
                                select track;
 
             int minLevel = filter.Levels[0], maxLevel = filter.Levels[1];
