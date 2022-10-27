@@ -109,24 +109,24 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid Background="#2D2D2D"
-                                      HorizontalAlignment="Left"
-                                      VerticalAlignment="Top"
-                                      Margin="0,0,5,5">
+                            <Grid Background="#252419"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Top"
+                                  Margin="0,0,5,5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding}"
-                                               Foreground="White"
-                                               FontFamily="{StaticResource Lato}"
-                                               FontSize="13"
-                                               Margin="5"/>
+                                           Foreground="White"
+                                           FontFamily="{StaticResource Lato}"
+                                           FontSize="13"
+                                           Margin="5"/>
                                 <Button Grid.Column="1"
-                                            Width="20"
-                                            cal:Message.Attach="RemoveItem($dataContext)"
-                                            Margin="0,2.5,5,2.5"
-                                            Style="{StaticResource WindowButton}">
+                                        Width="20"
+                                        cal:Message.Attach="RemoveFromFavorite($dataContext)"
+                                        Margin="0,2.5,5,2.5"
+                                        Style="{StaticResource WindowButton}">
                                     <Image Source="pack://application:,,,/Images/Close.png" Width="12"/>
                                 </Button>
                             </Grid>
@@ -144,24 +144,24 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid Background="#2D2D2D"
-                                      HorizontalAlignment="Left"
-                                      VerticalAlignment="Top"
-                                      Margin="0,0,5,5">
+                            <Grid Background="#291B26"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Top"
+                                  Margin="0,0,5,5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding}"
-                                               Foreground="White"
-                                               FontFamily="{StaticResource Lato}"
-                                               FontSize="13"
-                                               Margin="5"/>
+                                           Foreground="White"
+                                           FontFamily="{StaticResource Lato}"
+                                           FontSize="13"
+                                           Margin="5"/>
                                 <Button Grid.Column="1"
-                                            Width="20"
-                                            cal:Message.Attach="RemoveItem($dataContext)"
-                                            Margin="0,2.5,5,2.5"
-                                            Style="{StaticResource WindowButton}">
+                                        Width="20"
+                                        cal:Message.Attach="RemoveFromBlacklist($dataContext)"
+                                        Margin="0,2.5,5,2.5"
+                                        Style="{StaticResource WindowButton}">
                                     <Image Source="pack://application:,,,/Images/Close.png" Width="12"/>
                                 </Button>
                             </Grid>
