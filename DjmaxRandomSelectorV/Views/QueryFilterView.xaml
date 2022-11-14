@@ -438,7 +438,7 @@
                 </StackPanel>
                 <UniformGrid Grid.Row="1"
                              Grid.Column="1"
-                             Columns="5">
+                             Columns="6">
                     <ToggleButton x:Name="CategoryRP"
                                   Content="RESPECT"
                                   Style="{StaticResource CategoryButton}"
@@ -492,6 +492,12 @@
                                   Style="{StaticResource CategoryButton}"
                                   Background="{StaticResource BgVExtension2}"
                                   Foreground="{StaticResource FgVExtension2}">
+                    </ToggleButton>
+                    <ToggleButton x:Name="CategoryVE3"
+                                  Content="V EXTENSION 3"
+                                  Style="{StaticResource CategoryButton}"
+                                  Background="{StaticResource BgVExtension3}"
+                                  Foreground="{StaticResource FgVExtension3}">
                     </ToggleButton>
                     <ToggleButton x:Name="CategoryES"
                                   Content="EMOTIONAL S."
