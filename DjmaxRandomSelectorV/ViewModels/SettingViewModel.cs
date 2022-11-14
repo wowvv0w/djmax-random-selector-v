@@ -182,6 +182,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string _BS = "BS";
         private const string _VE = "VE";
         private const string _VE2 = "VE2";
+        private const string _VE3 = "VE3";
         private const string _ES = "ES";
         private const string _T1 = "T1";
         private const string _T2 = "T2";
@@ -249,6 +250,15 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 UpdateOwnedDlcs(value, _VE2);
                 NotifyOfPropertyChange(() => SettingVE2);
+            }
+        }
+        public bool SettingVE3
+        {
+            get { return CheckOwnedDlcs(_VE3); }
+            set
+            {
+                UpdateOwnedDlcs(value, _VE3);
+                NotifyOfPropertyChange(() => SettingVE3);
             }
         }
         public bool SettingES
