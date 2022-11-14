@@ -77,6 +77,7 @@ namespace Dmrsv.Data.Controller
             {
                 Exclusions = new List<string>(filter.Exclusions),
                 Favorites = new List<string>(filter.Favorites),
+                Blacklist = new List<string>(filter.Blacklist),
             };
         }
 
@@ -86,6 +87,7 @@ namespace Dmrsv.Data.Controller
             {
                 Exclusions = new List<string>(filter.Exclusions),
                 Favorites = new List<string>(filter.Favorites),
+                Blacklist = new List<string>(filter.Blacklist),
             };
         }
 

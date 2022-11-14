@@ -23,7 +23,7 @@
                     Content="OK"
                     Style="{StaticResource DialogButton}"
                     HorizontalAlignment="Right"
-                    Margin="0,0,10,0"
+                    Margin="0 0 10 0"
                     Width="90"/>
         </Grid>
 
@@ -31,25 +31,29 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20"/>
                 <ColumnDefinition/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition/>
                 <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
             <Border BorderBrush="Black"
                     BorderThickness="3"
-                    Grid.ColumnSpan="3"/>
-            <Grid Margin="0,20,0,0"
-                  Grid.Column="1">
+                    Grid.RowSpan="4"
+                    Grid.ColumnSpan="5"/>
+            <Grid Grid.Row ="1" Grid.Column="1"
+                  Grid.ColumnSpan="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-
                 <Grid Background="#1FFFFFFF"
-                      Margin="0,5">
+                      Margin="0 5">
                     <TextBox x:Name="SearchBox"
                              Background="Transparent"
                              BorderThickness="0"
@@ -70,51 +74,101 @@
                                  cal:Message.Attach="[Event SelectionChanged] = [Action SelectSuggestion(SuggestionBox.SelectedItem)]"/>
                     </Popup>
                 </Grid>
-                <Button x:Name="AddItem"
-                        Content="ADD"
+                <Button x:Name="AddToFavorite"
+                        Content="FAVORITE"
                         Grid.Column="1"
                         Width="100"
-                        Margin="10,5,0,5"
+                        Margin="10 5 0 5"
                         Style="{StaticResource DialogButton}">
                 </Button>
-
-                <ScrollViewer VerticalScrollBarVisibility="Hidden"
-                              Grid.Row="2"
-                              Grid.ColumnSpan="2">
-                    <ItemsControl x:Name="FavoriteItems">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Background="#2D2D2D"
-                                      HorizontalAlignment="Left"
-                                      VerticalAlignment="Top"
-                                      Margin="0,0,5,5">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding}"
-                                               Foreground="White"
-                                               FontFamily="{StaticResource Lato}"
-                                               FontSize="13"
-                                               Margin="5"/>
-                                    <Button Grid.Column="1"
-                                            Width="20"
-                                            cal:Message.Attach="RemoveItem($dataContext)"
-                                            Margin="0,2.5,5,2.5"
-                                            Style="{StaticResource WindowButton}">
-                                        <Image Source="pack://application:,,,/Images/Close.png" Width="12"/>
-                                    </Button>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
+                <Button x:Name="AddToBlacklist"
+                        Content="BLACKLIST"
+                        Grid.Column="2"
+                        Width="100"
+                        Margin="10 5 0 5"
+                        Style="{StaticResource DialogButton}">
+                </Button>
             </Grid>
+            <TextBlock Text="FAVORITE"
+                       Grid.Row="2" Grid.Column="1"
+                       Foreground="{StaticResource Default}"
+                       FontFamily="{StaticResource Lato Black}"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="BLACKLIST"
+                       Grid.Row="2" Grid.Column="3"
+                       Foreground="{StaticResource Default}"
+                       FontFamily="{StaticResource Lato Black}"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <ScrollViewer VerticalScrollBarVisibility="Hidden"
+                          Grid.Row="3" Grid.Column="1">
+                <ItemsControl x:Name="FavoriteItems">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Background="{StaticResource Nav}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Background="#252419"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Top"
+                                  Margin="0,0,5,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding}"
+                                           Foreground="White"
+                                           FontFamily="{StaticResource Lato}"
+                                           FontSize="13"
+                                           Margin="5"/>
+                                <Button Grid.Column="1"
+                                        Width="20"
+                                        cal:Message.Attach="RemoveFromFavorite($dataContext)"
+                                        Margin="0,2.5,5,2.5"
+                                        Style="{StaticResource WindowButton}">
+                                    <Image Source="pack://application:,,,/Images/Close.png" Width="12"/>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <ScrollViewer VerticalScrollBarVisibility="Hidden"
+                          Grid.Row="3" Grid.Column="3">
+                <ItemsControl x:Name="BlacklistItems">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Background="{StaticResource Nav}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Background="#291B26"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Top"
+                                  Margin="0,0,5,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding}"
+                                           Foreground="White"
+                                           FontFamily="{StaticResource Lato}"
+                                           FontSize="13"
+                                           Margin="5"/>
+                                <Button Grid.Column="1"
+                                        Width="20"
+                                        cal:Message.Attach="RemoveFromBlacklist($dataContext)"
+                                        Margin="0,2.5,5,2.5"
+                                        Style="{StaticResource WindowButton}">
+                                    <Image Source="pack://application:,,,/Images/Close.png" Width="12"/>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </Grid>
     </DockPanel>
 </Window>

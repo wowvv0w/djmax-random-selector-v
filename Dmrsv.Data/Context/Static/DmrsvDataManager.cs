@@ -138,12 +138,14 @@ namespace Dmrsv.Data.Context.Static
                 {
                     Exclusions = _config.Exclusions,
                     Favorites = _config.Favorite,
+                    Blacklist = _config.Blacklist,
                 };
             }
             set
             {
                 _config.Exclusions = value.Exclusions;
                 _config.Favorite = value.Favorites;
+                _config.Blacklist = value.Blacklist;
             }
         }
 

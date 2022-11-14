@@ -15,6 +15,7 @@ namespace Dmrsv.Data.Context.Schema
         public double[] Position { get; set; } = Array.Empty<double>();
         public List<string> Exclusions { get; set; } = new();
         public List<string> Favorite { get; set; } = new();
+        public List<string> Blacklist { get; set; } = new();
         public int AllTrackVersion { get; set; } = 0;
     }
 }
