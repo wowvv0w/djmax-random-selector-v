@@ -74,6 +74,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 case "1300211": return _BS;
                 case "1080550": return _VE;
                 case "1843020": return _VE2;
+                case "2164540": return _VE3;
                 case "1238760": return _ES;
                 case "1386610": return _T1;
                 case "1386611": return _T2;
@@ -182,6 +183,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string _BS = "BS";
         private const string _VE = "VE";
         private const string _VE2 = "VE2";
+        private const string _VE3 = "VE3";
         private const string _ES = "ES";
         private const string _T1 = "T1";
         private const string _T2 = "T2";
