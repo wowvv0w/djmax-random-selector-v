@@ -98,7 +98,7 @@ namespace Dmrsv.Data.Controller
 
         public void SavePlaylistFilter()
         {
-            Data.Export(Data.PlaylistFilter, "Data/CurrentFilter.json");
+            Data.Export(Data.PlaylistFilter, "Data/CurrentPlaylist.json");
         }
     }
 }
