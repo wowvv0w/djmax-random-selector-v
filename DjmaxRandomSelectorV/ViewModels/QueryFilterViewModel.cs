@@ -273,6 +273,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string _BS = "BS";
         private const string _VE = "VE";
         private const string _VE2 = "VE2";
+        private const string _VE3 = "VE3";
         private const string _ES = "ES";
         private const string _T1 = "T1";
         private const string _T2 = "T2";
@@ -468,6 +469,15 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 UpdateFilter(value, _filter.Categories, _VE2);
                 NotifyOfPropertyChange(() => CategoryVE2);
+            }
+        }
+        public bool CategoryVE3
+        {
+            get { return CheckFilter(_filter.Categories, _VE3); }
+            set
+            {
+                UpdateFilter(value, _filter.Categories, _VE3);
+                NotifyOfPropertyChange(() => CategoryVE3);
             }
         }
         public bool CategoryES

@@ -158,6 +158,14 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
+                        <TextBlock Text="V EXTENSION 3"/>
+                        <ToggleButton x:Name="SettingVE3"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
                         <TextBlock Text="EMOTIONAL S."/>
                         <ToggleButton x:Name="SettingES"/>
                     </Grid>

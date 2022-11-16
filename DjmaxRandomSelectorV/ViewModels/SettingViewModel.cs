@@ -253,6 +253,15 @@ namespace DjmaxRandomSelectorV.ViewModels
                 NotifyOfPropertyChange(() => SettingVE2);
             }
         }
+        public bool SettingVE3
+        {
+            get { return CheckOwnedDlcs(_VE3); }
+            set
+            {
+                UpdateOwnedDlcs(value, _VE3);
+                NotifyOfPropertyChange(() => SettingVE3);
+            }
+        }
         public bool SettingES
         {
             get { return CheckOwnedDlcs(_ES); }
