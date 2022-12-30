@@ -11,6 +11,7 @@ using System.Windows;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
+using Dmrsv.RandomSelector.Assistants;
 using Dmrsv.RandomSelector.Sifters;
 using Dmrsv.RandomSelector.Providers;
 using Dmrsv.Data.Controller;
@@ -37,8 +38,11 @@ namespace Dmrsv.RandomSelector
         private ISifter? _sifter;
         private IProvider? _provider;
 
+        public Executor Starter { get; }
+
         public Selector()
         {
+            Starter = new Executor(CanStart, Start);
             UpdateTrackList(new OptionApi().GetSelectorOption().OwnedDlcs);
             _exclusions = new FilterApi().GetExtraFilter().Exclusions;
             _isUpdated = true;
@@ -67,7 +71,7 @@ namespace Dmrsv.RandomSelector
             }
         }
 
-        public bool CanStart()
+        private bool CanStart()
         {
             if (_canExecuteWithoutGame)
                 return true;
@@ -81,7 +85,7 @@ namespace Dmrsv.RandomSelector
                 return false;
         }
 
-        public Music Start()
+        private Music Start()
         {
             _isRunning = true;
 
