@@ -15,7 +15,7 @@ namespace Dmrsv.Data.Controller
                 Difficulties = new List<string>(filter.Difficulties),
                 Categories = new List<string>(filter.Categories),
                 Levels = (int[])filter.Levels.Clone(),
-                ScLevels = (int[])filter.Levels.Clone(),
+                ScLevels = (int[])filter.ScLevels.Clone(),
                 IncludesFavorite = filter.IncludesFavorite,
             };
         }
@@ -28,7 +28,7 @@ namespace Dmrsv.Data.Controller
                 Difficulties = new List<string>(filter.Difficulties),
                 Categories = new List<string>(filter.Categories),
                 Levels = (int[])filter.Levels.Clone(),
-                ScLevels = (int[])filter.Levels.Clone(),
+                ScLevels = (int[])filter.ScLevels.Clone(),
                 IncludesFavorite = filter.IncludesFavorite,
             };
         }

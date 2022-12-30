@@ -101,6 +101,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (LevelMin < 15 && LevelMin < LevelMax)
             {
                 LevelMin++;
+                Publish();
             }
         }
         public void DecreaseLevelMin()
@@ -108,6 +109,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (LevelMin > 1)
             {
                 LevelMin--;
+                Publish();
             }
         }
         public void IncreaseLevelMax()
@@ -115,6 +117,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (LevelMax < 15)
             {
                 LevelMax++;
+                Publish();
             }
         }
         public void DecreaseLevelMax()
@@ -122,6 +125,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (LevelMax > 1 && LevelMax > LevelMin)
             {
                 LevelMax--;
+                Publish();
             }
         }
         public void IncreaseScLevelMin()
@@ -129,6 +133,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (ScLevelMin < 15 && ScLevelMin < ScLevelMax)
             {
                 ScLevelMin++;
+                Publish();
             }
         }
         public void DecreaseScLevelMin()
@@ -136,6 +141,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (ScLevelMin > 1)
             {
                 ScLevelMin--;
+                Publish();
             }
         }
         public void IncreaseScLevelMax()
@@ -143,6 +149,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (ScLevelMax < 15)
             {
                 ScLevelMax++;
+                Publish();
             }
         }
         public void DecreaseScLevelMax()
@@ -150,6 +157,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (ScLevelMax > 1 && ScLevelMax > ScLevelMin)
             {
                 ScLevelMax--;
+                Publish();
             }
         }
         #endregion
