@@ -18,7 +18,7 @@ namespace DjmaxRandomSelectorV
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
-            await DisplayRootViewForAsync<MainViewModel>();
+            await DisplayRootViewForAsync(typeof(ShellViewModel));
         }
     }
 }
