@@ -6,7 +6,7 @@
         xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d"
         Title="DJMAX Random Selector V"
-        Width="740" Height="480"
+        Width="740" Height="470"
         WindowStyle="None"
         FontFamily="{StaticResource Lato Black}"
         WindowStartupLocation="CenterScreen"
@@ -28,7 +28,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
+        <Grid.Effect>
+            <BlurEffect x:Name="BlurEffect" Radius="0"/>
+        </Grid.Effect>
         <Grid Height="30">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -63,7 +67,66 @@
                        Source="pack://application:,,,/Images/Close.png"/>
             </Button>
         </Grid>
-        <ContentControl x:Name="ActiveItem"
-                        Grid.Row="1"/>
+        <ContentControl x:Name="ActiveItem" Grid.Row="1"/>
+        <Grid Height="40"
+              Background="{StaticResource Nav}"
+              Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+            <Grid.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource UtilityButton}"/>
+            </Grid.Resources>
+            <Button Width="120" Grid.Column="1"
+                    HorizontalAlignment="Left">
+                <Grid>
+                    <ContentControl x:Name="FilterOptionIndicatorViewModel"/>
+                </Grid>
+                <Button.Triggers>
+                    <EventTrigger RoutedEvent="Button.Click">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="FilterOptionViewModel"
+                                                                  Storyboard.TargetProperty="Margin"
+                                                                  BeginTime="0:0:0"
+                                                                  DecelerationRatio=".9">
+                                    <SplineThicknessKeyFrame KeyTime="0:0:0" Value="-500 0 0 0"/>
+                                    <SplineThicknessKeyFrame KeyTime="0:0:0.2" Value="0 0 0 0"/>
+                                </ThicknessAnimationUsingKeyFrames>
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="BlurEffect"
+                                                               Storyboard.TargetProperty="Radius"
+                                                               BeginTime="0:0:0"
+                                                               DecelerationRatio=".9">
+                                    <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                                    <SplineDoubleKeyFrame KeyTime="0:0:0.2" Value="25"/>
+                                </DoubleAnimationUsingKeyFrames>
+                                <ThicknessAnimation Storyboard.TargetName="HideFilterOptionWindow"
+                                                    Storyboard.TargetProperty="Margin"
+                                                    To="0,0,0,0"
+                                                    Duration="0:0:0"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Button.Triggers>
+            </Button>
+            <TextBlock Text="Press F7 to Start Random Selector"
+                       Foreground="{StaticResource Default}"
+                       FontSize="14" Grid.Column="2"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal"
+                        Grid.Column="3"
+                        HorizontalAlignment="Right">
+                <Button x:Name="ShowInfoDialog" Width="25">
+                    <Image Source="pack://application:,,,/Images/info.png"/>
+                </Button>
+                <Button x:Name="ShowSettingDialog" Width="25">
+                    <Image Source="pack://application:,,,/Images/setting.png"/>
+                </Button>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
