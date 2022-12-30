@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d"
         Title="DJMAX Random Selector V"
         Width="740" Height="480"
@@ -24,6 +25,45 @@
         </LinearGradientBrush>
     </Window.Background>
     <Grid>
-        <ContentControl x:Name="ActiveItem"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Height="30">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="DJMAX Random Selector V" Foreground="#989999"
+                       FontSize="12" VerticalAlignment="Center" Margin="10 0 0 0"/>
+            <Border Background="Transparent"
+                    cal:Message.Attach="[Event MouseLeftButtonDown] = [Action MoveWindow($view)]"/>
+            <Button x:Name="OpenReleasePage"
+                    Content="[New Update is Available]"
+                    Foreground="{StaticResource Highlight}"
+                    FontFamily="{StaticResource Lato}"
+                    FontSize="12"
+                    Width="140"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Margin="170 0 0 0"
+                    Style="{StaticResource WindowButton}"
+                    Visibility="{Binding OpenReleasePageVisibility}"/>
+            <Button cal:Message.Attach="[Event Click] = [Action MinimizeWindow($view)]"
+                    Grid.Column="1"
+                    Style="{StaticResource WindowButton}">
+                <Image Width="16"
+                       Source="pack://application:,,,/Images/Minimize.png"/>
+            </Button>
+            <Button cal:Message.Attach="[Event Click] = [Action CloseWindow($view)]"
+                    Grid.Column="2"
+                    Style="{StaticResource WindowButton}">
+                <Image Width="14"
+                       Source="pack://application:,,,/Images/Close.png"/>
+            </Button>
+        </Grid>
+        <ContentControl x:Name="ActiveItem"
+                        Grid.Row="1"/>
     </Grid>
 </Window>
