@@ -25,112 +25,113 @@
         </LinearGradientBrush>
     </Window.Background>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
-        </Grid.RowDefinitions>
-        <Grid.Effect>
-            <BlurEffect x:Name="BlurEffect" Radius="0"/>
-        </Grid.Effect>
-        <Grid Height="30">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="DJMAX Random Selector V" Foreground="#989999"
-                       FontSize="12" VerticalAlignment="Center" Margin="10 0 0 0"/>
-            <Border Background="Transparent"
-                    cal:Message.Attach="[Event MouseLeftButtonDown] = [Action MoveWindow($view)]"/>
-            <Button x:Name="OpenReleasePage"
-                    Content="[New Update is Available]"
-                    Foreground="{StaticResource Highlight}"
-                    FontFamily="{StaticResource Lato}"
-                    FontSize="12"
-                    Width="140"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Margin="170 0 0 0"
-                    Style="{StaticResource WindowButton}"
-                    Visibility="{Binding OpenReleasePageVisibility}"/>
-            <Button cal:Message.Attach="[Event Click] = [Action MinimizeWindow($view)]"
-                    Grid.Column="1"
-                    Style="{StaticResource WindowButton}">
-                <Image Width="16"
-                       Source="pack://application:,,,/Images/Minimize.png"/>
-            </Button>
-            <Button cal:Message.Attach="[Event Click] = [Action CloseWindow($view)]"
-                    Grid.Column="2"
-                    Style="{StaticResource WindowButton}">
-                <Image Width="14"
-                       Source="pack://application:,,,/Images/Close.png"/>
-            </Button>
-        </Grid>
-        <ContentControl x:Name="ActiveItem" Grid.Row="1"/>
-        <Grid Height="40"
-              Background="{StaticResource Nav}"
-              Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="30"/>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="30"/>
-            </Grid.ColumnDefinitions>
-            <Grid.Resources>
-                <Style TargetType="Button" BasedOn="{StaticResource UtilityButton}"/>
-            </Grid.Resources>
-            <Button Width="120" Grid.Column="1"
-                    HorizontalAlignment="Left">
-                <Grid>
-                    <ContentControl x:Name="FilterOptionIndicatorViewModel"/>
-                </Grid>
-                <Button.Triggers>
-                    <EventTrigger RoutedEvent="Button.Click">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation Storyboard.TargetName="FilterOptionPanel"
-                                                 Storyboard.TargetProperty="Width"
-                                                 DecelerationRatio=".9"
-                                                 To="500"
-                                                 BeginTime="0:0:0"
-                                                 Duration="0:0:0.2"/>
-                                <DoubleAnimation Storyboard.TargetName="HideFilterOptionPanelButton"
-                                                 Storyboard.TargetProperty="Width"
-                                                 To="740"
-                                                 BeginTime="0:0:0"
-                                                 Duration="0:0:0"/>
-                                <DoubleAnimation Storyboard.TargetName="BlurEffect"
-                                                 Storyboard.TargetProperty="Radius"
-                                                 DecelerationRatio=".9"
-                                                 To="25"
-                                                 BeginTime="0:0:0"
-                                                 Duration="0:0:0.2"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </Button.Triggers>
-            </Button>
-            <TextBlock Text="Press F7 to Start Random Selector"
-                       Foreground="{StaticResource Default}"
-                       FontSize="14" Grid.Column="2"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <StackPanel Orientation="Horizontal"
-                        Grid.Column="3"
-                        HorizontalAlignment="Right">
-                <Button x:Name="ShowInfoDialog" Width="25">
-                    <Image Source="pack://application:,,,/Images/info.png"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+            <Grid.Effect>
+                <BlurEffect x:Name="BlurEffect" Radius="0"/>
+            </Grid.Effect>
+            <Grid Height="30">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="DJMAX Random Selector V" Foreground="#989999"
+                           FontSize="12" VerticalAlignment="Center" Margin="10 0 0 0"/>
+                <Border Background="Transparent"
+                        cal:Message.Attach="[Event MouseLeftButtonDown] = [Action MoveWindow($view)]"/>
+                <Button x:Name="OpenReleasePage"
+                        Content="[New Update is Available]"
+                        Foreground="{StaticResource Highlight}"
+                        FontFamily="{StaticResource Lato}"
+                        FontSize="12"
+                        Width="140"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Margin="170 0 0 0"
+                        Style="{StaticResource WindowButton}"
+                        Visibility="{Binding OpenReleasePageVisibility}"/>
+                <Button cal:Message.Attach="[Event Click] = [Action MinimizeWindow($view)]"
+                        Grid.Column="1"
+                        Style="{StaticResource WindowButton}">
+                    <Image Width="16"
+                           Source="pack://application:,,,/Images/Minimize.png"/>
                 </Button>
-                <Button x:Name="ShowSettingDialog" Width="25">
-                    <Image Source="pack://application:,,,/Images/setting.png"/>
+                <Button cal:Message.Attach="[Event Click] = [Action CloseWindow($view)]"
+                        Grid.Column="2"
+                        Style="{StaticResource WindowButton}">
+                    <Image Width="14"
+                           Source="pack://application:,,,/Images/Close.png"/>
                 </Button>
-            </StackPanel>
+            </Grid>
+            <ContentControl x:Name="MainPanel" Grid.Row="1"/>
+            <Grid Height="40"
+                  Background="{StaticResource Nav}"
+                  Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource UtilityButton}"/>
+                </Grid.Resources>
+                <Button Width="120" Grid.Column="1"
+                        HorizontalAlignment="Left">
+                    <Grid>
+                        <ContentControl x:Name="FilterOptionIndicator"/>
+                    </Grid>
+                    <Button.Triggers>
+                        <EventTrigger RoutedEvent="Button.Click">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="FilterOptionGrid"
+                                                     Storyboard.TargetProperty="Width"
+                                                     DecelerationRatio=".9"
+                                                     To="500"
+                                                     BeginTime="0:0:0"
+                                                     Duration="0:0:0.2"/>
+                                    <DoubleAnimation Storyboard.TargetName="HideFilterOptionPanelButton"
+                                                     Storyboard.TargetProperty="Width"
+                                                     To="740"
+                                                     BeginTime="0:0:0"
+                                                     Duration="0:0:0"/>
+                                    <DoubleAnimation Storyboard.TargetName="BlurEffect"
+                                                     Storyboard.TargetProperty="Radius"
+                                                     DecelerationRatio=".9"
+                                                     To="25"
+                                                     BeginTime="0:0:0"
+                                                     Duration="0:0:0.2"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Button.Triggers>
+                </Button>
+                <TextBlock Text="Press F7 to Start Random Selector"
+                           Foreground="{StaticResource Default}"
+                           FontSize="14" Grid.Column="2"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="3"
+                            HorizontalAlignment="Right">
+                    <Button x:Name="ShowInfoDialog" Width="25">
+                        <Image Source="pack://application:,,,/Images/info.png"/>
+                    </Button>
+                    <Button x:Name="ShowSettingDialog" Width="25">
+                        <Image Source="pack://application:,,,/Images/setting.png"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
         </Grid>
-
-        <Grid x:Name="FilterOptionPanel" Grid.RowSpan="3"
+        <Grid x:Name="FilterOptionGrid" Grid.RowSpan="3"
               Width="0" HorizontalAlignment="Left" Panel.ZIndex="2">
-            <ContentControl x:Name="FilterOptionViewModel"
+            <ContentControl x:Name="FilterOptionPanel"
                             HorizontalAlignment="Right"
                             Width="500"/>
         </Grid>
@@ -149,7 +150,7 @@
                 <EventTrigger RoutedEvent="Button.Click">
                     <BeginStoryboard>
                         <Storyboard>
-                            <DoubleAnimation Storyboard.TargetName="FilterOptionPanel"
+                            <DoubleAnimation Storyboard.TargetName="FilterOptionGrid"
                                              Storyboard.TargetProperty="Width"
                                              DecelerationRatio=".9"
                                              To="0"

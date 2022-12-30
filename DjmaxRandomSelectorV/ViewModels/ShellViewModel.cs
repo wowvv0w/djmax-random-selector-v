@@ -5,19 +5,23 @@ using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class ShellViewModel : Conductor<object>
+    public class ShellViewModel : Screen
     {
         private readonly IWindowManager _windowManager = new WindowManager(); // temp
-        protected async override void OnViewLoaded(object view)
+
+        public MainViewModel MainPanel { get; }
+        public FilterOptionViewModel FilterOptionPanel { get; }
+        public FilterOptionIndicatorViewModel FilterOptionIndicator { get; }
+
+        public ShellViewModel() // temp
+        {
+            MainPanel = IoC.Get<MainViewModel>();
+            FilterOptionPanel = IoC.Get<FilterOptionViewModel>();
+            FilterOptionIndicator = IoC.Get<FilterOptionIndicatorViewModel>();
+        }
+        protected override void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
-            await EditFilter();
-        }
-
-        public async Task EditFilter()
-        {
-            var viewmodel = IoC.Get<MainViewModel>();
-            await ActivateItemAsync(viewmodel, new CancellationToken());
         }
 
         public void MoveWindow(object view)
