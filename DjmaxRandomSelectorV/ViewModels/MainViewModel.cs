@@ -129,11 +129,11 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             var window = view as Window;
 
-            HwndSource source;
-            IntPtr handle = new WindowInteropHelper(window).Handle;
-            source = HwndSource.FromHwnd(handle);
-            source.AddHook(_executor.HwndHook);
-            _executor.AddHotkey(handle, 9000, 0x0000, 118);
+            //HwndSource source;
+            //IntPtr handle = new WindowInteropHelper(window).Handle;
+            //source = HwndSource.FromHwnd(handle);
+            //source.AddHook(_executor.HwndHook);
+            //_executor.AddHotkey(handle, 9000, 0x0000, 118);
 
             SetPosition(window);
         }
@@ -197,8 +197,9 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         public void CloseWindow(object view)
         {
-            var window = view as Window;
-            window.Close();
+            //var window = view as Window;
+            //window.Close();
+            TryCloseAsync();
         }
         #endregion
 

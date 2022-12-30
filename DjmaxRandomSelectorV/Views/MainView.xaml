@@ -1,30 +1,14 @@
-﻿<Window x:Class="DjmaxRandomSelectorV.Views.MainView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:cal="http://www.caliburnproject.org"
-        mc:Ignorable="d"
-        Title="DJMAX Random Selector V"
-        Width="740" Height="480"
-        WindowStyle="None"
-        FontFamily="{StaticResource Lato Black}"
-        WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize"
-        SnapsToDevicePixels="True"
-        Icon="pack://application:,,,/Images/icon.png"
-        cal:Message.Attach="[Event Closing] = [Action OnClosing($view)]">
-    <Window.Background>
-        <LinearGradientBrush StartPoint="0.987,0.5" EndPoint="1,0.5" SpreadMethod="Repeat">
-            <LinearGradientBrush.RelativeTransform>
-                <RotateTransform Angle="325" CenterX="0.5" CenterY="0.5"/>
-            </LinearGradientBrush.RelativeTransform>
-            <GradientStop Color="#2D2E2F" Offset="0.4"/>
-            <GradientStop Color="#2A2B2C" Offset="0.475"/>
-            <GradientStop Color="#2A2B2C" Offset="0.525"/>
-            <GradientStop Color="#2D2E2F" Offset="0.6"/>
-        </LinearGradientBrush>
-    </Window.Background>
+﻿<UserControl x:Class="DjmaxRandomSelectorV.Views.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d"
+             d:DesignHeight="480" d:DesignWidth="740"
+             FontFamily="{StaticResource Lato Black}"
+             SnapsToDevicePixels="True"
+             cal:Message.Attach="[Event Closing] = [Action OnClosing($view)]">
     <Grid>
         <!--#region Filter Option -->
         <ContentControl x:Name="FilterOptionViewModel"
@@ -236,4 +220,4 @@
         </DockPanel>
         <!--#endregion-->
     </Grid>
-</Window>
+</UserControl>
