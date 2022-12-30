@@ -7,6 +7,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class ShellViewModel : Conductor<object>
     {
+        private readonly IWindowManager _windowManager = new WindowManager(); // temp
         protected async override void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
@@ -41,6 +42,16 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             string url = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
             System.Diagnostics.Process.Start(url);
+        }
+
+        public void ShowInfoDialog()
+        {
+            _windowManager.ShowDialogAsync(new InfoViewModel(0, 0)); // temp
+        }
+
+        public void ShowSettingDialog()
+        {
+            _windowManager.ShowDialogAsync(new SettingViewModel(null)); // temp
         }
     }
 }

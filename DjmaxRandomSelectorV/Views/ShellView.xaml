@@ -90,24 +90,23 @@
                     <EventTrigger RoutedEvent="Button.Click">
                         <BeginStoryboard>
                             <Storyboard>
-                                <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="FilterOptionViewModel"
-                                                                  Storyboard.TargetProperty="Margin"
-                                                                  BeginTime="0:0:0"
-                                                                  DecelerationRatio=".9">
-                                    <SplineThicknessKeyFrame KeyTime="0:0:0" Value="-500 0 0 0"/>
-                                    <SplineThicknessKeyFrame KeyTime="0:0:0.2" Value="0 0 0 0"/>
-                                </ThicknessAnimationUsingKeyFrames>
-                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="BlurEffect"
-                                                               Storyboard.TargetProperty="Radius"
-                                                               BeginTime="0:0:0"
-                                                               DecelerationRatio=".9">
-                                    <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
-                                    <SplineDoubleKeyFrame KeyTime="0:0:0.2" Value="25"/>
-                                </DoubleAnimationUsingKeyFrames>
-                                <ThicknessAnimation Storyboard.TargetName="HideFilterOptionWindow"
-                                                    Storyboard.TargetProperty="Margin"
-                                                    To="0,0,0,0"
-                                                    Duration="0:0:0"/>
+                                <DoubleAnimation Storyboard.TargetName="FilterOptionPanel"
+                                                 Storyboard.TargetProperty="Width"
+                                                 DecelerationRatio=".9"
+                                                 To="500"
+                                                 BeginTime="0:0:0"
+                                                 Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetName="HideFilterOptionPanelButton"
+                                                 Storyboard.TargetProperty="Width"
+                                                 To="740"
+                                                 BeginTime="0:0:0"
+                                                 Duration="0:0:0"/>
+                                <DoubleAnimation Storyboard.TargetName="BlurEffect"
+                                                 Storyboard.TargetProperty="Radius"
+                                                 DecelerationRatio=".9"
+                                                 To="25"
+                                                 BeginTime="0:0:0"
+                                                 Duration="0:0:0.2"/>
                             </Storyboard>
                         </BeginStoryboard>
                     </EventTrigger>
@@ -128,5 +127,46 @@
                 </Button>
             </StackPanel>
         </Grid>
+
+        <Grid x:Name="FilterOptionPanel" Grid.RowSpan="3"
+              Width="0" HorizontalAlignment="Left" Panel.ZIndex="2">
+            <ContentControl x:Name="FilterOptionViewModel"
+                            HorizontalAlignment="Right"
+                            Width="500"/>
+        </Grid>
+        <Button x:Name="HideFilterOptionPanelButton"
+                Panel.ZIndex="1"
+                Grid.RowSpan="3"
+                Background="Transparent"
+                HorizontalAlignment="Right"
+                Width="0">
+            <Button.Template>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}"/>
+                </ControlTemplate>
+            </Button.Template>
+            <Button.Triggers>
+                <EventTrigger RoutedEvent="Button.Click">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="FilterOptionPanel"
+                                             Storyboard.TargetProperty="Width"
+                                             DecelerationRatio=".9"
+                                             To="0"
+                                             Duration="0:0:0.2"/>
+                            <DoubleAnimation Storyboard.TargetName="HideFilterOptionPanelButton"
+                                             Storyboard.TargetProperty="Width"
+                                             To="0"
+                                             Duration="0:0:0"/>
+                            <DoubleAnimation Storyboard.TargetName="BlurEffect"
+                                             Storyboard.TargetProperty="Radius"
+                                             DecelerationRatio=".9"
+                                             To="0"
+                                             Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Button.Triggers>
+        </Button>
     </Grid>
 </Window>
