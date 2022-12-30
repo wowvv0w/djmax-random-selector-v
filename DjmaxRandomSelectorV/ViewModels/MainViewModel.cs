@@ -17,7 +17,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class MainViewModel : Conductor<object>, IHandle<IFilter>, IHandle<FilterOption>, IHandle<SelectorOption>
     {
-        private const int ApplicationVersion = 150;
+        private const int ApplicationVersion = 151;
         private const string ReleasesUrl = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
         private const string VersionsUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
         private const string AllTrackListUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Data/AllTrackList.csv";
