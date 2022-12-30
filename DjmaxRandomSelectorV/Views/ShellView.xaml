@@ -3,9 +3,26 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
         mc:Ignorable="d"
-        Title="ShellView" Height="450" Width="800">
+        Title="DJMAX Random Selector V"
+        Width="740" Height="480"
+        WindowStyle="None"
+        FontFamily="{StaticResource Lato Black}"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        SnapsToDevicePixels="True"
+        Icon="pack://application:,,,/Images/icon.png">
+    <Window.Background>
+        <LinearGradientBrush StartPoint=".987 .5" EndPoint="1 .5" SpreadMethod="Repeat">
+            <LinearGradientBrush.RelativeTransform>
+                <RotateTransform Angle="325" CenterX=".5" CenterY=".5"/>
+            </LinearGradientBrush.RelativeTransform>
+            <GradientStop Color="#2D2E2F" Offset=".4"/>
+            <GradientStop Color="#2A2B2C" Offset=".475"/>
+            <GradientStop Color="#2A2B2C" Offset=".525"/>
+            <GradientStop Color="#2D2E2F" Offset=".6"/>
+        </LinearGradientBrush>
+    </Window.Background>
     <Grid>
         <ContentControl x:Name="ActiveItem"/>
     </Grid>
