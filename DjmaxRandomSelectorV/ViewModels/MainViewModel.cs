@@ -15,49 +15,36 @@ using Dmrsv.Data.Enums;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class MainViewModel : Conductor<object>, IHandle<IFilter>, IHandle<FilterOption>, IHandle<SelectorOption>
+    public class MainViewModel : Conductor<object>.Collection.OneActive, IHandle<IFilter>, IHandle<FilterOption>, IHandle<SelectorOption>
     {
         private const int ApplicationVersion = 151;
-        private const string ReleasesUrl = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
         private const string VersionsUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
-        private const string AllTrackListUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Data/AllTrackList.csv";
 
-        private FilterBaseViewModel _filterViewModel;
-        public FilterBaseViewModel FilterViewModel
+        protected override void OnViewLoaded(object view)
         {
-            get { return _filterViewModel; }
-            set
-            {
-                _filterViewModel = value;
-                NotifyOfPropertyChange(() => FilterViewModel);
-            }
+            ActivateItemAsync(FilterPanel, CancellationToken.None);
+            ActivateItemAsync(IoC.Get<HistoryViewModel>(), CancellationToken.None);
+            ActivateItemAsync(FilterPanel, CancellationToken.None);
         }
-        public HistoryViewModel HistoryViewModel { get; set; }
-        public FilterOptionViewModel FilterOptionViewModel { get; set; }
-        public FilterOptionIndicatorViewModel FilterOptionIndicatorViewModel { get; set; }
 
-        private InfoViewModel _infoViewModel;
+        public FilterBaseViewModel FilterPanel { get; }
 
         private readonly IEventAggregator _eventAggregator;
-        private readonly IWindowManager _windowManager;
         private readonly Selector _selector;
         private readonly Executor _executor;
         public MainViewModel()
         {
             _eventAggregator = new EventAggregator();
             _eventAggregator.SubscribeOnUIThread(this);
-            _windowManager = new WindowManager();
 
             _selector = new Selector();
             _executor = new Executor(_selector.CanStart, _selector.Start);
             _executor.ExecutionFailed += e => MessageBox.Show(e, "Selector Error", MessageBoxButton.OK, MessageBoxImage.Error);
             _executor.ExecutionComplete += e => _eventAggregator.PublishOnUIThreadAsync(e);
 
-            CheckUpdates();
-            ChangeFilterView(new OptionApi().GetSelectorOption().FilterType);
-            HistoryViewModel = new HistoryViewModel(_eventAggregator);
-            FilterOptionIndicatorViewModel = new FilterOptionIndicatorViewModel(_eventAggregator);
-            FilterOptionViewModel = new FilterOptionViewModel(_eventAggregator);
+            //CheckUpdates();
+            FilterPanel = IoC.Get<QueryFilterViewModel>();
+            FilterPanel.DisplayName = "FILTER";
         }
 
         private void CheckUpdates()
@@ -85,14 +72,14 @@ namespace DjmaxRandomSelectorV.ViewModels
                         "DJMAX Random Selector V", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
-                _infoViewModel = new InfoViewModel(ApplicationVersion, lastestAppVersion);
+                //_infoViewModel = new InfoViewModel(ApplicationVersion, lastestAppVersion);
             }
             catch (HttpRequestException)
             {
                 MessageBox.Show("Cannot check available updates. Check the internet connection.",
                     "Selector Error", MessageBoxButton.OK, MessageBoxImage.Warning);
 
-                _infoViewModel = new InfoViewModel(ApplicationVersion, ApplicationVersion);
+                //_infoViewModel = new InfoViewModel(ApplicationVersion, ApplicationVersion);
             }
         }
 
@@ -117,37 +104,37 @@ namespace DjmaxRandomSelectorV.ViewModels
         private void ChangeFilterView(FilterType filterType)
         {
             SaveFilter(filterType);
-            FilterViewModel = filterType switch
-            {
-                FilterType.Query => new QueryFilterViewModel(_eventAggregator, _windowManager),
-                FilterType.Playlist => new PlaylistFilterViewModel(_eventAggregator),
-                _ => throw new NotSupportedException(),
-            };
+            //FilterViewModel = filterType switch
+            //{
+            //    FilterType.Query => new QueryFilterViewModel(_eventAggregator, _windowManager),
+            //    FilterType.Playlist => new PlaylistFilterViewModel(_eventAggregator),
+            //    _ => throw new NotSupportedException(),
+            //};
         }
 
-        protected override void OnViewLoaded(object view)
-        {
-            var window = view as Window;
+        //protected override void OnViewLoaded(object view)
+        //{
+        //    var window = view as Window;
 
-            //HwndSource source;
-            //IntPtr handle = new WindowInteropHelper(window).Handle;
-            //source = HwndSource.FromHwnd(handle);
-            //source.AddHook(_executor.HwndHook);
-            //_executor.AddHotkey(handle, 9000, 0x0000, 118);
+        //    HwndSource source;
+        //    IntPtr handle = new WindowInteropHelper(window).Handle;
+        //    source = HwndSource.FromHwnd(handle);
+        //    source.AddHook(_executor.HwndHook);
+        //    _executor.AddHotkey(handle, 9000, 0x0000, 118);
 
-            SetPosition(window);
-        }
+        //    SetPosition(window);
+        //}
 
-        public void OnClosing(object view)
-        {
-            var window = view as Window;
-            var api = new OptionApi();
-            SaveFilter(api.GetSelectorOption().FilterType);
-            var appOpt = api.GetAppOption();
-            appOpt.Position = new double[2] { window.Top, window.Left };
-            api.SetAppOption(appOpt);
-            api.SaveConfig();
-        }
+        //public void OnClosing(object view)
+        //{
+        //    var window = view as Window;
+        //    var api = new OptionApi();
+        //    SaveFilter(api.GetSelectorOption().FilterType);
+        //    var appOpt = api.GetAppOption();
+        //    appOpt.Position = new double[2] { window.Top, window.Left };
+        //    api.SetAppOption(appOpt);
+        //    api.SaveConfig();
+        //}
 
         private void SaveFilter(FilterType filterType)
         {
@@ -160,15 +147,15 @@ namespace DjmaxRandomSelectorV.ViewModels
                 throw new NotSupportedException();
         }
 
-        public void SetPosition(Window window)
-        {
-            var position = new OptionApi().GetAppOption().Position;
-            if (position?.Length == 2)
-            {
-                window.Top = position[0];
-                window.Left = position[1];
-            }
-        }
+        //public void SetPosition(Window window)
+        //{
+        //    var position = new OptionApi().GetAppOption().Position;
+        //    if (position?.Length == 2)
+        //    {
+        //        window.Top = position[0];
+        //        window.Left = position[1];
+        //    }
+        //}
 
         #region Window Top Bar
         private Visibility _openReleasePageVisibility;
@@ -180,80 +167,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                 _openReleasePageVisibility = value;
                 NotifyOfPropertyChange(() => OpenReleasePageVisibility);
             }
-        }
-        public void OpenReleasePage()
-        {
-            System.Diagnostics.Process.Start(ReleasesUrl);
-        }
-        public void MoveWindow(object view)
-        {
-            var window = view as Window;
-            window.DragMove();
-        }
-        public void MinimizeWindow(object view)
-        {
-            var window = view as Window;
-            window.WindowState = WindowState.Minimized;
-        }
-        public void CloseWindow(object view)
-        {
-            //var window = view as Window;
-            //window.Close();
-            TryCloseAsync();
-        }
-        #endregion
-
-        #region Tab Bar
-        private string _currentTab = "FILTER";
-        private bool _isFilterTabSelected = true;
-        private bool _isHistoryTabSelected = false;
-        public string CurrentTab
-        {
-            get { return _currentTab; }
-            set 
-            { 
-                _currentTab = value; 
-                NotifyOfPropertyChange(() => CurrentTab);
-            }
-        }
-        public bool IsFilterTabSelected
-        {
-            get { return _isFilterTabSelected; }
-            set 
-            {
-                _isFilterTabSelected = value;
-                NotifyOfPropertyChange(() => IsFilterTabSelected);
-            }
-        }
-        public bool IsHistoryTabSelected
-        {
-            get { return _isHistoryTabSelected; }
-            set
-            {
-                _isHistoryTabSelected = value;
-                NotifyOfPropertyChange(() => IsHistoryTabSelected);
-            }
-        }
-        public void LoadFilterTab()
-        {
-            IsFilterTabSelected = true;
-            CurrentTab = "FILTER";
-        }
-        public void LoadHistoryTab()
-        {
-            IsHistoryTabSelected = true;
-            CurrentTab = "HISTORY";
-        }
-        #endregion
-
-        #region Another Windows
-        public void ShowInfo()
-        {
-            _windowManager.ShowDialogAsync(_infoViewModel);
-        }
-        public void ShowSetting()
-        {
-            _windowManager.ShowDialogAsync(new SettingViewModel(_eventAggregator));
         }
         #endregion
     }
