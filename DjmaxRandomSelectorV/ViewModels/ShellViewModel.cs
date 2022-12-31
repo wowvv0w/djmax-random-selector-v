@@ -8,21 +8,26 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class ShellViewModel : Screen
     {
-        private readonly IEventAggregator _eventAggregator = new EventAggregator(); // temp
-        private readonly IWindowManager _windowManager = new WindowManager(); // temp
+        private readonly IEventAggregator _eventAggregator;
+        private readonly IWindowManager _windowManager;
         private readonly Selector _selector;
 
         public MainViewModel MainPanel { get; }
         public FilterOptionViewModel FilterOptionPanel { get; }
         public FilterOptionIndicatorViewModel FilterOptionIndicator { get; }
 
-        public ShellViewModel()
+        public ShellViewModel(IEventAggregator eventAggregator, IWindowManager windowManager)
         {
+            _eventAggregator = eventAggregator;
+            _windowManager = windowManager;
+
             MainPanel = IoC.Get<MainViewModel>();
             FilterOptionPanel = IoC.Get<FilterOptionViewModel>();
             FilterOptionIndicator = IoC.Get<FilterOptionIndicatorViewModel>();
+
             _selector = new Selector();
         }
+
         protected override void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
