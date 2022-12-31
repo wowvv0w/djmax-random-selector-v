@@ -14,12 +14,13 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class SettingViewModel : Screen
     {
+        private readonly IEventAggregator _eventAggregator;
+        
         private bool _isPlaylist;
         private int _inputInterval;
         private bool _savesExclusion;
         private List<string> _ownedDlcs;
 
-        private IEventAggregator _eventAggregator;
         public SettingViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;

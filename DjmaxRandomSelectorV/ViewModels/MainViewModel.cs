@@ -6,45 +6,36 @@ using System.Windows;
 using System.Net.Http;
 using System.Threading;
 using Dmrsv.Data.Context.Schema;
-using Dmrsv.RandomSelector;
 using Dmrsv.Data.Controller;
-using Dmrsv.RandomSelector.Assistants;
-using System.Windows.Interop;
 using Dmrsv.Data.Interfaces;
 using Dmrsv.Data.Enums;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class MainViewModel : Conductor<object>.Collection.OneActive, IHandle<IFilter>, IHandle<FilterOption>, IHandle<SelectorOption>
+    public class MainViewModel : Conductor<object>.Collection.OneActive
     {
         private const int ApplicationVersion = 151;
         private const string VersionsUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
 
-        protected override void OnViewLoaded(object view)
-        {
-            ActivateItemAsync(FilterPanel, CancellationToken.None);
-            ActivateItemAsync(IoC.Get<HistoryViewModel>(), CancellationToken.None);
-            ActivateItemAsync(FilterPanel, CancellationToken.None);
-        }
+        //private readonly IEventAggregator _eventAggregator;
 
         public FilterBaseViewModel FilterPanel { get; }
 
-        private readonly IEventAggregator _eventAggregator;
-        private readonly Selector _selector;
-        private readonly Executor _executor;
         public MainViewModel()
         {
-            _eventAggregator = new EventAggregator();
-            _eventAggregator.SubscribeOnUIThread(this);
-
-            _selector = new Selector();
-            _executor = new Executor(_selector.CanStart, _selector.Start);
-            _executor.ExecutionFailed += e => MessageBox.Show(e, "Selector Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            _executor.ExecutionComplete += e => _eventAggregator.PublishOnUIThreadAsync(e);
+            //_eventAggregator = new EventAggregator();
+            //_eventAggregator.SubscribeOnUIThread(this);
 
             //CheckUpdates();
             FilterPanel = IoC.Get<QueryFilterViewModel>();
             FilterPanel.DisplayName = "FILTER";
+        }
+
+        protected override void OnViewLoaded(object view)
+        {
+            ActivateItemAsync(FilterPanel);
+            ActivateItemAsync(IoC.Get<HistoryViewModel>());
+            ChangeActiveItemAsync(FilterPanel, false);
         }
 
         private void CheckUpdates()
@@ -58,7 +49,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 var lastestTrackVersion = int.Parse(versions[1]);
 
                 bool hasAppUpdate = lastestAppVersion > ApplicationVersion;
-                OpenReleasePageVisibility = hasAppUpdate ? Visibility.Visible : Visibility.Hidden;
+                //OpenReleasePageVisibility = hasAppUpdate ? Visibility.Visible : Visibility.Hidden;
 
                 var appOption = new OptionApi().GetAppOption();
                 var currentTrackVersion = appOption.AllTrackVersion;
@@ -84,22 +75,22 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
 
 
-        public Task HandleAsync(IFilter message, CancellationToken cancellationToken)
-        {
-            _selector.Handle(message);
-            return Task.CompletedTask;
-        }
-        public Task HandleAsync(FilterOption message, CancellationToken cancellationToken)
-        {
-            _selector.Handle(message);
-            return Task.CompletedTask;
-        }
-        public Task HandleAsync(SelectorOption message, CancellationToken cancellationToken)
-        {
-            _selector.Handle(message);
-            ChangeFilterView(message.FilterType);
-            return Task.CompletedTask;
-        }
+        //public Task HandleAsync(IFilter message, CancellationToken cancellationToken)
+        //{
+        //    _selector.Handle(message);
+        //    return Task.CompletedTask;
+        //}
+        //public Task HandleAsync(FilterOption message, CancellationToken cancellationToken)
+        //{
+        //    _selector.Handle(message);
+        //    return Task.CompletedTask;
+        //}
+        //public Task HandleAsync(SelectorOption message, CancellationToken cancellationToken)
+        //{
+        //    _selector.Handle(message);
+        //    ChangeFilterView(message.FilterType);
+        //    return Task.CompletedTask;
+        //}
 
         private void ChangeFilterView(FilterType filterType)
         {
@@ -116,11 +107,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         //{
         //    var window = view as Window;
 
-        //    HwndSource source;
-        //    IntPtr handle = new WindowInteropHelper(window).Handle;
-        //    source = HwndSource.FromHwnd(handle);
-        //    source.AddHook(_executor.HwndHook);
-        //    _executor.AddHotkey(handle, 9000, 0x0000, 118);
+        
 
         //    SetPosition(window);
         //}
@@ -158,16 +145,16 @@ namespace DjmaxRandomSelectorV.ViewModels
         //}
 
         #region Window Top Bar
-        private Visibility _openReleasePageVisibility;
-        public Visibility OpenReleasePageVisibility
-        {
-            get { return _openReleasePageVisibility; }
-            set
-            {
-                _openReleasePageVisibility = value;
-                NotifyOfPropertyChange(() => OpenReleasePageVisibility);
-            }
-        }
+        //private Visibility _openReleasePageVisibility;
+        //public Visibility OpenReleasePageVisibility
+        //{
+        //    get { return _openReleasePageVisibility; }
+        //    set
+        //    {
+        //        _openReleasePageVisibility = value;
+        //        NotifyOfPropertyChange(() => OpenReleasePageVisibility);
+        //    }
+        //}
         #endregion
     }
 }

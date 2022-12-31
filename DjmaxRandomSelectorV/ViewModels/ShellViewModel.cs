@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using Dmrsv.RandomSelector;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
@@ -22,15 +23,14 @@ namespace DjmaxRandomSelectorV.ViewModels
             _windowManager = windowManager;
 
             MainPanel = IoC.Get<MainViewModel>();
-            FilterOptionPanel = IoC.Get<FilterOptionViewModel>();
             FilterOptionIndicator = IoC.Get<FilterOptionIndicatorViewModel>();
+            FilterOptionPanel = IoC.Get<FilterOptionViewModel>();
 
             _selector = new Selector();
         }
 
         protected override void OnViewLoaded(object view)
         {
-            base.OnViewLoaded(view);
             var window = view as Window;
             HwndSource source;
             IntPtr handle = new WindowInteropHelper(window).Handle;
@@ -59,20 +59,20 @@ namespace DjmaxRandomSelectorV.ViewModels
             window.Close();
         }
 
-        public void OpenReleasePage()
+        public void OpenReleasePage() // TODO: Fix error
         {
             string url = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
             System.Diagnostics.Process.Start(url);
         }
 
-        public void ShowInfoDialog()
+        public Task ShowInfoDialog()
         {
-            _windowManager.ShowDialogAsync(new InfoViewModel(0, 0)); // temp
+            return _windowManager.ShowDialogAsync(IoC.Get<InfoViewModel>());
         }
 
-        public void ShowSettingDialog()
+        public Task ShowSettingDialog()
         {
-            _windowManager.ShowDialogAsync(new SettingViewModel(null)); // temp
+            return _windowManager.ShowDialogAsync(IoC.Get<SettingViewModel>()); // temp
         }
     }
 }

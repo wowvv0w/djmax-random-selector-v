@@ -11,16 +11,19 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class HistoryViewModel : Screen, IHandle<Music>
     {
+        private readonly IEventAggregator _eventAggregator;
+
         private int _number;
+
         public BindableCollection<HistoryItem> History { get; set; }
 
-        private IEventAggregator _eventAggregator;
         public HistoryViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
             _number = 0;
             History = new BindableCollection<HistoryItem>();
+            DisplayName = "HISTORY";
         }
 
         private void UpdateHistory(HistoryItem historyItem)

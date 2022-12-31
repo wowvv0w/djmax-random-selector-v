@@ -13,7 +13,8 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class FilterOptionIndicatorViewModel : Screen, IHandle<FilterOption>
     {
-        #region Filter Option Elements
+        private readonly IEventAggregator _eventAggregator;
+
         private int _exceptCount;
         private BitmapImage _modeImage;
         private BitmapImage _aiderImage;
@@ -55,16 +56,13 @@ namespace DjmaxRandomSelectorV.ViewModels
                 NotifyOfPropertyChange(() => LevelImage);
             }
         }
-        #endregion
 
-        private IEventAggregator _eventAggregator;
         public FilterOptionIndicatorViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
         }
 
-        #region Image Modification
         public Task HandleAsync(FilterOption message, CancellationToken cancellationToken)
         {
             bool isFreestyle = message.Mode == Mode.Freestyle;
@@ -76,6 +74,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             return Task.CompletedTask;
         }
+
         private BitmapImage GetBitmapImage(string file)
         {
             return new BitmapImage(new Uri($"pack://application:,,,/Images/{file}.png"));
@@ -122,6 +121,5 @@ namespace DjmaxRandomSelectorV.ViewModels
                     break;
             }
         }
-        #endregion
     }
 }

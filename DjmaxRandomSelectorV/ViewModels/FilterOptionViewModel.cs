@@ -13,7 +13,6 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class FilterOptionViewModel : Screen
     {
-        #region Constants
         private const string OFF = "OFF";
         private const string FREESTYLE = "FREESTYLE";
         private const string ONLINE = "ONLINE";
@@ -21,13 +20,12 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string OBSERVE = "OBSERVE";
         private const string BEGINNER = "BEGINNER";
         private const string MASTER = "MASTER";
-        #endregion        
 
-        public FilterOptionIndicatorViewModel FilterOptionIndicatorViewModel { get; set; }
-
-        private readonly FilterOption _filterOption;
         private readonly IEventAggregator _eventAggregator;
+        private readonly FilterOption _filterOption;
         private readonly OptionApi _api;
+
+        public FilterOptionIndicatorViewModel FilterOptionIndicator { get; set; }
 
         public FilterOptionViewModel(IEventAggregator eventAggregator)
         {
@@ -35,7 +33,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _api = new OptionApi();
             _filterOption = _api.GetFilterOption();
 
-            FilterOptionIndicatorViewModel = new FilterOptionIndicatorViewModel(_eventAggregator);
+            FilterOptionIndicator = IoC.Get<FilterOptionIndicatorViewModel>();
 
             SetAddonText(_filterOption.Mode);
             SetAddonText(_filterOption.Aider);

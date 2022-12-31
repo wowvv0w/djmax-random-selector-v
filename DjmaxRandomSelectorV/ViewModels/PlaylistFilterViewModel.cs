@@ -14,18 +14,17 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class PlaylistFilterViewModel : FilterBaseViewModel
     {
+        private readonly IEventAggregator _eventAggregator;
         private readonly List<Music> _allItems;
         private readonly List<string> _allTitles;
         private readonly FilterApi _api;
 
-
         private bool _searchesSuggestion;
-        public BindableCollection<string> TitleSuggestions { get; set; }
 
+        public BindableCollection<string> TitleSuggestions { get; set; }
         public BindableCollection<Music> SearchResult { get; set; }
         public BindableCollection<Music> PlaylistItems { get; set; }
 
-        private readonly IEventAggregator _eventAggregator;
         public PlaylistFilterViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;

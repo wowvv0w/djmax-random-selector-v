@@ -11,13 +11,13 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class QueryFilterViewModel : FilterBaseViewModel
     {
-        private QueryFilter _filter;
-        private readonly FilterApi _api;
-
-        private readonly FavoriteViewModel _favoriteViewModel;
-
         private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
+        private readonly FavoriteViewModel _favoriteViewModel;
+        private readonly FilterApi _api;
+
+        private QueryFilter _filter;
+
         public QueryFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager)
         {
             _eventAggregator = eventAggregator;

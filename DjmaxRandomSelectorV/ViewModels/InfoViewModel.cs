@@ -14,6 +14,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string GITHUB_PAGE_URL = "https://github.com/wowvv0w/djmax-random-selector-v";
         private const string BUG_REPORT_URL = "https://github.com/wowvv0w/djmax-random-selector-v/issues";
 
+        public InfoViewModel() { } // temp
         public InfoViewModel(int currentVersion, int lastestVersion)
         {
             CurrentVersion = IntToString(currentVersion);
