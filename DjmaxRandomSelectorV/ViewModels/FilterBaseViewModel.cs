@@ -9,6 +9,11 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public abstract class FilterBaseViewModel : Screen
     {
+        public FilterBaseViewModel()
+        {
+            DisplayName = "FILTER";
+        }
+
         protected virtual void Publish()
         {
         }

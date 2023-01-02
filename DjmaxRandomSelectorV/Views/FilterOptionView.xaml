@@ -27,7 +27,7 @@
             <Grid Style="{x:Null}"
                   Background="#7F584E46"
                   Height="90">
-                <ContentControl x:Name="FilterOptionIndicatorViewModel"
+                <ContentControl x:Name="FilterOptionIndicator"
                                 Height="55"/>
             </Grid>
             <Grid>

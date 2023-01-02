@@ -38,11 +38,8 @@ namespace Dmrsv.RandomSelector
         private ISifter? _sifter;
         private IProvider? _provider;
 
-        public ExecutionHelper Starter { get; }
-
         public Selector()
         {
-            Starter = new ExecutionHelper(CanStart, Start);
             UpdateTrackList(new OptionApi().GetSelectorOption().OwnedDlcs);
             _exclusions = new FilterApi().GetExtraFilter().Exclusions;
             _isUpdated = true;
@@ -71,7 +68,7 @@ namespace Dmrsv.RandomSelector
             }
         }
 
-        private bool CanStart()
+        public bool CanStart()
         {
             if (_canExecuteWithoutGame)
                 return true;
@@ -85,7 +82,7 @@ namespace Dmrsv.RandomSelector
                 return false;
         }
 
-        private Music Start()
+        public Music Start()
         {
             _isRunning = true;
 

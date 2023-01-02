@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Dmrsv.Data;
 using Dmrsv.Data.Context.Schema;
 using Dmrsv.Data.Controller;
 using Dmrsv.Data.DataTypes;
@@ -14,10 +15,13 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class PlaylistFilterViewModel : FilterBaseViewModel
     {
+        private const string DefaultPath = @"Data\CurrentPlaylist.json";
+
         private readonly IEventAggregator _eventAggregator;
+        private readonly IFileManager _fileManager;
         private readonly List<Music> _allItems;
         private readonly List<string> _allTitles;
-        private readonly FilterApi _api;
+        //private readonly FilterApi _api;
 
         private bool _searchesSuggestion;
 
@@ -25,11 +29,12 @@ namespace DjmaxRandomSelectorV.ViewModels
         public BindableCollection<Music> SearchResult { get; set; }
         public BindableCollection<Music> PlaylistItems { get; set; }
 
-        public PlaylistFilterViewModel(IEventAggregator eventAggregator)
+        public PlaylistFilterViewModel(IEventAggregator eventAggregator, IFileManager fileManager)
         {
             _eventAggregator = eventAggregator;
+            _fileManager = fileManager;
             _searchesSuggestion = true;
-            _api = new FilterApi();
+            //_api = new FilterApi();
 
             var allTracks = new TrackApi().GetAllTrackList().ToList();
             var playlistItemsQuery = from track in allTracks
@@ -44,7 +49,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _allItems = playlistItemsQuery.ToList();
             _allTitles = _allItems.Select(x => x.Title).Distinct().ToList();
 
-            List<Music> playlist = _api.GetPlaylistFilter().Playlist;
+            List<Music> playlist = _fileManager.Import<PlaylistFilter>(DefaultPath).Playlist;
             PlaylistItems = new BindableCollection<Music>(playlist);
             SearchResult = new BindableCollection<Music>();
             TitleSuggestions = new BindableCollection<string>();
@@ -55,7 +60,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         protected override void Publish()
         {
             var filter = new PlaylistFilter() { Playlist = PlaylistItems.ToList() };
-            _api.SetPlaylistFilter(filter);
+            //_api.SetPlaylistFilter(filter);
             _eventAggregator.PublishOnUIThreadAsync(filter);
         }
 
@@ -86,8 +91,8 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                var concat = _api.GetPlaylist(dialog.FileName).Playlist;
-                PlaylistItems.AddRange(concat);
+                //var concat = _api.GetPlaylist(dialog.FileName).Playlist;
+                //PlaylistItems.AddRange(concat);
             }
 
             Publish();
@@ -114,7 +119,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 {
                     Playlist = PlaylistItems.ToList(),
                 };
-                _api.SetPlaylist(selectiveFilter, dialog.FileName);
+                //_api.SetPlaylist(selectiveFilter, dialog.FileName);
             }
         }
         public void LoadItems()
@@ -134,9 +139,9 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                List<Music> playlist = _api.GetPlaylist(dialog.FileName).Playlist;
-                PlaylistItems.Clear();
-                PlaylistItems.AddRange(playlist);
+                //List<Music> playlist = _api.GetPlaylist(dialog.FileName).Playlist;
+                //PlaylistItems.Clear();
+                //PlaylistItems.AddRange(playlist);
             }
 
             Publish();

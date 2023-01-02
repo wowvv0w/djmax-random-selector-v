@@ -1,32 +1,37 @@
 ﻿using Caliburn.Micro;
+using Dmrsv.Data;
 using Dmrsv.Data.Context.Schema;
 using Dmrsv.Data.Controller;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
     public class QueryFilterViewModel : FilterBaseViewModel
     {
+        private const string DefaultPath = @"Data\CurrentFilter.json";
+
         private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
-        private readonly FavoriteViewModel _favoriteViewModel;
-        private readonly FilterApi _api;
+        private readonly IFileManager _fileManager;
+        //private readonly FavoriteViewModel _favoriteViewModel;
 
         private QueryFilter _filter;
 
-        public QueryFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager)
+        public QueryFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, IFileManager fileManager)
         {
             _eventAggregator = eventAggregator;
             _windowManager = windowManager;
-            _api = new FilterApi();
+            _fileManager = fileManager;
 
-            _filter = _api.GetQueryFilter();
-            _favoriteViewModel = new FavoriteViewModel();
-            for(int i = 0; i < 16; i++)
+            _filter = _fileManager.Import<QueryFilter>(DefaultPath);
+
+            for (int i = 0; i < 16; i++)
             {
                 // DO NOT use index 0
                 LevelIndicators.Add(new LevelIndicator());
@@ -40,7 +45,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         protected override void Publish()
         {
-            _api.SetQueryFilter(_filter);
+            //_api.SetQueryFilter(_filter);
             _eventAggregator.PublishOnUIThreadAsync(_filter);
         }
 
@@ -65,7 +70,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             try
             {
-                _filter = _api.GetPreset(presetPath);
+                //_filter = _api.GetPreset(presetPath);
                 NotifyOfPropertyChange(string.Empty);
             }
             catch (FileNotFoundException)
@@ -231,8 +236,8 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             bool? result = dialog.ShowDialog();
 
-            if (result == true)
-                _api.SetPreset(_filter, dialog.FileName);
+            //if (result == true)
+                //_api.SetPreset(_filter, dialog.FileName);
         }
         public void LoadPreset()
         {
@@ -253,7 +258,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public async void OpenFavoriteEditor()
         {
-            bool? result = await _windowManager.ShowDialogAsync(_favoriteViewModel);
+            bool? result = await _windowManager.ShowDialogAsync(IoC.Get<FavoriteViewModel>());
             if (result == true)
             {
                 Publish();

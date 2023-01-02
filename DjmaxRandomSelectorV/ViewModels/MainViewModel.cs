@@ -9,34 +9,46 @@ using Dmrsv.Data.Context.Schema;
 using Dmrsv.Data.Controller;
 using Dmrsv.Data.Interfaces;
 using Dmrsv.Data.Enums;
+using Dmrsv.Data;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class MainViewModel : Conductor<object>.Collection.OneActive
+    public class MainViewModel : Conductor<object>.Collection.OneActive, IHandle<SelectorOption>
     {
         private const int ApplicationVersion = 151;
         private const string VersionsUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
 
-        //private readonly IEventAggregator _eventAggregator;
+        private readonly IEventAggregator _eventAggregator;
 
-        public FilterBaseViewModel FilterPanel { get; }
+        //private FilterBaseViewModel _filterPanel;
+        //public FilterBaseViewModel FilterPanel
+        //{
+        //    get => _filterPanel;
+        //    set
+        //    {
+        //        _filterPanel = value;
+        //        NotifyOfPropertyChange(nameof(FilterPanel));
+        //    }
+        //}
 
-        public MainViewModel()
+        public MainViewModel(IEventAggregator eventAggregator)
         {
-            //_eventAggregator = new EventAggregator();
-            //_eventAggregator.SubscribeOnUIThread(this);
-
+            _eventAggregator = eventAggregator;
+            _eventAggregator.SubscribeOnUIThread(this);
             //CheckUpdates();
-            FilterPanel = IoC.Get<QueryFilterViewModel>();
-            FilterPanel.DisplayName = "FILTER";
+            var type = GetFilterPanelType(IoC.Get<Configuration>().FilterType);
+            ActivateItemAsync(IoC.GetInstance(type, null));
+            ActivateItemAsync(IoC.Get<HistoryViewModel>());
+            ChangeActiveItemAsync(Items[0], false);
         }
 
-        protected override void OnViewLoaded(object view)
-        {
-            ActivateItemAsync(FilterPanel);
-            ActivateItemAsync(IoC.Get<HistoryViewModel>());
-            ChangeActiveItemAsync(FilterPanel, false);
-        }
+        //protected override void OnViewLoaded(object view)
+        //{
+        //    var type = GetFilterPanelType(IoC.Get<Configuration>().FilterType);
+        //    ActivateItemAsync(IoC.GetInstance(type, null));
+        //    ActivateItemAsync(IoC.Get<HistoryViewModel>());
+        //    ChangeActiveItemAsync(Items[0], false);
+        //}
 
         private void CheckUpdates()
         {
@@ -85,29 +97,30 @@ namespace DjmaxRandomSelectorV.ViewModels
         //    _selector.Handle(message);
         //    return Task.CompletedTask;
         //}
-        //public Task HandleAsync(SelectorOption message, CancellationToken cancellationToken)
-        //{
-        //    _selector.Handle(message);
-        //    ChangeFilterView(message.FilterType);
-        //    return Task.CompletedTask;
-        //}
-
-        private void ChangeFilterView(FilterType filterType)
+        public Task HandleAsync(SelectorOption message, CancellationToken cancellationToken)
         {
-            SaveFilter(filterType);
-            //FilterViewModel = filterType switch
-            //{
-            //    FilterType.Query => new QueryFilterViewModel(_eventAggregator, _windowManager),
-            //    FilterType.Playlist => new PlaylistFilterViewModel(_eventAggregator),
-            //    _ => throw new NotSupportedException(),
-            //};
+            var type = GetFilterPanelType(message.FilterType);
+            if (type != Items[0].GetType())
+            {
+                DeactivateItemAsync(Items[0], true, cancellationToken);
+                Items.Insert(0, IoC.GetInstance(type, null));
+                ActivateItemAsync(Items[0], cancellationToken);
+            }
+            return Task.CompletedTask;
         }
+
+        private Type GetFilterPanelType(FilterType filterType) => filterType switch
+        {
+            FilterType.Query => typeof(QueryFilterViewModel),
+            FilterType.Playlist => typeof(PlaylistFilterViewModel),
+            _ => throw new NotSupportedException(),
+        };
 
         //protected override void OnViewLoaded(object view)
         //{
         //    var window = view as Window;
 
-        
+
 
         //    SetPosition(window);
         //}
@@ -123,16 +136,16 @@ namespace DjmaxRandomSelectorV.ViewModels
         //    api.SaveConfig();
         //}
 
-        private void SaveFilter(FilterType filterType)
-        {
-            var api = new FilterApi();
-            if (filterType == FilterType.Query)
-                api.SaveQueryFilter();
-            else if (filterType == FilterType.Playlist)
-                api.SavePlaylistFilter();
-            else
-                throw new NotSupportedException();
-        }
+        //private void SaveFilter(FilterType filterType)
+        //{
+        //    var api = new FilterApi();
+        //    if (filterType == FilterType.Query)
+        //        api.SaveQueryFilter();
+        //    else if (filterType == FilterType.Playlist)
+        //        api.SavePlaylistFilter();
+        //    else
+        //        throw new NotSupportedException();
+        //}
 
         //public void SetPosition(Window window)
         //{

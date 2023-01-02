@@ -9,27 +9,30 @@ using System.IO;
 using Dmrsv.Data.Context.Schema;
 using Dmrsv.Data.Controller;
 using Dmrsv.Data.Enums;
+using Dmrsv.Data;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
     public class SettingViewModel : Screen
     {
         private readonly IEventAggregator _eventAggregator;
+        private readonly IFileManager _fileManager;
         
         private bool _isPlaylist;
         private int _inputInterval;
         private bool _savesExclusion;
         private List<string> _ownedDlcs;
 
-        public SettingViewModel(IEventAggregator eventAggregator)
+        public SettingViewModel(IEventAggregator eventAggregator, IFileManager fileManager)
         {
             _eventAggregator = eventAggregator;
-            var selectorOption = new OptionApi().GetSelectorOption();
+            _fileManager = fileManager;
 
-            _isPlaylist = selectorOption.FilterType == FilterType.Playlist;
-            _inputInterval = selectorOption.InputInterval;
-            _savesExclusion = selectorOption.SavesExclusion;
-            _ownedDlcs = selectorOption.OwnedDlcs.ConvertAll(x => x);
+            var config = IoC.Get<Configuration>();
+            _isPlaylist = config.FilterType == FilterType.Playlist;
+            _inputInterval = config.InputDelay;
+            _savesExclusion = config.SavesRecents;
+            _ownedDlcs = config.OwnedDlcs.ConvertAll(x => x);
 
             UpdateInputDelayText();
         }
@@ -104,7 +107,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 SavesExclusion = _savesExclusion,
                 OwnedDlcs = _ownedDlcs,
             };
-            new OptionApi().SetSelectorOption(selectorOption);
+            //new OptionApi().SetSelectorOption(selectorOption);
             _eventAggregator.PublishOnUIThreadAsync(selectorOption);
             TryCloseAsync(true);
         }

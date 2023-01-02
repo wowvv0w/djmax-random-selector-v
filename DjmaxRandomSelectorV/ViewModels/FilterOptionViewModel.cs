@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Dmrsv.Data;
 using Dmrsv.Data.Context.Schema;
 using Dmrsv.Data.Controller;
 using Dmrsv.Data.Enums;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class FilterOptionViewModel : Screen
+    public class FilterOptionViewModel : Conductor<object>
     {
         private const string OFF = "OFF";
         private const string FREESTYLE = "FREESTYLE";
@@ -23,17 +24,24 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private readonly IEventAggregator _eventAggregator;
         private readonly FilterOption _filterOption;
-        private readonly OptionApi _api;
+        //private readonly OptionApi _api;
 
-        public FilterOptionIndicatorViewModel FilterOptionIndicator { get; set; }
+        public object FilterOptionIndicator { get => ActiveItem; }
 
         public FilterOptionViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            _api = new OptionApi();
-            _filterOption = _api.GetFilterOption();
+            //_api = new OptionApi();
+            var config = IoC.Get<Configuration>();
+            _filterOption = new FilterOption()
+            {
+                Except = config.RecentsCount,
+                Mode = config.Mode,
+                Aider = config.Aider,
+                Level = config.Level,
+            };
 
-            FilterOptionIndicator = IoC.Get<FilterOptionIndicatorViewModel>();
+            ActivateItemAsync(IoC.Get<FilterOptionIndicatorViewModel>());
 
             SetAddonText(_filterOption.Mode);
             SetAddonText(_filterOption.Aider);
@@ -44,7 +52,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private void Publish()
         {
-            _api.SetFilterOption(_filterOption);
+            //_api.SetFilterOption(_filterOption);
             _eventAggregator.PublishOnUIThreadAsync(_filterOption);
         }
 
