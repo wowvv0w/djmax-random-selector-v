@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Dmrsv.RandomSelector.Assistants
 {
-    public class Executor
+    public class ExecutionHelper
     {
         private const int WM_HOTKEY = 0x0312;
 
@@ -18,7 +18,7 @@ namespace Dmrsv.RandomSelector.Assistants
         public event MessageEventHandler? ExecutionFailed;
         public event MusicEventHandler? ExecutionComplete;
 
-        public Executor(Func<bool> canExecute, Func<Music> execute)
+        public ExecutionHelper(Func<bool> canExecute, Func<Music> execute)
         {
             _canExecute = canExecute;
             _execute = execute;

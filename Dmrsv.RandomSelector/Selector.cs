@@ -38,11 +38,11 @@ namespace Dmrsv.RandomSelector
         private ISifter? _sifter;
         private IProvider? _provider;
 
-        public Executor Starter { get; }
+        public ExecutionHelper Starter { get; }
 
         public Selector()
         {
-            Starter = new Executor(CanStart, Start);
+            Starter = new ExecutionHelper(CanStart, Start);
             UpdateTrackList(new OptionApi().GetSelectorOption().OwnedDlcs);
             _exclusions = new FilterApi().GetExtraFilter().Exclusions;
             _isUpdated = true;
