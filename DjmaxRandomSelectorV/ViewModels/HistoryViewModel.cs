@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
-using Dmrsv.Data.DataTypes;
+using Dmrsv.Data;
 using System;
 using System.Collections.Generic;
 using System.Text;

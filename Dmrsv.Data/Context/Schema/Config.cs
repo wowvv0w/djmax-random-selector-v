@@ -1,6 +1,4 @@
-﻿using Dmrsv.Data.Enums;
-
-namespace Dmrsv.Data.Context.Schema
+﻿namespace Dmrsv.Data.Context.Schema
 {
     public class Config
     {

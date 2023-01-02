@@ -1,7 +1,4 @@
-﻿using Dmrsv.Data.Enums;
-using Dmrsv.Data.DataTypes;
-using Dmrsv.Data.Context.Schema;
-using Dmrsv.Data.Interfaces;
+﻿using Dmrsv.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;

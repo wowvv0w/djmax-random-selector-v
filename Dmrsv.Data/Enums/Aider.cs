@@ -1,4 +1,4 @@
-﻿namespace Dmrsv.Data.Enums
+﻿namespace Dmrsv.Data
 {
     public enum Aider
     {

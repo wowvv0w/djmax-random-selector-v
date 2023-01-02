@@ -6,9 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
 using System.IO;
-using Dmrsv.Data.Context.Schema;
-using Dmrsv.Data.Controller;
-using Dmrsv.Data.Enums;
 using Dmrsv.Data;
 
 namespace DjmaxRandomSelectorV.ViewModels

@@ -1,4 +1,4 @@
-﻿namespace Dmrsv.Data.Interfaces
+﻿namespace Dmrsv.Data
 {
     public interface IFilter
     {

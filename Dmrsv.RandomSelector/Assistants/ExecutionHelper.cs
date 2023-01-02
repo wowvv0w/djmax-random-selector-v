@@ -1,4 +1,4 @@
-﻿using Dmrsv.Data.DataTypes;
+﻿using Dmrsv.Data;
 using System.Runtime.InteropServices;
 
 namespace Dmrsv.RandomSelector.Assistants

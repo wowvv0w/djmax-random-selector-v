@@ -1,7 +1,4 @@
-﻿using Dmrsv.Data.DataTypes;
-using Dmrsv.Data.Interfaces;
-
-namespace Dmrsv.Data.Context.Schema
+﻿namespace Dmrsv.Data
 {
     public class PlaylistFilter : IFilter
     {

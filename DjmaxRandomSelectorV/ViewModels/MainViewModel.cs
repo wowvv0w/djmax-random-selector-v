@@ -1,15 +1,11 @@
 ﻿using Caliburn.Micro;
+using Dmrsv.Data;
 using System;
 using System.IO;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Net.Http;
 using System.Threading;
-using Dmrsv.Data.Context.Schema;
-using Dmrsv.Data.Controller;
-using Dmrsv.Data.Interfaces;
-using Dmrsv.Data.Enums;
-using Dmrsv.Data;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {

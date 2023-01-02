@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Dmrsv.Data.DataTypes
+﻿namespace Dmrsv.Data
 {
     public class Track
     {

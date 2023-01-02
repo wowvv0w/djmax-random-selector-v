@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
-using Dmrsv.Data.Context.Schema;
-using Dmrsv.Data.Enums;
+using Dmrsv.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
