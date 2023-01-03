@@ -1,7 +1,8 @@
 ﻿using Dmrsv.Data;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 
-namespace Dmrsv.RandomSelector.Assistants
+namespace Dmrsv.RandomSelector
 {
     public class ExecutionHelper
     {
@@ -13,10 +14,10 @@ namespace Dmrsv.RandomSelector.Assistants
         private readonly Func<bool> _canExecute;
         private readonly Func<Music> _execute;
 
-        public delegate void MessageEventHandler(string e);
-        public delegate void MusicEventHandler(Music e);
-        public event MessageEventHandler? ExecutionFailed;
-        public event MusicEventHandler? ExecutionComplete;
+        //public delegate void MessageEventHandler(string e);
+        //public delegate void MusicEventHandler(Music e);
+        //public event MessageEventHandler? ExecutionFailed;
+        //public event MusicEventHandler? ExecutionComplete;
 
         public ExecutionHelper(Func<bool> canExecute, Func<Music> execute)
         {
@@ -31,9 +32,6 @@ namespace Dmrsv.RandomSelector.Assistants
             RegisterHotKey(hWnd, id, fsModifiers, vk);
         }
 
-        [DllImport("user32.dll")]
-        private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
-
         public IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             if (msg == WM_HOTKEY && wParam.ToInt32() == _hotkeyID)
@@ -41,30 +39,24 @@ namespace Dmrsv.RandomSelector.Assistants
                 int vkey = (int)lParam >> 16 & 0xFFFF;
                 if (vkey == _keyCode)
                 {
-                    try
+                    //try
+                    //{
+                    if (_canExecute.Invoke())
                     {
-                        if (_canExecute.Invoke())
-                        {
-                            var task = Task.Run(() => _execute.Invoke());
-                            task.ContinueWith(t =>
-                            {
-                                var ex = t.Exception!.InnerException!;
-                                ExecutionFailed?.Invoke(ex.Message);
-                            }, TaskContinuationOptions.OnlyOnFaulted);
-                            task.ContinueWith(t =>
-                            {
-                                ExecutionComplete?.Invoke(t.Result);
-                            }, TaskContinuationOptions.OnlyOnRanToCompletion);
-                        }
+                        var task = Task.Run(() => _execute.Invoke());
                     }
-                    catch (Exception ex)
-                    {
-                        ExecutionFailed?.Invoke(ex.Message);
-                    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    ExecutionFailed?.Invoke(ex.Message);
+                    //}
                 }
                 handled = true;
             }
             return IntPtr.Zero;
         }
+
+        [DllImport("user32.dll")]
+        private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
     }
 }
