@@ -1,7 +1,5 @@
 ﻿using Caliburn.Micro;
 using Dmrsv.Data;
-using Dmrsv.Data.Context.Schema;
-using Dmrsv.Data.Controller;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -15,20 +13,15 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class QueryFilterViewModel : FilterBaseViewModel
     {
         private const string DefaultPath = @"Data\CurrentFilter.json";
-
-        private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
         private readonly IFileManager _fileManager;
-        //private readonly FavoriteViewModel _favoriteViewModel;
 
         private QueryFilter _filter;
 
-        public QueryFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, IFileManager fileManager)
+        public QueryFilterViewModel(IWindowManager windowManager, IFileManager fileManager)
         {
-            _eventAggregator = eventAggregator;
             _windowManager = windowManager;
             _fileManager = fileManager;
-
             _filter = _fileManager.Import<QueryFilter>(DefaultPath);
 
             for (int i = 0; i < 16; i++)
@@ -39,14 +32,14 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             UpdateLevelIndicators();
             UpdateScLevelIndicators();
-
-            Publish();
         }
 
-        protected override void Publish()
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-            //_api.SetQueryFilter(_filter);
-            _eventAggregator.PublishOnUIThreadAsync(_filter);
+            if (close)
+                _fileManager.Export(_filter, DefaultPath);
+
+            return Task.CompletedTask;
         }
 
         #region Filter Updater
@@ -64,13 +57,12 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 filter.Remove(value);
             }
-            Publish();
         }
         public void ReloadFilter(string presetPath)
         {
             try
             {
-                //_filter = _api.GetPreset(presetPath);
+                _filter = _fileManager.Import<QueryFilter>(presetPath);
                 NotifyOfPropertyChange(string.Empty);
             }
             catch (FileNotFoundException)
@@ -78,7 +70,6 @@ namespace DjmaxRandomSelectorV.ViewModels
                 MessageBox.Show($"Cannot apply the preset.",
                                 "Filter Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            Publish();
         }
         public void SelectAllCategories()
         {
@@ -89,14 +80,12 @@ namespace DjmaxRandomSelectorV.ViewModels
             });
             _filter.IncludesFavorite = true;
             NotifyOfPropertyChange(string.Empty);
-            Publish();
         }
         public void DeselectAllCategories()
         {
             _filter.Categories.Clear();
             _filter.IncludesFavorite = false;
             NotifyOfPropertyChange(string.Empty);
-            Publish();
         }
         #endregion
 
@@ -106,7 +95,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (LevelMin < 15 && LevelMin < LevelMax)
             {
                 LevelMin++;
-                Publish();
             }
         }
         public void DecreaseLevelMin()
@@ -114,7 +102,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (LevelMin > 1)
             {
                 LevelMin--;
-                Publish();
             }
         }
         public void IncreaseLevelMax()
@@ -122,7 +109,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (LevelMax < 15)
             {
                 LevelMax++;
-                Publish();
             }
         }
         public void DecreaseLevelMax()
@@ -130,7 +116,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (LevelMax > 1 && LevelMax > LevelMin)
             {
                 LevelMax--;
-                Publish();
             }
         }
         public void IncreaseScLevelMin()
@@ -138,7 +123,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (ScLevelMin < 15 && ScLevelMin < ScLevelMax)
             {
                 ScLevelMin++;
-                Publish();
             }
         }
         public void DecreaseScLevelMin()
@@ -146,7 +130,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (ScLevelMin > 1)
             {
                 ScLevelMin--;
-                Publish();
             }
         }
         public void IncreaseScLevelMax()
@@ -154,7 +137,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (ScLevelMax < 15)
             {
                 ScLevelMax++;
-                Publish();
             }
         }
         public void DecreaseScLevelMax()
@@ -162,7 +144,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (ScLevelMax > 1 && ScLevelMax > ScLevelMin)
             {
                 ScLevelMax--;
-                Publish();
             }
         }
         #endregion
@@ -236,8 +217,8 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             bool? result = dialog.ShowDialog();
 
-            //if (result == true)
-                //_api.SetPreset(_filter, dialog.FileName);
+            if (result == true)
+                _fileManager.Export(_filter, dialog.FileName);
         }
         public void LoadPreset()
         {
@@ -261,7 +242,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             bool? result = await _windowManager.ShowDialogAsync(IoC.Get<FavoriteViewModel>());
             if (result == true)
             {
-                Publish();
             }
         }
         #endregion

@@ -32,7 +32,7 @@ namespace DjmaxRandomSelectorV
 
         protected override void OnExit(object sender, EventArgs e)
         {
-            
+            new FileManager().Export(_configuration, ConfigPath);
         }
 
         protected override void Configure()

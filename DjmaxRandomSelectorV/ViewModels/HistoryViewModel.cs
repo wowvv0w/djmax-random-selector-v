@@ -26,15 +26,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             DisplayName = "HISTORY";
         }
 
-        private void UpdateHistory(HistoryItem historyItem)
-        {
-            History.Insert(0, historyItem);
-            if (History.Count > 8)
-            {
-                History.RemoveAt(8);
-            }
-        }
-
         public Task HandleAsync(Music message, CancellationToken cancellationToken)
         {
             _number++;
@@ -46,7 +37,13 @@ namespace DjmaxRandomSelectorV.ViewModels
                 Level = message.Level,
                 Time = DateTime.Now.ToString("HH:mm:ss"),
             };
-            UpdateHistory(historyItem);
+
+            History.Insert(0, historyItem);
+            if (History.Count > 8)
+            {
+                History.RemoveAt(8);
+            }
+
             return Task.CompletedTask;
         }
     }

@@ -1,8 +1,10 @@
 ﻿using Caliburn.Micro;
+using Dmrsv.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DjmaxRandomSelectorV.ViewModels
@@ -12,10 +14,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         public FilterBaseViewModel()
         {
             DisplayName = "FILTER";
-        }
-
-        protected virtual void Publish()
-        {
         }
     }
 }

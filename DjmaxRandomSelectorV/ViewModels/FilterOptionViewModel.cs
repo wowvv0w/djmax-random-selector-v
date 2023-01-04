@@ -21,14 +21,12 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private readonly IEventAggregator _eventAggregator;
         private readonly FilterOption _filterOption;
-        //private readonly OptionApi _api;
 
         public object FilterOptionIndicator { get => ActiveItem; }
 
         public FilterOptionViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            //_api = new OptionApi();
             var config = IoC.Get<Configuration>();
             _filterOption = new FilterOption()
             {
@@ -39,17 +37,15 @@ namespace DjmaxRandomSelectorV.ViewModels
             };
 
             ActivateItemAsync(IoC.Get<FilterOptionIndicatorViewModel>());
+            Publish();
 
             SetAddonText(_filterOption.Mode);
             SetAddonText(_filterOption.Aider);
             SetAddonText(_filterOption.Level);
-
-            Publish();
         }
 
         private void Publish()
         {
-            //_api.SetFilterOption(_filterOption);
             _eventAggregator.PublishOnUIThreadAsync(_filterOption);
         }
 

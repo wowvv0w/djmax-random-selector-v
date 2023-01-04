@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Dmrsv.Data;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
 using System.IO;
-using Dmrsv.Data;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
