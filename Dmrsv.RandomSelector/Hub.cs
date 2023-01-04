@@ -6,44 +6,55 @@ using System.Threading.Tasks;
 
 namespace Dmrsv.RandomSelector
 {
-    // 플레이스토어마냥
     public interface IHub
     {
-        bool TryRegister(Type type, object obj);
-        object? Request(Type type);
+        void Register(object sender, Type type, object obj, string? key);
+        object? Request(Type type, string? key);
         public IEnumerable<object?> RequestAll();
     }
 
     public class Hub : IHub
     {
-        private readonly Dictionary<Type, object?> _products = new();
+        private readonly List<Product> _products = new();
 
-        public bool HasUpdate { get; private set; }
-
-        public bool TryRegister(Type type, object obj)
+        public void Register(object sender, Type type, object obj, string? key = null)
         {
-            return _products.TryAdd(type, obj);
+            var id = new Identifier(type, key);
+            if (_products.Any(x => x.Id == id && x.Sender != sender))
+                throw new ArgumentException("The identifier already exists.");
+
+            var product = new Product { Id = id, Sender = sender, Content = obj };
+            int index = _products.FindIndex(x => x.Id == id);
+            if (index == -1)
+                _products.Add(product);
+            else
+                _products[index] = product;
         }
 
-        public void NotifyUpdate()
+        public object? Request(Type type, string? key = null)
         {
-            HasUpdate = true;
-        }
-
-        public object? Request(Type type)
-        {
-            var obj = _products.GetValueOrDefault(type, null);
+            var obj = _products.FirstOrDefault(x => x!.Id.Type == type && x.Id.Key == key, null);
             return obj;
         }
 
-        public T? Request<T>()
+        public T? Request<T>(string? key = null)
         {
-            return (T?)Request(typeof(T));
+            return (T?)Request(typeof(T), key);
         }
 
         public IEnumerable<object?> RequestAll()
         {
-            return _products.Values.Select(x => x);
+            return _products.Select(x => x.Content);
+        }
+
+        private record Identifier(Type Type, string? Key);
+
+        private class Product
+        {
+            public Identifier Id { get; init; } = default!;
+            public object Sender { get; init; } = default!;
+            public object Content { get; init; } = default!;
+            public bool HasUpdate { get; set; } = true;
         }
     }
 }
