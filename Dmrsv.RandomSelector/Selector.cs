@@ -13,10 +13,28 @@ using Dmrsv.RandomSelector.Providers;
 
 namespace Dmrsv.RandomSelector
 {
-    public class Selector
+    public class Selector : ISelector
     {
-        private readonly IHub _hub;
+        public virtual Music Select(IEnumerable<Music> musicList)
+        {
+            if (!musicList.Any())
+            {
+                throw new ArgumentException("musicList is empty.", nameof(musicList));
+            }
+            if (musicList == null)
+            {
+                throw new ArgumentNullException(nameof(musicList));
+            }
 
+            var random = new Random();
+            int index = random.Next(musicList.Count() - 1);
+            return musicList.ElementAt(index);
+        }
+    }
+
+    [Obsolete]
+    public class Selector2
+    {
         private List<Track> _tracks;
         private List<Music> _musics;
         private List<string> _titles;
@@ -33,9 +51,8 @@ namespace Dmrsv.RandomSelector
         private ISifter? _sifter;
         private IProvider? _provider;
 
-        public Selector(IHub hub)
+        public Selector2()
         {
-            _hub = hub;
             _tracks = new List<Track>();
             _musics = new List<Music>();
             _titles = new List<string>();
