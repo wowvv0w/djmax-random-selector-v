@@ -1,6 +1,4 @@
-﻿using Dmrsv.Data;
-
-namespace Dmrsv.RandomSelector
+﻿namespace Dmrsv.RandomSelector
 {
     public interface ISelector
     {

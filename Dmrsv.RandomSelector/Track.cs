@@ -1,12 +1,10 @@
-﻿namespace Dmrsv.Data
+﻿namespace Dmrsv.RandomSelector
 {
-    [Obsolete]
-    public class Track
+    public record Track
     {
-        public string Title { get; set; }
-        public string Category { get; set; }
-        public Dictionary<string, int> Patterns { get; set; }
-            = new Dictionary<string, int>();
+        public string Title { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
+        public Dictionary<string, int> Patterns { get; set; } = new();
 
         public IEnumerable<Music> GetMusicList()
         {
@@ -15,7 +13,7 @@
                             {
                                 Title = Title,
                                 Style = p.Key,
-                                Level = p.Value.ToString()
+                                Level = p.Value
                             };
 
             return musicList;
