@@ -2,9 +2,9 @@
 {
     public record Track
     {
-        public string Title { get; set; } = string.Empty;
-        public string Category { get; set; } = string.Empty;
-        public Dictionary<string, int> Patterns { get; set; } = new();
+        public string Title { get; init; } = string.Empty;
+        public string Category { get; init; } = string.Empty;
+        public Dictionary<string, int> Patterns { get; init; } = new();
 
         public IEnumerable<Music> GetMusicList()
         {
@@ -12,7 +12,8 @@
                             select new Music()
                             {
                                 Title = Title,
-                                Style = p.Key,
+                                ButtonTunes = p.Key[..2],
+                                Difficulty = p.Key[2..4],
                                 Level = p.Value
                             };
 

@@ -2,8 +2,9 @@
 {
     public record Music
     {
-        public string Title { get; set; } = string.Empty;
-        public string Style { get; set; } = string.Empty;
-        public int Level { get; set; } = default;
+        public string Title { get; init; } = string.Empty;
+        public string ButtonTunes { get; init; } = string.Empty;
+        public string Difficulty { get; init; } = string.Empty;
+        public int Level { get; init; } = default;
     }
 }
