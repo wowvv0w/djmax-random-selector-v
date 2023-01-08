@@ -1,5 +1,6 @@
 ﻿namespace Dmrsv.Data
 {
+    [Obsolete]
     public interface ISifter
     {
         void ChangeMethod(FilterOption filterOption);

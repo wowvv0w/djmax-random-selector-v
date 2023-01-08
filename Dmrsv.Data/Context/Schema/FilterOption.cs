@@ -1,5 +1,6 @@
 ﻿namespace Dmrsv.Data
 {
+    [Obsolete]
     public class FilterOption
     {
         public int Except { get; set; } = 5;
