@@ -20,7 +20,7 @@ namespace Dmrsv.RandomSelector
             _instance = new FilterHandler<QueryFilter>();
         }
 
-        public void Build(FilterOption option)
+        public void Build(FilterHandlerOption option)
         {
             var trackPredicate = (Track t, QueryFilter filter) =>
             {

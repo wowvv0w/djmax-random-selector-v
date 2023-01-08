@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Dmrsv.RandomSelector
 {
+    public record FilterHandlerOption(MusicForm Mode, LevelPreference Level);
+
     public interface IFilterHandlerBuilder
     {
         void Reset();
-        void Build(FilterOption option);
+        void Build(FilterHandlerOption option);
     }
 }
