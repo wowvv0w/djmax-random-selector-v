@@ -15,15 +15,11 @@ namespace Dmrsv.RandomSelector
 {
     public class Selector : ISelector
     {
-        public virtual Music Select(IEnumerable<Music> musicList)
+        public virtual Music? Select(IEnumerable<Music> musicList)
         {
-            if (!musicList.Any())
+            if (!musicList.Any() || musicList == null)
             {
-                throw new ArgumentException("musicList is empty.", nameof(musicList));
-            }
-            if (musicList == null)
-            {
-                throw new ArgumentNullException(nameof(musicList));
+                return null;
             }
 
             var random = new Random();
@@ -173,18 +169,18 @@ namespace Dmrsv.RandomSelector
 
         public void Handle(FilterOption message)
         {
-            _maxExclusionCount = message.Except;
-            _sifter?.ChangeMethod(message);
-            ChangeProvider(message.Mode, message.Aider);
+            _maxExclusionCount = message.Except; // selector
+            _sifter?.ChangeMethod(message); // filterhandlerbuilder
+            ChangeProvider(message.Mode, message.Aider); // locator
             _canExecuteWithoutGame = message.Aider == Aider.Observe;
             _isUpdated = true;
         }
 
         public void Handle(SelectorOption message)
         {
-            ChangeSifter(message.FilterType);
-            _inputInterval = message.InputInterval;
-            UpdateTracks(message.OwnedDlcs);
+            ChangeSifter(message.FilterType); // filterhandler
+            _inputInterval = message.InputInterval; // locator
+            UpdateTracks(message.OwnedDlcs); // track
             _isUpdated = true;
         }
 

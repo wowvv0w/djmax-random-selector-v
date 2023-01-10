@@ -25,7 +25,7 @@
             RecentMax = recentMax;
         }
 
-        public override Music Select(IEnumerable<Music> musicList)
+        public override Music? Select(IEnumerable<Music> musicList)
         {
             var recentExcluded = from music in musicList
                                  where !_recent.Contains(music.Title)
@@ -33,10 +33,13 @@
 
             var selected = base.Select(recentExcluded);
 
-            _recent.Enqueue(selected.Title);
-            if (_recent.Count > RecentMax)
+            if (selected is not null)
             {
-                _recent.Dequeue();
+                _recent.Enqueue(selected.Title);
+                if (_recent.Count > RecentMax)
+                {
+                    _recent.Dequeue();
+                }
             }
 
             return selected;
