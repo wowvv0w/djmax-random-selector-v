@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Dmrsv.RandomSelector;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dmrsv.Data
+namespace DjmaxRandomSelectorV
 {
     public class Configuration
     {
         public int RecentsCount { get; set; } = 5;
-        public Mode Mode { get; set; } = Mode.Freestyle;
-        public Aider Aider { get; set; } = Aider.Off;
-        public Level Level { get; set; } = Level.Off;
+        public MusicForm Mode { get; set; } = MusicForm.Default;
+        public InputMethod Aider { get; set; } = InputMethod.Default;
+        public LevelPreference Level { get; set; } = LevelPreference.None;
         public FilterType FilterType { get; set; } = FilterType.Query;
         public int InputDelay { get; set; } = 30;
         public bool SavesRecents { get; set; } = false;
