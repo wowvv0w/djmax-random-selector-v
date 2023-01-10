@@ -2,11 +2,13 @@
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
-namespace Dmrsv.RandomSelector.Providers
+namespace Dmrsv.RandomSelector
 {
-    public class Locator : IProvider
+    public class Locator
     {
-        private readonly bool _startsAutomatically;
+        public bool StartsAutomatically { get; set; }
+        public int InputInterval { get; set; }
+
         private static bool _isKeyMapInitialized = false;
         private static Dictionary<string, ushort> KeyMap = new Dictionary<string, ushort>
         {
@@ -54,9 +56,10 @@ namespace Dmrsv.RandomSelector.Providers
             {"pagedown", 0xD1 + 1024},
         };
 
-        public Locator(bool startsAutomatically)
+        public Locator(bool startsAutomatically = false, int inputInterval = 30)
         {
-            _startsAutomatically = startsAutomatically;
+            StartsAutomatically = startsAutomatically;
+            InputInterval = inputInterval;
             if (!_isKeyMapInitialized)
             {
                 KeyMap.Add("left", (ushort)MapVirtualKey(0x25, 0));
@@ -67,7 +70,7 @@ namespace Dmrsv.RandomSelector.Providers
             }
         }
 
-        public void Provide(Music selectedMusic, List<Track> trackList, int delay)
+        public void Provide(Music selectedMusic, List<Track> trackList)
         {
             // Check if title starts with alphabet or not
             char initial = selectedMusic.Title[0];
@@ -121,7 +124,9 @@ namespace Dmrsv.RandomSelector.Providers
 
             int inputRight;
             char inputButton;
-            if (selectedMusic.Style.Equals("FREE"))
+            string buttonTunes = selectedMusic.ButtonTunes;
+            string difficulty = selectedMusic.Difficulty;
+            if (string.IsNullOrEmpty(buttonTunes) && string.IsNullOrEmpty(difficulty))
             {
                 inputRight = 0;
                 inputButton = '\0';
@@ -129,14 +134,13 @@ namespace Dmrsv.RandomSelector.Providers
             else
             {
                 Track? sameMusic = trackList.Find(x => x.Title.Equals(selectedMusic.Title));
-                string selectedButton = selectedMusic.Style.Substring(0, 2);
                 var difficulties = new List<string> { "NM", "HD", "MX", "SC" };
-                int a = difficulties.FindIndex(x => x.Equals(selectedMusic.Style.Substring(2, 2)));
+                int a = difficulties.FindIndex(x => x.Equals(difficulty));
                 var styles = new List<string>();
 
                 for (int i = 0; i <= a; i++)
                 {
-                    styles.Add($"{selectedButton}{difficulties[i]}");
+                    styles.Add($"{buttonTunes}{difficulties[i]}");
                 }
                 var list2 = from pattern in sameMusic!.Patterns
                             where styles.Contains(pattern.Key)
@@ -144,16 +148,16 @@ namespace Dmrsv.RandomSelector.Providers
                 int subCount = list2.Count(x => x == 0);
                 inputRight = a - subCount;
 
-                inputButton = selectedButton[0];
+                inputButton = buttonTunes[0];
             }
 
             // Input
             void Input(ushort key, bool isArrowKey = false)
             {
                 KeyDown(key, isArrowKey);
-                Thread.Sleep(delay);
+                Thread.Sleep(InputInterval);
                 KeyUp(key, isArrowKey);
-                Thread.Sleep(delay);
+                Thread.Sleep(InputInterval);
             }
 
             string direction = isForward ? "down" : "up";
@@ -178,9 +182,9 @@ namespace Dmrsv.RandomSelector.Providers
                 }
             }
 
-            if (_startsAutomatically)
+            if (StartsAutomatically)
             {
-                int startDelay = 800 - delay * (inputRight + 1);
+                int startDelay = 800 - InputInterval * (inputRight + 1);
                 startDelay = startDelay < 0 ? 0 : startDelay;
                 Thread.Sleep(startDelay);
                 Input(KeyMap["f5"]);
