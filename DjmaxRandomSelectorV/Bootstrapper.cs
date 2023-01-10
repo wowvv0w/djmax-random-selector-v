@@ -18,7 +18,7 @@ namespace DjmaxRandomSelectorV
 
         private readonly SimpleContainer _container = new SimpleContainer();
         private readonly Configuration _configuration = new FileManager().Import<Configuration>(ConfigPath);
-        private readonly Selector _selector = new Selector();
+        private readonly RandomSelector _rs = new RandomSelector();
 
         public Bootstrapper()
         {
@@ -39,7 +39,7 @@ namespace DjmaxRandomSelectorV
         {
             _container.Instance(_container);
             _container.Instance(_configuration);
-            _container.Instance(_selector);
+            _container.Instance(_rs);
 
             _container
                 .Singleton<IWindowManager, WindowManager>()
