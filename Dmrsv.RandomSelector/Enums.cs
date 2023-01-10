@@ -19,4 +19,10 @@
         Lowest,
         Highest
     }
+
+    public enum FilterType
+    {
+        Query,
+        Playlist
+    }
 }
