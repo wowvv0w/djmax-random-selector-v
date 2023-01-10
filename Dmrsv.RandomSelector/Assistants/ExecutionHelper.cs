@@ -12,17 +12,15 @@ namespace Dmrsv.RandomSelector
         private uint _keyCode;
 
         private readonly Func<bool> _canExecute;
-        private readonly Func<Music> _execute;
+        private readonly Action _execute;
 
-        //public delegate void MessageEventHandler(string e);
-        //public delegate void MusicEventHandler(Music e);
-        //public event MessageEventHandler? ExecutionFailed;
-        //public event MusicEventHandler? ExecutionComplete;
+        public bool IgnoreCanExecute { get; set; }
 
-        public ExecutionHelper(Func<bool> canExecute, Func<Music> execute)
+        public ExecutionHelper(Func<bool> canExecute, Action execute)
         {
             _canExecute = canExecute;
             _execute = execute;
+            IgnoreCanExecute = false;
         }
 
         public void AddHotkey(IntPtr hWnd, int id, uint fsModifiers, uint vk)
@@ -39,17 +37,10 @@ namespace Dmrsv.RandomSelector
                 int vkey = (int)lParam >> 16 & 0xFFFF;
                 if (vkey == _keyCode)
                 {
-                    //try
-                    //{
-                    if (_canExecute.Invoke())
+                    if (IgnoreCanExecute || _canExecute.Invoke())
                     {
                         var task = Task.Run(() => _execute.Invoke());
                     }
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    ExecutionFailed?.Invoke(ex.Message);
-                    //}
                 }
                 handled = true;
             }
