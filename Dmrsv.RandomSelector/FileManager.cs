@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Dmrsv.Data
+namespace Dmrsv.RandomSelector
 {
     public interface IFileManager
     {
