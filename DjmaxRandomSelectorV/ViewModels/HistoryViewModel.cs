@@ -1,40 +1,32 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
-using Dmrsv.Data;
+using Dmrsv.RandomSelector;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class HistoryViewModel : Screen, IHandle<Music>
+    public class HistoryViewModel : Screen
     {
-        private readonly IEventAggregator _eventAggregator;
-
         private int _number;
 
         public BindableCollection<HistoryItem> History { get; set; }
 
-        public HistoryViewModel(IEventAggregator eventAggregator)
+        public HistoryViewModel()
         {
-            _eventAggregator = eventAggregator;
-            _eventAggregator.SubscribeOnUIThread(this);
             _number = 0;
             History = new BindableCollection<HistoryItem>();
             DisplayName = "HISTORY";
         }
 
-        public Task HandleAsync(Music message, CancellationToken cancellationToken)
+        public void AddItem(Music music)
         {
             _number++;
             var historyItem = new HistoryItem()
             {
                 Number = _number,
-                Title = message.Title,
-                Style = message.Style,
-                Level = message.Level,
+                Title = music.Title,
+                Style = $"{music.ButtonTunes}{music.Difficulty}",
+                Level = music.Level.ToString(),
                 Time = DateTime.Now.ToString("HH:mm:ss"),
             };
 
@@ -43,8 +35,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 History.RemoveAt(8);
             }
-
-            return Task.CompletedTask;
         }
     }
 }

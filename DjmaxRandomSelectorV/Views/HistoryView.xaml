@@ -60,7 +60,6 @@
                             <ColumnDefinition Width="60"/>
                             <ColumnDefinition Width="120"/>
                         </Grid.ColumnDefinitions>
-                        
                         <TextBlock Text="{Binding Number}"/>
                         <TextBlock Text="{Binding Title}" Grid.Column="1" TextWrapping="Wrap"/>
                         <TextBlock Text="{Binding Style}" Grid.Column="2"/>
@@ -70,6 +69,5 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        
     </Grid>
 </UserControl>
