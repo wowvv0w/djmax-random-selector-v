@@ -7,13 +7,24 @@
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="480" d:DesignWidth="500">
-    <Grid Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="30"/>
+        </Grid.ColumnDefinitions>
         <Border Background="#DF221C15"
-                    BorderBrush="Gray"
-                    BorderThickness="2"
-                    Margin="-4,-4,0,-4">
+                BorderBrush="Gray"
+                BorderThickness="0 0 2 0"
+                Margin="-4 -4 0 -4"
+                Grid.RowSpan="3" Grid.ColumnSpan="3">
         </Border>
-        <StackPanel Margin="30,50">
+        <StackPanel Grid.Row="1" Grid.Column="1">
             <StackPanel.Resources>
                 <Style TargetType="Grid" BasedOn="{StaticResource SettingBar}"/>
                 <Style TargetType="TextBlock" BasedOn="{StaticResource SettingText}"/>
@@ -38,10 +49,10 @@
                 <TextBlock Text="EXCLUDE RECENT MUSICS"/>
                 <TextBlock Text="{Binding ElementName=ExceptCount, Path=Value}"
                            HorizontalAlignment="Right"
-                           Margin="0,0,10,0">
+                           Margin="0 0 10 0">
                 </TextBlock>
                 <Slider x:Name="ExceptCount"
-                        Margin="20,0"
+                        Margin="20 0"
                         Minimum="0"
                         Maximum="30"/>
             </Grid>
@@ -61,7 +72,6 @@
                     <Button cal:Message.Attach="SwitchMode"
                             Style="{StaticResource LeftArrowButton}"/>
                     <TextBlock x:Name="ModeText"
-                               Text="FREESTYLE"
                                Foreground="White"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
@@ -84,15 +94,14 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="30"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="PrevAider"
+                    <Button cal:Message.Attach="SwitchAider('-1')"
                             Style="{StaticResource LeftArrowButton}"/>
                     <TextBlock x:Name="AiderText"
-                               Text="OFF"
                                Foreground="White"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Grid.Column="1"/>
-                    <Button x:Name="NextAider"
+                    <Button cal:Message.Attach="SwitchAider('1')"
                             Grid.Column="2"
                             Style="{StaticResource RightArrowButton}"/>
                 </Grid>
@@ -110,15 +119,14 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="30"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="PrevLevel"
+                    <Button cal:Message.Attach="SwitchLevel('-1')"
                             Style="{StaticResource LeftArrowButton}"/>
                     <TextBlock x:Name="LevelText"
-                               Text="OFF"
                                Foreground="White"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Grid.Column="1"/>
-                    <Button x:Name="NextLevel"
+                    <Button cal:Message.Attach="SwitchLevel('1')"
                             Grid.Column="2"
                             Style="{StaticResource RightArrowButton}"/>
                 </Grid>
