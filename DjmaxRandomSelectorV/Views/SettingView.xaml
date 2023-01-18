@@ -23,16 +23,14 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
-                <RowDefinition Height="50*"/>
-                <RowDefinition Height="11*"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="10"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="10"/>
             </Grid.RowDefinitions>
             <ScrollViewer VerticalScrollBarVisibility="Hidden"
-                          Grid.Row="1"
-                          Grid.Column="1" Grid.RowSpan="2">
-                <StackPanel Margin="40,0" Orientation="Vertical">
+                          Grid.Row="1" Grid.Column="1" Grid.RowSpan="2">
+                <StackPanel Margin="40 0" Orientation="Vertical">
                     <StackPanel.Resources>
                         <Style TargetType="Grid" BasedOn="{StaticResource SettingBar}"/>
                         <Style TargetType="TextBlock" BasedOn="{StaticResource SettingText}"/>
@@ -40,10 +38,9 @@
                         <Style TargetType="Slider" BasedOn="{StaticResource SettingSlider}"/>
                     </StackPanel.Resources>
 
-                    <!--#region Selector Setting-->
                     <TextBlock Text="SELECTOR SETTING"
                                Style="{StaticResource SettingCategoryText}"
-                               Margin="0,0,0,-5"/>
+                               Margin="0 0 0 -5"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
@@ -58,9 +55,9 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="INPUT DELAY"/>
-                        <TextBlock x:Name="InputDelayText"
+                        <TextBlock Text="{Binding ElementName=InputDelay, Path=Value}"
                                    HorizontalAlignment="Right"
-                                   Margin="0,0,10,0"/>
+                                   Margin="0 0 10 0"/>
                         <Slider x:Name="InputDelay"
                                 Minimum="10"
                                 Maximum="50"
@@ -75,10 +72,8 @@
                         <TextBlock Text="SAVE RECENT MUSIC LIST"/>
                         <ToggleButton x:Name="SavesRecents"/>
                     </Grid>
-                    <!--#endregion-->
-                    
-                    <!--region Track List Setting-->
-                    <Grid Style="{x:Null}" Margin="0,10,0,0">
+
+                    <Grid Style="{x:Null}" Margin="0 10 0 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
@@ -98,188 +93,42 @@
                                    Foreground="#1FFFFFFF"
                                    FontFamily="{StaticResource Lato}"
                                    FontSize="23"
-                                   Margin="0,0,0,-5"
+                                   Margin="0 0 0 -5"
                                    Grid.Column="0"/>
                         <Button x:Name="DetectDlcs"
                                 Content="DETECT"
                                 Grid.Column="2"/>
                     </Grid>
-                  
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="PORTABLE 3"/>
-                        <ToggleButton x:Name="SettingP3"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="TRILOGY"/>
-                        <ToggleButton x:Name="SettingTR"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="CLAZZIQUAI"/>
-                        <ToggleButton x:Name="SettingCE"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="BLACK SQUARE"/>
-                        <ToggleButton x:Name="SettingBS"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="V EXTENSION"/>
-                        <ToggleButton x:Name="SettingVE"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="V EXTENSION 2"/>
-                        <ToggleButton x:Name="SettingVE2"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="V EXTENSION 3"/>
-                        <ToggleButton x:Name="SettingVE3"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="EMOTIONAL S."/>
-                        <ToggleButton x:Name="SettingES"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="TECHNIKA 1"/>
-                        <ToggleButton x:Name="SettingT1"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="TECHNIKA 2"/>
-                        <ToggleButton x:Name="SettingT2"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="TECHNIKA 3"/>
-                        <ToggleButton x:Name="SettingT3"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="TECHNIKA TUNE &amp; Q"/>
-                        <ToggleButton x:Name="SettingTQ"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="CHUNITHM"/>
-                        <ToggleButton x:Name="SettingCHU"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="CYTUS"/>
-                        <ToggleButton x:Name="SettingCY"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="DEEMO"/>
-                        <ToggleButton x:Name="SettingDM"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="ESTIMATE"/>
-                        <ToggleButton x:Name="SettingESTI"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="GROOVE COASTER"/>
-                        <ToggleButton x:Name="SettingGC"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="GIRLS' FRONTLINE"/>
-                        <ToggleButton x:Name="SettingGF"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="MUSE DASH"/>
-                        <ToggleButton x:Name="SettingMD"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="NEXON"/>
-                        <ToggleButton x:Name="SettingNXN"/>
-                    </Grid>
-                    <!--#endregion-->
-                    
+                    <ItemsControl x:Name="CategoryUpdaters"
+                                  Background="Transparent" BorderThickness="0">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Style="{StaticResource SettingBar}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Name}"
+                                               Style="{StaticResource SettingText}"/>
+                                    <ToggleButton IsChecked="{Binding Path=IsValueContained, Mode=TwoWay}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </StackPanel>
             </ScrollViewer>
+            
             <StackPanel Orientation="Horizontal"
-                        Grid.Row="4"
-                        Grid.Column="1"
+                        Grid.Row="3" Grid.Column="1"
                         HorizontalAlignment="Right"
-                        Margin="40,0">
+                        Margin="40 0">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource SettingWindowButton}"/>
+                </StackPanel.Resources>
                 <Button x:Name="Apply"
-                        Content="APPLY"
-                        Style="{StaticResource SettingWindowButton}"/>
+                        Content="APPLY"/>
                 <Button x:Name="Cancel"
-                        Content="CANCEL"
-                        Style="{StaticResource SettingWindowButton}"/>
+                        Content="CANCEL"/>
             </StackPanel>
         </Grid>
     </Border>
