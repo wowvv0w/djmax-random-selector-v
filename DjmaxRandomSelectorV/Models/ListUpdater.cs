@@ -3,12 +3,13 @@ using System.Collections.Generic;
 
 namespace DjmaxRandomSelectorV.Models
 {
-    public class CategoryUpdater : PropertyChangedBase
+    public class ListUpdater : PropertyChangedBase
     {
+        private readonly string _name;
         private readonly string _value;
         private readonly List<string> _target;
 
-        public string Name { get; }
+        public string Name { get => _name; }
         public bool IsValueContained
         {
             get => _target.Contains(_value);
@@ -26,10 +27,10 @@ namespace DjmaxRandomSelectorV.Models
             }
         }
 
-        public CategoryUpdater(Category category, List<string> target)
+        public ListUpdater(string name, string value, List<string> target)
         {
-            Name = category.Name;
-            _value = category.Id;
+            _name = name;
+            _value = value;
             _target = target;
         }
     }

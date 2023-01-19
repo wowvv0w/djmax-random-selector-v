@@ -85,11 +85,9 @@ namespace DjmaxRandomSelectorV.ViewModels
                 }
             }
 
-            CategoryUpdaters.ForEach(x => x.Refresh());
+            CategoryUpdaters.Refresh();
             MessageBox.Show($"{ownedDlcs.Count} DLCs are detected.",
-                "Notice",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+                "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public void Apply()
