@@ -156,6 +156,7 @@
         </Setter>
     </Style>
     <Style x:Key="CategoryButton" TargetType="ToggleButton">
+        <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="Height" Value="30"/>
         <Setter Property="FontFamily" Value="{StaticResource Bebas Neue}"/>
         <Setter Property="FontSize" Value="20"/>
@@ -165,12 +166,15 @@
                     <Border x:Name="Border"
                             Background="#56000000"
                             BorderThickness="0">
-                        <TextBlock x:Name="TextBlock"
-                                   Text="{TemplateBinding Content}"
-                                   Foreground="{TemplateBinding Foreground}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Margin="0,2,0,0"/>
+                        <Border x:Name="Border2"
+                                Background="Transparent">
+                            <TextBlock x:Name="TextBlock"
+                                       Text="{TemplateBinding Content}"
+                                       Foreground="{TemplateBinding Foreground}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Margin="0 2 0 0"/>
+                        </Border>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
@@ -180,6 +184,9 @@
                             <Setter Property="Foreground"
                                     TargetName="TextBlock"
                                     Value="Black"/>
+                            <Setter Property="Background"
+                                    TargetName="Border2"
+                                    Value="{Binding BorderBrush, RelativeSource={RelativeSource TemplatedParent}}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

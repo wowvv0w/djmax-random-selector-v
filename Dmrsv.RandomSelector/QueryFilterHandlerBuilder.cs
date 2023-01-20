@@ -25,7 +25,7 @@ namespace Dmrsv.RandomSelector
             var trackPredicate = (Track t, QueryFilter filter) =>
             {
                 var categories = filter.Categories;
-                var favorites = filter.Favorites;
+                var favorites = categories.Contains("FAVORITE") ? filter.Favorites : new List<string>();
                 var blacklist = filter.Blacklist;
                 return (categories.Contains(t.Category) || favorites.Contains(t.Title))
                         && !blacklist.Contains(t.Title);
