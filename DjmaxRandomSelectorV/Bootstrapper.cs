@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.ViewModels;
-using Dmrsv.Data;
 using System.Collections.Generic;
 using System;
 using System.ComponentModel;
@@ -23,6 +22,7 @@ namespace DjmaxRandomSelectorV
         public Bootstrapper()
         {
             Initialize();
+            IoC.Get<IEventAggregator>().SubscribeOnUIThread(_rs);
         }
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
@@ -46,6 +46,8 @@ namespace DjmaxRandomSelectorV
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<IFileManager, FileManager>();
 
+            _rs.Initialize(_configuration);
+            
             foreach (var assembly in SelectAssemblies())
             {
                 assembly.GetTypes()

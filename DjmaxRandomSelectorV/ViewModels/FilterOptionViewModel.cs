@@ -36,7 +36,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             set
             {
                 _message.Except = value;
-                NotifyOfPropertyChange(() => ExceptCount);
+                NotifyOfPropertyChange();
                 Publish();
             }
         }

@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
-using Dmrsv.Data;
+using DjmaxRandomSelectorV.Messages;
+using Dmrsv.RandomSelector;
 using System;
 using System.IO;
 using System.Net.Http;
@@ -9,7 +10,7 @@ using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class MainViewModel : Conductor<object>.Collection.OneActive, IHandle<SelectorOption>
+    public class MainViewModel : Conductor<object>.Collection.OneActive, IHandle<SettingMessage>
     {
         private const int ApplicationVersion = 151;
         private const string VersionsUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
@@ -63,7 +64,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         //    }
         //}
 
-        public Task HandleAsync(SelectorOption message, CancellationToken cancellationToken)
+        public Task HandleAsync(SettingMessage message, CancellationToken cancellationToken)
         {
             var type = GetFilterPanelType(message.FilterType);
             if (type != Items[0].GetType())
@@ -81,18 +82,5 @@ namespace DjmaxRandomSelectorV.ViewModels
             FilterType.Playlist => typeof(PlaylistFilterViewModel),
             _ => throw new NotSupportedException(),
         };
-
-        #region Window Top Bar
-        //private Visibility _openReleasePageVisibility;
-        //public Visibility OpenReleasePageVisibility
-        //{
-        //    get { return _openReleasePageVisibility; }
-        //    set
-        //    {
-        //        _openReleasePageVisibility = value;
-        //        NotifyOfPropertyChange(() => OpenReleasePageVisibility);
-        //    }
-        //}
-        #endregion
     }
 }
