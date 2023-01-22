@@ -1,50 +1,28 @@
 ﻿namespace Dmrsv.RandomSelector
 {
-    public class SelectorWithRecent : Selector
+    public class SelectorWithRecent : SelectorBase
     {
-        private readonly Queue<string> _recent;
-        private int _recentMax;
+        public IRecent<string> Recent { get; set; }
 
-        public int RecentMax
+        public SelectorWithRecent(IRecent<string> recent)
         {
-            get => _recentMax;
-            set
-            {
-                _recentMax = value;
-                int diff = _recent.Count - _recentMax;
-                for (int i = 0; i < diff; i++)
-                {
-                    _recent.Dequeue();
-                }
-            }
-        }
-
-        public SelectorWithRecent(IEnumerable<string>? recent = null, int recentMax = 5)
-        {
-            _recent = new Queue<string>(recent ?? Array.Empty<string>());
-            RecentMax = recentMax;
+            Recent = recent;
         }
 
         public override Music? Select(IEnumerable<Music> musicList)
         {
             var recentExcluded = from music in musicList
-                                 where !_recent.Contains(music.Title)
+                                 where !Recent.Contains(music.Title)
                                  select music;
 
             var selected = base.Select(recentExcluded);
 
             if (selected is not null)
             {
-                _recent.Enqueue(selected.Title);
-                if (_recent.Count > RecentMax)
-                {
-                    _recent.Dequeue();
-                }
+                Recent.Add(selected.Title);
             }
 
             return selected;
         }
-
-        public IEnumerable<string> CopyRecent() => _recent.Select(x => x);
     }
 }
