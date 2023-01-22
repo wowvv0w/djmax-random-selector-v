@@ -1,10 +1,9 @@
-﻿namespace Dmrsv.RandomSelector
+﻿using System.Text.Json.Serialization;
+
+namespace Dmrsv.RandomSelector
 {
-    public record Music
+    public record Music(string Title, string ButtonTunes, string Difficulty, int Level)
     {
-        public string Title { get; init; } = string.Empty;
-        public string ButtonTunes { get; init; } = string.Empty;
-        public string Difficulty { get; init; } = string.Empty;
-        public int Level { get; init; } = default;
+        public string GetStyle() => $"{ButtonTunes}{Difficulty}";
     }
 }

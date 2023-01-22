@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DjmaxRandomSelectorV", "Djm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dmrsv.Data", "Dmrsv.Data\Dmrsv.Data.csproj", "{D8E723FE-5972-4670-A8F8-257A3DE6D5FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dmrsv.RandomSelector", "Dmrsv.RandomSelector\Dmrsv.RandomSelector.csproj", "{3BB18A30-684D-433A-8A79-9D98F95ABADA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dmrsv.RandomSelector", "Dmrsv.RandomSelector\Dmrsv.RandomSelector.csproj", "{3BB18A30-684D-433A-8A79-9D98F95ABADA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
