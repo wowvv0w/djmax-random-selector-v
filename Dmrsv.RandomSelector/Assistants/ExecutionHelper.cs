@@ -8,6 +8,7 @@ namespace Dmrsv.RandomSelector
     {
         private const int WM_HOTKEY = 0x0312;
 
+        private IntPtr _handle;
         private int _hotkeyID;
         private uint _keyCode;
 
@@ -23,11 +24,16 @@ namespace Dmrsv.RandomSelector
             IgnoreCanExecute = false;
         }
 
-        public void AddHotkey(IntPtr hWnd, int id, uint fsModifiers, uint vk)
+        public void Register(IntPtr hWnd, int id)
         {
+            _handle = hWnd;
             _hotkeyID = id;
+        }
+
+        public void SetHotkey(uint fsModifiers, uint vk)
+        {
             _keyCode = vk;
-            RegisterHotKey(hWnd, id, fsModifiers, vk);
+            RegisterHotKey(_handle, _hotkeyID, fsModifiers, vk);
         }
 
         public IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)

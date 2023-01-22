@@ -1,12 +1,8 @@
 ﻿using Caliburn.Micro;
-using Dmrsv.Data;
-using Dmrsv.RandomSelector;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Interop;
 
 namespace DjmaxRandomSelectorV.ViewModels
@@ -18,6 +14,17 @@ namespace DjmaxRandomSelectorV.ViewModels
         public object MainPanel { get => Items[0]; }
         public object FilterOptionIndicator { get => Items[1]; }
         public object FilterOptionPanel { get => Items[2]; }
+
+        private Visibility _openReleasePageVisibility;
+        public Visibility OpenReleasePageVisibility
+        {
+            get { return _openReleasePageVisibility; }
+            set
+            {
+                _openReleasePageVisibility = value;
+                NotifyOfPropertyChange(() => OpenReleasePageVisibility);
+            }
+        }
 
         public ShellViewModel(IWindowManager windowManager)
         {
@@ -36,15 +43,9 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             var window = view as Window;
 
-            var selector = IoC.Get<Selector>();
-            var executor = new ExecutionHelper(selector.CanStart, selector.Start);
-            HwndSource source;
-            IntPtr handle = new WindowInteropHelper(window).Handle;
-            source = HwndSource.FromHwnd(handle);
-            source.AddHook(executor.HwndHook);
-            executor.AddHotkey(handle, 9000, 0x0000, 118);
-            //executor.ExecutionFailed += e => MessageBox.Show(e, "Selector Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            //executor.ExecutionComplete += e => _eventAggregator.PublishOnUIThreadAsync(e);
+            var rs = IoC.Get<RandomSelector>();
+            rs.RegisterHook(window);
+            rs.SetHotkey(0x0000, 118);
 
             var config = IoC.Get<Configuration>();
             double[] position = config.Position;
