@@ -7,7 +7,7 @@ namespace DjmaxRandomSelectorV.Models
     {
         private readonly string _name;
         private readonly string _value;
-        private readonly List<string> _target;
+        private readonly ICollection<string> _target;
 
         public string Name { get => _name; }
         public bool IsValueContained
@@ -27,7 +27,7 @@ namespace DjmaxRandomSelectorV.Models
             }
         }
 
-        public ListUpdater(string name, string value, List<string> target)
+        public ListUpdater(string name, string value, ICollection<string> target)
         {
             _name = name;
             _value = value;

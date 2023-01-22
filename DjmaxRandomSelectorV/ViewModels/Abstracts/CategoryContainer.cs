@@ -40,7 +40,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public BindableCollection<ListUpdater> CategoryUpdaters { get; private set; }
 
-        protected void InitializeCategoryUpdaters(List<string> target)
+        protected void InitializeCategoryUpdaters(ICollection<string> target)
         {
             var updaters = _categories.ConvertAll(x => new ListUpdater(x.Name, x.Id, target));
             CategoryUpdaters = new BindableCollection<ListUpdater>(updaters);

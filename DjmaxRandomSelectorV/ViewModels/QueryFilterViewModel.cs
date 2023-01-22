@@ -71,11 +71,17 @@ namespace DjmaxRandomSelectorV.ViewModels
                 string[] difficulties = new string[] { "NM", "HD", "MX" };
                 if (value)
                 {
-                    _filter.Difficulties.AddRange(difficulties);
+                    foreach (var d in difficulties)
+                    {
+                        _filter.Difficulties.Add(d);
+                    }
                 }
                 else
                 {
-                    _filter.Difficulties.RemoveAll(x => difficulties.Contains(x));
+                    foreach (var d in difficulties)
+                    {
+                        _filter.Difficulties.Remove(d);
+                    }
                 }
                 NotifyOfPropertyChange();
             }
@@ -104,6 +110,9 @@ namespace DjmaxRandomSelectorV.ViewModels
             _windowManager = windowManager;
             _fileManager = fileManager;
             _filter = _fileManager.Import<QueryFilter>(DefaultPath);
+            var config = IoC.Get<Configuration>();
+            _filter.Favorites = config.Favorite;
+            _filter.Blacklist = config.Blacklist;
 
             _categories.Insert(15, new Category("FAVORITE", "FAVORITE", null));
             _categories.Insert(16, new Category("COLLABORATION", null, null));
@@ -131,6 +140,9 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void Initialize()
         {
+            var randomSelector = IoC.Get<RandomSelector>();
+            _filter = (QueryFilter)randomSelector.Filter;
+
             var buttons = new List<string>() { "4B", "5B", "6B", "8B" }.ConvertAll(x => new ListUpdater(x, x, _filter.ButtonTunes));
             ButtonTunesUpdaters = new BindableCollection<ListUpdater>(buttons);
 
@@ -165,7 +177,10 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void SelectAllCategories()
         {
             _filter.Categories.Clear();
-            _filter.Categories.AddRange(_categories.ConvertAll(x => x.Id).Where(id => !string.IsNullOrEmpty(id)));
+            foreach (var c in _categories.ConvertAll(x => x.Id).Where(id => !string.IsNullOrEmpty(id)))
+            {
+                _filter.Categories.Add(c);
+            }
             RegularCategories.Refresh();
             CollabCategories.Refresh();
         }
@@ -249,7 +264,9 @@ namespace DjmaxRandomSelectorV.ViewModels
             bool? result = dialog.ShowDialog();
 
             if (result == true)
+            {
                 _fileManager.Export(_filter, dialog.FileName);
+            }
         }
         public void LoadPreset()
         {
@@ -265,7 +282,9 @@ namespace DjmaxRandomSelectorV.ViewModels
             bool? result = dialog.ShowDialog();
 
             if (result == true)
+            {
                 ReloadFilter(dialog.FileName);
+            }
         }
 
         public async void OpenFavoriteEditor()
