@@ -15,7 +15,7 @@ namespace Dmrsv.RandomSelector
         private const string AllTrackUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Data/AllTrackList.csv";
         private const string AllTrackPath = "Data/AllTrackList.csv";
 
-        private readonly Dictionary<string, string[]?> _dlcMusicInRespect = new()
+        private readonly Dictionary<string, string[]> _dlcMusicInRespect = new()
         {
             ["P3"] = new[] { "glory day (Mintorment Remix)", "glory day -JHS Remix-" },
             ["TR"] = new[] { "Nevermind" },
@@ -54,37 +54,22 @@ namespace Dmrsv.RandomSelector
             return records.ToList();
         }
 
-        public List<Track> CreateTracks(List<string> dlcs)
+        public IEnumerable<Track> CreateTracks(IEnumerable<string> dlcs)
         {
             var allTrack = GetAllTrack();
-            var basicCategories = new List<string>() { "RP", "P1", "P2", "GG" };
+            var basicCategories = new string[] { "RP", "P1", "P2", "GG" };
             var categories = dlcs.Concat(basicCategories);
 
-            var titleFilter = new List<string>();
-            foreach (var dlc in dlcs)
-            {
-                string[]? music = _dlcMusicInRespect.GetValueOrDefault(dlc, null);
-                if (music != null)
-                {
-                    titleFilter.AddRange(music);
-                }
-            }
-            foreach (var tuple in _linkDiscMusic)
-            {
-                var predicate = tuple.Key;
-                string music = tuple.Value;
-                if (predicate.Invoke(dlcs))
-                {
-                    titleFilter.Add(music);
-                }
-            }
+            var exclusions = new List<string>();
+            exclusions.AddRange(_dlcMusicInRespect.Where(x => !dlcs.Contains(x.Key)).SelectMany(x => x.Value));
+            exclusions.AddRange(_linkDiscMusic.Where(x => !x.Key.Invoke(dlcs)).Select(x => x.Value));
 
             var trackQuery = from track in allTrack
                              where categories.Contains(track.Category)
-                             where titleFilter.Contains(track.Title)
+                             where !exclusions.Contains(track.Title)
                              select track;
 
-            return trackQuery.ToList();
+            return trackQuery;
         }
 
         public sealed class TrackMap : ClassMap<Track>
