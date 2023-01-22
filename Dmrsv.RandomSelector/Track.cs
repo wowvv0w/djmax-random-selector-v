@@ -1,7 +1,11 @@
 ﻿namespace Dmrsv.RandomSelector
 {
-    public record Track(string Title, string Category, Dictionary<string, int> Patterns)
+    public record Track()
     {
+        public string Title { get; init; } = string.Empty;
+        public string Category { get; init; } = string.Empty;
+        public Dictionary<string, int> Patterns { get; init; } = new();
+
         public IEnumerable<Music> GetMusicList()
         {
             var musicList = from p in Patterns
