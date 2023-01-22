@@ -8,6 +8,7 @@ namespace Dmrsv.RandomSelector
     {
         public bool StartsAutomatically { get; set; }
         public int InputInterval { get; set; }
+        public bool InvokesInput { get; set; }
 
         private static bool _isKeyMapInitialized = false;
         private static Dictionary<string, ushort> KeyMap = new Dictionary<string, ushort>
@@ -56,10 +57,11 @@ namespace Dmrsv.RandomSelector
             {"pagedown", 0xD1 + 1024},
         };
 
-        public Locator(bool startsAutomatically = false, int inputInterval = 30)
+        public Locator()
         {
-            StartsAutomatically = startsAutomatically;
-            InputInterval = inputInterval;
+            StartsAutomatically = false;
+            InputInterval = 30;
+            InvokesInput = true;
             if (!_isKeyMapInitialized)
             {
                 KeyMap.Add("left", (ushort)MapVirtualKey(0x25, 0));
@@ -72,6 +74,11 @@ namespace Dmrsv.RandomSelector
 
         public void Provide(Music selectedMusic, List<Track> trackList)
         {
+            if (!InvokesInput)
+            {
+                return;
+            }
+
             // Check if title starts with alphabet or not
             char initial = selectedMusic.Title[0];
             bool isAlphabet = Regex.IsMatch(initial.ToString(), "[a-z]", RegexOptions.IgnoreCase);
