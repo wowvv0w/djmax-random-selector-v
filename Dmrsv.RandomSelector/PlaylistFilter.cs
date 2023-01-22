@@ -24,6 +24,8 @@ namespace Dmrsv.RandomSelector
             {
                 musicList = OutputMethod.Invoke(musicList);
             }
+
+            IsUpdated = false;
             return musicList;
         }
     }
