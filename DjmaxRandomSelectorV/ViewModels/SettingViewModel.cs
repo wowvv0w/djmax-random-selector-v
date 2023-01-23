@@ -98,7 +98,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             config.SavesRecents = _message.SavesExclusion;
             config.OwnedDlcs = _message.OwnedDlcs.ConvertAll((x) => x);
 
-            _fileManager.Export(config, config.SavePath);
+            _fileManager.Export(config, @"Data\Config.json");
             _eventAggregator.PublishOnUIThreadAsync(_message);
             TryCloseAsync(true);
         }

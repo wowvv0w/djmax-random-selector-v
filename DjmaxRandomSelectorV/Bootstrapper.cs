@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.ViewModels;
-using Dmrsv.Data.Context.Schema;
 using Dmrsv.RandomSelector;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ namespace DjmaxRandomSelectorV
 {
     public class Bootstrapper : BootstrapperBase
     {
-        private const string ConfigPath = @"Data\config.json";
+        private const string ConfigPath = @"Data\Config.json";
 
         private readonly SimpleContainer _container = new SimpleContainer();
         private readonly Configuration _configuration;
@@ -35,7 +34,7 @@ namespace DjmaxRandomSelectorV
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
             await DisplayRootViewForAsync(typeof(ShellViewModel));
-            Window window = Application.Current.MainWindow;
+            Window window = Application.MainWindow;
             _rs.RegisterHandle(new WindowInteropHelper(window).Handle);
             _rs.SetHotkey(0x0000, 118);
             double[] position = _configuration.Position;

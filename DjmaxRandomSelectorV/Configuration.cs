@@ -1,10 +1,6 @@
 ﻿using Dmrsv.RandomSelector;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace DjmaxRandomSelectorV
 {
@@ -23,6 +19,5 @@ namespace DjmaxRandomSelectorV
         public List<string> Favorite { get; set; } = new();
         public List<string> Blacklist { get; set; } = new();
         public int AllTrackVersion { get; set; } = 0;
-        public string SavePath { get; set; } = @"Data\config.json";
     }
 }

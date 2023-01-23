@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Interop;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -56,7 +55,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             var window = view as Window;
             var config = IoC.Get<Configuration>();
             config.Position = new double[2] { window.Top, window.Left };
-            DeactivateItemAsync(MainPanel, true);
             window.Close();
         }
 
