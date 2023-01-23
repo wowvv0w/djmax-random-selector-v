@@ -53,7 +53,6 @@ namespace DjmaxRandomSelectorV
             _candidates = _filter.Filter(_playable);
 
             _recent = new RecentHelper<string>(config.Exclusions, config.RecentsCount);
-            SetCapacity(config.RecentsCount);
             _selector = new SelectorWithRecent(_recent);
 
             _keyInputInvoker.InputInterval = config.InputDelay;
@@ -78,7 +77,7 @@ namespace DjmaxRandomSelectorV
             if (_filter.IsUpdated)
             {
                 _candidates = _filter.Filter(_playable);
-                SetCapacity(_recent.Capacity);
+                _recent.Clear();
             }
             var selected = _selector.Select(_candidates);
             if (selected is not null)
@@ -113,10 +112,10 @@ namespace DjmaxRandomSelectorV
 
         public Task HandleAsync(FilterOptionMessage message, CancellationToken cancellationToken)
         {
-            SetCapacity(message.Except);
+            _recent.Capacity = message.Except;
             _filter.OutputMethod = new OutputMethodCreator().Create(message.Mode, message.Level);
             _keyInputInvoker.StartsAutomatically = message.Mode == MusicForm.Default && message.Aider == InputMethod.WithAutoStart;
-            _keyInputInvoker.InvokesInput = message.Aider == InputMethod.NotInput;
+            _keyInputInvoker.InvokesInput = message.Aider != InputMethod.NotInput;
             _executionHelper.IgnoreCanExecute = message.Aider == InputMethod.NotInput;
             return Task.CompletedTask;
         }
@@ -139,13 +138,6 @@ namespace DjmaxRandomSelectorV
         private void ShowErrorMessageBox(string message)
         {
             MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
-        private void SetCapacity(int value)
-        {
-            int titleCount = _candidates.Select(x => x.Title).Distinct().Count();
-            int capacity = titleCount < value ? titleCount : value;
-            _recent.Capacity = capacity;
         }
     }
 }

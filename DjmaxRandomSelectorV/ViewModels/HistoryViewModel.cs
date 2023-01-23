@@ -16,6 +16,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             _number = 0;
             History = new BindableCollection<HistoryItem>();
             DisplayName = "HISTORY";
+            var rs = IoC.Get<RandomSelector>();
+            rs.OnSelectionSuccessful += m => AddItem(m);
         }
 
         public void AddItem(Music music)

@@ -11,27 +11,30 @@
             set
             {
                 _capacity = value;
-                int diff = _recent.Count - _capacity;
-                for (int i = 0; i < diff; i++)
-                {
-                    _recent.Dequeue();
-                }
+                ResolveOverflow();
             }
         }
+        public int Count => _recent.Count;
 
         public RecentHelper(IEnumerable<T>? recent = null, int capacity = 5)
         {
             _recent = new Queue<T>(recent ?? Array.Empty<T>());
             Capacity = capacity;
+            ResolveOverflow();
         }
 
-        public void Add(T item)
+        public void Enqueue(T item)
         {
             _recent.Enqueue(item);
             if (_recent.Count > Capacity)
             {
                 _recent.Dequeue();
             }
+        }
+
+        public T Dequeue()
+        {
+            return _recent.Dequeue();
         }
 
         public bool Contains(T item)
@@ -47,6 +50,15 @@
         public IEnumerable<T> GetItems()
         {
             return _recent.Select(x => x);
+        }
+
+        private void ResolveOverflow()
+        {
+            int over = _recent.Count - _capacity;
+            for (int i = 0; i < over; i++)
+            {
+                _recent.Dequeue();
+            }
         }
     }
 }

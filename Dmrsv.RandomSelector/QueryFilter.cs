@@ -59,8 +59,7 @@ namespace Dmrsv.RandomSelector
         public override IEnumerable<Music> Filter(IEnumerable<Track> trackList)
         {
             var musicList = from t in trackList
-                            where Categories.Contains(t.Category)
-                            where Categories.Contains("FAVORITE") && Favorites.Contains(t.Title)
+                            where Categories.Contains(t.Category) || (Categories.Contains("FAVORITE") && Favorites.Contains(t.Title))
                             where !Blacklist.Contains(t.Category)
                             from m in t.GetMusicList()
                             where ButtonTunes.Contains(m.ButtonTunes) && Difficulties.Contains(m.Difficulty)

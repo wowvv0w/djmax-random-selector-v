@@ -55,9 +55,12 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="INPUT DELAY"/>
-                        <TextBlock Text="{Binding ElementName=InputDelay, Path=Value}"
-                                   HorizontalAlignment="Right"
-                                   Margin="0 0 10 0"/>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    Margin="0 0 10 0">
+                            <TextBlock Text="{Binding ElementName=InputDelay, Path=Value}"/>
+                            <TextBlock Text="ms" Margin="0"/>
+                        </StackPanel>
                         <Slider x:Name="InputDelay"
                                 Minimum="10"
                                 Maximum="50"
