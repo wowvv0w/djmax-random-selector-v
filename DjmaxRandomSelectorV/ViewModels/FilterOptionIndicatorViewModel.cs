@@ -8,7 +8,8 @@ using System.Windows.Media.Imaging;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class FilterOptionIndicatorViewModel : Screen, IHandle<FilterOptionMessage>
+    public class FilterOptionIndicatorViewModel : Screen,
+        IHandle<CapacityMessage>, IHandle<ModeWithAiderMessage>, IHandle<ModeWithLevelMessage>
     {
         private readonly IEventAggregator _eventAggregator;
 
@@ -58,19 +59,52 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
+
+            var config = IoC.Get<Configuration>();
+            SetExceptCount(config.RecentsCount);
+            SetModeImage(config.Mode);
+            SetAiderImage(config.Mode, config.Aider);
+            SetLevelImage(config.Mode, config.Level);
         }
 
-        public Task HandleAsync(FilterOptionMessage message, CancellationToken cancellationToken)
+        public Task HandleAsync(CapacityMessage message, CancellationToken cancellationToken)
         {
-            ExceptCount = message.Except;
-            MusicForm mode = message.Mode;
-            ModeImage = GetBitmapImage(mode switch
+            SetExceptCount(message.Value);
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(ModeWithAiderMessage message, CancellationToken cancellationToken)
+        {
+            SetModeImage(message.Mode);
+            SetAiderImage(message.Mode, message.Aider);
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(ModeWithLevelMessage message, CancellationToken cancellationToken)
+        {
+            SetModeImage(message.Mode);
+            SetLevelImage(message.Mode, message.Level);
+            return Task.CompletedTask;
+        }
+
+        private void SetExceptCount(int value)
+        {
+            ExceptCount = value;
+        }
+
+        private void SetModeImage(MusicForm value)
+        {
+            ModeImage = GetBitmapImage(value switch
             {
                 MusicForm.Default => "mode_fs",
                 MusicForm.Free => "mode_on",
                 _ => throw new NotImplementedException(),
             });
-            AiderImage = GetBitmapImage((mode, message.Aider) switch
+        }
+
+        private void SetAiderImage(MusicForm mValue, InputMethod aValue)
+        {
+            AiderImage = GetBitmapImage((mValue, aValue) switch
             {
                 (_, InputMethod.Default) => "addon_none",
                 (MusicForm.Default, InputMethod.WithAutoStart) => "aider_auto",
@@ -78,16 +112,19 @@ namespace DjmaxRandomSelectorV.ViewModels
                 (_, InputMethod.NotInput) => "aider_observe",
                 _ => throw new NotImplementedException(),
             });
-            LevelImage = GetBitmapImage((mode, message.Level) switch
+        }
+
+        private void SetLevelImage(MusicForm mValue, LevelPreference lValue)
+        {
+            LevelImage = GetBitmapImage((mValue, lValue) switch
             {
                 (_, LevelPreference.None) => "addon_none",
                 (MusicForm.Default, LevelPreference.Lowest) => "level_beginner",
-                (MusicForm.Free, LevelPreference.Lowest) => "level_beginner_locked",
                 (MusicForm.Default, LevelPreference.Highest) => "level_master",
+                (MusicForm.Free, LevelPreference.Lowest) => "level_beginner_locked",
                 (MusicForm.Free, LevelPreference.Highest) => "level_master_locked",
                 _ => throw new NotImplementedException(),
             });
-            return Task.CompletedTask;
         }
 
         private BitmapImage GetBitmapImage(string fileName)

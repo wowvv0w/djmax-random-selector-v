@@ -11,10 +11,10 @@ using System.Windows.Interop;
 
 namespace DjmaxRandomSelectorV
 {
-    public class RandomSelector : IHandle<FilterOptionMessage>, IHandle<SettingMessage>
+    public class RandomSelector : IHandle<FilterMessage>, IHandle<CapacityMessage>,
+        IHandle<ModeWithAiderMessage>, IHandle<ModeWithLevelMessage>, IHandle<SettingMessage>
     {
-        public delegate void MusicEventHandler(Music e);
-        public event MusicEventHandler OnSelectionSuccessful;
+        private readonly IEventAggregator _eventAggregator;
 
         private IEnumerable<Track> _playable;
         private IEnumerable<Music> _candidates;
@@ -29,19 +29,19 @@ namespace DjmaxRandomSelectorV
         private readonly WindowTitleHelper _windowTitleHelper;
         private readonly ExecutionHelper _executionHelper;
 
-        public IFilter Filter => _filter;
-
-        public RandomSelector()
+        public RandomSelector(IEventAggregator eventAggregator)
         {
+            _eventAggregator = eventAggregator;
+            _eventAggregator.SubscribeOnUIThread(this);
             _isRunning = false;
             _windowTitleHelper = new WindowTitleHelper();
             _executionHelper = new ExecutionHelper(CanStart, Start);
-            _keyInputInvoker = new Locator();
         }
 
         public void Initialize(Configuration config)
         {
             _playable = new TrackManager().CreateTracks(config.OwnedDlcs);
+            _candidates = new List<Music>();
 
             _filter = config.FilterType switch
             {
@@ -50,12 +50,17 @@ namespace DjmaxRandomSelectorV
                 _ => throw new NotImplementedException(),
             };
             _filter.OutputMethod = new OutputMethodCreator().Create(config.Mode, config.Level);
-            _candidates = _filter.Filter(_playable);
 
             _recent = new RecentHelper<string>(config.Exclusions, config.RecentsCount);
             _selector = new SelectorWithRecent(_recent);
 
-            _keyInputInvoker.InputInterval = config.InputDelay;
+            _keyInputInvoker = new Locator()
+            {
+                StartsAutomatically = config.Mode == MusicForm.Default && config.Aider == InputMethod.WithAutoStart,
+                InputInterval = config.InputDelay,
+                InvokesInput = config.Aider != InputMethod.NotInput,
+            };
+            _executionHelper.IgnoreCanExecute = config.Aider == InputMethod.NotInput;
         }
 
         public bool CanStart()
@@ -83,7 +88,7 @@ namespace DjmaxRandomSelectorV
             if (selected is not null)
             {
                 _keyInputInvoker?.Provide(selected, _playable.ToList());
-                OnSelectionSuccessful.Invoke(selected);
+                _eventAggregator.PublishOnUIThreadAsync(new MusicMessage(selected));
             }
             else
             {
@@ -92,11 +97,9 @@ namespace DjmaxRandomSelectorV
             _isRunning = false;
         }
 
-        public void RegisterHook(Window window)
+        public void RegisterHandle(IntPtr handle)
         {
-            HwndSource source;
-            IntPtr handle = new WindowInteropHelper(window).Handle;
-            source = HwndSource.FromHwnd(handle);
+            HwndSource source = HwndSource.FromHwnd(handle);
             _executionHelper.Register(handle, 9000);
             source.AddHook(_executionHelper.HwndHook);
         }
@@ -110,19 +113,36 @@ namespace DjmaxRandomSelectorV
             return new TrackManager().GetAllTrack();
         }
 
-        public Task HandleAsync(FilterOptionMessage message, CancellationToken cancellationToken)
+        public Task HandleAsync(FilterMessage message, CancellationToken cancellationToken)
         {
-            _recent.Capacity = message.Except;
+            _filter = message.Item;
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(CapacityMessage message, CancellationToken cancellationToken)
+        {
+            _recent.Capacity = message.Value;
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(ModeWithAiderMessage message, CancellationToken cancellationToken)
+        {
+            InputMethod aider = message.Aider;
+            _keyInputInvoker.StartsAutomatically = message.Mode == MusicForm.Default && aider == InputMethod.WithAutoStart;
+            _keyInputInvoker.InvokesInput = aider != InputMethod.NotInput;
+            _executionHelper.IgnoreCanExecute = aider == InputMethod.NotInput;
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(ModeWithLevelMessage message, CancellationToken cancellationToken)
+        {
             _filter.OutputMethod = new OutputMethodCreator().Create(message.Mode, message.Level);
-            _keyInputInvoker.StartsAutomatically = message.Mode == MusicForm.Default && message.Aider == InputMethod.WithAutoStart;
-            _keyInputInvoker.InvokesInput = message.Aider != InputMethod.NotInput;
-            _executionHelper.IgnoreCanExecute = message.Aider == InputMethod.NotInput;
             return Task.CompletedTask;
         }
 
         public Task HandleAsync(SettingMessage message, CancellationToken cancellationToken)
         {
-            var outputMethod = _filter?.OutputMethod;
+            var outputMethod = _filter.OutputMethod;
             _filter = message.FilterType switch
             {
                 FilterType.Query => new QueryFilter(),

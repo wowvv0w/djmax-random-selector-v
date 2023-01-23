@@ -1,34 +1,41 @@
 ﻿using Caliburn.Micro;
+using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.Models;
 using Dmrsv.RandomSelector;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class HistoryViewModel : Screen
+    public class HistoryViewModel : Screen, IHandle<MusicMessage>
     {
+        private readonly IEventAggregator _eventAggregator;
+
         private int _number;
 
-        public BindableCollection<HistoryItem> History { get; set; }
+        public BindableCollection<HistoryItem> History { get; }
 
-        public HistoryViewModel()
+        public HistoryViewModel(IEventAggregator eventAggregator)
         {
+            _eventAggregator = eventAggregator;
+            _eventAggregator.SubscribeOnUIThread(this);
             _number = 0;
             History = new BindableCollection<HistoryItem>();
             DisplayName = "HISTORY";
-            var rs = IoC.Get<RandomSelector>();
-            rs.OnSelectionSuccessful += m => AddItem(m);
         }
 
-        public void AddItem(Music music)
+        private void AddItem(Music music)
         {
             _number++;
+            string style = music.GetStyle();
+            int level = music.Level;
             var historyItem = new HistoryItem()
             {
                 Number = _number,
                 Title = music.Title,
-                Style = $"{music.ButtonTunes}{music.Difficulty}",
-                Level = music.Level.ToString(),
+                Style = string.IsNullOrEmpty(style) ? "FREE" : style,
+                Level = level == -1 ? "-" : level.ToString(),
                 Time = DateTime.Now.ToString("HH:mm:ss"),
             };
 
@@ -37,6 +44,12 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 History.RemoveAt(8);
             }
+        }
+
+        public Task HandleAsync(MusicMessage message, CancellationToken cancellationToken)
+        {
+            AddItem(message.Item);
+            return Task.CompletedTask;
         }
     }
 }

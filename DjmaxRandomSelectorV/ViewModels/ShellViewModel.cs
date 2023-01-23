@@ -39,23 +39,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             childrenType.ForEach(type => ActivateItemAsync(IoC.GetInstance(type, null)));
         }
 
-        protected override void OnViewLoaded(object view)
-        {
-            var window = view as Window;
-
-            var rs = IoC.Get<RandomSelector>();
-            rs.RegisterHook(window);
-            rs.SetHotkey(0x0000, 118);
-
-            var config = IoC.Get<Configuration>();
-            double[] position = config.Position;
-            if (position?.Length == 2)
-            {
-                window.Top = position[0];
-                window.Left = position[1];
-            }
-        }
-
         public void MoveWindow(object view)
         {
             var window = view as Window;

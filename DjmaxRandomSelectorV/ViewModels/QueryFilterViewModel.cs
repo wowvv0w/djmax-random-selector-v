@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.Models;
 using Dmrsv.RandomSelector;
 using Microsoft.Win32;
@@ -15,6 +16,7 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class QueryFilterViewModel : CategoryContainer
     {
         private const string DefaultPath = @"Data\CurrentFilter.json";
+        private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
         private readonly IFileManager _fileManager;
 
@@ -104,18 +106,17 @@ namespace DjmaxRandomSelectorV.ViewModels
         public BindableCollection<LevelIndicator> LevelIndicators { get; set; }
         public BindableCollection<LevelIndicator> ScLevelIndicators { get; set; }
 
-        public QueryFilterViewModel(IWindowManager windowManager, IFileManager fileManager)
+        public QueryFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, IFileManager fileManager)
         {
             DisplayName = "FILTER";
+            _eventAggregator = eventAggregator;
             _windowManager = windowManager;
             _fileManager = fileManager;
-            _filter = _fileManager.Import<QueryFilter>(DefaultPath);
-            var config = IoC.Get<Configuration>();
-            _filter.Favorites = config.Favorite;
-            _filter.Blacklist = config.Blacklist;
 
             _categories.Insert(15, new Category("FAVORITE", "FAVORITE", null));
             _categories.Insert(16, new Category("COLLABORATION", null, null));
+
+            ImportFilter(DefaultPath);
             Initialize();
         }
 
@@ -140,9 +141,6 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void Initialize()
         {
-            var randomSelector = IoC.Get<RandomSelector>();
-            _filter = (QueryFilter)randomSelector.Filter;
-
             var buttons = new List<string>() { "4B", "5B", "6B", "8B" }.ConvertAll(x => new ListUpdater(x, x, _filter.ButtonTunes));
             ButtonTunesUpdaters = new BindableCollection<ListUpdater>(buttons);
 
@@ -160,11 +158,20 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
+        private void ImportFilter(string path)
+        {
+            _filter = _fileManager.Import<QueryFilter>(path);
+            var config = IoC.Get<Configuration>();
+            _filter.Favorites = config.Favorite;
+            _filter.Blacklist = config.Blacklist;
+            _eventAggregator.PublishOnUIThreadAsync(new FilterMessage(_filter));
+        }
+
         public void ReloadFilter(string presetPath)
         {
             try
             {
-                _filter = _fileManager.Import<QueryFilter>(presetPath);
+                ImportFilter(presetPath);
                 Initialize();
                 Refresh();
             }
@@ -189,6 +196,51 @@ namespace DjmaxRandomSelectorV.ViewModels
             _filter.Categories.Clear();
             RegularCategories.Refresh();
             CollabCategories.Refresh();
+        }
+
+        public void SavePreset()
+        {
+            string app = AppDomain.CurrentDomain.BaseDirectory;
+            string path = Path.Combine(app, @"Data\Preset");
+            var dialog = new SaveFileDialog()
+            {
+                InitialDirectory = path,
+                DefaultExt = ".json",
+                Filter = "JSON Files (*.json)|*.json"
+            };
+
+            bool? result = dialog.ShowDialog();
+
+            if (result == true)
+            {
+                _fileManager.Export(_filter, dialog.FileName);
+            }
+        }
+        public void LoadPreset()
+        {
+            string app = AppDomain.CurrentDomain.BaseDirectory;
+            string path = Path.Combine(app, @"Data\Preset");
+            var dialog = new OpenFileDialog()
+            {
+                InitialDirectory = path,
+                DefaultExt = ".json",
+                Filter = "JSON Files (*.json)|*.json"
+            };
+
+            bool? result = dialog.ShowDialog();
+
+            if (result == true)
+            {
+                ReloadFilter(dialog.FileName);
+            }
+        }
+
+        public async void OpenFavoriteEditor()
+        {
+            bool? result = await _windowManager.ShowDialogAsync(IoC.Get<FavoriteViewModel>());
+            if (result == true)
+            {
+            }
         }
 
         #region Level Adjustment
@@ -249,50 +301,5 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
         #endregion
-
-        public void SavePreset()
-        {
-            string app = AppDomain.CurrentDomain.BaseDirectory;
-            string path = Path.Combine(app, @"Data\Preset");
-            var dialog = new SaveFileDialog()
-            {
-                InitialDirectory = path,
-                DefaultExt = ".json",
-                Filter = "JSON Files (*.json)|*.json"
-            };
-
-            bool? result = dialog.ShowDialog();
-
-            if (result == true)
-            {
-                _fileManager.Export(_filter, dialog.FileName);
-            }
-        }
-        public void LoadPreset()
-        {
-            string app = AppDomain.CurrentDomain.BaseDirectory;
-            string path = Path.Combine(app, @"Data\Preset");
-            var dialog = new OpenFileDialog()
-            {
-                InitialDirectory = path,
-                DefaultExt = ".json",
-                Filter = "JSON Files (*.json)|*.json"
-            };
-
-            bool? result = dialog.ShowDialog();
-
-            if (result == true)
-            {
-                ReloadFilter(dialog.FileName);
-            }
-        }
-
-        public async void OpenFavoriteEditor()
-        {
-            bool? result = await _windowManager.ShowDialogAsync(IoC.Get<FavoriteViewModel>());
-            if (result == true)
-            {
-            }
-        }
     }
 }
