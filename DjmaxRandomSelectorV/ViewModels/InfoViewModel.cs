@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using Dmrsv.Data.Controller;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,7 +18,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             CurrentVersion = IntToString(currentVersion);
             LastestVersion = IntToString(lastestVersion);
-            AllTrackVersion = new OptionApi().GetAppOption().AllTrackVersion.ToString();
+            //AllTrackVersion = new OptionApi().GetAppOption().AllTrackVersion.ToString();
 
             string IntToString(int version)
             {

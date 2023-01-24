@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Dmrsv.RandomSelector
+﻿namespace Dmrsv.RandomSelector
 {
     public record Music(string Title, string ButtonTunes, string Difficulty, int Level)
     {

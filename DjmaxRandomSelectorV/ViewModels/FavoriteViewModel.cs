@@ -1,6 +1,4 @@
 ﻿using Caliburn.Micro;
-using Dmrsv.Data.Context.Schema;
-using Dmrsv.Data.Controller;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +13,7 @@ namespace DjmaxRandomSelectorV.ViewModels
     {
         private bool searchesSuggestion;
         private readonly List<string> _titleList;
-        private readonly ExtraFilter _extraFilter;
+        //private readonly ExtraFilter _extraFilter;
 
         public BindableCollection<string> FavoriteItems { get; set; }
         public BindableCollection<string> BlacklistItems { get; set; }
@@ -24,21 +22,21 @@ namespace DjmaxRandomSelectorV.ViewModels
         public FavoriteViewModel()
         {
             searchesSuggestion = true;
-            _titleList = new TrackApi().GetAllTrackList().ToList().ConvertAll(x => x.Title);
+            //_titleList = new TrackApi().GetAllTrackList().ToList().ConvertAll(x => x.Title);
 
-            _extraFilter = new FilterApi().GetExtraFilter();
+            //_extraFilter = new FilterApi().GetExtraFilter();
 
-            FavoriteItems = new BindableCollection<string>(_extraFilter.Favorites);
-            BlacklistItems = new BindableCollection<string>(_extraFilter.Blacklist);
+            //FavoriteItems = new BindableCollection<string>(_extraFilter.Favorites);
+            //BlacklistItems = new BindableCollection<string>(_extraFilter.Blacklist);
 
             TitleSuggestions = new BindableCollection<string>();
             OpensSuggestionBox = false;
         }
         public void OK()
         {
-            _extraFilter.Favorites = FavoriteItems.ToList();
-            _extraFilter.Blacklist = BlacklistItems.ToList();
-            new FilterApi().SetExtraFilter(_extraFilter);
+            //_extraFilter.Favorites = FavoriteItems.ToList();
+            //_extraFilter.Blacklist = BlacklistItems.ToList();
+            //new FilterApi().SetExtraFilter(_extraFilter);
             TryCloseAsync(true);
         }
 

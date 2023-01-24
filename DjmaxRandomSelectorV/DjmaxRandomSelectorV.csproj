@@ -113,7 +113,6 @@
     <Folder Include="Data\Playlist\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dmrsv.Data\Dmrsv.Data.csproj" />
     <ProjectReference Include="..\Dmrsv.RandomSelector\Dmrsv.RandomSelector.csproj" />
   </ItemGroup>
   <ItemGroup>
