@@ -22,6 +22,7 @@ namespace DjmaxRandomSelectorV
         private bool _isRunning;
 
         private IFilter _filter;
+        private Func<IEnumerable<Music>, IEnumerable<Music>> _outputMethod;
         private IRecent<string> _recent;
         private ISelector _selector;
         private Locator _keyInputInvoker;
@@ -43,13 +44,7 @@ namespace DjmaxRandomSelectorV
             _playable = new TrackManager().CreateTracks(config.OwnedDlcs);
             _candidates = new List<Music>();
 
-            _filter = config.FilterType switch
-            {
-                FilterType.Query => new QueryFilter(),
-                FilterType.Playlist => new PlaylistFilter(),
-                _ => throw new NotImplementedException(),
-            };
-            _filter.OutputMethod = new OutputMethodCreator().Create(config.Mode, config.Level);
+            _outputMethod = new OutputMethodCreator().Create(config.Mode, config.Level);
 
             _recent = new RecentHelper<string>(config.Exclusions, config.RecentsCount);
             _selector = new SelectorWithRecent(_recent);
@@ -116,6 +111,7 @@ namespace DjmaxRandomSelectorV
         public Task HandleAsync(FilterMessage message, CancellationToken cancellationToken)
         {
             _filter = message.Item;
+            _filter.OutputMethod = _outputMethod;
             return Task.CompletedTask;
         }
 
@@ -136,20 +132,13 @@ namespace DjmaxRandomSelectorV
 
         public Task HandleAsync(ModeWithLevelMessage message, CancellationToken cancellationToken)
         {
-            _filter.OutputMethod = new OutputMethodCreator().Create(message.Mode, message.Level);
+            _outputMethod = new OutputMethodCreator().Create(message.Mode, message.Level);
+            _filter.OutputMethod = _outputMethod;
             return Task.CompletedTask;
         }
 
         public Task HandleAsync(SettingMessage message, CancellationToken cancellationToken)
         {
-            var outputMethod = _filter.OutputMethod;
-            _filter = message.FilterType switch
-            {
-                FilterType.Query => new QueryFilter(),
-                FilterType.Playlist => new PlaylistFilter(),
-                _ => throw new NotImplementedException(),
-            };
-            _filter.OutputMethod = outputMethod;
             _keyInputInvoker.InputInterval = message.InputInterval;
             _playable = new TrackManager().CreateTracks(message.OwnedDlcs);
             return Task.CompletedTask;
