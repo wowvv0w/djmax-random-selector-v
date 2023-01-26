@@ -1,6 +1,6 @@
 ﻿namespace Dmrsv.RandomSelector
 {
-    public interface IRecent<T>
+    public interface IHistory<T>
     {
         int Capacity { get; set; }
         int Count { get; }

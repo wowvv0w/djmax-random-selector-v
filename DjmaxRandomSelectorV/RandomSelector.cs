@@ -23,7 +23,7 @@ namespace DjmaxRandomSelectorV
 
         private IFilter _filter;
         private Func<IEnumerable<Music>, IEnumerable<Music>> _outputMethod;
-        private IRecent<string> _recent;
+        private IHistory<string> _history;
         private ISelector _selector;
         private Locator _keyInputInvoker;
 
@@ -46,8 +46,8 @@ namespace DjmaxRandomSelectorV
 
             _outputMethod = new OutputMethodCreator().Create(config.Mode, config.Level);
 
-            _recent = new RecentHelper<string>(config.Exclusions, config.RecentsCount);
-            _selector = new SelectorWithRecent(_recent);
+            _history = new History<string>(config.Exclusions, config.RecentsCount);
+            _selector = new SelectorWithHistory(_history);
 
             _keyInputInvoker = new Locator()
             {
@@ -77,7 +77,7 @@ namespace DjmaxRandomSelectorV
             if (_filter.IsUpdated)
             {
                 _candidates = _filter.Filter(_playable);
-                _recent.Clear();
+                _history.Clear();
             }
             var selected = _selector.Select(_candidates);
             if (selected is not null)
@@ -117,7 +117,7 @@ namespace DjmaxRandomSelectorV
 
         public Task HandleAsync(CapacityMessage message, CancellationToken cancellationToken)
         {
-            _recent.Capacity = message.Value;
+            _history.Capacity = message.Value;
             return Task.CompletedTask;
         }
 

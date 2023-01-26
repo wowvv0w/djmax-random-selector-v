@@ -1,23 +1,23 @@
 ﻿namespace Dmrsv.RandomSelector
 {
-    public class SelectorWithRecent : SelectorBase
+    public class SelectorWithHistory : SelectorBase
     {
-        public IRecent<string> Recent { get; set; }
+        public IHistory<string> History { get; set; }
 
-        public SelectorWithRecent(IRecent<string> recent)
+        public SelectorWithHistory(IHistory<string> recent)
         {
-            Recent = recent;
+            History = recent;
         }
 
         public override Music? Select(IEnumerable<Music> musicList)
         {
             var recentExcluded = from music in musicList
-                                 where !Recent.Contains(music.Title)
+                                 where !History.Contains(music.Title)
                                  select music;
 
-            if (!recentExcluded.Any() && Recent.Count > 0)
+            if (!recentExcluded.Any() && History.Count > 0)
             {
-                string title = Recent.Dequeue();
+                string title = History.Dequeue();
                 recentExcluded = from music in musicList
                                  where music.Title == title
                                  select music;
@@ -27,7 +27,7 @@
 
             if (selected is not null)
             {
-                Recent.Enqueue(selected.Title);
+                History.Enqueue(selected.Title);
             }
 
             return selected;
