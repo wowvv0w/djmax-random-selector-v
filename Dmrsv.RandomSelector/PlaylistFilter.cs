@@ -26,7 +26,7 @@ namespace Dmrsv.RandomSelector
             var musicList = from item in Items
                             let track = trackList.FirstOrDefault(t => t.Title == item.Title)
                             where track is not null
-                            let level = track.Patterns[item.GetStyle()]
+                            let level = track.Patterns[item.Style]
                             select item with { Level = level };
             
             if (OutputMethod is not null)

@@ -1,79 +1,70 @@
 ﻿using Caliburn.Micro;
-using Dmrsv.Data;
-using Dmrsv.Data.Context.Schema;
-using Dmrsv.Data.Controller;
-using Dmrsv.Data.DataTypes;
+using DjmaxRandomSelectorV.Messages;
+using Dmrsv.RandomSelector;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class PlaylistFilterViewModel : FilterBaseViewModel
+    public class PlaylistFilterViewModel : Screen
     {
         private const string DefaultPath = @"Data\CurrentPlaylist.json";
 
         private readonly IEventAggregator _eventAggregator;
         private readonly IFileManager _fileManager;
-        private readonly List<Music> _allItems;
-        private readonly List<string> _allTitles;
-        //private readonly FilterApi _api;
+        private readonly List<Track> _tracks;
+        private readonly List<string> _titles;
 
+        private PlaylistFilter _filter;
         private bool _searchesSuggestion;
 
-        public BindableCollection<string> TitleSuggestions { get; set; }
-        public BindableCollection<Music> SearchResult { get; set; }
-        public BindableCollection<Music> PlaylistItems { get; set; }
+        public BindableCollection<string> TitleSuggestions { get; }
+        public BindableCollection<Music> SearchResult { get; }
+        public BindableCollection<Music> PlaylistItems { get; }
 
         public PlaylistFilterViewModel(IEventAggregator eventAggregator, IFileManager fileManager)
         {
+            DisplayName = "FILTER";
             _eventAggregator = eventAggregator;
             _fileManager = fileManager;
             _searchesSuggestion = true;
-            //_api = new FilterApi();
 
-            var allTracks = new TrackApi().GetAllTrackList().ToList();
-            var playlistItemsQuery = from track in allTracks
-                                     from pattern in track.Patterns
-                                     where pattern.Value > 0
-                                     select new Music() 
-                                     { 
-                                         Title = track.Title,
-                                         Style = pattern.Key, 
-                                         Level = pattern.Value.ToString(),
-                                     };
-            _allItems = playlistItemsQuery.ToList();
-            _allTitles = _allItems.Select(x => x.Title).Distinct().ToList();
+            _filter = _fileManager.Import<PlaylistFilter>(DefaultPath);
+            _tracks = new TrackManager().GetAllTrack();
+            _titles = _tracks.ConvertAll(x => x.Title);
 
-            List<Music> playlist = _fileManager.Import<PlaylistFilter>(DefaultPath).Playlist;
-            PlaylistItems = new BindableCollection<Music>(playlist);
+            PlaylistItems = new BindableCollection<Music>(_filter.Items);
+            _filter.Items = PlaylistItems;
+            _eventAggregator.PublishOnUIThreadAsync(new FilterMessage(_filter));
+
             SearchResult = new BindableCollection<Music>();
             TitleSuggestions = new BindableCollection<string>();
             OpensSuggestionBox = false;
-
-            Publish();
         }
-        protected override void Publish()
+
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-            var filter = new PlaylistFilter() { Playlist = PlaylistItems.ToList() };
-            //_api.SetPlaylistFilter(filter);
-            _eventAggregator.PublishOnUIThreadAsync(filter);
+            if (close)
+            {
+                _fileManager.Export(_filter, DefaultPath);
+            }
+            return Task.CompletedTask;
         }
 
         public void AddItem(Music item)
         {
-            PlaylistItems.Add(item);
-            Publish();
+            PlaylistItems.Add(item with { Level = -1 });
         }
 
         public void RemoveItem(Music item)
         {
             PlaylistItems.Remove(item);
-            Publish();
         }
 
         public void ConcatenateItems()
@@ -91,13 +82,16 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                //var concat = _api.GetPlaylist(dialog.FileName).Playlist;
-                //PlaylistItems.AddRange(concat);
+                var concat = _fileManager.Import<PlaylistFilter>(dialog.FileName).Items;
+                PlaylistItems.AddRange(concat);
             }
-
-            Publish();
         }
-        public void ClearItems() => PlaylistItems.Clear();
+
+        public void ClearItems()
+        {
+            PlaylistItems.Clear();
+        }
+
         public void SaveItems()
         {
             string app = AppDomain.CurrentDomain.BaseDirectory;
@@ -115,11 +109,8 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                var selectiveFilter = new PlaylistFilter()
-                {
-                    Playlist = PlaylistItems.ToList(),
-                };
-                //_api.SetPlaylist(selectiveFilter, dialog.FileName);
+                string fileName = dialog.FileName;
+                _fileManager.Export(_filter, fileName);
             }
         }
         public void LoadItems()
@@ -139,12 +130,11 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                //List<Music> playlist = _api.GetPlaylist(dialog.FileName).Playlist;
-                //PlaylistItems.Clear();
-                //PlaylistItems.AddRange(playlist);
+                string fileName = dialog.FileName;
+                var playlist = _fileManager.Import<PlaylistFilter>(fileName).Items;
+                PlaylistItems.Clear();
+                PlaylistItems.AddRange(playlist);
             }
-
-            Publish();
         }
 
         #region SearchBox
@@ -155,7 +145,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             set
             {
                 _searchBox = value;
-                NotifyOfPropertyChange(() => SearchBox);
+                NotifyOfPropertyChange();
                 if (_searchesSuggestion)
                 { 
                     SearchTitle();
@@ -178,14 +168,14 @@ namespace DjmaxRandomSelectorV.ViewModels
             
             if (_searchBox.Equals("#"))
             {
-                var titles = from title in _allTitles
+                var titles = from title in _titles
                              where !Regex.IsMatch(title, "[a-z]", RegexOptions.IgnoreCase)
                              select title;
                 TitleSuggestions.AddRange(titles);
             }
             else
             {
-                var titles = from title in _allTitles
+                var titles = from title in _titles
                              where title.StartsWith(_searchBox, true, null)
                              select title;
                 TitleSuggestions.AddRange(titles);
@@ -223,9 +213,11 @@ namespace DjmaxRandomSelectorV.ViewModels
         private void UpdateResult()
         {
             SearchResult.Clear();
-            var query = from item in _allItems
-                        where item.Title.ToLower().Equals(_searchBox?.ToLower() ?? "")
-                        select item;
+            var query = from t in _tracks
+                        where t.Title.ToLower() == (_searchBox?.ToLower() ?? string.Empty)
+                        select t.GetMusicList() into musicList
+                        from m in musicList
+                        select m;
             SearchResult.AddRange(query);
         }
         #endregion

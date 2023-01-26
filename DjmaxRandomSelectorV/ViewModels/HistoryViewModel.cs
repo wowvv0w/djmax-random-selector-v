@@ -28,7 +28,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private void AddItem(Music music)
         {
             _number++;
-            string style = music.GetStyle();
+            string style = music.Style;
             int level = music.Level;
             var historyItem = new HistoryItem()
             {
