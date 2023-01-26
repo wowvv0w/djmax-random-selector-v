@@ -9,7 +9,7 @@
             History = recent;
         }
 
-        public override Music? Select(IEnumerable<Music> musicList)
+        public override Music? Select(IList<Music> musicList)
         {
             var recentExcluded = from music in musicList
                                  where !History.Contains(music.Title)
@@ -23,7 +23,7 @@
                                  select music;
             }
 
-            var selected = base.Select(recentExcluded);
+            var selected = base.Select(recentExcluded.ToList());
 
             if (selected is not null)
             {

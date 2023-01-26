@@ -2,6 +2,6 @@
 {
     public interface ISelector
     {
-        Music? Select(IEnumerable<Music> musicList);
+        Music? Select(IList<Music> musicList);
     }
 }
