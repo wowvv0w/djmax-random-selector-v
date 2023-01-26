@@ -1,10 +1,5 @@
 ﻿using Caliburn.Micro;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -13,12 +8,16 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string GITHUB_PAGE_URL = "https://github.com/wowvv0w/djmax-random-selector-v";
         private const string BUG_REPORT_URL = "https://github.com/wowvv0w/djmax-random-selector-v/issues";
 
-        public InfoViewModel() { } // temp
-        public InfoViewModel(int currentVersion, int lastestVersion)
+        public string CurrentVersion { get; }
+        public string LastestVersion { get; }
+        public string AllTrackVersion { get; }
+
+        public InfoViewModel()
         {
-            CurrentVersion = IntToString(currentVersion);
-            LastestVersion = IntToString(lastestVersion);
-            //AllTrackVersion = new OptionApi().GetAppOption().AllTrackVersion.ToString();
+            var vc = IoC.Get<VersionContainer>();
+            CurrentVersion = "Current Version: " + IntToString(vc.CurrentAppVersion);
+            LastestVersion = "Lastest Version: " + IntToString(vc.LastestAppVersion);
+            AllTrackVersion = "All Track Version : " + vc.AllTrackVersion.ToString();
 
             string IntToString(int version)
             {
@@ -31,52 +30,17 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
-        #region Versions
-        private string _currentVersion;
-        private string _lastestVersion;
-        private string _allTrackVersion;
-
-        public string CurrentVersion
-        {
-            get { return _currentVersion; }
-            set
-            {
-                _currentVersion = $"Current Version: {value}";
-                NotifyOfPropertyChange(() => CurrentVersion);
-            }
-        }
-        public string LastestVersion
-        {
-            get { return _lastestVersion; }
-            set
-            {
-                _lastestVersion = $"Lastest Version: {value}";
-                NotifyOfPropertyChange(() => LastestVersion);
-            }
-        }
-        public string AllTrackVersion
-        {
-            get { return _allTrackVersion; }
-            set
-            {
-                _allTrackVersion = $"All Track Version: {value}";
-                NotifyOfPropertyChange(() => AllTrackVersion);
-            }
-        }
-        #endregion
-
-        #region Buttons
         public void OpenGithubPage()
         {
-            Process.Start(GITHUB_PAGE_URL);
+            Process.Start("explorer.exe", GITHUB_PAGE_URL);
         }
+
         public void OpenBugReport()
         {
-            Process.Start(BUG_REPORT_URL);
+            Process.Start("explorer.exe", BUG_REPORT_URL);
         }
-        #endregion
 
-        public void Close()
+        public void CloseDialog()
         {
             TryCloseAsync();
         }

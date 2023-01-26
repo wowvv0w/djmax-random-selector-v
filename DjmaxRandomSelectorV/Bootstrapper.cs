@@ -1,9 +1,12 @@
 ﻿using Caliburn.Micro;
+using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.ViewModels;
 using Dmrsv.RandomSelector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
@@ -17,6 +20,9 @@ namespace DjmaxRandomSelectorV
         private readonly Configuration _configuration;
         private readonly RandomSelector _rs;
         private readonly IFileManager _fileManager;
+        private readonly IEventAggregator _eventAggregator;
+
+        private VersionContainer _versionContainer;
 
         public Bootstrapper()
         {
@@ -26,23 +32,74 @@ namespace DjmaxRandomSelectorV
             _configuration = _fileManager.Import<Configuration>(ConfigPath);
             _container.Instance(_configuration);
 
-            _rs = new RandomSelector(IoC.Get<IEventAggregator>());
-            _rs.Initialize(_configuration);
-            _container.Instance(_rs);
+            _eventAggregator = IoC.Get<IEventAggregator>();
+            _rs = new RandomSelector(_eventAggregator);
         }
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
-            await DisplayRootViewForAsync(typeof(ShellViewModel));
+            Task<int[]> version = new UpdateHelper().GetLastestVersionsAsync();
+            Task display = DisplayRootViewForAsync(typeof(ShellViewModel));
+
+            await display;
             Window window = Application.MainWindow;
-            _rs.RegisterHandle(new WindowInteropHelper(window).Handle);
-            _rs.SetHotkey(0x0000, 118);
             double[] position = _configuration.Position;
             if (position?.Length == 2)
             {
                 window.Top = position[0];
                 window.Left = position[1];
             }
+
+            int[] lastest = null;
+            try
+            {
+                lastest = await version;
+            }
+            catch
+            {
+                MessageBox.Show("Failed to version check.",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            Version assemblyVersion = Assembly.GetEntryAssembly().GetName().Version;
+            int appVersion = assemblyVersion.Major * 100 +
+                             assemblyVersion.Minor * 10 +
+                             assemblyVersion.Build;
+
+            if (lastest is not null)
+            {
+                var current = new int[] { appVersion, _configuration.AllTrackVersion };
+                if (current[0] < lastest[0])
+                {
+                    await _eventAggregator.PublishOnUIThreadAsync(new UpdateMessage());
+                }
+                if (current[1] != lastest[1])
+                {
+                    try
+                    {
+                        new TrackManager().DownloadAllTrack();
+                        _configuration.AllTrackVersion = lastest[1];
+                        MessageBox.Show($"All track list is updated to the version {lastest[1]}.",
+                            "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
+                        
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Failed to download all track list.",
+                            "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            _rs.Initialize(_configuration);
+            _rs.RegisterHandle(new WindowInteropHelper(window).Handle);
+            _rs.SetHotkey(0x0000, 118);
+            _versionContainer = new VersionContainer
+            {
+                CurrentAppVersion = appVersion,
+                LastestAppVersion = lastest?[0] ?? appVersion,
+                AllTrackVersion = _configuration.AllTrackVersion
+            };
+            _container.Instance(_versionContainer);
         }
 
         protected override void OnExit(object sender, EventArgs e)

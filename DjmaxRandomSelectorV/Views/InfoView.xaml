@@ -20,7 +20,7 @@
         </Grid>
         <Grid DockPanel.Dock="Bottom"
               Style="{StaticResource DialogBar}">
-            <Button x:Name="Close"
+            <Button x:Name="CloseDialog"
                     Content="CLOSE"
                     Style="{StaticResource DialogButton}"
                     HorizontalAlignment="Right"
