@@ -1,4 +1,6 @@
 ﻿using Caliburn.Micro;
+using DjmaxRandomSelectorV.Messages;
+using Dmrsv.RandomSelector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class FavoriteViewModel : Screen
     {
+        private readonly IEventAggregator _eventAggregator;
         private bool searchesSuggestion;
         private readonly List<string> _titleList;
         //private readonly ExtraFilter _extraFilter;
@@ -19,24 +22,31 @@ namespace DjmaxRandomSelectorV.ViewModels
         public BindableCollection<string> BlacklistItems { get; set; }
         public BindableCollection<string> TitleSuggestions { get; set; }
 
-        public FavoriteViewModel()
+        public FavoriteViewModel(IEventAggregator eventAggregator)
         {
+            _eventAggregator = eventAggregator;
             searchesSuggestion = true;
-            //_titleList = new TrackApi().GetAllTrackList().ToList().ConvertAll(x => x.Title);
+            _titleList = new TrackManager().GetAllTrack().ConvertAll(x => x.Title);
 
-            //_extraFilter = new FilterApi().GetExtraFilter();
-
-            //FavoriteItems = new BindableCollection<string>(_extraFilter.Favorites);
-            //BlacklistItems = new BindableCollection<string>(_extraFilter.Blacklist);
+            var config = IoC.Get<Configuration>();
+            FavoriteItems = new BindableCollection<string>(config.Favorite);
+            BlacklistItems = new BindableCollection<string>(config.Blacklist);
 
             TitleSuggestions = new BindableCollection<string>();
             OpensSuggestionBox = false;
         }
-        public void OK()
+        public void CloseDialog()
         {
-            //_extraFilter.Favorites = FavoriteItems.ToList();
-            //_extraFilter.Blacklist = BlacklistItems.ToList();
-            //new FilterApi().SetExtraFilter(_extraFilter);
+            List<string> favorite = FavoriteItems.ToList();
+            List<string> blacklist = BlacklistItems.ToList();
+
+            var config = IoC.Get<Configuration>();
+            config.Favorite = favorite;
+            config.Blacklist = blacklist;
+
+            var message = new FavoriteMessage(favorite, blacklist);
+            _eventAggregator.PublishOnUIThreadAsync(message);
+
             TryCloseAsync(true);
         }
 

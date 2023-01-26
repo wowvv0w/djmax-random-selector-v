@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class QueryFilterViewModel : CategoryContainer
+    public class QueryFilterViewModel : CategoryContainer, IHandle<FavoriteMessage>
     {
         private const string DefaultPath = @"Data\CurrentFilter.json";
         private readonly IEventAggregator _eventAggregator;
@@ -112,6 +112,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator = eventAggregator;
             _windowManager = windowManager;
             _fileManager = fileManager;
+            _eventAggregator.SubscribeOnUIThread(this);
 
             _categories.Insert(15, new Category("FAVORITE", "FAVORITE", null));
             _categories.Insert(16, new Category("COLLABORATION", null, null));
@@ -235,12 +236,16 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
-        public async void OpenFavoriteEditor()
+        public Task OpenFavoriteEditor()
         {
-            bool? result = await _windowManager.ShowDialogAsync(IoC.Get<FavoriteViewModel>());
-            if (result == true)
-            {
-            }
+            return _windowManager.ShowDialogAsync(IoC.Get<FavoriteViewModel>());
+        }
+
+        public Task HandleAsync(FavoriteMessage message, CancellationToken cancellationToken)
+        {
+            _filter.Favorites = message.Favorite;
+            _filter.Blacklist = message.Blacklist;
+            return Task.CompletedTask;
         }
 
         #region Level Adjustment
