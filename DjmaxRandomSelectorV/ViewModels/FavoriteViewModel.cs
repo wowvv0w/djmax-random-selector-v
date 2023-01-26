@@ -1,12 +1,9 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Messages;
 using Dmrsv.RandomSelector;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
@@ -14,13 +11,13 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class FavoriteViewModel : Screen
     {
         private readonly IEventAggregator _eventAggregator;
-        private bool searchesSuggestion;
         private readonly List<string> _titleList;
-        //private readonly ExtraFilter _extraFilter;
 
-        public BindableCollection<string> FavoriteItems { get; set; }
-        public BindableCollection<string> BlacklistItems { get; set; }
-        public BindableCollection<string> TitleSuggestions { get; set; }
+        private bool searchesSuggestion;
+
+        public BindableCollection<string> FavoriteItems { get; }
+        public BindableCollection<string> BlacklistItems { get; }
+        public BindableCollection<string> TitleSuggestions { get; }
 
         public FavoriteViewModel(IEventAggregator eventAggregator)
         {
