@@ -4,15 +4,24 @@ namespace Dmrsv.RandomSelector
 {
     public class PlaylistFilter : FilterBase
     {
-        public ObservableCollection<Music> Items { get; set; }
+        private ObservableCollection<Music> _items;
+        public ObservableCollection<Music> Items
+        {
+            get => _items;
+            set
+            {
+                _items = value;
+                _items.CollectionChanged += (s, e) => IsUpdated = true;
+            }
+        }
 
         public PlaylistFilter()
         {
-            Items = new();
-            Items.CollectionChanged += (s, e) => IsUpdated = true;
+            _items = new ObservableCollection<Music>();
+            _items.CollectionChanged += (s, e) => IsUpdated = true;
         }
 
-        public override IEnumerable<Music> Filter(IEnumerable<Track> trackList)
+        public override List<Music> Filter(IEnumerable<Track> trackList)
         {
             var musicList = from item in Items
                             let track = trackList.FirstOrDefault(t => t.Title == item.Title)
@@ -26,7 +35,7 @@ namespace Dmrsv.RandomSelector
             }
 
             IsUpdated = false;
-            return musicList;
+            return musicList.ToList();
         }
     }
 }

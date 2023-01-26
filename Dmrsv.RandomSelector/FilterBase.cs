@@ -25,6 +25,6 @@ namespace Dmrsv.RandomSelector
             OutputMethod = null;
         }
 
-        public abstract IEnumerable<Music> Filter(IEnumerable<Track> trackList);
+        public abstract List<Music> Filter(IEnumerable<Track> trackList);
     }
 }

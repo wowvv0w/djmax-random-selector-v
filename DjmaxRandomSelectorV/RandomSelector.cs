@@ -16,8 +16,8 @@ namespace DjmaxRandomSelectorV
     {
         private readonly IEventAggregator _eventAggregator;
 
-        private IEnumerable<Track> _playable;
-        private IEnumerable<Music> _candidates;
+        private List<Track> _playable;
+        private List<Music> _candidates;
 
         private bool _isRunning;
 
@@ -103,7 +103,7 @@ namespace DjmaxRandomSelectorV
             _executionHelper.SetHotkey(fsModifiers, vk);
         }
 
-        public IEnumerable<Track> GetAllTrack()
+        public List<Track> GetAllTrack()
         {
             return new TrackManager().GetAllTrack();
         }

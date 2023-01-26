@@ -4,6 +4,6 @@
     {
         bool IsUpdated { get; }
         Func<IEnumerable<Music>, IEnumerable<Music>>? OutputMethod { get; set; }
-        IEnumerable<Music> Filter(IEnumerable<Track> trackList);
+        List<Music> Filter(IEnumerable<Track> trackList);
     }
 }

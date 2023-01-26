@@ -8,7 +8,7 @@ namespace Dmrsv.RandomSelector
     public class TrackManager
     {
         private const string AllTrackUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Data/AllTrackList.csv";
-        private const string AllTrackPath = "Data/AllTrackList.csv";
+        private const string AllTrackPath = @"Data\AllTrackList.csv";
 
         private readonly Dictionary<string, string[]> _dlcMusicInRespect = new()
         {
@@ -38,7 +38,7 @@ namespace Dmrsv.RandomSelector
             writer.Write(result);
         }
 
-        public IEnumerable<Track> GetAllTrack()
+        public List<Track> GetAllTrack()
         {
             using var reader = new StreamReader(AllTrackPath, Encoding.UTF8);
             using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
@@ -49,7 +49,7 @@ namespace Dmrsv.RandomSelector
             return records.ToList();
         }
 
-        public IEnumerable<Track> CreateTracks(IEnumerable<string> dlcs)
+        public List<Track> CreateTracks(IEnumerable<string> dlcs)
         {
             var allTrack = GetAllTrack();
             var basicCategories = new string[] { "RP", "P1", "P2", "GG" };
@@ -64,7 +64,7 @@ namespace Dmrsv.RandomSelector
                              where !exclusions.Contains(track.Title)
                              select track;
 
-            return trackQuery;
+            return trackQuery.ToList();
         }
 
         public sealed class TrackMap : ClassMap<Track>
