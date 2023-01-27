@@ -6,9 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -22,7 +24,18 @@ namespace DjmaxRandomSelectorV.ViewModels
         private readonly List<string> _titles;
 
         private PlaylistFilter _filter;
-        private bool _searchesSuggestion;
+        private string _searchBox;
+
+        public string SearchBox
+        {
+            get => _searchBox;
+            set
+            {
+                _searchBox = value;
+                NotifyOfPropertyChange();
+                UpdateResult();
+            }
+        }
 
         public BindableCollection<string> TitleSuggestions { get; }
         public BindableCollection<Music> SearchResult { get; }
@@ -33,7 +46,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             DisplayName = "FILTER";
             _eventAggregator = eventAggregator;
             _fileManager = fileManager;
-            _searchesSuggestion = true;
 
             _filter = _fileManager.Import<PlaylistFilter>(DefaultPath);
             _tracks = new TrackManager().GetAllTrack();
@@ -45,7 +57,6 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             SearchResult = new BindableCollection<Music>();
             TitleSuggestions = new BindableCollection<string>();
-            OpensSuggestionBox = false;
         }
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
@@ -89,7 +100,12 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void ClearItems()
         {
-            PlaylistItems.Clear();
+            var result = MessageBox.Show("Are you sure?",
+                "Clear all", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                PlaylistItems.Clear();
+            }
         }
 
         public void SaveItems()
@@ -137,94 +153,65 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
-        #region SearchBox
-        private string _searchBox;
-        public string SearchBox
-        {
-            get { return _searchBox; }
-            set
-            {
-                _searchBox = value;
-                NotifyOfPropertyChange();
-                if (_searchesSuggestion)
-                { 
-                    SearchTitle();
-                }
-                UpdateResult();
-            }
-        }
-
         public void ClearSearchBox()
         {
             SearchBox = string.Empty;
         }
 
-        private void SearchTitle()
+        public void SelectSuggestion(string title)
+        {
+            if (string.IsNullOrEmpty(title))
+            {
+                return;
+            }
+            SearchBox = title;
+        }
+
+        public void SearchTitle()
         {
             TitleSuggestions.Clear();
 
-            if (string.IsNullOrEmpty(_searchBox))
+            if (string.IsNullOrEmpty(SearchBox))
             {
-                OpensSuggestionBox = false;
                 return;
             }
 
-            OpensSuggestionBox = true;
-            
-            if (_searchBox.Equals("#"))
+            IEnumerable<string> titles;
+            if (SearchBox.Equals("#"))
             {
-                var titles = from title in _titles
-                             where !Regex.IsMatch(title, "[a-z]", RegexOptions.IgnoreCase)
-                             select title;
-                TitleSuggestions.AddRange(titles);
+                titles = from title in _titles
+                         where !Regex.IsMatch(title[..1], "[a-z]", RegexOptions.IgnoreCase)
+                         select title;
             }
             else
             {
-                var titles = from title in _titles
-                             where title.StartsWith(_searchBox, true, null)
-                             select title;
-                TitleSuggestions.AddRange(titles);
+                titles = from title in _titles
+                         where title.StartsWith(SearchBox, true, null)
+                         select title;
             }
-
-            if (TitleSuggestions.Count == 0)
-            {
-                OpensSuggestionBox = false;
-            }
-        }
-        #endregion
-
-        #region SuggestionBox
-        private bool _opensSuggestionBox;
-        public bool OpensSuggestionBox
-        {
-            get { return _opensSuggestionBox; }
-            set
-            {
-                _opensSuggestionBox = value;
-                NotifyOfPropertyChange(() => OpensSuggestionBox);
-            }
-        }
-
-        public void SelectSuggestion(string title)
-        {
-            _searchesSuggestion = false;
-
-            SearchBox = title;
-            OpensSuggestionBox = false;
-
-            _searchesSuggestion = true;
+            TitleSuggestions.AddRange(titles);
         }
 
         private void UpdateResult()
         {
             SearchResult.Clear();
             var query = from t in _tracks
-                        where t.Title.ToLower() == (_searchBox?.ToLower() ?? string.Empty)
+                        where t.Title.ToLower() == (SearchBox?.ToLower() ?? string.Empty)
                         select t.GetMusicList() into musicList
                         from m in musicList
                         select m;
             SearchResult.AddRange(query);
         }
-        #endregion
+
+        public void SortPlaylist()
+        {
+            var difficultyOrder = new string[] { "NM", "HD", "MX", "SC" };
+            var sorted = PlaylistItems.OrderBy(x => !Regex.IsMatch(x.Title[..1], "[ㄱ-ㅎ가-힣]"))
+                .ThenBy(x => x.Title)
+                .ThenBy(x => x.ButtonTunes)
+                .ThenBy(x => Array.IndexOf(difficultyOrder, x.Difficulty)).ToList();
+            PlaylistItems.Clear();
+            PlaylistItems.AddRange(sorted);
+        }
     }
 }

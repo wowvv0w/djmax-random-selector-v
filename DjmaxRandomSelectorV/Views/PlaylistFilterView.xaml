@@ -57,30 +57,29 @@
         <!--#endregion-->
         
         <!--#region Search Box-->
-        <Border Grid.Row="2" Padding="5 0"
-                Background="#1FFFFFFF">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock x:Name="watermark"
-                           Foreground="{StaticResource Default}"
-                           FontSize="15"
-                           FontFamily="{StaticResource Lato}"
-                           VerticalAlignment="Center"
-                           Margin="2 0">
-                    <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=SearchBox}" Value="True">
-                                    <Setter Property="Text" Value="Search"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
+        <Grid Grid.Row="2">
+            <Border Padding="5 0"
+                    Background="#1FFFFFFF">
                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Foreground="{StaticResource Default}"
+                               FontSize="15"
+                               FontFamily="{StaticResource Lato}"
+                               VerticalAlignment="Center"
+                               Margin="2 0">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=SearchBox}" Value="True">
+                                        <Setter Property="Text" Value="Search"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                     <TextBox x:Name="SearchBox"
                              Background="Transparent"
                              BorderThickness="0"
@@ -88,35 +87,51 @@
                              CaretBrush="White"
                              VerticalAlignment="Center"
                              FontFamily="{StaticResource Lato}"
-                             FontSize="15"/>
-                    <Popup IsOpen="{Binding OpensSuggestionBox}"
-                           StaysOpen="False"
-                           Placement="Bottom">
-                        <ListBox x:Name="SuggestionBox"
-                                 Width="278"
-                                 MaxHeight="189"
-                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                 FontFamily="{StaticResource Lato}"
-                                 ItemsSource="{Binding TitleSuggestions}"
-                                 cal:Message.Attach="[Event SelectionChanged] = [Action SelectSuggestion(SuggestionBox.SelectedItem)]"/>
-                    </Popup>
+                             FontSize="15"
+                             cal:Message.Attach="[Event KeyUp] = [Action SearchTitle]"/>
+                    <Button x:Name="ClearSearchBox"
+                            Grid.Column="1"
+                            Width="25">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource WindowButton}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=SearchBox}" Value="True">
+                                        <Setter Property="Visibility" Value="Hidden"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <Image Source="pack://application:,,,/Images/Close.png" Width="12"/>
+                    </Button>
                 </Grid>
-                <Button x:Name="ClearSearchBox"
-                        Grid.Column="1"
-                        Width="25">
-                    <Button.Style>
-                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource WindowButton}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=SearchBox}" Value="True">
-                                    <Setter Property="Visibility" Value="Hidden"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                    <Image Source="pack://application:,,,/Images/Close.png" Width="12"/>
-                </Button>
-            </Grid>
-        </Border>
+            </Border>
+            <Popup StaysOpen="False"
+                   Placement="Bottom">
+                <Popup.Style>
+                    <Style TargetType="{x:Type Popup}">
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding HasItems, ElementName=SuggestionBox}"
+                                               Value="True"/>
+                                    <Condition Binding="{Binding SelectedIndex, ElementName=SuggestionBox}"
+                                               Value="-1"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="IsOpen" Value="True"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Popup.Style>
+                <ListBox x:Name="SuggestionBox"
+                         Width="334"
+                         MaxHeight="180"
+                         Style="{StaticResource PopupListBox}"
+                         ItemsSource="{Binding TitleSuggestions}"
+                         ItemContainerStyle="{StaticResource PopupListBoxItem}"
+                         cal:Message.Attach="[Event SelectionChanged] = [Action SelectSuggestion(SuggestionBox.SelectedItem)]">
+                </ListBox>
+            </Popup>
+        </Grid>
         <!--#endregion-->
         
         <!--#region All Items-->
@@ -233,6 +248,8 @@
             <TextBlock Text="PLAYLIST"
                        VerticalAlignment="Center"
                        Margin="10 0"/>
+            <Button x:Name="SortPlaylist"
+                    Content="SORT"/>
         </StackPanel>
         <Grid Grid.Row="2" Grid.Column="3"
               Grid.RowSpan="6"
@@ -273,9 +290,18 @@
                                 </Grid.Resources>
                                 <TextBlock Text="{Binding Title}"
                                            Grid.Column="1"
+                                           Foreground="#9F9F9F"
                                            TextWrapping="Wrap"/>
-                                <TextBlock Text="{Binding Style}"
-                                           Grid.Column="3"/>
+                                <Border x:Name="styleBorder"
+                                        Grid.Column="3"
+                                        BorderThickness="0 0 6 0"
+                                        VerticalAlignment="Center"
+                                        Width="50">
+                                    <TextBlock x:Name="styleText"
+                                               Text="{Binding Style}"
+                                               Foreground="#DFDFDF"
+                                               TextAlignment="Center"/>
+                                </Border>
                                 <Button Grid.Column="4"
                                         Width="auto"
                                         cal:Message.Attach="RemoveItem($dataContext)"
@@ -283,6 +309,32 @@
                                     <Image Source="pack://application:,,,/Images/Close.png" Width="12"/>
                                 </Button>
                             </Grid>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding ButtonTunes}" Value="4B">
+                                    <Setter TargetName="styleBorder" Property="Background" Value="#80A2D783"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ButtonTunes}" Value="5B">
+                                    <Setter TargetName="styleBorder" Property="Background" Value="#8043B3C6"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ButtonTunes}" Value="6B">
+                                    <Setter TargetName="styleBorder" Property="Background" Value="#80C68C47"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ButtonTunes}" Value="8B">
+                                    <Setter TargetName="styleBorder" Property="Background" Value="#809F8DED"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Difficulty}" Value="NM">
+                                    <Setter TargetName="styleBorder" Property="BorderBrush" Value="#80D7B854"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Difficulty}" Value="HD">
+                                    <Setter TargetName="styleBorder" Property="BorderBrush" Value="#80DD8E5E"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Difficulty}" Value="MX">
+                                    <Setter TargetName="styleBorder" Property="BorderBrush" Value="#80D75B7B"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Difficulty}" Value="SC">
+                                    <Setter TargetName="styleBorder" Property="BorderBrush" Value="#80CF4DB5"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

@@ -483,6 +483,8 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="0.00001*"/>
                         </Grid.RowDefinitions>
+                        <Border Background="#56000000"
+                                CornerRadius="5"/>
                         <Track x:Name="PART_Track"
                                IsDirectionReversed="True">
                             <Track.Thumb>
@@ -531,5 +533,39 @@
             </Setter.Value>
         </Setter>
     </Style>
-                
+    <Style x:Key="PopupListBoxItem" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontFamily" Value="{StaticResource Lato}"/>
+        <Setter Property="Padding" Value="5 3"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <TextBlock Text="{Binding}"
+                               TextWrapping="Wrap"
+                               FontSize="{TemplateBinding FontSize}"
+                               FontFamily="{TemplateBinding FontFamily}"
+                               Padding="{TemplateBinding Padding}">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#3D3E3F"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="PopupListBox" TargetType="{x:Type ListBox}">
+        <Setter Property="Foreground" Value="#9F9F9F"/>
+        <Setter Property="Background" Value="#1F1F1F"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Default}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="Padding" Value="2"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden"/>
+    </Style>
 </ResourceDictionary>
