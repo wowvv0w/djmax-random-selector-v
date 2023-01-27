@@ -154,6 +154,11 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
+        public void ClearSearchBox()
+        {
+            SearchBox = string.Empty;
+        }
+
         private void SearchTitle()
         {
             TitleSuggestions.Clear();
