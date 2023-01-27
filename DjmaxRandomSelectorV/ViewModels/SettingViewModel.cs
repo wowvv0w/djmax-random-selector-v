@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Messages;
+using DjmaxRandomSelectorV.Models;
 using Dmrsv.RandomSelector;
 using Microsoft.Win32;
 using System.Collections.Generic;
@@ -9,11 +10,12 @@ using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class SettingViewModel : CategoryContainer
+    public class SettingViewModel : Screen
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly IFileManager _fileManager;
         private readonly SettingMessage _message;
+        private readonly List<Category> _categories;
 
         public bool IsPlaylist
         {
@@ -42,6 +44,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 NotifyOfPropertyChange();
             }
         }
+        public BindableCollection<ListUpdater> CategoryUpdaters { get; }
 
         public SettingViewModel(IEventAggregator eventAggregator, IFileManager fileManager)
         {
@@ -57,8 +60,10 @@ namespace DjmaxRandomSelectorV.ViewModels
                 OwnedDlcs = config.OwnedDlcs.ConvertAll(x => x)
             };
 
+            _categories = IoC.Get<CategoryContainer>().GetCategories();
             _categories.RemoveAll(x => string.IsNullOrEmpty(x.Code));
-            InitializeCategoryUpdaters(_message.OwnedDlcs);
+            var updaters = _categories.ConvertAll(x => new ListUpdater(x.Name, x.Id, _message.OwnedDlcs));
+            CategoryUpdaters = new BindableCollection<ListUpdater>(updaters);
         }
 
         public void DetectDlcs()
@@ -96,13 +101,16 @@ namespace DjmaxRandomSelectorV.ViewModels
             config.FilterType = _message.FilterType;
             config.InputDelay = _message.InputInterval;
             config.SavesRecents = _message.SavesExclusion;
-            config.OwnedDlcs = _message.OwnedDlcs.ConvertAll((x) => x);
+            config.OwnedDlcs = _message.OwnedDlcs.ConvertAll(x => x);
 
             _fileManager.Export(config, @"Data\Config.json");
             _eventAggregator.PublishOnUIThreadAsync(_message);
             TryCloseAsync(true);
         }
 
-        public void Cancel() => TryCloseAsync(false);
+        public void Cancel()
+        {
+            TryCloseAsync(false);
+        }
     }
 }

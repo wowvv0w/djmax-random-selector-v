@@ -1,12 +1,11 @@
-﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.Models;
+﻿using DjmaxRandomSelectorV.Models;
 using System.Collections.Generic;
 
-namespace DjmaxRandomSelectorV.ViewModels
+namespace DjmaxRandomSelectorV
 {
-    public abstract class CategoryContainer : Screen
+    public class CategoryContainer
     {
-        protected readonly List<Category> _categories = new()
+        private readonly List<Category> _categories = new()
         {
             new Category("RESPECT", "RP", null),
             new Category("PORTABLE 1", "P1", null),
@@ -34,12 +33,9 @@ namespace DjmaxRandomSelectorV.ViewModels
             new Category("NEXON", "NXN", "1958170"),
         };
 
-        public BindableCollection<ListUpdater> CategoryUpdaters { get; private set; }
-
-        protected void InitializeCategoryUpdaters(ICollection<string> target)
+        public List<Category> GetCategories()
         {
-            var updaters = _categories.ConvertAll(x => new ListUpdater(x.Name, x.Id, target));
-            CategoryUpdaters = new BindableCollection<ListUpdater>(updaters);
+            return _categories.ConvertAll(x => x);
         }
     }
 }

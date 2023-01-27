@@ -21,6 +21,7 @@ namespace DjmaxRandomSelectorV
         private readonly RandomSelector _rs;
         private readonly IFileManager _fileManager;
         private readonly IEventAggregator _eventAggregator;
+        private readonly CategoryContainer _categoryContainer = new CategoryContainer();
 
         private VersionContainer _versionContainer;
 
@@ -110,6 +111,7 @@ namespace DjmaxRandomSelectorV
         protected override void Configure()
         {
             _container.Instance(_container);
+            _container.Instance(_categoryContainer);
 
             _container
                 .Singleton<IWindowManager, WindowManager>()

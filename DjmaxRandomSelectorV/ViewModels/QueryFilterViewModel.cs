@@ -13,12 +13,13 @@ using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class QueryFilterViewModel : CategoryContainer, IHandle<FavoriteMessage>
+    public class QueryFilterViewModel : Screen, IHandle<FavoriteMessage>
     {
         private const string DefaultPath = @"Data\CurrentFilter.json";
         private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
         private readonly IFileManager _fileManager;
+        private readonly List<Category> _categories;
 
         private QueryFilter _filter;
 
@@ -114,6 +115,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _fileManager = fileManager;
             _eventAggregator.SubscribeOnUIThread(this);
 
+            _categories = IoC.Get<CategoryContainer>().GetCategories();
             _categories.Insert(15, new Category("FAVORITE", "FAVORITE", null));
             _categories.Insert(16, new Category("COLLABORATION", null, null));
 
@@ -145,8 +147,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             var buttons = new List<string>() { "4B", "5B", "6B", "8B" }.ConvertAll(x => new ListUpdater(x, x, _filter.ButtonTunes));
             ButtonTunesUpdaters = new BindableCollection<ListUpdater>(buttons);
 
-            InitializeCategoryUpdaters(_filter.Categories);
-            var updaters = CategoryUpdaters.ToList();
+            var updaters = _categories.ConvertAll(x => new ListUpdater(x.Name, x.Id, _filter.Categories));
             RegularCategories = new BindableCollection<ListUpdater>(updaters.GetRange(0, 16));
             CollabCategories = new BindableCollection<ListUpdater>(updaters.GetRange(16, 10));
 
