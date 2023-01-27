@@ -138,6 +138,8 @@ namespace DjmaxRandomSelectorV
         {
             _keyInputInvoker.InputInterval = message.InputInterval;
             _playable = new TrackManager().CreateTracks(message.OwnedDlcs);
+            _candidates = _filter.Filter(_playable);
+            _history.Clear();
             return Task.CompletedTask;
         }
 
