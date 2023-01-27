@@ -30,6 +30,8 @@ namespace DjmaxRandomSelectorV
         private readonly WindowTitleHelper _windowTitleHelper;
         private readonly ExecutionHelper _executionHelper;
 
+        public IHistory<string> History => _history;
+
         public RandomSelector(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
@@ -101,11 +103,6 @@ namespace DjmaxRandomSelectorV
         public void SetHotkey(uint fsModifiers, uint vk)
         {
             _executionHelper.SetHotkey(fsModifiers, vk);
-        }
-
-        public List<Track> GetAllTrack()
-        {
-            return new TrackManager().GetAllTrack();
         }
 
         public Task HandleAsync(FilterMessage message, CancellationToken cancellationToken)

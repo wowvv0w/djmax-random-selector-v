@@ -47,9 +47,9 @@
             _history.Clear();
         }
 
-        public IEnumerable<T> GetItems()
+        public List<T> GetItems()
         {
-            return _history.Select(x => x);
+            return _history.Select(x => x).ToList();
         }
 
         private void ResolveOverflow()

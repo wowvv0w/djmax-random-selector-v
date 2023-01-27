@@ -8,6 +8,6 @@
         T Dequeue();
         bool Contains(T item);
         void Clear();
-        IEnumerable<T> GetItems();
+        List<T> GetItems();
     }
 }

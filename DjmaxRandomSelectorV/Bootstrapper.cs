@@ -105,6 +105,11 @@ namespace DjmaxRandomSelectorV
 
         protected override void OnExit(object sender, EventArgs e)
         {
+            var historyItems = _rs.History.GetItems();
+            if (_configuration.SavesRecents)
+            {
+                _configuration.Exclusions = historyItems;
+            }
             _fileManager.Export(_configuration, ConfigPath);
         }
 
