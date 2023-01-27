@@ -13,7 +13,17 @@ namespace DjmaxRandomSelectorV.ViewModels
         private readonly IEventAggregator _eventAggregator;
         private readonly List<string> _titleList;
 
-        private bool searchesSuggestion;
+        private string _searchBox;
+
+        public string SearchBox
+        {
+            get { return _searchBox; }
+            set
+            {
+                _searchBox = value;
+                NotifyOfPropertyChange();
+            }
+        }
 
         public BindableCollection<string> FavoriteItems { get; }
         public BindableCollection<string> BlacklistItems { get; }
@@ -22,7 +32,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         public FavoriteViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            searchesSuggestion = true;
             _titleList = new TrackManager().GetAllTrack().ConvertAll(x => x.Title);
 
             var config = IoC.Get<Configuration>();
@@ -30,7 +39,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             BlacklistItems = new BindableCollection<string>(config.Blacklist);
 
             TitleSuggestions = new BindableCollection<string>();
-            OpensSuggestionBox = false;
         }
         public void CloseDialog()
         {
@@ -47,75 +55,44 @@ namespace DjmaxRandomSelectorV.ViewModels
             TryCloseAsync(true);
         }
 
-        #region SearchBox
-        private string _searchBox;
-        public string SearchBox
-        {
-            get { return _searchBox; }
-            set
-            {
-                _searchBox = value;
-                NotifyOfPropertyChange(() => SearchBox);
-                if (searchesSuggestion) { SearchTitle(); }
-            }
-        }
-
-        private void SearchTitle()
+        public void SearchTitle()
         {
             TitleSuggestions.Clear();
 
-            if (string.IsNullOrEmpty(_searchBox))
+            if (string.IsNullOrEmpty(SearchBox))
             {
-                OpensSuggestionBox = false;
                 return;
             }
 
-            OpensSuggestionBox = true;
-
-            if (_searchBox.Equals("#"))
+            IEnumerable<string> titles;
+            if (SearchBox.Equals("#"))
             {
-                var titles = from title in _titleList
-                             where !Regex.IsMatch(title, "[a-z]", RegexOptions.IgnoreCase)
-                             select title;
-                TitleSuggestions.AddRange(titles);
+                titles = from title in _titleList
+                         where !Regex.IsMatch(title[..1], "[a-z]", RegexOptions.IgnoreCase)
+                         select title;
             }
             else
             {
-                var titles = from title in _titleList
-                             where title.StartsWith(_searchBox, true, null)
-                             select title;
-                TitleSuggestions.AddRange(titles);
+                titles = from title in _titleList
+                         where title.StartsWith(SearchBox, true, null)
+                         select title;
             }
-
-            if (TitleSuggestions.Count == 0)
-            {
-                OpensSuggestionBox = false;
-            }
-        }
-        #endregion
-
-        #region SuggestionBox
-        private bool _opensSuggestionBox;
-        public bool OpensSuggestionBox
-        {
-            get { return _opensSuggestionBox; }
-            set 
-            {
-                _opensSuggestionBox = value;
-                NotifyOfPropertyChange(() => OpensSuggestionBox);
-            }
+            TitleSuggestions.AddRange(titles);
         }
 
         public void SelectSuggestion(string title)
         {
-            searchesSuggestion = false;
-
+            if (string.IsNullOrEmpty(title))
+            {
+                return;
+            }
             SearchBox = title;
-            OpensSuggestionBox = false;
-
-            searchesSuggestion = true;
         }
-        #endregion
+
+        public void ClearSearchBox()
+        {
+            SearchBox = string.Empty;
+        }
 
         #region Favorite Item Adjustment
         public void AddToFavorite()
