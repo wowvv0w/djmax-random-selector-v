@@ -1,11 +1,11 @@
 ﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.ViewModels;
 using Dmrsv.RandomSelector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
@@ -22,6 +22,8 @@ namespace DjmaxRandomSelectorV
         private readonly IFileManager _fileManager;
         private readonly CategoryContainer _categoryContainer = new CategoryContainer();
         private readonly VersionContainer _versionContainer;
+
+        private Mutex _mutex;
 
         public Bootstrapper()
         {
@@ -61,6 +63,16 @@ namespace DjmaxRandomSelectorV
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
+            _mutex = new Mutex(true, "DjmaxRandomSelectorV", out bool createsNew);
+            if (!createsNew)
+            {
+                MessageBox.Show("Already running.",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Exit -= OnExit;
+                Application.Shutdown();
+                return;
+            }
+
             try
             {
                 await _versionContainer.CheckLastestVersionsAsync();
