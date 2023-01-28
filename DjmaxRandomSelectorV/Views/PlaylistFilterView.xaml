@@ -10,9 +10,9 @@
              d:DesignHeight="340" d:DesignWidth="680">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition/>
             <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -20,58 +20,41 @@
             <RowDefinition Height="25"/>
             <RowDefinition Height="10"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.Resources>
-            <Style TargetType="TextBlock">
-                <Setter Property="Foreground" Value="{StaticResource Default}"/>
-                <Setter Property="FontFamily" Value="{StaticResource Lato}"/>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource GrayTextBlock}">
                 <Setter Property="FontSize" Value="16"/>
             </Style>
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource HoverEffectTransparentButton}">
+                <Setter Property="Padding" Value="10 0"/>
+            </Style>
         </Grid.Resources>
-
-        <!--#region Tool-->
+        <!--#region Left Header-->
         <StackPanel Orientation="Horizontal"
-                    Background="{StaticResource Widget}">
-            <StackPanel.Resources>
-                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource WindowButton}">
-                    <Setter Property="Foreground" Value="{StaticResource Default}"/>
-                    <Setter Property="FontFamily" Value="{StaticResource Lato}"/>
-                    <Setter Property="FontSize" Value="10"/>
-                    <Setter Property="Width" Value="auto"/>
-                    <Setter Property="Padding" Value="10 0"/>
-                </Style>
-            </StackPanel.Resources>
+                    Background="{StaticResource DarkTranslucentBackgroundColor}">
             <TextBlock Text="TOOL"
-                       VerticalAlignment="Center"
                        Margin="10 0"/>
-            <Button x:Name="SaveItems"
-                    Content="SAVE"/>
-            <Button x:Name="LoadItems"
-                    Content="LOAD"/>
-            <Button x:Name="ConcatenateItems"
-                    Content="CONCAT"/>
-            <Button x:Name="ClearItems"
-                    Content="CLEAR"/>
+            <Button x:Name="SaveItems" Content="SAVE"/>
+            <Button x:Name="LoadItems" Content="LOAD"/>
+            <Button x:Name="ConcatenateItems" Content="CONCAT"/>
+            <Button x:Name="ClearItems" Content="CLEAR"/>
         </StackPanel>
         <!--#endregion-->
-        
-        <!--#region Search Box-->
+        <!--#region Left SearchBox-->
         <Grid Grid.Row="2">
-            <Border Padding="5 0"
-                    Background="#1FFFFFFF">
+            <Border x:Name="searchBoxBorder"
+                    Background="{StaticResource BrighterTranslucentBackgroundColor}"
+                    Padding="5 0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Foreground="{StaticResource Default}"
-                               FontSize="15"
-                               FontFamily="{StaticResource Lato}"
-                               VerticalAlignment="Center"
+                    <TextBlock HorizontalAlignment="Left"
                                Margin="2 0">
                         <TextBlock.Style>
-                            <Style TargetType="{x:Type TextBlock}">
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource GrayTextBlock}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=SearchBox}" Value="True">
                                         <Setter Property="Text" Value="Search"/>
@@ -81,19 +64,19 @@
                         </TextBlock.Style>
                     </TextBlock>
                     <TextBox x:Name="SearchBox"
+                             Foreground="White"
                              Background="Transparent"
                              BorderThickness="0"
-                             Foreground="White"
                              CaretBrush="White"
                              VerticalAlignment="Center"
-                             FontFamily="{StaticResource Lato}"
+                             FontFamily="{StaticResource LatoFont}"
                              FontSize="15"
                              cal:Message.Attach="[Event KeyUp] = [Action SearchTitle]"/>
                     <Button x:Name="ClearSearchBox"
                             Grid.Column="1"
                             Width="25">
                         <Button.Style>
-                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource WindowButton}">
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource HoverEffectTransparentButton}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=SearchBox}" Value="True">
                                         <Setter Property="Visibility" Value="Hidden"/>
@@ -101,7 +84,7 @@
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>
-                        <Image Source="pack://application:,,,/Images/Close.png" Width="12"/>
+                        <Image Style="{StaticResource XMarkImage}" Width="12"/>
                     </Button>
                 </Grid>
             </Border>
@@ -123,7 +106,7 @@
                     </Style>
                 </Popup.Style>
                 <ListBox x:Name="SuggestionBox"
-                         Width="334"
+                         Width="{Binding ActualWidth, ElementName=searchBoxBorder}"
                          MaxHeight="180"
                          Style="{StaticResource PopupListBox}"
                          ItemsSource="{Binding TitleSuggestions}"
@@ -133,63 +116,44 @@
             </Popup>
         </Grid>
         <!--#endregion-->
-        
-        <!--#region All Items-->
+        <!--#region Left Search Result-->
         <Grid Grid.Row="4"
-              Background="#56000000"
+              Background="{StaticResource DarkerTranslucentBackgroundColor}"
               Height="200"
               VerticalAlignment="Top">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
             <Grid.Resources>
-                <Style TargetType="{x:Type TextBlock}">
+                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BoldGrayTextBlock}">
                     <Setter Property="FontSize" Value="16"/>
-                    <Setter Property="FontFamily" Value="{StaticResource Lato Black}"/>
-                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                    <Setter Property="VerticalAlignment" Value="Center"/>
                 </Style>
             </Grid.Resources>
             <TextBlock Text="STYLE"
-                       Foreground="{StaticResource Default}"
+                       Style="{StaticResource GrayTextBlock}"
                        FontSize="12"
-                       FontFamily="{StaticResource Lato}"
                        Margin="5 0"/>
-            <UniformGrid Grid.Column="1"
-                         Columns="4">
-                <TextBlock Text="NM"
-                           Foreground="#56D7B854"/>
-                <TextBlock Text="HD"
-                           Foreground="#56DD8E5E"/>
-                <TextBlock Text="MX"
-                           Foreground="#56D75B7B"/>
-                <TextBlock Text="SC"
-                           Foreground="#56CF4DB5"/>
+            <UniformGrid Grid.Column="1" Columns="4">
+                <TextBlock Text="NM" Foreground="#56D7B854"/>
+                <TextBlock Text="HD" Foreground="#56DD8E5E"/>
+                <TextBlock Text="MX" Foreground="#56D75B7B"/>
+                <TextBlock Text="SC" Foreground="#56CF4DB5"/>
             </UniformGrid>
-            <UniformGrid Grid.Row="1"
-                         Rows="4">
-                <TextBlock Text="4B"
-                           Foreground="#56A2D783"/>
-                <TextBlock Text="5B"
-                           Foreground="#5643B3C6"/>
-                <TextBlock Text="6B"
-                           Foreground="#56C68C47"/>
-                <TextBlock Text="8B"
-                           Foreground="#569F8DED"/>
+            <UniformGrid Grid.Row="1" Rows="4">
+                <TextBlock Text="4B" Foreground="#56A2D783"/>
+                <TextBlock Text="5B" Foreground="#5643B3C6"/>
+                <TextBlock Text="6B" Foreground="#56C68C47"/>
+                <TextBlock Text="8B" Foreground="#569F8DED"/>
             </UniformGrid>
             <TextBlock Grid.Row="2" Grid.Column="1"
-                       FontSize="12"
-                       FontFamily="{StaticResource Lato}"
-                       Foreground="{StaticResource Default}"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center">
+                       FontSize="12">
                 <TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}">
+                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource GrayTextBlock}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding HasItems, ElementName=SearchResult}" Value="False">
                                 <Setter Property="Text" Value="Search music to add patterns to playlist."/>
@@ -199,27 +163,19 @@
                 </TextBlock.Style>
             </TextBlock>
             <ItemsControl x:Name="SearchResult"
-                          Grid.Row="2" Grid.Column="1"
-                          Padding="0"
-                          Foreground="{StaticResource Default}"
-                          Background="Transparent"
-                          BorderThickness="0"
-                          FontFamily="{StaticResource Lato}"
-                          FontSize="12">
+                          Grid.Row="2" Grid.Column="1">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Rows="4" Columns="4"/>
+                        <UniformGrid Columns="4" Rows="4"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button x:Name="patternButton"
                                 Content="{Binding Level}"
-                                Foreground="{StaticResource Default}"
-                                FontFamily="{StaticResource Lato Black}"
-                                Width="auto"
-                                cal:Message.Attach="AddItem($dataContext)"
-                                Style="{StaticResource WindowButton}"/>
+                                Style="{StaticResource HoverEffectTransparentButton}"
+                                FontFamily="{StaticResource LatoBlackFont}"
+                                cal:Message.Attach="AddItem($dataContext)"/>
                         <DataTemplate.Triggers>
                             <DataTrigger Binding="{Binding Level}" Value="0">
                                 <Setter TargetName="patternButton" Property="Content" Value="-"/>
@@ -231,40 +187,27 @@
             </ItemsControl>
         </Grid>
         <!--#endregion-->
-
-        <!--#region Playlist -->
+        <!--#region Right Header-->
         <StackPanel Orientation="Horizontal"
-                    Background="{StaticResource Widget}"
-                    Grid.Column="2">
-            <StackPanel.Resources>
-                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource WindowButton}">
-                    <Setter Property="Foreground" Value="{StaticResource Default}"/>
-                    <Setter Property="FontFamily" Value="{StaticResource Lato}"/>
-                    <Setter Property="FontSize" Value="10"/>
-                    <Setter Property="Width" Value="auto"/>
-                    <Setter Property="Padding" Value="10 0"/>
-                </Style>
-            </StackPanel.Resources>
+                    Grid.Column="2"
+                    Background="{StaticResource DarkTranslucentBackgroundColor}">
             <TextBlock Text="PLAYLIST"
                        VerticalAlignment="Center"
                        Margin="10 0"/>
             <Button x:Name="SortPlaylist"
                     Content="SORT"/>
         </StackPanel>
+        <!--#endregion-->
+        <!--#region Right Playlist-->
         <Grid Grid.Row="2" Grid.Column="3"
               Grid.RowSpan="6"
-              Background="#56000000">
+              Background="{StaticResource DarkerTranslucentBackgroundColor}">
             <ScrollViewer Padding="5 2" Style="{StaticResource PlaylistScrollViewer}">
                 <ScrollViewer.Resources>
                     <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">10</sys:Double>
                 </ScrollViewer.Resources>
                 <ItemsControl x:Name="PlaylistItems"
-                              Grid.Row="1"
-                              Padding="0"
-                              Foreground="{StaticResource Default}"
-                              BorderThickness="0"
-                              FontFamily="{StaticResource Lato}"
-                              FontSize="12">
+                              Grid.Row="1">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel/>
@@ -272,6 +215,12 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
+                            <DataTemplate.Resources>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="FontFamily" Value="{StaticResource LatoBlackFont}"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataTemplate.Resources>
                             <Grid Background="#11FFFFFF"
                                   MinHeight="20"
                                   Margin="0 2">
@@ -282,12 +231,6 @@
                                     <ColumnDefinition Width="1*"/>
                                     <ColumnDefinition Width="20"/>
                                 </Grid.ColumnDefinitions>
-                                <Grid.Resources>
-                                    <Style TargetType="{x:Type TextBlock}">
-                                        <Setter Property="FontFamily" Value="{StaticResource Lato Black}"/>
-                                        <Setter Property="VerticalAlignment" Value="Center"/>
-                                    </Style>
-                                </Grid.Resources>
                                 <TextBlock Text="{Binding Title}"
                                            Grid.Column="1"
                                            Foreground="#9F9F9F"
@@ -297,16 +240,14 @@
                                         BorderThickness="0 0 6 0"
                                         VerticalAlignment="Center"
                                         Width="50">
-                                    <TextBlock x:Name="styleText"
-                                               Text="{Binding Style}"
+                                    <TextBlock Text="{Binding Style}"
                                                Foreground="#DFDFDF"
                                                TextAlignment="Center"/>
                                 </Border>
                                 <Button Grid.Column="4"
-                                        Width="auto"
-                                        cal:Message.Attach="RemoveItem($dataContext)"
-                                        Style="{StaticResource WindowButton}">
-                                    <Image Source="pack://application:,,,/Images/Close.png" Width="12"/>
+                                        Style="{StaticResource HoverEffectTransparentButton}"
+                                        cal:Message.Attach="RemoveItem($dataContext)">
+                                    <Image Style="{StaticResource XMarkImage}" Width="12"/>
                                 </Button>
                             </Grid>
                             <DataTemplate.Triggers>
@@ -340,8 +281,6 @@
                 </ItemsControl>
             </ScrollViewer>
         </Grid>
-        
         <!--#endregion-->
-        
     </Grid>
 </UserControl>

@@ -53,16 +53,17 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Border Background="#1FFFFFFF"
+                <Border x:Name="searchBoxBorder"
+                        Background="{StaticResource BrighterTranslucentBackgroundColor}"
                         Padding="5 0">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Foreground="{StaticResource Default}"
+                        <TextBlock Foreground="{StaticResource DefaultGrayColor}"
                                    FontSize="15"
-                                   FontFamily="{StaticResource Lato}"
+                                   FontFamily="{StaticResource LatoFont}"
                                    VerticalAlignment="Center"
                                    Margin="2 0">
                             <TextBlock.Style>
@@ -81,14 +82,14 @@
                                  Foreground="White"
                                  CaretBrush="White"
                                  VerticalAlignment="Center"
-                                 FontFamily="{StaticResource Lato}"
+                                 FontFamily="{StaticResource LatoFont}"
                                  FontSize="15"
                                  cal:Message.Attach="[Event KeyUp] = [Action SearchTitle]"/>
                         <Button x:Name="ClearSearchBox"
                                 Grid.Column="1"
                                 Width="25">
                             <Button.Style>
-                                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource WindowButton}">
+                                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource HoverEffectTransparentButton}">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=SearchBox}" Value="True">
                                             <Setter Property="Visibility" Value="Hidden"/>
@@ -96,7 +97,7 @@
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
-                            <Image Source="pack://application:,,,/Images/Close.png" Width="12"/>
+                            <Image Style="{StaticResource XMarkImage}" Width="12"/>
                         </Button>
                     </Grid>
                 </Border>
@@ -118,7 +119,7 @@
                         </Style>
                     </Popup.Style>
                     <ListBox x:Name="SuggestionBox"
-                             Width="380"
+                             Width="{Binding ActualWidth, ElementName=searchBoxBorder}"
                              MaxHeight="180"
                              Style="{StaticResource PopupListBox}"
                              ItemsSource="{Binding TitleSuggestions}"
@@ -142,20 +143,18 @@
             </Grid>
             <TextBlock Text="FAVORITE"
                        Grid.Row="2" Grid.Column="1"
-                       Foreground="{StaticResource Default}"
-                       FontFamily="{StaticResource Lato Black}"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                       Style="{StaticResource BoldGrayTextBlock}"
+                       FontSize="12"/>
             <TextBlock Text="BLACKLIST"
                        Grid.Row="2" Grid.Column="3"
-                       Foreground="{StaticResource Default}"
-                       FontFamily="{StaticResource Lato Black}"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                       Style="{StaticResource BoldGrayTextBlock}"
+                       FontSize="12"/>
             <ScrollViewer VerticalScrollBarVisibility="Hidden"
                           Grid.Row="3" Grid.Column="1">
                 <ItemsControl x:Name="FavoriteItems">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel Background="{StaticResource Nav}"/>
+                            <WrapPanel Background="{StaticResource DarkestTranslucentBackgroundColor}"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
@@ -163,22 +162,22 @@
                             <Grid Background="#252419"
                                   HorizontalAlignment="Left"
                                   VerticalAlignment="Top"
-                                  Margin="0,0,5,5">
+                                  Margin="0 0 5 5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding}"
                                            Foreground="White"
-                                           FontFamily="{StaticResource Lato}"
+                                           FontFamily="{StaticResource LatoFont}"
                                            FontSize="13"
                                            Margin="5"/>
                                 <Button Grid.Column="1"
                                         Width="20"
                                         cal:Message.Attach="RemoveFromFavorite($dataContext)"
-                                        Margin="0,2.5,5,2.5"
-                                        Style="{StaticResource WindowButton}">
-                                    <Image Source="pack://application:,,,/Images/Close.png" Width="12"/>
+                                        Margin="0 2.5 5 2.5"
+                                        Style="{StaticResource HoverEffectTransparentButton}">
+                                    <Image Style="{StaticResource XMarkImage}" Width="12"/>
                                 </Button>
                             </Grid>
                         </DataTemplate>
@@ -190,7 +189,7 @@
                 <ItemsControl x:Name="BlacklistItems">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel Background="{StaticResource Nav}"/>
+                            <WrapPanel Background="{StaticResource DarkestTranslucentBackgroundColor}"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
@@ -198,22 +197,22 @@
                             <Grid Background="#291B26"
                                   HorizontalAlignment="Left"
                                   VerticalAlignment="Top"
-                                  Margin="0,0,5,5">
+                                  Margin="0 0 5 5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding}"
                                            Foreground="White"
-                                           FontFamily="{StaticResource Lato}"
+                                           FontFamily="{StaticResource LatoFont}"
                                            FontSize="13"
                                            Margin="5"/>
                                 <Button Grid.Column="1"
                                         Width="20"
                                         cal:Message.Attach="RemoveFromBlacklist($dataContext)"
-                                        Margin="0,2.5,5,2.5"
-                                        Style="{StaticResource WindowButton}">
-                                    <Image Source="pack://application:,,,/Images/Close.png" Width="12"/>
+                                        Margin="0 2.5 5 2.5"
+                                        Style="{StaticResource HoverEffectTransparentButton}">
+                                    <Image Style="{StaticResource XMarkImage}" Width="12"/>
                                 </Button>
                             </Grid>
                         </DataTemplate>

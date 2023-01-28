@@ -6,32 +6,35 @@
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d"
              d:DesignHeight="400" d:DesignWidth="740"
-             FontFamily="{StaticResource Lato Black}">
+             FontFamily="{StaticResource LatoBlackFont}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid Height="40" Background="{StaticResource Nav}">
+        <!--#region Nav-->
+        <Grid Background="{StaticResource DarkestTranslucentBackgroundColor}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="30"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="30"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding ElementName=Items, Path=SelectedItem.DisplayName}"
-                       Foreground="{StaticResource Highlight}"
-                       FontFamily="{StaticResource Lato Light}"
-                       FontSize="23"
+            <TextBlock Text="{Binding SelectedItem.DisplayName, ElementName=Items}"
                        Grid.Column="1"
+                       Foreground="{StaticResource HighlightYellowColor}"
+                       FontFamily="{StaticResource LatoLightFont}"
+                       FontSize="23"
                        VerticalAlignment="Center"/>
-            <ListBox x:Name="Items" Grid.Column="3" DisplayMemberPath="DisplayName"
-                     Background="Transparent" BorderThickness="0">
+            <ListBox x:Name="Items"
+                     Grid.Column="3"
+                     DisplayMemberPath="DisplayName"
+                     Style="{StaticResource TransparentListBox}">
                 <ListBox.Resources>
                     <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Foreground" Value="{StaticResource DefaultGrayColor}"/>
                         <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="Foreground" Value="{StaticResource Default}"/>
                         <Setter Property="FontSize" Value="17"/>
                         <Setter Property="Margin" Value="30 0 0 0"/>
                         <Setter Property="Template">
@@ -57,21 +60,23 @@
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>
-                
         </Grid>
+        <!--#endregion-->
+        <!--#region Body-->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="30"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition/>
                 <ColumnDefinition Width="30"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="10"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition/>
                 <RowDefinition Height="10"/>
             </Grid.RowDefinitions>
             <ContentControl x:Name="ActiveItem"
-                            Grid.Column="1" Grid.Row="1"/>
+                            Grid.Row="1" Grid.Column="1"/>
         </Grid>
+        <!--#endregion-->
     </Grid>
 </UserControl>

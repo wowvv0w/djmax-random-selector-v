@@ -48,18 +48,18 @@
                             VerticalAlignment="Center">
                     <TextBlock Text="DJMAX Random Selector V"
                                Foreground="White"
-                               FontFamily="{StaticResource Lato}"
+                               FontFamily="{StaticResource LatoFont}"
                                FontSize="20"
-                               Margin="0,0,0,10"/>
+                               Margin="0 0 0 10"/>
                     <TextBlock x:Name="CurrentVersion"
                                Text="Current Version:"
-                               Foreground="{StaticResource Default}"
-                               FontFamily="{StaticResource Lato}"
+                               Foreground="{StaticResource DefaultGrayColor}"
+                               FontFamily="{StaticResource LatoFont}"
                                FontSize="16"/>
                     <TextBlock x:Name="LastestVersion"
                                Text="Lastest Version:"
-                               Foreground="{StaticResource Highlight}"
-                               FontFamily="{StaticResource Lato}"
+                               Foreground="{StaticResource HighlightYellowColor}"
+                               FontFamily="{StaticResource LatoFont}"
                                FontSize="16"/>
                 </StackPanel>
 
@@ -80,8 +80,8 @@
                            Text="All Track Version:"
                            Grid.Row="2"
                            Grid.ColumnSpan="2"
-                           Foreground="{StaticResource Default}"
-                           FontFamily="{StaticResource Lato}"
+                           Foreground="{StaticResource DefaultGrayColor}"
+                           FontFamily="{StaticResource LatoFont}"
                            FontSize="16"/>
             </Grid>
         </Border>

@@ -8,7 +8,7 @@
         Title="DJMAX Random Selector V"
         Width="740" Height="470"
         WindowStyle="None"
-        FontFamily="{StaticResource Lato Black}"
+        FontFamily="{StaticResource LatoBlackFont}"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         SnapsToDevicePixels="True"
@@ -28,61 +28,73 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition/>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
             <Grid.Effect>
-                <BlurEffect x:Name="BlurEffect" Radius="0"/>
+                <BlurEffect x:Name="blurEffect" Radius="0"/>
             </Grid.Effect>
+            <!--#region Header-->
             <Grid Height="30">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="DJMAX Random Selector V" Foreground="#989999"
-                           FontSize="12" VerticalAlignment="Center" Margin="10 0 0 0"/>
-                <Border Background="Transparent"
-                        cal:Message.Attach="[Event MouseLeftButtonDown] = [Action MoveWindow($view)]"/>
+                <Grid.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="FontSize" Value="12"/>
+                    </Style>
+                </Grid.Resources>
+                <TextBlock Text="DJMAX Random Selector V"
+                           Foreground="#989999"
+                           VerticalAlignment="Center"
+                           Margin="10 0 0 0"/>
+                <Border cal:Message.Attach="[Event MouseLeftButtonDown] = [Action MoveWindow($view)]"
+                        Background="Transparent"/>
                 <Button x:Name="OpenReleasePage"
                         Content="[New Update is Available]"
-                        Foreground="{StaticResource Highlight}"
-                        FontFamily="{StaticResource Lato}"
-                        FontSize="12"
-                        Width="140"
+                        Style="{StaticResource HoverEffectTransparentButton}"
+                        Foreground="{StaticResource HighlightYellowColor}"
+                        FontFamily="{StaticResource LatoFont}"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Margin="170 0 0 0"
-                        Style="{StaticResource WindowButton}"
+                        Padding="5"
                         Visibility="{Binding OpenReleasePageVisibility}"/>
                 <Button cal:Message.Attach="[Event Click] = [Action MinimizeWindow($view)]"
                         Grid.Column="1"
-                        Style="{StaticResource WindowButton}">
-                    <Image Width="16"
-                           Source="pack://application:,,,/Images/Minimize.png"/>
+                        Style="{StaticResource HoverEffectTransparentButton}"
+                        Width="40">
+                    <Image Source="pack://application:,,,/Images/Minimize.png"
+                           Width="16"/>
                 </Button>
                 <Button cal:Message.Attach="[Event Click] = [Action CloseWindow($view)]"
                         Grid.Column="2"
-                        Style="{StaticResource WindowButton}">
-                    <Image Width="14"
-                           Source="pack://application:,,,/Images/Close.png"/>
+                        Style="{StaticResource HoverEffectTransparentButton}"
+                        Width="40">
+                    <Image Style="{StaticResource XMarkImage}"
+                           Width="14"/>
                 </Button>
             </Grid>
-            <ContentControl x:Name="MainPanel" Grid.Row="1"/>
-            <Grid Height="40"
-                  Background="{StaticResource Nav}"
+            <!--#endregion-->
+            <!--#region Body-->
+            <ContentControl x:Name="MainPanel"
+                            Grid.Row="1"/>
+            <!--#endregion-->
+            <!--#region Footer-->
+            <Grid Background="{StaticResource DarkestTranslucentBackgroundColor}"
                   Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="30"/>
                     <ColumnDefinition Width="160"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition/>
                     <ColumnDefinition Width="160"/>
                     <ColumnDefinition Width="30"/>
                 </Grid.ColumnDefinitions>
-                <Grid.Resources>
-                    <Style TargetType="Button" BasedOn="{StaticResource UtilityButton}"/>
-                </Grid.Resources>
-                <Button Width="120" Grid.Column="1"
+                <Button Grid.Column="1"
+                        Style="{StaticResource TransparentButton}"
+                        Width="120"
                         HorizontalAlignment="Left">
                     <Grid>
                         <ContentControl x:Name="FilterOptionIndicator"/>
@@ -91,18 +103,18 @@
                         <EventTrigger RoutedEvent="Button.Click">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetName="FilterOptionGrid"
+                                    <DoubleAnimation Storyboard.TargetName="filterOptionGrid"
                                                      Storyboard.TargetProperty="Width"
                                                      DecelerationRatio=".9"
                                                      To="500"
                                                      BeginTime="0:0:0"
                                                      Duration="0:0:0.2"/>
-                                    <DoubleAnimation Storyboard.TargetName="HideFilterOptionPanelButton"
+                                    <DoubleAnimation Storyboard.TargetName="hideFilterOptionPanelButton"
                                                      Storyboard.TargetProperty="Width"
                                                      To="740"
                                                      BeginTime="0:0:0"
                                                      Duration="0:0:0"/>
-                                    <DoubleAnimation Storyboard.TargetName="BlurEffect"
+                                    <DoubleAnimation Storyboard.TargetName="blurEffect"
                                                      Storyboard.TargetProperty="Radius"
                                                      DecelerationRatio=".9"
                                                      To="25"
@@ -114,52 +126,60 @@
                     </Button.Triggers>
                 </Button>
                 <TextBlock Text="Press F7 to Start Random Selector"
-                           Foreground="{StaticResource Default}"
-                           FontSize="14" Grid.Column="2"
-                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                           Grid.Column="2"
+                           Style="{StaticResource BoldGrayTextBlock}"
+                           FontSize="14"/>
                 <StackPanel Orientation="Horizontal"
                             Grid.Column="3"
                             HorizontalAlignment="Right">
-                    <Button x:Name="ShowInfoDialog" Width="25">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource TransparentButton}">
+                            <Setter Property="Width" Value="25"/>
+                            <Setter Property="Height" Value="25"/>
+                            <Setter Property="Margin" Value="10 0 0 0"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button x:Name="ShowInfoDialog">
                         <Image Source="pack://application:,,,/Images/info.png"/>
                     </Button>
-                    <Button x:Name="ShowSettingDialog" Width="25">
+                    <Button x:Name="ShowSettingDialog">
                         <Image Source="pack://application:,,,/Images/setting.png"/>
                     </Button>
                 </StackPanel>
             </Grid>
         </Grid>
-        <Grid x:Name="FilterOptionGrid" Grid.RowSpan="3"
-              Width="0" HorizontalAlignment="Left" Panel.ZIndex="2">
+        <!--#endregion-->
+        <!--#region Left Side Panel-->
+        <Grid x:Name="filterOptionGrid"
+              Grid.RowSpan="3"
+              Panel.ZIndex="2"
+              Width="0"
+              HorizontalAlignment="Left">
             <ContentControl x:Name="FilterOptionPanel"
                             HorizontalAlignment="Right"
                             Width="500"/>
         </Grid>
-        <Button x:Name="HideFilterOptionPanelButton"
-                Panel.ZIndex="1"
+        <Button x:Name="hideFilterOptionPanelButton"
                 Grid.RowSpan="3"
+                Panel.ZIndex="1"
+                Style="{StaticResource TransparentButton}"
                 Background="Transparent"
                 HorizontalAlignment="Right"
                 Width="0">
-            <Button.Template>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border Background="{TemplateBinding Background}"/>
-                </ControlTemplate>
-            </Button.Template>
             <Button.Triggers>
                 <EventTrigger RoutedEvent="Button.Click">
                     <BeginStoryboard>
                         <Storyboard>
-                            <DoubleAnimation Storyboard.TargetName="FilterOptionGrid"
+                            <DoubleAnimation Storyboard.TargetName="filterOptionGrid"
                                              Storyboard.TargetProperty="Width"
                                              DecelerationRatio=".9"
                                              To="0"
                                              Duration="0:0:0.2"/>
-                            <DoubleAnimation Storyboard.TargetName="HideFilterOptionPanelButton"
+                            <DoubleAnimation Storyboard.TargetName="hideFilterOptionPanelButton"
                                              Storyboard.TargetProperty="Width"
                                              To="0"
                                              Duration="0:0:0"/>
-                            <DoubleAnimation Storyboard.TargetName="BlurEffect"
+                            <DoubleAnimation Storyboard.TargetName="blurEffect"
                                              Storyboard.TargetProperty="Radius"
                                              DecelerationRatio=".9"
                                              To="0"

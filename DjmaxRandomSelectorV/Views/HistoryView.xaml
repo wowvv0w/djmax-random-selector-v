@@ -11,7 +11,8 @@
             <RowDefinition Height="20"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid Background="#1FFFFFFF">
+        <!--#region Header-->
+        <Grid Background="{StaticResource BrighterTranslucentBackgroundColor}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="60"/>
                 <ColumnDefinition/>
@@ -20,12 +21,8 @@
                 <ColumnDefinition Width="120"/>
             </Grid.ColumnDefinitions>
             <Grid.Resources>
-                <Style TargetType="TextBlock">
-                    <Setter Property="Foreground" Value="{StaticResource Default}"/>
-                    <Setter Property="FontFamily" Value="{StaticResource Lato Black}"/>
+                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BoldGrayTextBlock}">
                     <Setter Property="FontSize" Value="12"/>
-                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                    <Setter Property="VerticalAlignment" Value="Center"/>
                 </Style>
             </Grid.Resources>
             <TextBlock Text="NO."/>
@@ -34,28 +31,20 @@
             <TextBlock Text="LEVEL" Grid.Column="3"/>
             <TextBlock Text="TIME" Grid.Column="4"/>
         </Grid>
+        <!--#endregion-->
+        <!--#region Body-->
         <ItemsControl x:Name="History"
-                      Background="#56000000"
-                      BorderThickness="0"
-                      Grid.Row="1">
+                      Grid.Row="1"
+                      Background="{StaticResource DarkerTranslucentBackgroundColor}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <DataTemplate.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Foreground" Value="{StaticResource Default}"/>
-                            <Setter Property="FontFamily" Value="{StaticResource Lato Black}"/>
-                            <Setter Property="FontSize" Value="15"/>
-                            <Setter Property="HorizontalAlignment" Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                        <Style TargetType="Grid">
-                            <Setter Property="Height" Value="39"/>
-                        </Style>
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BoldGrayTextBlock}"/>
                     </DataTemplate.Resources>
-                    <Grid>
+                    <Grid Height="39">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="60"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition/>
                             <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="60"/>
                             <ColumnDefinition Width="120"/>
@@ -69,5 +58,6 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <!--#endregion-->
     </Grid>
 </UserControl>
