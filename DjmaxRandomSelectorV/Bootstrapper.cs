@@ -22,8 +22,7 @@ namespace DjmaxRandomSelectorV
         private readonly IFileManager _fileManager;
         private readonly IEventAggregator _eventAggregator;
         private readonly CategoryContainer _categoryContainer = new CategoryContainer();
-
-        private VersionContainer _versionContainer;
+        private readonly VersionContainer _versionContainer;
 
         public Bootstrapper()
         {
@@ -35,11 +34,39 @@ namespace DjmaxRandomSelectorV
 
             _eventAggregator = IoC.Get<IEventAggregator>();
             _rs = new RandomSelector(_eventAggregator);
+
+            Version assemblyVersion = Assembly.GetEntryAssembly().GetName().Version;
+            int appVersion = assemblyVersion.Major * 100 +
+                             assemblyVersion.Minor * 10 +
+                             assemblyVersion.Build;
+            _versionContainer = new VersionContainer(appVersion, _configuration.AllTrackVersion);
+            _versionContainer.NewAppVersionAvailable += (s, e) =>
+            {
+                _eventAggregator.PublishOnUIThreadAsync(new UpdateMessage());
+            };
+            _versionContainer.NewAllTrackVersionAvailable += (s, e) =>
+            {
+                try
+                {
+                    new TrackManager().DownloadAllTrack();
+                }
+                catch
+                {
+                    throw new Exception($"Failed to download lastest all track list (Version {e.Version})");
+                }
+                Task.Run(() =>
+                {
+                    MessageBox.Show($"All track list is updated to the version {e.Version}.",
+                        "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
+                });
+                _configuration.AllTrackVersion = e.Version;
+            };
+            _container.Instance(_versionContainer);
         }
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
-            Task<int[]> version = new UpdateHelper().GetLastestVersionsAsync();
+            Task checkVersion = _versionContainer.CheckLastestVersionsAsync();
             Task display = DisplayRootViewForAsync(typeof(ShellViewModel));
 
             await display;
@@ -51,56 +78,22 @@ namespace DjmaxRandomSelectorV
                 window.Left = position[1];
             }
 
-            int[] lastest = null;
             try
             {
-                lastest = await version;
+                await checkVersion;
             }
-            catch
+            catch (Exception ex) 
             {
-                MessageBox.Show("Failed to version check.",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                _ = Task.Run(() =>
+                {
+                    MessageBox.Show(ex.Message,
+                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                });
             }
 
-            Version assemblyVersion = Assembly.GetEntryAssembly().GetName().Version;
-            int appVersion = assemblyVersion.Major * 100 +
-                             assemblyVersion.Minor * 10 +
-                             assemblyVersion.Build;
-
-            if (lastest is not null)
-            {
-                var current = new int[] { appVersion, _configuration.AllTrackVersion };
-                if (current[0] < lastest[0])
-                {
-                    await _eventAggregator.PublishOnUIThreadAsync(new UpdateMessage());
-                }
-                if (current[1] != lastest[1])
-                {
-                    try
-                    {
-                        new TrackManager().DownloadAllTrack();
-                        _configuration.AllTrackVersion = lastest[1];
-                        MessageBox.Show($"All track list is updated to the version {lastest[1]}.",
-                            "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
-                        
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Failed to download all track list.",
-                            "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-            }
             _rs.Initialize(_configuration);
             _rs.RegisterHandle(new WindowInteropHelper(window).Handle);
             _rs.SetHotkey(0x0000, 118);
-            _versionContainer = new VersionContainer
-            {
-                CurrentAppVersion = appVersion,
-                LastestAppVersion = lastest?[0] ?? appVersion,
-                AllTrackVersion = _configuration.AllTrackVersion
-            };
-            _container.Instance(_versionContainer);
         }
 
         protected override void OnExit(object sender, EventArgs e)
