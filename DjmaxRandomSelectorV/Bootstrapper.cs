@@ -20,7 +20,6 @@ namespace DjmaxRandomSelectorV
         private readonly Configuration _configuration;
         private readonly RandomSelector _rs;
         private readonly IFileManager _fileManager;
-        private readonly IEventAggregator _eventAggregator;
         private readonly CategoryContainer _categoryContainer = new CategoryContainer();
         private readonly VersionContainer _versionContainer;
 
@@ -32,18 +31,14 @@ namespace DjmaxRandomSelectorV
             _configuration = _fileManager.Import<Configuration>(ConfigPath);
             _container.Instance(_configuration);
 
-            _eventAggregator = IoC.Get<IEventAggregator>();
-            _rs = new RandomSelector(_eventAggregator);
+            var eventAggregator = IoC.Get<IEventAggregator>();
+            _rs = new RandomSelector(eventAggregator);
 
             Version assemblyVersion = Assembly.GetEntryAssembly().GetName().Version;
             int appVersion = assemblyVersion.Major * 100 +
                              assemblyVersion.Minor * 10 +
                              assemblyVersion.Build;
             _versionContainer = new VersionContainer(appVersion, _configuration.AllTrackVersion);
-            _versionContainer.NewAppVersionAvailable += (s, e) =>
-            {
-                _eventAggregator.PublishOnUIThreadAsync(new UpdateMessage());
-            };
             _versionContainer.NewAllTrackVersionAvailable += (s, e) =>
             {
                 try
@@ -66,29 +61,26 @@ namespace DjmaxRandomSelectorV
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
-            Task checkVersion = _versionContainer.CheckLastestVersionsAsync();
-            Task display = DisplayRootViewForAsync(typeof(ShellViewModel));
-
-            await display;
-            Window window = Application.MainWindow;
-            double[] position = _configuration.Position;
-            if (position?.Length == 2)
-            {
-                window.Top = position[0];
-                window.Left = position[1];
-            }
-
             try
             {
-                await checkVersion;
+                await _versionContainer.CheckLastestVersionsAsync();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 _ = Task.Run(() =>
                 {
                     MessageBox.Show(ex.Message,
                         "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 });
+            }
+
+            await DisplayRootViewForAsync(typeof(ShellViewModel));
+            Window window = Application.MainWindow;
+            double[] position = _configuration.Position;
+            if (position?.Length == 2)
+            {
+                window.Top = position[0];
+                window.Left = position[1];
             }
 
             _rs.Initialize(_configuration);

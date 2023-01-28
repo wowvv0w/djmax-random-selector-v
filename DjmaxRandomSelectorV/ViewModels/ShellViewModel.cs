@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.Messages;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -8,7 +7,7 @@ using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class ShellViewModel : Conductor<object>.Collection.AllActive, IHandle<UpdateMessage>
+    public class ShellViewModel : Conductor<object>.Collection.AllActive
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
@@ -16,23 +15,17 @@ namespace DjmaxRandomSelectorV.ViewModels
         public object MainPanel { get => Items[0]; }
         public object FilterOptionIndicator { get => Items[1]; }
         public object FilterOptionPanel { get => Items[2]; }
-
-        private Visibility _openReleasePageVisibility = Visibility.Hidden;
-        public Visibility OpenReleasePageVisibility
-        {
-            get { return _openReleasePageVisibility; }
-            set
-            {
-                _openReleasePageVisibility = value;
-                NotifyOfPropertyChange();
-            }
-        }
+        public Visibility OpenReleasePageVisibility { get; }
 
         public ShellViewModel(IEventAggregator eventAggregator, IWindowManager windowManager)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
             _windowManager = windowManager;
+
+            var version = IoC.Get<VersionContainer>();
+            bool visible = version.CurrentAppVersion < version.LastestAppVersion;
+            OpenReleasePageVisibility = visible ? Visibility.Visible : Visibility.Hidden;
 
             var childrenType = new List<Type>()
             {
@@ -77,12 +70,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         public Task ShowSettingDialog()
         {
             return _windowManager.ShowDialogAsync(IoC.Get<SettingViewModel>());
-        }
-
-        public Task HandleAsync(UpdateMessage message, CancellationToken cancellationToken)
-        {
-            OpenReleasePageVisibility = Visibility.Visible;
-            return Task.CompletedTask;
         }
     }
 }
