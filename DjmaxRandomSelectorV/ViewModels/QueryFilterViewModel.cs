@@ -119,7 +119,14 @@ namespace DjmaxRandomSelectorV.ViewModels
             _categories.Insert(15, new Category("FAVORITE", "FAVORITE", null));
             _categories.Insert(16, new Category("COLLABORATION", null, null));
 
-            ImportFilter(DefaultPath);
+            try
+            {
+                ImportFilter(DefaultPath);
+            }
+            catch
+            {
+                _filter = new QueryFilter();
+            }
             Initialize();
         }
 
@@ -169,20 +176,6 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator.PublishOnUIThreadAsync(new FilterMessage(_filter));
         }
 
-        public void ReloadFilter(string presetPath)
-        {
-            try
-            {
-                ImportFilter(presetPath);
-                Initialize();
-                Refresh();
-            }
-            catch (FileNotFoundException)
-            {
-                MessageBox.Show($"Cannot apply the preset.",
-                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
         public void SelectAllCategories()
         {
             _filter.Categories.Clear();
@@ -233,7 +226,18 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                ReloadFilter(dialog.FileName);
+                try
+                {
+                    ImportFilter(dialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Cannot apply the preset.\n{ex.Message}",
+                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                Initialize();
+                Refresh();
             }
         }
 

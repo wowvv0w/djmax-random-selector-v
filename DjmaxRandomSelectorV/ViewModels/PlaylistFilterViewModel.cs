@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,7 +46,14 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator = eventAggregator;
             _fileManager = fileManager;
 
-            _filter = _fileManager.Import<PlaylistFilter>(DefaultPath);
+            try
+            {
+                _filter = _fileManager.Import<PlaylistFilter>(DefaultPath);
+            }
+            catch
+            {
+                _filter = new PlaylistFilter();
+            }
             _tracks = new TrackManager().GetAllTrack();
             _titles = _tracks.ConvertAll(x => x.Title);
 
@@ -93,7 +99,18 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                var concat = _fileManager.Import<PlaylistFilter>(dialog.FileName).Items;
+                PlaylistFilter filter;
+                try
+                {
+                    filter = _fileManager.Import<PlaylistFilter>(dialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Cannot concatenate the items of playlist.\n{ex.Message}",
+                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                var concat = filter.Items;
                 PlaylistItems.AddRange(concat);
             }
         }
@@ -146,10 +163,20 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                string fileName = dialog.FileName;
-                var playlist = _fileManager.Import<PlaylistFilter>(fileName).Items;
+                PlaylistFilter filter;
+                try
+                {
+                    filter = _fileManager.Import<PlaylistFilter>(dialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Cannot load the playlist.\n{ex.Message}",
+                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                var items = filter.Items;
                 PlaylistItems.Clear();
-                PlaylistItems.AddRange(playlist);
+                PlaylistItems.AddRange(items);
             }
         }
 

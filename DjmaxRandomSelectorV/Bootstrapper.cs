@@ -30,7 +30,14 @@ namespace DjmaxRandomSelectorV
             Initialize();
 
             _fileManager = IoC.Get<IFileManager>();
-            _configuration = _fileManager.Import<Configuration>(ConfigPath);
+            try
+            {
+                _configuration = _fileManager.Import<Configuration>(ConfigPath);
+            }
+            catch
+            {
+                _configuration = new Configuration();
+            }
             _container.Instance(_configuration);
 
             var eventAggregator = IoC.Get<IEventAggregator>();
