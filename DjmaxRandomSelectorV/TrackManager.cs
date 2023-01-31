@@ -44,7 +44,7 @@ namespace DjmaxRandomSelectorV
             writer.Write(result);
         }
 
-        public List<Track> GetAllTrack()
+        public IEnumerable<Track> GetAllTrack()
         {
             using var reader = new StreamReader(AllTrackPath, Encoding.UTF8);
             using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
@@ -52,12 +52,14 @@ namespace DjmaxRandomSelectorV
             csv.Context.RegisterClassMap<TrackMap>();
             var records = csv.GetRecords<Track>();
 
-            return records.ToList();
+            foreach (var record in records)
+            {
+                yield return record;
+            }
         }
 
         public List<Track> CreateTracks(IEnumerable<string> dlcs)
         {
-            var allTrack = GetAllTrack();
             var basicCategories = new string[] { "RP", "P1", "P2", "GG" };
             var categories = dlcs.Concat(basicCategories);
 
@@ -65,7 +67,7 @@ namespace DjmaxRandomSelectorV
             exclusions.AddRange(_dlcMusicInRespect.Where(x => !dlcs.Contains(x.Key)).SelectMany(x => x.Value));
             exclusions.AddRange(_linkDiscMusic.Where(x => !x.Key.Invoke(dlcs)).Select(x => x.Value));
 
-            var trackQuery = from track in allTrack
+            var trackQuery = from track in GetAllTrack()
                              where categories.Contains(track.Category)
                              where !exclusions.Contains(track.Title)
                              select track;

@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Messages;
-using Dmrsv.RandomSelector;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -32,7 +31,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public FavoriteViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            _titleList = new TrackManager().GetAllTrack().ConvertAll(x => x.Title);
+            _titleList = new TrackManager().GetAllTrack().Select(x => x.Title).ToList();
 
             var config = IoC.Get<Configuration>();
             FavoriteItems = new BindableCollection<string>(config.Favorite);

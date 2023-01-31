@@ -54,7 +54,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 _filter = new PlaylistFilter();
             }
-            _tracks = new TrackManager().GetAllTrack();
+            _tracks = new TrackManager().GetAllTrack().ToList();
             _titles = _tracks.ConvertAll(x => x.Title);
 
             PlaylistItems = new BindableCollection<Music>(_filter.Items);
