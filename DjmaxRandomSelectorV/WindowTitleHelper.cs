@@ -1,7 +1,8 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Dmrsv.RandomSelector
+namespace DjmaxRandomSelectorV
 {
     public class WindowTitleHelper
     {
