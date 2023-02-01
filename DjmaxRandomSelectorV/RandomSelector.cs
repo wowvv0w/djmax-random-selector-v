@@ -25,7 +25,7 @@ namespace DjmaxRandomSelectorV
         private Func<IEnumerable<Music>, IEnumerable<Music>> _outputMethod;
         private IHistory<string> _history;
         private ISelector _selector;
-        private Locator _keyInputInvoker;
+        private ILocator _locator;
 
         private readonly WindowTitleHelper _windowTitleHelper;
         private readonly ExecutionHelper _executionHelper;
@@ -51,7 +51,7 @@ namespace DjmaxRandomSelectorV
             _history = new History<string>(config.Exclusions, config.RecentsCount);
             _selector = new SelectorWithHistory(_history);
 
-            _keyInputInvoker = new Locator()
+            _locator = new Locator()
             {
                 StartsAutomatically = config.Mode == MusicForm.Default && config.Aider == InputMethod.WithAutoStart,
                 InputInterval = config.InputDelay,
@@ -84,7 +84,7 @@ namespace DjmaxRandomSelectorV
             var selected = _selector.Select(_candidates);
             if (selected is not null)
             {
-                _keyInputInvoker?.Provide(selected, _playable.ToList());
+                _locator.Locate(selected, _playable);
                 _eventAggregator.PublishOnUIThreadAsync(new MusicMessage(selected));
             }
             else
@@ -121,8 +121,8 @@ namespace DjmaxRandomSelectorV
         public Task HandleAsync(ModeWithAiderMessage message, CancellationToken cancellationToken)
         {
             InputMethod aider = message.Aider;
-            _keyInputInvoker.StartsAutomatically = message.Mode == MusicForm.Default && aider == InputMethod.WithAutoStart;
-            _keyInputInvoker.InvokesInput = aider != InputMethod.NotInput;
+            _locator.StartsAutomatically = message.Mode == MusicForm.Default && aider == InputMethod.WithAutoStart;
+            _locator.InvokesInput = aider != InputMethod.NotInput;
             _executionHelper.IgnoreCanExecute = aider == InputMethod.NotInput;
             return Task.CompletedTask;
         }
@@ -136,7 +136,7 @@ namespace DjmaxRandomSelectorV
 
         public Task HandleAsync(SettingMessage message, CancellationToken cancellationToken)
         {
-            _keyInputInvoker.InputInterval = message.InputInterval;
+            _locator.InputInterval = message.InputInterval;
             _playable = new TrackManager().CreateTracks(message.OwnedDlcs);
             _candidates = _filter.Filter(_playable);
             _history.Clear();

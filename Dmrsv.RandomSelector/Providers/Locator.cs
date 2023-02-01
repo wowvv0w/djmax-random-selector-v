@@ -3,231 +3,185 @@ using System.Text.RegularExpressions;
 
 namespace Dmrsv.RandomSelector
 {
-    public class Locator
+    public class Locator : ILocator
     {
         public bool StartsAutomatically { get; set; }
         public int InputInterval { get; set; }
         public bool InvokesInput { get; set; }
 
-        private static bool _isKeyMapInitialized = false;
-        private static Dictionary<string, ushort> KeyMap = new Dictionary<string, ushort>
+        private readonly Dictionary<string, ushort> _keyMap = new()
         {
-            {"1", 0x02},
-            {"2", 0x03},
-            {"3", 0x04},
-            {"4", 0x05},
-            {"5", 0x06},
-            {"6", 0x07},
-            {"7", 0x08},
-            {"8", 0x09},
-            {"9", 0x0A},
-            {"0", 0x0B},
-            {"q", 0x10},
-            {"w", 0x11},
-            {"e", 0x12},
-            {"r", 0x13},
-            {"t", 0x14},
-            {"y", 0x15},
-            {"u", 0x16},
-            {"i", 0x17},
-            {"o", 0x18},
-            {"p", 0x19},
-            {"a", 0x1E},
-            {"s", 0x1F},
-            {"d", 0x20},
-            {"f", 0x21},
-            {"g", 0x22},
-            {"h", 0x23},
-            {"j", 0x24},
-            {"k", 0x25},
-            {"l", 0x26},
-            {";", 0x27},
-            {"z", 0x2C},
-            {"x", 0x2D},
-            {"c", 0x2E},
-            {"v", 0x2F},
-            {"b", 0x30},
-            {"n", 0x31},
-            {"m", 0x32},
-            {"f5", 0x3F},
-            {"shiftleft", 0x2A},
-            {"shiftright", 0x36},
-            {"pageup", 0xC9 + 1024},
-            {"pagedown", 0xD1 + 1024},
+            ["1"] = 0x02, ["2"] = 0x03, ["3"] = 0x04, ["4"] = 0x05, ["5"] = 0x06,
+            ["6"] = 0x07, ["7"] = 0x08, ["8"] = 0x09, ["9"] = 0x0A, ["0"] = 0x0B,
+            ["q"] = 0x10, ["w"] = 0x11, ["e"] = 0x12, ["r"] = 0x13, ["t"] = 0x14,
+            ["y"] = 0x15, ["u"] = 0x16, ["i"] = 0x17, ["o"] = 0x18, ["p"] = 0x19,
+            ["a"] = 0x1E, ["s"] = 0x1F, ["d"] = 0x20, ["f"] = 0x21, ["g"] = 0x22,
+            ["h"] = 0x23, ["j"] = 0x24, ["k"] = 0x25, ["l"] = 0x26, [";"] = 0x27,
+            ["z"] = 0x2C, ["x"] = 0x2D, ["c"] = 0x2E, ["v"] = 0x2F, ["b"] = 0x30,
+            ["n"] = 0x31, ["m"] = 0x32,
+            ["f5"] = 0x3F,
+            ["shiftleft"] = 0x2A, ["shiftright"] = 0x36,
+            ["pageup"] = 0xC9 + 1024, ["pagedown"] = 0xD1 + 1024,
         };
+        private readonly LocationFinder _locationFinder = new LocationFinder();
 
         public Locator()
         {
             StartsAutomatically = false;
             InputInterval = 30;
             InvokesInput = true;
-            if (!_isKeyMapInitialized)
-            {
-                KeyMap.Add("left", (ushort)MapVirtualKey(0x25, 0));
-                KeyMap.Add("up", (ushort)MapVirtualKey(0x26, 0));
-                KeyMap.Add("right", (ushort)MapVirtualKey(0x27, 0));
-                KeyMap.Add("down", (ushort)MapVirtualKey(0x28, 0));
-                _isKeyMapInitialized = true;
-            }
+            _keyMap.Add("left", (ushort)MapVirtualKey(0x25, 0));
+            _keyMap.Add("up", (ushort)MapVirtualKey(0x26, 0));
+            _keyMap.Add("right", (ushort)MapVirtualKey(0x27, 0));
+            _keyMap.Add("down", (ushort)MapVirtualKey(0x28, 0));
         }
-
-        public void Provide(Music selectedMusic, List<Track> trackList)
+        
+        public void Locate(Music music, IEnumerable<Track> trackList)
         {
             if (!InvokesInput)
             {
                 return;
             }
 
-            // Check if title starts with alphabet or not
-            char initial = selectedMusic.Title[0];
-            bool isAlphabet = Regex.IsMatch(initial.ToString(), "[a-z]", RegexOptions.IgnoreCase);
-
-            // Create List of Tracks that have same initial with selected music
-            List<Track> sameInitialList;
-            if (isAlphabet)
-            {
-                var list = from track in trackList
-                           let t = track.Title.Substring(0, 1)
-                           where string.Compare(t, initial.ToString(), true) == 0
-                           select track;
-                sameInitialList = list.ToList();
-            }
-            else
-            {
-                var list = from track in trackList
-                           let t = track.Title.Substring(0, 1)
-                           where Regex.IsMatch(t, "[a-z]", RegexOptions.IgnoreCase) == false
-                           select track;
-                sameInitialList = list.ToList();
-            }
-
-            // Find which key should be pressed
-            int whereIsIt = sameInitialList.FindIndex(x => x.Title == selectedMusic.Title);
-            int count = sameInitialList.Count;
-            bool isForward = whereIsIt <= Math.Ceiling((double)count / 2) || "wxyzWXYZ".Contains(initial);
-
-            char inputInitial;
-            int inputVertical;
-            if (isForward)
-            {
-                if (isAlphabet)
-                    inputInitial = initial;
-                else
-                    inputInitial = 'a';
-
-                inputVertical = whereIsIt;
-            }
-            else
-            {
-                if (isAlphabet)
-                    inputInitial = (char)(initial + 1);
-                else
-                    inputInitial = 'a';
-
-                inputVertical = count - whereIsIt;
-            }
-            inputInitial = char.ToLower(inputInitial);
-
-            int inputRight;
-            char inputButton;
-            string buttonTunes = selectedMusic.ButtonTunes;
-            string difficulty = selectedMusic.Difficulty;
-            if (string.IsNullOrEmpty(buttonTunes) && string.IsNullOrEmpty(difficulty))
-            {
-                inputRight = 0;
-                inputButton = '\0';
-            }
-            else
-            {
-                Track? sameMusic = trackList.Find(x => x.Title.Equals(selectedMusic.Title));
-                var difficulties = new List<string> { "NM", "HD", "MX", "SC" };
-                int a = difficulties.FindIndex(x => x.Equals(difficulty));
-                var styles = new List<string>();
-
-                for (int i = 0; i <= a; i++)
-                {
-                    styles.Add($"{buttonTunes}{difficulties[i]}");
-                }
-                var list2 = from pattern in sameMusic!.Patterns
-                            where styles.Contains(pattern.Key)
-                            select pattern.Value;
-                int subCount = list2.Count(x => x == 0);
-                inputRight = a - subCount;
-
-                inputButton = buttonTunes[0];
-            }
-
-            // Input
-            void Input(ushort key, bool isArrowKey = false)
-            {
-                KeyDown(key, isArrowKey);
-                Thread.Sleep(InputInterval);
-                KeyUp(key, isArrowKey);
-                Thread.Sleep(InputInterval);
-            }
-
-            string direction = isForward ? "down" : "up";
+            LocationInfo info = _locationFinder.FindLocation(music, trackList);
 
             ResetMusicCursor();
-            if (isAlphabet || !isForward)
+            if (!string.IsNullOrEmpty(info.Initial))
             {
-                Input(KeyMap[inputInitial.ToString()]);
+                Input(_keyMap[info.Initial]);
             }
-
-            for (int i = 0; i < inputVertical; i++)
+            RepeatInputs(info.VerticalDistance, _keyMap[info.VerticalDirection], true);
+            if (info.Button != '\0')
             {
-                Input(KeyMap[direction], true);
+                SelectButton(info.Button);
+                RepeatInputs(info.DifficultyOrder, _keyMap["right"], true);
             }
-
-            if (inputButton != '\0')
-            {
-                BtnSelect(inputButton);
-                for (int i = 0; i < inputRight; i++)
-                {
-                    Input(KeyMap["right"], true);
-                }
-            }
-
             if (StartsAutomatically)
             {
-                int startDelay = 800 - InputInterval * (inputRight + 1);
+                int startDelay = 800 - InputInterval * (info.DifficultyOrder + 1);
                 startDelay = startDelay < 0 ? 0 : startDelay;
                 Thread.Sleep(startDelay);
-                Input(KeyMap["f5"]);
+                Input(_keyMap["f5"]);
             }
         }
 
-        private static void BtnSelect(char btn)
+        private void KeyDown(ushort key, bool isArrowKey = false)
         {
-            ushort scancode = 0x52;
-            if (btn == '4') scancode = 0x4B;
-            else if (btn == '5') scancode = 0x4C;
-            else if (btn == '6') scancode = 0x4D;
-            else if (btn == '8') scancode = 0x48;
+            SendKeyDown(key, isArrowKey);
+            Thread.Sleep(InputInterval);
+        }
 
-            KeyDown(0x1D);
-            Thread.Sleep(20);
+        private void KeyUp(ushort key, bool isArrowKey = false)
+        {
+            SendKeyUp(key, isArrowKey);
+            Thread.Sleep(InputInterval);
+        }
+
+        private void Input(ushort key, bool isArrowKey = false)
+        {
+            KeyDown(key, isArrowKey);
+            KeyUp(key, isArrowKey);
+        }
+
+        private void RepeatInputs(int number, ushort key, bool isArrowKey = false)
+        {
+            for (int i = 0; i < number; i++)
+            {
+                Input(key, isArrowKey);
+            }
+        }
+
+        private void ResetMusicCursor()
+        {
+            KeyDown(_keyMap["shiftright"]);
+            KeyDown(_keyMap["shiftleft"]);
+            KeyUp(_keyMap["shiftright"]);
+            KeyUp(_keyMap["shiftleft"]);
+        }
+
+        private void SelectButton(char button)
+        {
+            ushort ctrl = 0x1D;
+            ushort scancode = button switch
+            {
+                '4' => 0x4B,
+                '5' => 0x4C,
+                '6' => 0x4D,
+                '8' => 0x48,
+                _ => throw new NotImplementedException(),
+            };
+            KeyDown(ctrl);
             KeyDown(scancode);
-            Thread.Sleep(20);
             KeyUp(scancode);
-            Thread.Sleep(20);
-            KeyUp(0x1D);
-            Thread.Sleep(20);
+            KeyUp(ctrl);
         }
 
-        private static void ResetMusicCursor()
+        private record LocationInfo
         {
-            KeyDown(KeyMap["shiftright"]);
-            Thread.Sleep(20);
-            KeyDown(KeyMap["shiftleft"]);
-            Thread.Sleep(20);
-            KeyUp(KeyMap["shiftright"]);
-            Thread.Sleep(20);
-            KeyUp(KeyMap["shiftleft"]);
-            Thread.Sleep(20);
+            public string Initial { get; init; } = default!;
+            public string VerticalDirection { get; init; } = default!;
+            public int VerticalDistance { get; init; }
+            public char Button { get; init; }
+            public int DifficultyOrder { get; init; }
         }
 
-        private static bool KeyDown(ushort ScanCode, bool isArrowKey = false)
+        private class LocationFinder
+        {
+            public LocationInfo FindLocation(Music target, IEnumerable<Track> list)
+            {
+                string initial = target.Title[..1];
+                bool isAlphabet = Regex.IsMatch(initial, "[a-z]", RegexOptions.IgnoreCase);
+
+                var sameInitials = (isAlphabet
+                                 ? list.Where(x => string.Compare(x.Title[..1], initial, true) == 0)
+                                 : list.Where(x => Regex.IsMatch(x.Title[..1], "[^a-z]", RegexOptions.IgnoreCase))
+                                 ).ToList();
+                
+                int index = sameInitials.FindIndex(x => x.Title == target.Title);
+                int count = sameInitials.Count;
+                bool isDirectionDown = index <= Math.Ceiling((double)count / 2) || "wxyzWXYZ".Contains(initial);
+                int distance;
+                if (isDirectionDown)
+                {
+                    initial = isAlphabet ? initial : string.Empty;
+                    distance = index;
+                }
+                else
+                {
+                    char parsedInitial = char.Parse(initial);
+                    initial = isAlphabet ? ((char)(parsedInitial + 1)).ToString() : "a";
+                    distance = count - index;
+                }
+
+                char button;
+                int order;
+                if (string.IsNullOrEmpty(target.ButtonTunes + target.Difficulty))
+                {
+                    button = '\0';
+                    order = 0;
+                }
+                else
+                {
+                    button = target.ButtonTunes[0];
+                    Track trackOfTarget = sameInitials[index];
+                    var difficulties = trackOfTarget.Patterns.Where(x => x.Key[0] == button)
+                                       .Where(x => x.Value != 0).ToList();
+                    order = difficulties.FindIndex(p => p.Key[2..4] == target.Difficulty);
+                }
+
+                var result = new LocationInfo()
+                {
+                    Initial = initial.ToLower(),
+                    VerticalDirection = isDirectionDown ? "down" : "up",
+                    VerticalDistance = distance,
+                    Button = button,
+                    DifficultyOrder = order,
+                };
+                return result;
+            }
+        }
+
+        private bool SendKeyDown(ushort ScanCode, bool isArrowKey = false)
         {
             // Original code from https://github.com/learncodebygaming/pydirectinput
             // Copyright(c) 2020 Ben Johnson
@@ -269,8 +223,10 @@ namespace Dmrsv.RandomSelector
             return insertedEvents == expectedEvents;
         }
 
-        private static bool KeyUp(ushort ScanCode, bool isArrowKey = false)
+        private bool SendKeyUp(ushort ScanCode, bool isArrowKey = false)
         {
+            // Original code from https://github.com/learncodebygaming/pydirectinput
+            // Copyright(c) 2020 Ben Johnson
             uint insertedEvents = 0;
             uint expectedEvents = 1;
             uint Flags = 0x0008 | 0x0002;       // KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP
@@ -321,7 +277,7 @@ namespace Dmrsv.RandomSelector
         private static extern short GetKeyState(int nVirtKey);
 
         [StructLayout(LayoutKind.Sequential)]
-        internal struct KEYBDINPUT
+        private struct KEYBDINPUT
         {
             public ushort Vk;
             public ushort Scan;
@@ -331,7 +287,7 @@ namespace Dmrsv.RandomSelector
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        internal struct HARDWAREINPUT
+        private struct HARDWAREINPUT
         {
             public uint Msg;
             public ushort ParamL;
@@ -339,7 +295,7 @@ namespace Dmrsv.RandomSelector
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        internal struct MOUSEINPUT
+        private struct MOUSEINPUT
         {
             public int X;
             public int Y;
@@ -350,7 +306,7 @@ namespace Dmrsv.RandomSelector
         }
 
         [StructLayout(LayoutKind.Explicit)]
-        internal struct MOUSEKEYBDHARDWAREINPUT
+        private struct MOUSEKEYBDHARDWAREINPUT
         {
             [FieldOffset(0)]
             public HARDWAREINPUT Hardware;
@@ -361,7 +317,7 @@ namespace Dmrsv.RandomSelector
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        internal struct INPUT
+        private struct INPUT
         {
             public uint Type;
             public MOUSEKEYBDHARDWAREINPUT Data;
