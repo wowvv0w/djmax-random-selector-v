@@ -10,7 +10,7 @@
             }
 
             var random = new Random();
-            int index = random.Next(musicList.Count - 1);
+            int index = random.Next(musicList.Count);
             return musicList[index];
         }
     }
