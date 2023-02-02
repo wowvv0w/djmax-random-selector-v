@@ -2,11 +2,11 @@
 {
     public class OutputMethodCreator
     {
-        public Func<IEnumerable<Music>, IEnumerable<Music>>? Create(MusicForm form, LevelPreference preference)
+        public OutputMethodCallback? Create(MusicForm form, LevelPreference preference)
         {
             return (form, preference) switch
             {
-                (MusicForm.Free, _) => (IEnumerable<Music> musicList) =>
+                (MusicForm.Free, _) => (musicList) =>
                 {
                     var result = from m in musicList
                                  group m by new { m.Title } into g
@@ -20,7 +20,7 @@
                     return result;
                 }
                 ,
-                (MusicForm.Default, LevelPreference.Lowest) => (IEnumerable<Music> musicList) =>
+                (MusicForm.Default, LevelPreference.Lowest) => (musicList) =>
                 {
                     var result = from m in musicList
                                  group m by new { m.Title, m.ButtonTunes } into g
@@ -28,7 +28,7 @@
                     return result;
                 }
                 ,
-                (MusicForm.Default, LevelPreference.Highest) => (IEnumerable<Music> musicList) =>
+                (MusicForm.Default, LevelPreference.Highest) => (musicList) =>
                 {
                     var result = from m in musicList
                                  group m by new { m.Title, m.ButtonTunes } into g

@@ -4,12 +4,12 @@ namespace Dmrsv.RandomSelector
 {
     public abstract class FilterBase : IFilter
     {
-        private Func<IEnumerable<Music>, IEnumerable<Music>>? _outputMethod;
+        private OutputMethodCallback? _outputMethod;
 
         [JsonIgnore]
         public bool IsUpdated { get; protected set; }
         [JsonIgnore]
-        public Func<IEnumerable<Music>, IEnumerable<Music>>? OutputMethod
+        public OutputMethodCallback? OutputMethod
         {
             get { return _outputMethod; }
             set

@@ -22,7 +22,7 @@ namespace DjmaxRandomSelectorV
         private bool _isRunning;
 
         private IFilter _filter;
-        private Func<IEnumerable<Music>, IEnumerable<Music>> _outputMethod;
+        private OutputMethodCallback _outputMethod;
         private IHistory<string> _history;
         private ISelector _selector;
         private ILocator _locator;
