@@ -163,6 +163,7 @@
         <Setter Property="Height" Value="30"/>
         <Setter Property="FontFamily" Value="{StaticResource BebasNeueFont}"/>
         <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Padding" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
@@ -170,7 +171,8 @@
                             Background="{StaticResource DarkerTranslucentBackgroundColor}"
                             BorderThickness="0">
                         <Border x:Name="Border2"
-                                Background="Transparent">
+                                Background="Transparent"
+                                Padding="{TemplateBinding Padding}">
                             <TextBlock x:Name="TextBlock"
                                        Text="{TemplateBinding Content}"
                                        Foreground="{TemplateBinding Foreground}"

@@ -11,6 +11,7 @@ namespace Dmrsv.RandomSelector
         private ObservableCollection<string> _categories;
         private ObservableCollection<int> _levels;
         private ObservableCollection<int> _scLevels;
+        private bool _includesFavorite;
         private List<string> _favorites;
         private List<string> _blacklist;
 
@@ -59,6 +60,15 @@ namespace Dmrsv.RandomSelector
                 _scLevels.CollectionChanged += (s, e) => IsUpdated = true;
             }
         }
+        public bool IncludesFavorite
+        {
+            get => _includesFavorite;
+            set
+            {
+                _includesFavorite = value;
+                IsUpdated = true;
+            }
+        }
 
         [JsonIgnore]
         public List<string> Favorites
@@ -104,7 +114,7 @@ namespace Dmrsv.RandomSelector
         public override List<Music> Filter(IEnumerable<Track> trackList)
         {
             var musicList = from t in trackList
-                            where Categories.Contains(t.Category) || (Categories.Contains("FAVORITE") && Favorites.Contains(t.Title))
+                            where Categories.Contains(t.Category) || (IncludesFavorite && Favorites.Contains(t.Title))
                             where !Blacklist.Contains(t.Title)
                             from m in t.GetMusicList()
                             where ButtonTunes.Contains(m.ButtonTunes) && Difficulties.Contains(m.Difficulty)

@@ -507,7 +507,7 @@
                             <Setter Property="Border.CornerRadius" Value="3"/>
                             <Setter Property="FontSize" Value="9"/>
                             <Setter Property="Margin" Value="10 0 0 0"/>
-                            <Setter Property="Height" Value="15"/>
+                            <Setter Property="Height" Value="16"/>
                         </Style>
                     </StackPanel.Resources>
                     <TextBlock Text="CATEGORY"/>
@@ -515,6 +515,15 @@
                             Content="SELECT ALL"/>
                     <Button x:Name="DeselectAllCategories"
                             Content="DESELECT ALL"/>
+                    <ToggleButton x:Name="IsFavoriteContained"
+                                  Content="FAVORITE ★"
+                                  Style="{StaticResource CategoryButton}"
+                                  Foreground="{StaticResource FgFavorite}"
+                                  Background="{StaticResource BgFavorite}"
+                                  Padding="8 0"
+                                  FontSize="12"
+                                  Height="16"
+                                  Margin="10 0 0 0"/>
                 </StackPanel>
                 <ItemsControl x:Name="RegularCategories"
                               Grid.Row="1" Grid.Column="1">
@@ -586,11 +595,6 @@
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgTechnikaTQ2}"/>
                                     <Setter TargetName="Button" Property="BorderBrush" Value="{StaticResource BgTechnikaTQ1}"/>
                                     <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgTechnikaTQ}"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Name}" Value="FAVORITE">
-                                    <Setter TargetName="Button" Property="Content" Value="FAVORITE ★"/>
-                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgFavorite}"/>
-                                    <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgFavorite}"/>
                                 </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>

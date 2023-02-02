@@ -26,6 +26,15 @@ namespace DjmaxRandomSelectorV.ViewModels
         public BindableCollection<ListUpdater> ButtonTunesUpdaters { get; set; }
         public BindableCollection<ListUpdater> RegularCategories { get; set; }
         public BindableCollection<ListUpdater> CollabCategories { get; set; }
+        public bool IsFavoriteContained
+        {
+            get => _filter.IncludesFavorite;
+            set
+            {
+                _filter.IncludesFavorite = value;
+                NotifyOfPropertyChange();
+            }
+        }
         public int LevelMin
         {
             get { return _filter.Levels[0]; }
@@ -116,8 +125,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator.SubscribeOnUIThread(this);
 
             _categories = IoC.Get<CategoryContainer>().GetCategories();
-            _categories.Insert(15, new Category("FAVORITE", "FAVORITE", null));
-            _categories.Insert(16, new Category("COLLABORATION", null, null));
+            _categories.Insert(15, new Category("COLLABORATION", null, null));
 
             try
             {
@@ -155,8 +163,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             ButtonTunesUpdaters = new BindableCollection<ListUpdater>(buttons);
 
             var updaters = _categories.ConvertAll(x => new ListUpdater(x.Name, x.Id, _filter.Categories));
-            RegularCategories = new BindableCollection<ListUpdater>(updaters.GetRange(0, 16));
-            CollabCategories = new BindableCollection<ListUpdater>(updaters.GetRange(16, 10));
+            RegularCategories = new BindableCollection<ListUpdater>(updaters.GetRange(0, 15));
+            CollabCategories = new BindableCollection<ListUpdater>(updaters.GetRange(15, 10));
 
             LevelIndicators = new BindableCollection<LevelIndicator>();
             ScLevelIndicators = new BindableCollection<LevelIndicator>();
