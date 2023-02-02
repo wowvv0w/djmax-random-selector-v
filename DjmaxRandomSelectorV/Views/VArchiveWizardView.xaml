@@ -1,0 +1,521 @@
+﻿<Window x:Class="DjmaxRandomSelectorV.Views.VArchiveWizardView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
+        xmlns:cal="http://www.caliburnproject.org"
+        mc:Ignorable="d"
+        Title="V-ARCHIVE Wizard" Height="540" Width="720"
+        FontFamily="{StaticResource LatoFont}">
+    <Grid Margin="30">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="255"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="125"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="205"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="70"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Height" Value="25"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="{x:Type CheckBox}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="{x:Type ComboBox}">
+                <Setter Property="Height" Value="25"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="{x:Type RadioButton}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style x:Key="defaultButtonLayout" TargetType="{x:Type Button}">
+                <Setter Property="Width" Value="80"/>
+                <Setter Property="Height" Value="25"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource defaultButtonLayout}"/>
+        </Grid.Resources>
+        <!--#region Left Panel-->
+        <Grid Grid.RowSpan="6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Foreground="{StaticResource DefaultGrayColor}"
+                       FontSize="28"
+                       FontFamily="{StaticResource LatoLightFont}">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasItems, ElementName=PatternItems}" Value="False">
+                                <Setter Property="Text" Value="N/A"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="CurrentButton"
+                           FontSize="28"
+                           FontFamily="{StaticResource LatoBlackFont}"
+                           Margin="0 0 5 0">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentButton}" Value="4B">
+                                    <Setter Property="Foreground" Value="#3EB955"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentButton}" Value="5B">
+                                    <Setter Property="Foreground" Value="#4AA5C9"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentButton}" Value="6B">
+                                    <Setter Property="Foreground" Value="#F7B000"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentButton}" Value="8B">
+                                    <Setter Property="Foreground" Value="#4054A6"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock x:Name="CurrentBoard"
+                           FontSize="24"
+                           VerticalAlignment="Bottom">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Text" Value=""/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 1">
+                                    <Setter Property="Foreground" Value="#EBB900"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 2">
+                                    <Setter Property="Foreground" Value="#EBB900"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 3">
+                                    <Setter Property="Foreground" Value="#EBB900"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 4">
+                                    <Setter Property="Foreground" Value="#EBB900"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 5">
+                                    <Setter Property="Foreground" Value="#EBB900"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 6">
+                                    <Setter Property="Foreground" Value="#E95E00"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 7">
+                                    <Setter Property="Foreground" Value="#E95E00"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 8">
+                                    <Setter Property="Foreground" Value="#E95E00"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 9">
+                                    <Setter Property="Foreground" Value="#E95E00"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 10">
+                                    <Setter Property="Foreground" Value="#E95E00"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 11">
+                                    <Setter Property="Foreground" Value="#E81054"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 12~15">
+                                    <Setter Property="Foreground" Value="#E81054"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="SC">
+                                    <Setter Property="Foreground" Value="#653FE2"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="SC~5">
+                                    <Setter Property="Foreground" Value="#653FE2"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="SC~10">
+                                    <Setter Property="Foreground" Value="#653FE2"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="SC~15">
+                                    <Setter Property="Foreground" Value="#653FE2"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+            <ListView x:Name="PatternItems"
+                      Grid.Row="1"
+                      ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <ListView.View>
+                    <GridView>
+                        <GridView.ColumnHeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="IsHitTestVisible" Value="False"/>
+                            </Style>
+                        </GridView.ColumnHeaderContainerStyle>
+                        <GridViewColumn Width="{Binding ActualWidth, ElementName=resizeHelper0}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Style" DisplayMemberBinding="{Binding Style}"
+                                        Width="{Binding ActualWidth, ElementName=resizeHelper1}"/>
+                        <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}"
+                                        Width="{Binding ActualWidth, ElementName=resizeHelper2}"/>
+                        <GridViewColumn Header="Floor" DisplayMemberBinding="{Binding Floor}"
+                                        Width="{Binding ActualWidth, ElementName=resizeHelper3}"/>
+                        <GridViewColumn Header="Score" Width="{Binding ActualWidth, ElementName=resizeHelper4}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Name="scoreText"
+                                               Text="{Binding Score, StringFormat={}{0:#0.00'%'}}"/>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding IsMaxCombo}" Value="True">
+                                            <Setter TargetName="scoreText" Property="Background" Value="#6AECAC"/>
+                                            <Setter TargetName="scoreText" Property="FontWeight" Value="Bold"/>
+                                        </DataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding IsMaxCombo}" Value="True"/>
+                                                <Condition Binding="{Binding Score}" Value="100"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter TargetName="scoreText" Property="Background" Value="#E33634"/>
+                                                <Setter TargetName="scoreText" Property="Foreground" Value="White"/>
+                                                <Setter TargetName="scoreText" Property="FontWeight" Value="Bold"/>
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Grid Grid.Row="1" Visibility="Hidden">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="35"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <Grid x:Name="resizeHelper0"/>
+                <Grid x:Name="resizeHelper1" Grid.Column="1"/>
+                <Grid x:Name="resizeHelper2" Grid.Column="2" MinWidth="100"/>
+                <Grid x:Name="resizeHelper3" Grid.Column="3"/>
+                <Grid x:Name="resizeHelper4" Grid.Column="4"/>
+            </Grid>
+        </Grid>
+        <!--#endregion-->
+        <!--#region Right Request-->
+        <Grid Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="REQUEST BOARD"
+                       Grid.ColumnSpan="5"
+                       Foreground="{StaticResource DefaultGrayColor}"
+                       FontSize="18"
+                       FontFamily="{StaticResource LatoLightFont}"/>
+            <TextBlock Text="Nickname" Grid.Row="1"/>
+            <TextBox x:Name="Nickname" Grid.Row="1" Grid.Column="1"
+                     Grid.ColumnSpan="4"/>
+            <TextBlock Text="Button" Grid.Row="2"/>
+            <ComboBox x:Name="buttonComboBox"
+                      Grid.Row="2" Grid.Column="1"
+                      SelectedValue="{Binding SelectedButton}"
+                      SelectedValuePath="Content">
+                <ComboBoxItem Content="4"/>
+                <ComboBoxItem Content="5"/>
+                <ComboBoxItem Content="6"/>
+                <ComboBoxItem Content="8"/>
+            </ComboBox>
+            <TextBlock Text="Board" Grid.Row="2" Grid.Column="3"/>
+            <ComboBox x:Name="boardComboBox"
+                      Grid.Row="2" Grid.Column="4"
+                      SelectedValue="{Binding SelectedBoard}"
+                      SelectedValuePath="Content">
+                <ComboBoxItem Content="1"/>
+                <ComboBoxItem Content="2"/>
+                <ComboBoxItem Content="3"/>
+                <ComboBoxItem Content="4"/>
+                <ComboBoxItem Content="5"/>
+                <ComboBoxItem Content="6"/>
+                <ComboBoxItem Content="7"/>
+                <ComboBoxItem Content="8"/>
+                <ComboBoxItem Content="9"/>
+                <ComboBoxItem Content="10"/>
+                <ComboBoxItem Content="11"/>
+                <ComboBoxItem Content="MX"/>
+                <ComboBoxItem Content="SC"/>
+                <ComboBoxItem Content="SC5"/>
+                <ComboBoxItem Content="SC10"/>
+                <ComboBoxItem Content="SC15"/>
+            </ComboBox>
+            <Button x:Name="RequestBoard" Grid.Row="3"
+                    Grid.ColumnSpan="5"
+                    Content="Request">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource defaultButtonLayout}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=Nickname}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+        <!--#endregion-->
+        <!--#region Right Conditions-->
+        <Grid Grid.Row="2" Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Items.Count, ElementName=PatternItems}" Value="0">
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <TextBlock Text="SELECT BY QUERY"
+                       Grid.ColumnSpan="4"
+                       Foreground="{StaticResource DefaultGrayColor}"
+                       FontSize="18"
+                       FontFamily="{StaticResource LatoLightFont}"/>
+            <CheckBox x:Name="IncludesPlayed" Content="Played"
+                      Grid.Row="1"/>
+            <UniformGrid Grid.Row="1" Grid.Column="2"
+                         Rows="1" Columns="2">
+                <RadioButton x:Name="IsPlayed" GroupName="playedConditions"
+                             Content="Y"/>
+                <RadioButton x:Name="IsNotPlayed" GroupName="playedConditions"
+                             Content="N"/>
+                <UniformGrid.Style>
+                    <Style TargetType="{x:Type UniformGrid}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=IncludesPlayed}"
+                                         Value="False">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </UniformGrid.Style>
+            </UniformGrid>
+            <CheckBox x:Name="IncludesScore" Content="Score" Grid.Row="2"/>
+            <Grid Grid.Row="2" Grid.Column="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="scoreAbove"
+                         Text="{Binding ScoreAbove, Mode=TwoWay}"
+                         TextAlignment="Center"/>
+                <TextBlock Text="~" Grid.Column="1"
+                           TextAlignment="Center"
+                           VerticalAlignment="Center"/>
+                <TextBox x:Name="scoreBelow"
+                         Text="{Binding ScoreBelow, Mode=TwoWay}" Grid.Column="2"
+                         TextAlignment="Center"/>
+                <Grid.Style>
+                    <Style TargetType="{x:Type Grid}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=IncludesScore}"
+                                         Value="False">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+            </Grid>
+            <CheckBox x:Name="IncludesMaxCombo" Content="Max Combo" Grid.Row="3"/>
+            <UniformGrid Grid.Row="3" Grid.Column="2"
+                         Rows="1" Columns="2">
+                <RadioButton x:Name="IsMaxCombo" GroupName="maxComboConditions"
+                             Content="Y"/>
+                <RadioButton x:Name="IsNotMaxCombo" GroupName="maxComboConditions"
+                             Content="N"/>
+                <UniformGrid.Style>
+                    <Style TargetType="{x:Type UniformGrid}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=IncludesMaxCombo}"
+                                         Value="False">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </UniformGrid.Style>
+            </UniformGrid>
+            <CheckBox x:Name="IncludesFloor" Content="Floor" Grid.Row="4"/>
+            <Grid Grid.Row="4" Grid.Column="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="floorAbove"
+                         Text="{Binding FloorAbove, Mode=TwoWay}"
+                         TextAlignment="Center"/>
+                <TextBlock Text="~" Grid.Column="1"
+                           TextAlignment="Center"
+                           VerticalAlignment="Center"/>
+                <TextBox x:Name="floorBelow"
+                         Text="{Binding FloorBelow, Mode=TwoWay}" Grid.Column="2"
+                         TextAlignment="Center"/>
+                <Grid.Style>
+                    <Style TargetType="{x:Type Grid}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=IncludesFloor}"
+                                         Value="False">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+            </Grid>
+            <UniformGrid Grid.Row="5"
+                         Grid.ColumnSpan="3"
+                         Rows="1" Columns="3">
+                <Button cal:Message.Attach="ApplyQuery('select')">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource defaultButtonLayout}">
+                            <Setter Property="Content" Value="Select"/>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsChecked, ElementName=IncludesPlayed}" Value="False"/>
+                                        <Condition Binding="{Binding IsChecked, ElementName=IncludesScore}" Value="False"/>
+                                        <Condition Binding="{Binding IsChecked, ElementName=IncludesMaxCombo}" Value="False"/>
+                                        <Condition Binding="{Binding IsChecked, ElementName=IncludesFloor}" Value="False"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Content" Value="Select All"/>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button cal:Message.Attach="ApplyQuery('exclusive')"
+                        Content="Select Only">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource defaultButtonLayout}">
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsChecked, ElementName=IncludesPlayed}" Value="False"/>
+                                        <Condition Binding="{Binding IsChecked, ElementName=IncludesScore}" Value="False"/>
+                                        <Condition Binding="{Binding IsChecked, ElementName=IncludesMaxCombo}" Value="False"/>
+                                        <Condition Binding="{Binding IsChecked, ElementName=IncludesFloor}" Value="False"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button cal:Message.Attach="ApplyQuery('deselect')">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource defaultButtonLayout}">
+                            <Setter Property="Content" Value="Deselect"/>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsChecked, ElementName=IncludesPlayed}" Value="False"/>
+                                        <Condition Binding="{Binding IsChecked, ElementName=IncludesScore}" Value="False"/>
+                                        <Condition Binding="{Binding IsChecked, ElementName=IncludesMaxCombo}" Value="False"/>
+                                        <Condition Binding="{Binding IsChecked, ElementName=IncludesFloor}" Value="False"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Content" Value="Deselect All"/>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <UniformGrid.Style>
+                    <Style TargetType="{x:Type UniformGrid}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=scoreAbove}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=scoreBelow}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=floorAbove}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=floorBelow}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </UniformGrid.Style>
+            </UniformGrid>
+        </Grid>
+        <!--#endregion-->
+        <!--#region Right Apply-->
+        <Grid Grid.Row="4" Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="ADD TO PLAYLIST"
+                       Grid.ColumnSpan="4"
+                       Foreground="{StaticResource DefaultGrayColor}"
+                       FontSize="18"
+                       FontFamily="{StaticResource LatoLightFont}"/>
+            <UniformGrid Grid.Row="1"
+                         Rows="1" Columns="2">
+                <Button cal:Message.Attach="PublishItems('add')"
+                        Content="Add"/>
+                <Button cal:Message.Attach="PublishItems('overwrite')"
+                        Content="Overwrite"/>
+                <UniformGrid.Style>
+                    <Style TargetType="{x:Type UniformGrid}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Items.Count, ElementName=PatternItems}" Value="0">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </UniformGrid.Style>
+            </UniformGrid>
+        </Grid>
+        <!--#endregion-->
+    </Grid>
+</Window>

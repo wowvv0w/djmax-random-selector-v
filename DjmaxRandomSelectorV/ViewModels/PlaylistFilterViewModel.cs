@@ -13,11 +13,12 @@ using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class PlaylistFilterViewModel : Screen
+    public class PlaylistFilterViewModel : Screen, IHandle<VArchiveMessage>
     {
         private const string DefaultPath = @"Data\CurrentPlaylist.json";
 
         private readonly IEventAggregator _eventAggregator;
+        private readonly IWindowManager _windowManager;
         private readonly IFileManager _fileManager;
         private readonly List<Track> _tracks;
         private readonly List<string> _titles;
@@ -40,12 +41,13 @@ namespace DjmaxRandomSelectorV.ViewModels
         public BindableCollection<Music> SearchResult { get; }
         public BindableCollection<Music> PlaylistItems { get; }
 
-        public PlaylistFilterViewModel(IEventAggregator eventAggregator, IFileManager fileManager)
+        public PlaylistFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, IFileManager fileManager)
         {
             DisplayName = "FILTER";
             _eventAggregator = eventAggregator;
+            _windowManager = windowManager;
             _fileManager = fileManager;
-
+            _eventAggregator.SubscribeOnUIThread(this);
             try
             {
                 _filter = _fileManager.Import<PlaylistFilter>(DefaultPath);
@@ -239,6 +241,26 @@ namespace DjmaxRandomSelectorV.ViewModels
                 .ThenBy(x => Array.IndexOf(difficultyOrder, x.Difficulty)).ToList();
             PlaylistItems.Clear();
             PlaylistItems.AddRange(sorted);
+        }
+
+        public Task RunVArchiveWizard()
+        {
+            return _windowManager.ShowWindowAsync(IoC.Get<VArchiveWizardViewModel>());
+        }
+
+        public Task HandleAsync(VArchiveMessage message, CancellationToken cancellationToken)
+        {
+            if (message.Command == "overwrite" && PlaylistItems.Any())
+            {
+                var result = MessageBox.Show("The playlist will be overwrited.\nContinue?",
+                    "Overwrite Playlist", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    PlaylistItems.Clear();
+                }
+            }
+            PlaylistItems.AddRange(message.Items);
+            return Task.CompletedTask;
         }
     }
 }

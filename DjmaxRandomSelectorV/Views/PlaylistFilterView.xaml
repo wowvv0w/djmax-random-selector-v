@@ -187,6 +187,16 @@
             </ItemsControl>
         </Grid>
         <!--#endregion-->
+        
+        <Button x:Name="RunVArchiveWizard"
+                Content="Run V-ARCHIVE Wizard"
+                Background="{StaticResource DarkerTranslucentBackgroundColor}"
+                Grid.Row="6"
+                Style="{StaticResource HoverEffectTransparentButton}"
+                FontSize="12"
+                FontFamily="{StaticResource LatoBlackFont}"
+                Width="150" Height="30"/>
+
         <!--#region Right Header-->
         <StackPanel Orientation="Horizontal"
                     Grid.Column="2"
