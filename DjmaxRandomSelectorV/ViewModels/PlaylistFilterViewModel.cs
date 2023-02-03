@@ -76,15 +76,25 @@ namespace DjmaxRandomSelectorV.ViewModels
             return Task.CompletedTask;
         }
 
+        public void AddItem(Music item)
+        {
+            PlaylistItems.Add(item with { Level = -1 });
+        }
+
+        #region SELECTED methods
         public void DeselectItems(object sended)
         {
             var items = sended as ICollection<object>;
             items.Clear();
         }
 
-        public void AddItem(Music item)
+        public void MoveItem(int index, int move)
         {
-            PlaylistItems.Add(item with { Level = -1 });
+            int newIndex = index + move;
+            if (0 <= newIndex && newIndex <= PlaylistItems.Count - 1)
+            {
+                PlaylistItems.Move(index, index + move);
+            }
         }
 
         public void RemoveItems(object sended)
@@ -101,7 +111,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             foreach (var i in PlaylistItems)
             {
                 index++;
-                if (!items.Where(m => ReferenceEquals(m, i)).Any())
+                if (!items.Any(m => ReferenceEquals(m, i)))
                 {
                     continue;
                 }
@@ -120,45 +130,18 @@ namespace DjmaxRandomSelectorV.ViewModels
             PlaylistItems.Refresh();
             items.Clear();
         }
+        #endregion
 
-        public void MoveItem(int index, int move)
+        #region PLAYLIST methods
+        public void SortItems()
         {
-            int newIndex = index + move;
-            if (0 <= newIndex && newIndex <= PlaylistItems.Count - 1)
-            {
-                PlaylistItems.Move(index, index + move);
-            }
-        }
-
-        public void ConcatenateItems()
-        {
-            string app = AppDomain.CurrentDomain.BaseDirectory;
-            string path = Path.Combine(app, @"Data\Playlist");
-            var dialog = new OpenFileDialog()
-            {
-                InitialDirectory = path,
-                DefaultExt = ".json",
-                Filter = "JSON Files (*.json)|*.json"
-            };
-
-            bool? result = dialog.ShowDialog();
-
-            if (result == true)
-            {
-                PlaylistFilter filter;
-                try
-                {
-                    filter = _fileManager.Import<PlaylistFilter>(dialog.FileName);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Cannot concatenate the items of playlist.\n{ex.Message}",
-                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-                var concat = filter.Items;
-                PlaylistItems.AddRange(concat);
-            }
+            var difficultyOrder = new string[] { "NM", "HD", "MX", "SC" };
+            var sorted = PlaylistItems.OrderBy(x => !Regex.IsMatch(x.Title[..1], "[ㄱ-ㅎ가-힣]"))
+                .ThenBy(x => x.Title)
+                .ThenBy(x => x.ButtonTunes)
+                .ThenBy(x => Array.IndexOf(difficultyOrder, x.Difficulty)).ToList();
+            PlaylistItems.Clear();
+            PlaylistItems.AddRange(sorted);
         }
 
         public void DistinctItems()
@@ -182,7 +165,9 @@ namespace DjmaxRandomSelectorV.ViewModels
                 PlaylistItems.Clear();
             }
         }
+        #endregion
 
+        #region TOOL methods
         public void SaveItems()
         {
             string app = AppDomain.CurrentDomain.BaseDirectory;
@@ -204,6 +189,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 _fileManager.Export(_filter, fileName);
             }
         }
+
         public void LoadItems()
         {
             string app = AppDomain.CurrentDomain.BaseDirectory;
@@ -238,6 +224,39 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
+        public void ConcatenateItems()
+        {
+            string app = AppDomain.CurrentDomain.BaseDirectory;
+            string path = Path.Combine(app, @"Data\Playlist");
+            var dialog = new OpenFileDialog()
+            {
+                InitialDirectory = path,
+                DefaultExt = ".json",
+                Filter = "JSON Files (*.json)|*.json"
+            };
+
+            bool? result = dialog.ShowDialog();
+
+            if (result == true)
+            {
+                PlaylistFilter filter;
+                try
+                {
+                    filter = _fileManager.Import<PlaylistFilter>(dialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Cannot concatenate the items of playlist.\n{ex.Message}",
+                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                var concat = filter.Items;
+                PlaylistItems.AddRange(concat);
+            }
+        }
+        #endregion
+
+        #region SEARCH methods
         public void ClearSearchBox()
         {
             SearchBox = string.Empty;
@@ -287,17 +306,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                         select m;
             SearchResult.AddRange(query);
         }
-
-        public void SortPlaylist()
-        {
-            var difficultyOrder = new string[] { "NM", "HD", "MX", "SC" };
-            var sorted = PlaylistItems.OrderBy(x => !Regex.IsMatch(x.Title[..1], "[ㄱ-ㅎ가-힣]"))
-                .ThenBy(x => x.Title)
-                .ThenBy(x => x.ButtonTunes)
-                .ThenBy(x => Array.IndexOf(difficultyOrder, x.Difficulty)).ToList();
-            PlaylistItems.Clear();
-            PlaylistItems.AddRange(sorted);
-        }
+        #endregion
 
         public Task RunVArchiveWizard()
         {

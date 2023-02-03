@@ -203,7 +203,7 @@
             <TextBlock Text="PLAYLIST"
                        VerticalAlignment="Center"
                        Margin="10 0"/>
-            <Button x:Name="SortPlaylist" Content="SORT"/>
+            <Button x:Name="SortItems" Content="SORT"/>
             <Button x:Name="DistinctItems" Content="DISTINCT"/>
             <Button x:Name="ClearItems" Content="CLEAR"/>
         </StackPanel>
