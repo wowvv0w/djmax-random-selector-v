@@ -76,14 +76,58 @@ namespace DjmaxRandomSelectorV.ViewModels
             return Task.CompletedTask;
         }
 
+        public void DeselectItems(object sended)
+        {
+            var items = sended as ICollection<object>;
+            items.Clear();
+        }
+
         public void AddItem(Music item)
         {
             PlaylistItems.Add(item with { Level = -1 });
         }
 
-        public void RemoveItem(Music item)
+        public void RemoveItems(object sended)
         {
-            PlaylistItems.Remove(item);
+            var items = sended as ICollection<object>;
+            int requested = items.Count;
+            if (requested <= 0)
+            {
+                return;
+            }
+
+            int index = -1;
+            var indexesToBeRemoved = new List<int>();
+            foreach (var i in PlaylistItems)
+            {
+                index++;
+                if (!items.Where(m => ReferenceEquals(m, i)).Any())
+                {
+                    continue;
+                }
+                indexesToBeRemoved.Add(index);
+                requested--;
+                if (requested == 0)
+                {
+                    break;
+                }
+            }
+
+            PlaylistItems.IsNotifying = false;
+            indexesToBeRemoved.Reverse();
+            indexesToBeRemoved.ForEach(i => PlaylistItems.RemoveAt(i));
+            PlaylistItems.IsNotifying = true;
+            PlaylistItems.Refresh();
+            items.Clear();
+        }
+
+        public void MoveItem(int index, int move)
+        {
+            int newIndex = index + move;
+            if (0 <= newIndex && newIndex <= PlaylistItems.Count - 1)
+            {
+                PlaylistItems.Move(index, index + move);
+            }
         }
 
         public void ConcatenateItems()
@@ -117,10 +161,22 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
+        public void DistinctItems()
+        {
+            var result = MessageBox.Show("Would you like to remove duplicates?",
+                "Prompt", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                var deduplicated = PlaylistItems.Distinct().ToList();
+                PlaylistItems.Clear();
+                PlaylistItems.AddRange(deduplicated);
+            }
+        }
+
         public void ClearItems()
         {
-            var result = MessageBox.Show("Are you sure?",
-                "Clear all", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var result = MessageBox.Show("Would you like to clear all items?",
+                "Prompt", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
                 PlaylistItems.Clear();

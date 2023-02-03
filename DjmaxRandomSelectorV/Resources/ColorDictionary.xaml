@@ -4,8 +4,9 @@
     <!-- Text Colors -->
     <SolidColorBrush x:Key="DefaultGrayColor" Color="#7F7F7F"/>
     <SolidColorBrush x:Key="HighlightYellowColor" Color="#FFBE00"/>
-
+    
     <!-- Panel Colors -->
+    <SolidColorBrush x:Key="BrightTranslucentBackgroundColor" Color="#11FFFFFF"/>
     <SolidColorBrush x:Key="BrighterTranslucentBackgroundColor" Color="#1FFFFFFF"/>
     <SolidColorBrush x:Key="DarkTranslucentBackgroundColor" Color="#33000000"/>
     <SolidColorBrush x:Key="DarkerTranslucentBackgroundColor" Color="#56000000"/>
