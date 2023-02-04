@@ -4,184 +4,394 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="340" d:DesignWidth="680">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition/>
             <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="10"/>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="10"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.Resources>
-            <Style TargetType="TextBlock">
-                <Setter Property="Foreground" Value="{StaticResource Default}"/>
-                <Setter Property="FontFamily" Value="{StaticResource Lato}"/>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource GrayTextBlock}">
                 <Setter Property="FontSize" Value="16"/>
             </Style>
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource HoverEffectTransparentButton}">
+                <Setter Property="Padding" Value="8 0"/>
+            </Style>
         </Grid.Resources>
-
-        <!--#region Tool-->
+        <!--#region Left Header-->
         <StackPanel Orientation="Horizontal"
-                    Background="{StaticResource Widget}">
-            <StackPanel.Resources>
-                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource WindowButton}">
-                    <Setter Property="Foreground" Value="{StaticResource Default}"/>
-                    <Setter Property="FontFamily" Value="{StaticResource Lato}"/>
-                    <Setter Property="FontSize" Value="10"/>
-                    <Setter Property="Width" Value="auto"/>
-                    <Setter Property="Padding" Value="10 0"/>
-                </Style>
-            </StackPanel.Resources>
+                    Background="{StaticResource DarkTranslucentBackgroundColor}">
             <TextBlock Text="TOOL"
-                       VerticalAlignment="Center"
                        Margin="10 0"/>
-            <Button x:Name="SaveItems"
-                    Content="SAVE"/>
-            <Button x:Name="LoadItems"
-                    Content="LOAD"/>
-            <Button x:Name="ConcatenateItems"
-                    Content="CONCAT"/>
-            <Button x:Name="ClearItems"
-                    Content="CLEAR"/>
+            <Button x:Name="SaveItems" Content="SAVE"/>
+            <Button x:Name="LoadItems" Content="LOAD"/>
+            <Button x:Name="ConcatenateItems" Content="CONCAT"/>
         </StackPanel>
         <!--#endregion-->
-        
-        <!--#region Search Box-->
+        <!--#region Left SearchBox-->
         <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="SEARCH"
-                       FontSize="12"
-                       VerticalAlignment="Center"/>
-            <Grid Background="#1FFFFFFF"
-                  Grid.Column="2">
-                <TextBox x:Name="SearchBox"
-                         Background="Transparent"
-                         BorderThickness="0"
-                         Foreground="White"
-                         CaretBrush="White"
-                         VerticalAlignment="Center"
-                         FontFamily="{StaticResource Lato}"
-                         FontSize="15"/>
-                <Popup IsOpen="{Binding OpensSuggestionBox}"
-                       StaysOpen="False"
-                       Placement="Bottom">
-                    <ListBox x:Name="SuggestionBox"
-                             Width="278"
-                             MaxHeight="189"
-                             ScrollViewer.VerticalScrollBarVisibility="Auto"
-                             FontFamily="{StaticResource Lato}"
-                             ItemsSource="{Binding TitleSuggestions}"
-                             cal:Message.Attach="[Event SelectionChanged] = [Action SelectSuggestion(SuggestionBox.SelectedItem)]"/>
-                </Popup>
-            </Grid>
+            <Border x:Name="searchBoxBorder"
+                    Background="{StaticResource BrighterTranslucentBackgroundColor}"
+                    Padding="5 0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock HorizontalAlignment="Left"
+                               Margin="2 0">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource GrayTextBlock}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=SearchBox}" Value="True">
+                                        <Setter Property="Text" Value="Search"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBox x:Name="SearchBox"
+                             Foreground="White"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             CaretBrush="White"
+                             VerticalAlignment="Center"
+                             FontFamily="{StaticResource LatoFont}"
+                             FontSize="15"
+                             cal:Message.Attach="[Event KeyUp] = [Action SearchTitle]"/>
+                    <Button x:Name="ClearSearchBox"
+                            Grid.Column="1"
+                            Width="25">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource HoverEffectTransparentButton}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=SearchBox}" Value="True">
+                                        <Setter Property="Visibility" Value="Hidden"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <Image Style="{StaticResource XMarkImage}" Width="12"/>
+                    </Button>
+                </Grid>
+            </Border>
+            <Popup StaysOpen="False"
+                   Placement="Bottom">
+                <Popup.Style>
+                    <Style TargetType="{x:Type Popup}">
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding HasItems, ElementName=SuggestionBox}"
+                                               Value="True"/>
+                                    <Condition Binding="{Binding SelectedIndex, ElementName=SuggestionBox}"
+                                               Value="-1"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="IsOpen" Value="True"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Popup.Style>
+                <ListBox x:Name="SuggestionBox"
+                         Width="{Binding ActualWidth, ElementName=searchBoxBorder}"
+                         MaxHeight="180"
+                         Style="{StaticResource PopupListBox}"
+                         ItemsSource="{Binding TitleSuggestions}"
+                         ItemContainerStyle="{StaticResource PopupListBoxItem}"
+                         cal:Message.Attach="[Event SelectionChanged] = [Action SelectSuggestion(SuggestionBox.SelectedItem)]">
+                </ListBox>
+            </Popup>
         </Grid>
         <!--#endregion-->
-        
-        <!--#region All Items-->
-        <ScrollViewer VerticalScrollBarVisibility="Hidden"
-                      Grid.Row="4">
+        <!--#region Left Search Result-->
+        <Grid Grid.Row="4"
+              Background="{StaticResource DarkerTranslucentBackgroundColor}"
+              Height="200"
+              VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.Resources>
+                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BoldGrayTextBlock}">
+                    <Setter Property="FontSize" Value="16"/>
+                </Style>
+            </Grid.Resources>
+            <TextBlock Text="STYLE"
+                       Style="{StaticResource GrayTextBlock}"
+                       FontSize="12"
+                       Margin="5 0"/>
+            <UniformGrid Grid.Column="1" Columns="4">
+                <TextBlock Text="NM" Foreground="#56D7B854"/>
+                <TextBlock Text="HD" Foreground="#56DD8E5E"/>
+                <TextBlock Text="MX" Foreground="#56D75B7B"/>
+                <TextBlock Text="SC" Foreground="#56CF4DB5"/>
+            </UniformGrid>
+            <UniformGrid Grid.Row="1" Rows="4">
+                <TextBlock Text="4B" Foreground="#56A2D783"/>
+                <TextBlock Text="5B" Foreground="#5643B3C6"/>
+                <TextBlock Text="6B" Foreground="#56C68C47"/>
+                <TextBlock Text="8B" Foreground="#569F8DED"/>
+            </UniformGrid>
+            <TextBlock Grid.Row="2" Grid.Column="1"
+                       FontSize="12">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource GrayTextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasItems, ElementName=SearchResult}" Value="False">
+                                <Setter Property="Text" Value="Search music to add patterns to playlist."/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
             <ItemsControl x:Name="SearchResult"
-                          Padding="0"
-                          Foreground="{StaticResource Default}"
-                          Background="#56000000"
-                          BorderThickness="0"
-                          FontFamily="{StaticResource Lato}"
-                          FontSize="12">
+                          Grid.Row="2" Grid.Column="1">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel CanVerticallyScroll="True"/>
+                        <UniformGrid Columns="4" Rows="4"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid Background="Transparent"
-                              Height="20"
-                              Margin="5 2.5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="4*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="20"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.Resources>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="FontFamily" Value="{StaticResource Lato Black}"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                </Style>
-                            </Grid.Resources>
-                            <TextBlock Text="{Binding Title}"/>
-                            <TextBlock Text="{Binding Style}"
-                                       Grid.Column="1"/>
-                            <Button Grid.Column="2"
-                                    Content="+"
-                                    Foreground="{StaticResource Default}"
-                                    FontFamily="{StaticResource Lato Black}"
-                                    Width="auto"
-                                    cal:Message.Attach="AddItem($dataContext)"
-                                    Style="{StaticResource WindowButton}"/>
-                        </Grid>
+                        <Button x:Name="patternButton"
+                                Content="{Binding Level}"
+                                Style="{StaticResource HoverEffectTransparentButton}"
+                                FontFamily="{StaticResource LatoBlackFont}"
+                                cal:Message.Attach="AddItem($dataContext)"/>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Level}" Value="0">
+                                <Setter TargetName="patternButton" Property="Content" Value="-"/>
+                                <Setter TargetName="patternButton" Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </ScrollViewer>
-        <!--#endregion-->
-
-        <!--#region Playlist -->
-        <ItemsControl x:Name="PlaylistItems"
-                      Grid.Column="3"
-                      Grid.RowSpan="5"
-                      Padding="0"
-                      Foreground="{StaticResource Default}"
-                      Background="#56000000"
-                      BorderThickness="0"
-                      FontFamily="{StaticResource Lato}"
-                      FontSize="12">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid Background="Transparent"
-                          Height="20"
-                          Margin="5 2.5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="4*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="20"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.Resources>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="FontFamily" Value="{StaticResource Lato Black}"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </Grid.Resources>
-                        <TextBlock Text="{Binding Title}"/>
-                        <TextBlock Text="{Binding Style}"
-                                   Grid.Column="1"/>
-                        <Button Grid.Column="2"
-                                Width="auto"
-                                cal:Message.Attach="RemoveItem($dataContext)"
-                                Style="{StaticResource WindowButton}">
-                            <Image Source="pack://application:,,,/Images/Close.png" Width="12"/>
-                        </Button>
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        </Grid>
         <!--#endregion-->
         
+        <Button x:Name="RunVArchiveWizard"
+                Content="Run V-ARCHIVE Wizard"
+                Background="{StaticResource DarkerTranslucentBackgroundColor}"
+                Grid.Row="6"
+                Style="{StaticResource HoverEffectTransparentButton}"
+                FontSize="12"
+                FontFamily="{StaticResource LatoBlackFont}"
+                Width="150" Height="30"/>
+
+        <!--#region Right Header-->
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="2"
+                    Background="{StaticResource DarkTranslucentBackgroundColor}">
+            <TextBlock Text="PLAYLIST"
+                       VerticalAlignment="Center"
+                       Margin="10 0"/>
+            <Button x:Name="SortItems" Content="SORT"/>
+            <Button x:Name="DistinctItems" Content="DISTINCT"/>
+            <Button x:Name="ClearItems" Content="CLEAR"/>
+        </StackPanel>
+        <!--#endregion-->
+        <!--#region Right Playlist-->
+        <Grid Grid.Row="2" Grid.Column="3"
+              Grid.RowSpan="6">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ListBox x:Name="PlaylistItems"
+                     Background="{StaticResource DarkerTranslucentBackgroundColor}"
+                     BorderBrush="Transparent"
+                     BorderThickness="0"
+                     Padding="2 1"
+                     SelectionMode="Extended"
+                     SnapsToDevicePixels="True">
+                <ListBox.Resources>
+                    <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">10</sys:Double>
+                    <Style TargetType="{x:Type ScrollViewer}" BasedOn="{StaticResource PlaylistScrollViewer}">
+                        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+                        <Setter Property="VerticalScrollBarVisibility" Value="Visible"/>
+                        <Setter Property="CanContentScroll" Value="False"/>
+                    </Style>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Margin" Value="0 0 0 -3"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <Border x:Name="Border"
+                                            BorderThickness="3"
+                                            SnapsToDevicePixels="True">
+                                        <Border.BorderBrush>
+                                            <SolidColorBrush Color="Transparent"/>
+                                        </Border.BorderBrush>
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="SelectionStates">
+                                                <VisualState x:Name="Unselected"/>
+                                                <VisualState x:Name="Selected">
+                                                    <Storyboard>
+                                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                                                      Storyboard.TargetProperty="(Border.BorderBrush)
+                                                                                                                 .(SolidColorBrush.Color)">
+                                                            <EasingColorKeyFrame KeyTime="0"
+                                                                                 Value="#C4FFBE00"/>
+                                                        </ColorAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                        <ContentPresenter/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.Resources>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <DataTemplate.Resources>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="FontFamily" Value="{StaticResource LatoBlackFont}"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataTemplate.Resources>
+                        <Grid Background="{StaticResource BrightTranslucentBackgroundColor}"
+                              MinHeight="20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="10"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Title}"
+                                       Grid.Column="1"
+                                       Foreground="#9F9F9F"
+                                       TextWrapping="Wrap"/>
+                            <Border x:Name="styleBorder"
+                                    Grid.Column="3"
+                                    BorderThickness="0 0 6 0"
+                                    VerticalAlignment="Center"
+                                    Width="50">
+                                <TextBlock Text="{Binding Style}"
+                                           Foreground="#DFDFDF"
+                                           TextAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding ButtonTunes}" Value="4B">
+                                <Setter TargetName="styleBorder" Property="Background" Value="#80A2D783"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ButtonTunes}" Value="5B">
+                                <Setter TargetName="styleBorder" Property="Background" Value="#8043B3C6"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ButtonTunes}" Value="6B">
+                                <Setter TargetName="styleBorder" Property="Background" Value="#80C68C47"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ButtonTunes}" Value="8B">
+                                <Setter TargetName="styleBorder" Property="Background" Value="#809F8DED"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Difficulty}" Value="NM">
+                                <Setter TargetName="styleBorder" Property="BorderBrush" Value="#80D7B854"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Difficulty}" Value="HD">
+                                <Setter TargetName="styleBorder" Property="BorderBrush" Value="#80DD8E5E"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Difficulty}" Value="MX">
+                                <Setter TargetName="styleBorder" Property="BorderBrush" Value="#80D75B7B"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Difficulty}" Value="SC">
+                                <Setter TargetName="styleBorder" Property="BorderBrush" Value="#80CF4DB5"/>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <TextBlock FontSize="12">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource GrayTextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasItems, ElementName=PlaylistItems}" Value="False">
+                                <Setter Property="Text" Value="The playlist is empty."/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <Border Grid.Row="1"
+                    Padding="20 0"
+                    Background="{StaticResource DarkTranslucentBackgroundColor}">
+                <Border.Style>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="Height" Value="30"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedItems.Count, ElementName=PlaylistItems}" Value="0">
+                                <Setter Property="Height" Value="0"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.Resources>
+                        <Style x:Key="enableWhenOneButton" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="IsEnabled" Value="False"/>
+                            <Setter Property="Padding" Value="12 0"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedItems.Count, ElementName=PlaylistItems}"
+                                             Value="1">
+                                    <Setter Property="Foreground" Value="{StaticResource DefaultGrayColor}"/>
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Resources>
+                    <TextBlock Text="{Binding SelectedItems.Count, ElementName=PlaylistItems, StringFormat={}{0:'Selected: '0}}"
+                               HorizontalAlignment="Left"
+                               Foreground="{StaticResource HighlightYellowColor}"
+                               FontSize="12"/>
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Column="1"
+                                HorizontalAlignment="Right">
+                        <Button cal:Message.Attach="DeselectItems(PlaylistItems.SelectedItems)"
+                                Content="DESELECT"/>
+                        <Button cal:Message.Attach="MoveItem(PlaylistItems.SelectedIndex, '-1')"
+                                Content="▲"
+                                Style="{StaticResource enableWhenOneButton}"/>
+                        <Button cal:Message.Attach="MoveItem(PlaylistItems.SelectedIndex, '1')"
+                                Content="▼"
+                                Style="{StaticResource enableWhenOneButton}"/>
+                        <Button cal:Message.Attach="RemoveItems(PlaylistItems.SelectedItems)"
+                                Content="DELETE"
+                                Foreground="#BF0000"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+        <!--#endregion-->
     </Grid>
 </UserControl>

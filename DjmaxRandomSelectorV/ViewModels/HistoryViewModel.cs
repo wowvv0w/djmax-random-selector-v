@@ -1,30 +1,44 @@
 ﻿using Caliburn.Micro;
+using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.Models;
-using Dmrsv.Data.DataTypes;
+using Dmrsv.RandomSelector;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class HistoryViewModel : Screen, IHandle<Music>
+    public class HistoryViewModel : Screen, IHandle<MusicMessage>
     {
-        private int _number;
-        public BindableCollection<HistoryItem> History { get; set; }
+        private readonly IEventAggregator _eventAggregator;
 
-        private IEventAggregator _eventAggregator;
+        private int _number;
+
+        public BindableCollection<HistoryItem> History { get; }
+
         public HistoryViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
             _number = 0;
             History = new BindableCollection<HistoryItem>();
+            DisplayName = "HISTORY";
         }
 
-        private void UpdateHistory(HistoryItem historyItem)
+        private void AddItem(Music music)
         {
+            _number++;
+            string style = music.Style;
+            int level = music.Level;
+            var historyItem = new HistoryItem()
+            {
+                Number = _number,
+                Title = music.Title,
+                Style = string.IsNullOrEmpty(style) ? "FREE" : style,
+                Level = level == -1 ? "-" : level.ToString(),
+                Time = DateTime.Now.ToString("HH:mm:ss"),
+            };
+
             History.Insert(0, historyItem);
             if (History.Count > 8)
             {
@@ -32,18 +46,15 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
-        public Task HandleAsync(Music message, CancellationToken cancellationToken)
+        public void ClearItems()
         {
-            _number++;
-            var historyItem = new HistoryItem()
-            {
-                Number = _number,
-                Title = message.Title,
-                Style = message.Style,
-                Level = message.Level,
-                Time = DateTime.Now.ToString("HH:mm:ss"),
-            };
-            UpdateHistory(historyItem);
+            History.Clear();
+            _number = 0;
+        }
+
+        public Task HandleAsync(MusicMessage message, CancellationToken cancellationToken)
+        {
+            AddItem(message.Item);
             return Task.CompletedTask;
         }
     }

@@ -7,27 +7,46 @@
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="480" d:DesignWidth="500">
-    <Grid Width="500">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="30"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
         <Border Background="#DF221C15"
-                    BorderBrush="Gray"
-                    BorderThickness="2"
-                    Margin="-4,-4,0,-4">
+                BorderBrush="Gray"
+                BorderThickness="0 0 2 0"
+                Grid.RowSpan="3" Grid.ColumnSpan="3">
         </Border>
-        <StackPanel Margin="30,50">
+        <StackPanel Grid.Row="1" Grid.Column="1">
             <StackPanel.Resources>
-                <Style TargetType="Grid" BasedOn="{StaticResource SettingBar}"/>
-                <Style TargetType="TextBlock" BasedOn="{StaticResource SettingText}"/>
-                <Style TargetType="ToggleButton" BasedOn="{StaticResource SettingToggleButton}"/>
-                <Style TargetType="Slider" BasedOn="{StaticResource SettingSlider}"/>
+                <Style TargetType="{x:Type Grid}" BasedOn="{StaticResource SettingBar}">
+                    <Setter Property="Margin" Value="0 5 0 0"/>
+                </Style>
+                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BoldGrayTextBlock}">
+                    <Setter Property="FontSize" Value="13"/>
+                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                    <Setter Property="Margin" Value="10 0 0 0"/>
+                </Style>
+                <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource SettingToggleButton}">
+                    <Setter Property="Grid.Column" Value="1"/>
+                </Style>
+                <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource SettingSlider}">
+                    <Setter Property="Grid.Column" Value="1"/>
+                    <Setter Property="Margin" Value="20 0"/>
+                </Style>
             </StackPanel.Resources>
-
             <TextBlock Text="FILTER OPTION"
-                       Margin="0"
                        Style="{StaticResource SettingCategoryText}"/>
             <Grid Style="{x:Null}"
                   Background="#7F584E46"
                   Height="90">
-                <ContentControl x:Name="FilterOptionIndicatorViewModel"
+                <ContentControl x:Name="FilterOptionIndicator"
                                 Height="55"/>
             </Grid>
             <Grid>
@@ -36,12 +55,11 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="EXCLUDE RECENT MUSICS"/>
-                <TextBlock Text="{Binding ElementName=ExceptCount, Path=Value}"
+                <TextBlock Text="{Binding Value, ElementName=ExceptCount}"
                            HorizontalAlignment="Right"
-                           Margin="0,0,10,0">
+                           Margin="0 0 10 0">
                 </TextBlock>
                 <Slider x:Name="ExceptCount"
-                        Margin="20,0"
                         Minimum="0"
                         Maximum="30"/>
             </Grid>
@@ -61,7 +79,6 @@
                     <Button cal:Message.Attach="SwitchMode"
                             Style="{StaticResource LeftArrowButton}"/>
                     <TextBlock x:Name="ModeText"
-                               Text="FREESTYLE"
                                Foreground="White"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
@@ -84,15 +101,14 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="30"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="PrevAider"
+                    <Button cal:Message.Attach="SwitchAider('-1')"
                             Style="{StaticResource LeftArrowButton}"/>
                     <TextBlock x:Name="AiderText"
-                               Text="OFF"
                                Foreground="White"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Grid.Column="1"/>
-                    <Button x:Name="NextAider"
+                    <Button cal:Message.Attach="SwitchAider('1')"
                             Grid.Column="2"
                             Style="{StaticResource RightArrowButton}"/>
                 </Grid>
@@ -110,15 +126,14 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="30"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="PrevLevel"
+                    <Button cal:Message.Attach="SwitchLevel('-1')"
                             Style="{StaticResource LeftArrowButton}"/>
                     <TextBlock x:Name="LevelText"
-                               Text="OFF"
                                Foreground="White"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Grid.Column="1"/>
-                    <Button x:Name="NextLevel"
+                    <Button cal:Message.Attach="SwitchLevel('1')"
                             Grid.Column="2"
                             Style="{StaticResource RightArrowButton}"/>
                 </Grid>

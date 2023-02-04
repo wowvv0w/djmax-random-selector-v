@@ -1,116 +1,97 @@
 ﻿using Caliburn.Micro;
-using Dmrsv.Data.Context.Schema;
-using Dmrsv.Data.Controller;
-using System;
+using DjmaxRandomSelectorV.Messages;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
     public class FavoriteViewModel : Screen
     {
-        private bool searchesSuggestion;
+        private readonly IEventAggregator _eventAggregator;
         private readonly List<string> _titleList;
-        private readonly ExtraFilter _extraFilter;
 
-        public BindableCollection<string> FavoriteItems { get; set; }
-        public BindableCollection<string> BlacklistItems { get; set; }
-        public BindableCollection<string> TitleSuggestions { get; set; }
-
-        public FavoriteViewModel()
-        {
-            searchesSuggestion = true;
-            _titleList = new TrackApi().GetAllTrackList().ToList().ConvertAll(x => x.Title);
-
-            _extraFilter = new FilterApi().GetExtraFilter();
-
-            FavoriteItems = new BindableCollection<string>(_extraFilter.Favorites);
-            BlacklistItems = new BindableCollection<string>(_extraFilter.Blacklist);
-
-            TitleSuggestions = new BindableCollection<string>();
-            OpensSuggestionBox = false;
-        }
-        public void OK()
-        {
-            _extraFilter.Favorites = FavoriteItems.ToList();
-            _extraFilter.Blacklist = BlacklistItems.ToList();
-            new FilterApi().SetExtraFilter(_extraFilter);
-            TryCloseAsync(true);
-        }
-
-        #region SearchBox
         private string _searchBox;
+
         public string SearchBox
         {
             get { return _searchBox; }
             set
             {
                 _searchBox = value;
-                NotifyOfPropertyChange(() => SearchBox);
-                if (searchesSuggestion) { SearchTitle(); }
+                NotifyOfPropertyChange();
             }
         }
 
-        private void SearchTitle()
+        public BindableCollection<string> FavoriteItems { get; }
+        public BindableCollection<string> BlacklistItems { get; }
+        public BindableCollection<string> TitleSuggestions { get; }
+
+        public FavoriteViewModel(IEventAggregator eventAggregator)
+        {
+            _eventAggregator = eventAggregator;
+            _titleList = new TrackManager().GetAllTrack().Select(x => x.Title).ToList();
+
+            var config = IoC.Get<Configuration>();
+            FavoriteItems = new BindableCollection<string>(config.Favorite);
+            BlacklistItems = new BindableCollection<string>(config.Blacklist);
+
+            TitleSuggestions = new BindableCollection<string>();
+        }
+        public void CloseDialog()
+        {
+            List<string> favorite = FavoriteItems.ToList();
+            List<string> blacklist = BlacklistItems.ToList();
+
+            var config = IoC.Get<Configuration>();
+            config.Favorite = favorite;
+            config.Blacklist = blacklist;
+
+            var message = new FavoriteMessage(favorite, blacklist);
+            _eventAggregator.PublishOnUIThreadAsync(message);
+
+            TryCloseAsync(true);
+        }
+
+        public void SearchTitle()
         {
             TitleSuggestions.Clear();
 
-            if (string.IsNullOrEmpty(_searchBox))
+            if (string.IsNullOrEmpty(SearchBox))
             {
-                OpensSuggestionBox = false;
                 return;
             }
 
-            OpensSuggestionBox = true;
-
-            if (_searchBox.Equals("#"))
+            IEnumerable<string> titles;
+            if (SearchBox.Equals("#"))
             {
-                var titles = from title in _titleList
-                             where !Regex.IsMatch(title, "[a-z]", RegexOptions.IgnoreCase)
-                             select title;
-                TitleSuggestions.AddRange(titles);
+                titles = from title in _titleList
+                         where !Regex.IsMatch(title[..1], "[a-z]", RegexOptions.IgnoreCase)
+                         select title;
             }
             else
             {
-                var titles = from title in _titleList
-                             where title.StartsWith(_searchBox, true, null)
-                             select title;
-                TitleSuggestions.AddRange(titles);
+                titles = from title in _titleList
+                         where title.StartsWith(SearchBox, true, null)
+                         select title;
             }
-
-            if (TitleSuggestions.Count == 0)
-            {
-                OpensSuggestionBox = false;
-            }
-        }
-        #endregion
-
-        #region SuggestionBox
-        private bool _opensSuggestionBox;
-        public bool OpensSuggestionBox
-        {
-            get { return _opensSuggestionBox; }
-            set 
-            {
-                _opensSuggestionBox = value;
-                NotifyOfPropertyChange(() => OpensSuggestionBox);
-            }
+            TitleSuggestions.AddRange(titles);
         }
 
         public void SelectSuggestion(string title)
         {
-            searchesSuggestion = false;
-
+            if (string.IsNullOrEmpty(title))
+            {
+                return;
+            }
             SearchBox = title;
-            OpensSuggestionBox = false;
-
-            searchesSuggestion = true;
         }
-        #endregion
+
+        public void ClearSearchBox()
+        {
+            SearchBox = string.Empty;
+        }
 
         #region Favorite Item Adjustment
         public void AddToFavorite()

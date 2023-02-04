@@ -19,7 +19,7 @@
         </Grid>
         <Grid DockPanel.Dock="Bottom"
               Style="{StaticResource DialogBar}">
-            <Button x:Name="OK"
+            <Button x:Name="CloseDialog"
                     Content="OK"
                     Style="{StaticResource DialogButton}"
                     HorizontalAlignment="Right"
@@ -46,65 +46,115 @@
                     Grid.RowSpan="4"
                     Grid.ColumnSpan="5"/>
             <Grid Grid.Row ="1" Grid.Column="1"
-                  Grid.ColumnSpan="3">
+                  Grid.ColumnSpan="3"
+                  Margin="0 5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Grid Background="#1FFFFFFF"
-                      Margin="0 5">
-                    <TextBox x:Name="SearchBox"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             Foreground="White"
-                             CaretBrush="White"
-                             VerticalAlignment="Center"
-                             FontFamily="{StaticResource Lato}"
-                             FontSize="15"/>
-                    <Popup IsOpen="{Binding OpensSuggestionBox}"
-                           StaysOpen="False"
-                           Placement="Bottom">
-                        <ListBox x:Name="SuggestionBox"
-                                 Width="490"
-                                 MaxHeight="189"
-                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                 FontFamily="{StaticResource Lato}"
-                                 ItemsSource="{Binding TitleSuggestions}"
-                                 cal:Message.Attach="[Event SelectionChanged] = [Action SelectSuggestion(SuggestionBox.SelectedItem)]"/>
-                    </Popup>
-                </Grid>
+                <Border x:Name="searchBoxBorder"
+                        Background="{StaticResource BrighterTranslucentBackgroundColor}"
+                        Padding="5 0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Foreground="{StaticResource DefaultGrayColor}"
+                                   FontSize="15"
+                                   FontFamily="{StaticResource LatoFont}"
+                                   VerticalAlignment="Center"
+                                   Margin="2 0">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=SearchBox}" Value="True">
+                                            <Setter Property="Text" Value="Search"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBox x:Name="SearchBox"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Foreground="White"
+                                 CaretBrush="White"
+                                 VerticalAlignment="Center"
+                                 FontFamily="{StaticResource LatoFont}"
+                                 FontSize="15"
+                                 cal:Message.Attach="[Event KeyUp] = [Action SearchTitle]"/>
+                        <Button x:Name="ClearSearchBox"
+                                Grid.Column="1"
+                                Width="25">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource HoverEffectTransparentButton}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text.IsEmpty, ElementName=SearchBox}" Value="True">
+                                            <Setter Property="Visibility" Value="Hidden"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Image Style="{StaticResource XMarkImage}" Width="12"/>
+                        </Button>
+                    </Grid>
+                </Border>
+                <Popup StaysOpen="False"
+                       Placement="Bottom">
+                    <Popup.Style>
+                        <Style TargetType="{x:Type Popup}">
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding HasItems, ElementName=SuggestionBox}"
+                                                   Value="True"/>
+                                        <Condition Binding="{Binding SelectedIndex, ElementName=SuggestionBox}"
+                                                   Value="-1"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="IsOpen" Value="True"/>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Popup.Style>
+                    <ListBox x:Name="SuggestionBox"
+                             Width="{Binding ActualWidth, ElementName=searchBoxBorder}"
+                             MaxHeight="180"
+                             Style="{StaticResource PopupListBox}"
+                             ItemsSource="{Binding TitleSuggestions}"
+                             ItemContainerStyle="{StaticResource PopupListBoxItem}"
+                             cal:Message.Attach="[Event SelectionChanged] = [Action SelectSuggestion(SuggestionBox.SelectedItem)]"/>
+                </Popup>
                 <Button x:Name="AddToFavorite"
                         Content="FAVORITE"
                         Grid.Column="1"
                         Width="100"
-                        Margin="10 5 0 5"
+                        Margin="10 0 0 0"
                         Style="{StaticResource DialogButton}">
                 </Button>
                 <Button x:Name="AddToBlacklist"
                         Content="BLACKLIST"
                         Grid.Column="2"
                         Width="100"
-                        Margin="10 5 0 5"
+                        Margin="10 0 0 0"
                         Style="{StaticResource DialogButton}">
                 </Button>
             </Grid>
             <TextBlock Text="FAVORITE"
                        Grid.Row="2" Grid.Column="1"
-                       Foreground="{StaticResource Default}"
-                       FontFamily="{StaticResource Lato Black}"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                       Style="{StaticResource BoldGrayTextBlock}"
+                       FontSize="12"/>
             <TextBlock Text="BLACKLIST"
                        Grid.Row="2" Grid.Column="3"
-                       Foreground="{StaticResource Default}"
-                       FontFamily="{StaticResource Lato Black}"
-                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                       Style="{StaticResource BoldGrayTextBlock}"
+                       FontSize="12"/>
             <ScrollViewer VerticalScrollBarVisibility="Hidden"
                           Grid.Row="3" Grid.Column="1">
                 <ItemsControl x:Name="FavoriteItems">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel Background="{StaticResource Nav}"/>
+                            <WrapPanel Background="{StaticResource DarkestTranslucentBackgroundColor}"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
@@ -112,22 +162,22 @@
                             <Grid Background="#252419"
                                   HorizontalAlignment="Left"
                                   VerticalAlignment="Top"
-                                  Margin="0,0,5,5">
+                                  Margin="0 0 5 5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding}"
                                            Foreground="White"
-                                           FontFamily="{StaticResource Lato}"
+                                           FontFamily="{StaticResource LatoFont}"
                                            FontSize="13"
                                            Margin="5"/>
                                 <Button Grid.Column="1"
                                         Width="20"
                                         cal:Message.Attach="RemoveFromFavorite($dataContext)"
-                                        Margin="0,2.5,5,2.5"
-                                        Style="{StaticResource WindowButton}">
-                                    <Image Source="pack://application:,,,/Images/Close.png" Width="12"/>
+                                        Margin="0 2.5 5 2.5"
+                                        Style="{StaticResource HoverEffectTransparentButton}">
+                                    <Image Style="{StaticResource XMarkImage}" Width="12"/>
                                 </Button>
                             </Grid>
                         </DataTemplate>
@@ -139,7 +189,7 @@
                 <ItemsControl x:Name="BlacklistItems">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel Background="{StaticResource Nav}"/>
+                            <WrapPanel Background="{StaticResource DarkestTranslucentBackgroundColor}"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
@@ -147,22 +197,22 @@
                             <Grid Background="#291B26"
                                   HorizontalAlignment="Left"
                                   VerticalAlignment="Top"
-                                  Margin="0,0,5,5">
+                                  Margin="0 0 5 5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding}"
                                            Foreground="White"
-                                           FontFamily="{StaticResource Lato}"
+                                           FontFamily="{StaticResource LatoFont}"
                                            FontSize="13"
                                            Margin="5"/>
                                 <Button Grid.Column="1"
                                         Width="20"
                                         cal:Message.Attach="RemoveFromBlacklist($dataContext)"
-                                        Margin="0,2.5,5,2.5"
-                                        Style="{StaticResource WindowButton}">
-                                    <Image Source="pack://application:,,,/Images/Close.png" Width="12"/>
+                                        Margin="0 2.5 5 2.5"
+                                        Style="{StaticResource HoverEffectTransparentButton}">
+                                    <Image Style="{StaticResource XMarkImage}" Width="12"/>
                                 </Button>
                             </Grid>
                         </DataTemplate>

@@ -2,12 +2,15 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- Text Colors -->
-    <SolidColorBrush x:Key="Default" Color="#7F7F7F"/>
-    <SolidColorBrush x:Key="Highlight" Color="#FFBE00"/>
-
+    <SolidColorBrush x:Key="DefaultGrayColor" Color="#7F7F7F"/>
+    <SolidColorBrush x:Key="HighlightYellowColor" Color="#FFBE00"/>
+    
     <!-- Panel Colors -->
-    <SolidColorBrush x:Key="Nav" Color="#9E000000"/>
-    <SolidColorBrush x:Key="Widget" Color="#33000000"/>
+    <SolidColorBrush x:Key="BrightTranslucentBackgroundColor" Color="#11FFFFFF"/>
+    <SolidColorBrush x:Key="BrighterTranslucentBackgroundColor" Color="#1FFFFFFF"/>
+    <SolidColorBrush x:Key="DarkTranslucentBackgroundColor" Color="#33000000"/>
+    <SolidColorBrush x:Key="DarkerTranslucentBackgroundColor" Color="#56000000"/>
+    <SolidColorBrush x:Key="DarkestTranslucentBackgroundColor" Color="#9E000000"/>
 
     <!-- Difficulty Colors -->
     <SolidColorBrush x:Key="Normal" Color="#FFCC25"/>
@@ -15,13 +18,13 @@
     <SolidColorBrush x:Key="Maximum" Color="#F91C55"/>
     <SolidColorBrush x:Key="SC" Color="#F21CC7"/>
 
-    <LinearGradientBrush x:Key="SettingElement" StartPoint="0,0.5" EndPoint="1,0.5">
-        <GradientStop Color="#7F584E46" Offset="0.4999"/>
-        <GradientStop Color="#FF604E41" Offset="0.5"/>
+    <LinearGradientBrush x:Key="SettingBarColor" StartPoint="0 .5" EndPoint="1 .5">
+        <GradientStop Color="#7F584E46" Offset=".4999"/>
+        <GradientStop Color="#FF604E41" Offset=".5"/>
     </LinearGradientBrush>
-    <SolidColorBrush x:Key="SliderBackground" Color="#44372E"/>
+    <SolidColorBrush x:Key="SliderBackgroundColor" Color="#44372E"/>
 
-    <!-- Category Colors -->
+    <!--#region Category Colors -->
     <LinearGradientBrush x:Key="BgRespect" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Color="#F96775" Offset="0.1"/>
         <GradientStop Color="#F0B405" Offset="0.9"/>
@@ -206,4 +209,6 @@
         <GradientStop Color="#DE2D9A" Offset="0.6"/>
         <GradientStop Color="#DB0268" Offset="0.9"/>
     </LinearGradientBrush>
+    <!--#endregion-->
+
 </ResourceDictionary>

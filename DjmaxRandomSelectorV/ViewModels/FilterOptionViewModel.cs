@@ -1,187 +1,110 @@
 ﻿using Caliburn.Micro;
-using Dmrsv.Data.Context.Schema;
-using Dmrsv.Data.Controller;
-using Dmrsv.Data.Enums;
-using System;
+using DjmaxRandomSelectorV.Messages;
+using Dmrsv.RandomSelector;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class FilterOptionViewModel : Screen
+    public class FilterOptionViewModel : Conductor<object>
     {
-        #region Constants
-        private const string OFF = "OFF";
-        private const string FREESTYLE = "FREESTYLE";
-        private const string ONLINE = "ONLINE";
-        private const string AUTO_START = "AUTO START";
-        private const string OBSERVE = "OBSERVE";
-        private const string BEGINNER = "BEGINNER";
-        private const string MASTER = "MASTER";
-        #endregion        
-
-        public FilterOptionIndicatorViewModel FilterOptionIndicatorViewModel { get; set; }
-
-        private readonly FilterOption _filterOption;
+        private readonly Dictionary<MusicForm, string> _modeItems = new()
+        {
+            [MusicForm.Default] = "FREESTYLE",
+            [MusicForm.Free] = "ONLINE",
+        };
+        private readonly Dictionary<InputMethod, string> _aiderItems = new()
+        {
+            [InputMethod.Default] = "OFF",
+            [InputMethod.WithAutoStart] = "AUTO START",
+            [InputMethod.NotInput] = "OBSERVE",
+        };
+        private readonly Dictionary<LevelPreference, string> _levelItems = new()
+        {
+            [LevelPreference.None] = "OFF",
+            [LevelPreference.Lowest] = "BEGINNER",
+            [LevelPreference.Highest] = "MASTER",
+        };
         private readonly IEventAggregator _eventAggregator;
-        private readonly OptionApi _api;
+
+        private int _except;
+        private MusicForm _mode;
+        private InputMethod _aider;
+        private LevelPreference _level;
+
+        public object FilterOptionIndicator { get => ActiveItem; }
+        public int ExceptCount
+        {
+            get => _except;
+            set
+            {
+                _except = value;
+                NotifyOfPropertyChange();
+                Publish(new CapacityMessage(value));
+            }
+        }
+        public string ModeText { get => _modeItems[_mode]; }
+        public string AiderText { get => _aiderItems[_aider]; }
+        public string LevelText { get => _levelItems[_level]; }
 
         public FilterOptionViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            _api = new OptionApi();
-            _filterOption = _api.GetFilterOption();
-
-            FilterOptionIndicatorViewModel = new FilterOptionIndicatorViewModel(_eventAggregator);
-
-            SetAddonText(_filterOption.Mode);
-            SetAddonText(_filterOption.Aider);
-            SetAddonText(_filterOption.Level);
-
-            Publish();
+            var config = IoC.Get<Configuration>();
+            _except = config.RecentsCount;
+            _mode = config.Mode;
+            _aider = config.Aider;
+            _level = config.Level;
+            ActivateItemAsync(IoC.Get<FilterOptionIndicatorViewModel>());
         }
 
-        private void Publish()
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-            _api.SetFilterOption(_filterOption);
-            _eventAggregator.PublishOnUIThreadAsync(_filterOption);
-        }
-
-        public int ExceptCount
-        {
-            get { return _filterOption.Except; }
-            set
+            if (close)
             {
-                _filterOption.Except = value;
-                NotifyOfPropertyChange(() => ExceptCount);
-                Publish();
+                var config = IoC.Get<Configuration>();
+                config.RecentsCount = _except;
+                config.Mode = _mode;
+                config.Aider = _aider;
+                config.Level = _level;
             }
+            return Task.CompletedTask;
         }
 
-        private string _modeText;
-        public string ModeText
+        private void Publish(object message)
         {
-            get { return _modeText; }
-            set
-            {
-                _modeText = value;
-                NotifyOfPropertyChange(() => ModeText);
-            }
-        }
-        private void SetAddonText(Mode mode)
-        {
-            switch (mode)
-            {
-                case Mode.Freestyle:
-                    ModeText = FREESTYLE;
-                    break;
-                case Mode.Online:
-                    ModeText = ONLINE;
-                    break;
-            }
+            _eventAggregator.PublishOnUIThreadAsync(message);
         }
 
         public void SwitchMode()
         {
-            if (_filterOption.Mode == Mode.Freestyle)
-                _filterOption.Mode = Mode.Online;
-            else
-                _filterOption.Mode = Mode.Freestyle;
-            SetAddonText(_filterOption.Mode);
-            Publish();
+            int value = (int)_mode;
+            value ^= 0x1;
+            _mode = (MusicForm)value;
+            NotifyOfPropertyChange(nameof(ModeText));
+            Publish(new ModeWithAiderMessage(_mode, _aider));
+            Publish(new ModeWithLevelMessage(_mode, _level));
         }
 
-        private string _aiderText;
-        public string AiderText
+        public void SwitchAider(int move)
         {
-            get { return _aiderText; }
-            set
-            {
-                _aiderText = value;
-                NotifyOfPropertyChange(() => AiderText);
-            }
-        }
-        private void SetAddonText(Aider aider)
-        {
-            switch (aider)
-            {
-                case Aider.Off:
-                    AiderText = OFF;
-                    break;
-                case Aider.AutoStart:
-                    AiderText = AUTO_START;
-                    break;
-                case Aider.Observe:
-                    AiderText = OBSERVE;
-                    break;
-            }
+            int value = (int)_aider;
+            value += move;
+            value = (value % 3 + 3) % 3;
+            _aider = (InputMethod)value;
+            NotifyOfPropertyChange(nameof(AiderText));
+            Publish(new ModeWithAiderMessage(_mode, _aider));
         }
 
-        public void PrevAider()
+        public void SwitchLevel(int move)
         {
-            if (_filterOption.Aider == Aider.Off)
-                _filterOption.Aider = Aider.Observe;
-            else
-                _filterOption.Aider--;
-            SetAddonText(_filterOption.Aider);
-            Publish();
-        }
-        public void NextAider()
-        {
-            if (_filterOption.Aider == Aider.Observe)
-                _filterOption.Aider = Aider.Off;
-            else
-                _filterOption.Aider++;
-            SetAddonText(_filterOption.Aider);
-            Publish();
-        }
-
-        private string _levelText;
-        public string LevelText
-        {
-            get { return _levelText; }
-            set
-            {
-                _levelText = value;
-                NotifyOfPropertyChange(() => LevelText);
-            }
-        }
-        private void SetAddonText(Level level)
-        {
-            switch (level)
-            {
-                case Level.Off:
-                    LevelText = OFF;
-                    break;
-                case Level.Beginner:
-                    LevelText = BEGINNER;
-                    break;
-                case Level.Master:
-                    LevelText = MASTER;
-                    break;
-            }
-        }
-
-        public void PrevLevel()
-        {
-            if (_filterOption.Level == Level.Off)
-                _filterOption.Level = Level.Master;
-            else
-                _filterOption.Level--;
-            SetAddonText(_filterOption.Level);
-            Publish();
-        }
-        public void NextLevel()
-        {
-            if (_filterOption.Level == Level.Master)
-                _filterOption.Level = Level.Off;
-            else
-                _filterOption.Level++;
-            SetAddonText(_filterOption.Level);
-            Publish();
+            int value = (int)_level;
+            value += move;
+            value = (value % 3 + 3) % 3;
+            _level = (LevelPreference)value;
+            NotifyOfPropertyChange(nameof(LevelText));
+            Publish(new ModeWithLevelMessage(_mode, _level));
         }
     }
 }

@@ -13,13 +13,13 @@
                        Margin="2.5"/>
                 <TextBlock x:Name="ExceptCount"
                            Text="5"
-                           FontFamily="{StaticResource Bebas Neue}"
+                           FontFamily="{StaticResource BebasNeueFont}"
                            FontSize="36"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           Margin="0,0,0,-15">
+                           Margin="0 0 0 -15">
                     <TextBlock.Foreground>
-                        <LinearGradientBrush StartPoint=".5,0" EndPoint=".5,1">
+                        <LinearGradientBrush StartPoint=".5 0" EndPoint=".5 1">
                             <GradientStop Color="#FFFFFF" Offset=".1"/>
                             <GradientStop Color="#D6D6D6" Offset="1"/>
                         </LinearGradientBrush>
