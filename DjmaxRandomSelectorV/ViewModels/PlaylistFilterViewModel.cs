@@ -72,6 +72,14 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (close)
             {
                 _fileManager.Export(_filter, DefaultPath);
+                foreach (Window window in Application.Current.Windows)
+                {
+                    if (window.Title == "V-ARCHIVE Wizard")
+                    {
+                        window.Close();
+                        break;
+                    }
+                }
             }
             return Task.CompletedTask;
         }
