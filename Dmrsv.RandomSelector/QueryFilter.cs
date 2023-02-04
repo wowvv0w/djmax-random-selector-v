@@ -18,33 +18,48 @@ namespace Dmrsv.RandomSelector
         public ObservableCollection<string> ButtonTunes
         {
             get => _buttonTunes;
-            set => SetObservableCollection(_buttonTunes, value);
+            set
+            {
+                _buttonTunes = value;
+                _buttonTunes.CollectionChanged += (s, e) => IsUpdated = true;
+            }
         }
-
         public ObservableCollection<string> Difficulties
         {
             get => _difficulties;
-            set => SetObservableCollection(_difficulties, value);
+            set
+            {
+                _difficulties = value;
+                _difficulties.CollectionChanged += (s, e) => IsUpdated = true;
+            }
         }
-
         public ObservableCollection<string> Categories
         {
             get => _categories;
-            set => SetObservableCollection(_categories, value);
+            set
+            {
+                _categories = value;
+                _categories.CollectionChanged += (s, e) => IsUpdated = true;
+            }
         }
-
         public ObservableCollection<int> Levels
         {
             get => _levels;
-            set => SetObservableCollection(_levels, value);
+            set
+            {
+                _levels = value;
+                _levels.CollectionChanged += (s, e) => IsUpdated = true;
+            }
         }
-
         public ObservableCollection<int> ScLevels
         {
             get => _scLevels;
-            set => SetObservableCollection(_scLevels, value);
+            set
+            {
+                _scLevels = value;
+                _scLevels.CollectionChanged += (s, e) => IsUpdated = true;
+            }
         }
-
         public bool IncludesFavorite
         {
             get => _includesFavorite;
@@ -65,7 +80,6 @@ namespace Dmrsv.RandomSelector
                 IsUpdated = true;
             }
         }
-
         [JsonIgnore]
         public List<string> Blacklist
         {
@@ -103,10 +117,7 @@ namespace Dmrsv.RandomSelector
                             where Categories.Contains(t.Category) || (IncludesFavorite && Favorites.Contains(t.Title))
                             where !Blacklist.Contains(t.Title)
                             from m in t.GetMusicList()
-                            let styles = (from b in ButtonTunes
-                                          from d in Difficulties
-                                          select $"{b}{d}")
-                            where styles.Contains(m.Style)
+                            where ButtonTunes.Contains(m.ButtonTunes) && Difficulties.Contains(m.Difficulty)
                             let levels = m.Difficulty == "SC" ? ScLevels : Levels
                             where levels[0] <= m.Level && m.Level <= levels[1]
                             select m;
@@ -118,12 +129,6 @@ namespace Dmrsv.RandomSelector
 
             IsUpdated = false;
             return musicList.ToList();
-        }
-
-        private void SetObservableCollection(INotifyCollectionChanged observable, INotifyCollectionChanged value)
-        {
-            observable = value;
-            observable.CollectionChanged += (s, e) => IsUpdated = true;
         }
     }
 }
