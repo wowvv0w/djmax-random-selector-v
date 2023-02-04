@@ -117,7 +117,10 @@ namespace Dmrsv.RandomSelector
                             where Categories.Contains(t.Category) || (IncludesFavorite && Favorites.Contains(t.Title))
                             where !Blacklist.Contains(t.Title)
                             from m in t.GetMusicList()
-                            where ButtonTunes.Contains(m.ButtonTunes) && Difficulties.Contains(m.Difficulty)
+                            let styles = (from b in ButtonTunes
+                                          from d in Difficulties
+                                          select $"{b}{d}")
+                            where styles.Contains(m.Style)
                             let levels = m.Difficulty == "SC" ? ScLevels : Levels
                             where levels[0] <= m.Level && m.Level <= levels[1]
                             select m;
