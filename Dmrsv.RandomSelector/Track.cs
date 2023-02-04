@@ -1,6 +1,6 @@
 ﻿namespace Dmrsv.RandomSelector
 {
-    public record Track()
+    public record Track
     {
         public string Title { get; init; } = string.Empty;
         public string Category { get; init; } = string.Empty;
@@ -9,7 +9,7 @@
         public IEnumerable<Music> GetMusicList()
         {
             var musicList = from p in Patterns
-                            select new Music(Title, p.Key[..2], p.Key[2..4], p.Value);
+                            select new Music(Title, p.Key, p.Value);
 
             return musicList;
         }

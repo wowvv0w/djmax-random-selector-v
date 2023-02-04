@@ -27,7 +27,7 @@ namespace DjmaxRandomSelectorV
             var options = new JsonSerializerOptions()
             {
                 WriteIndented = true,
-                IgnoreReadOnlyProperties = false
+                IgnoreReadOnlyProperties = true,
             };
 
             string jsonString = JsonSerializer.Serialize(instance, options);

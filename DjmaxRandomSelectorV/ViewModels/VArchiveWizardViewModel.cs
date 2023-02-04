@@ -153,7 +153,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             var items = from item in PatternItems
                         where item.IsChecked
-                        select new Music(item.Title, CurrentButton, item.Style, -1);
+                        select new Music(item.Title, CurrentButton + item.Style, -1);
             _eventAggregator.PublishOnUIThreadAsync(new VArchiveMessage(items, command));
         }
 

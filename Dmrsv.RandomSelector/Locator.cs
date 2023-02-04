@@ -155,7 +155,7 @@ namespace Dmrsv.RandomSelector
 
                 char button;
                 int order;
-                if (string.IsNullOrEmpty(target.ButtonTunes + target.Difficulty))
+                if (string.IsNullOrEmpty(target.Style))
                 {
                     button = '\0';
                     order = 0;

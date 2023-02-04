@@ -1,10 +1,13 @@
 ﻿using System.Collections.ObjectModel;
+using System.Text.Json.Serialization;
 
 namespace Dmrsv.RandomSelector
 {
     public class PlaylistFilter : FilterBase
     {
         private ObservableCollection<Music> _items;
+
+        [JsonPropertyName("Playlist")]
         public ObservableCollection<Music> Items
         {
             get => _items;

@@ -12,9 +12,8 @@
                                  group m by new { m.Title } into g
                                  select g.First() with
                                  {
-                                     ButtonTunes = string.Empty,
-                                     Difficulty = string.Empty,
-                                     Level = -1
+                                     Style = string.Empty,
+                                     Level = -1,
                                  };
 
                     return result;
