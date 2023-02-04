@@ -10,6 +10,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <!--#region Header-->
         <Grid Background="{StaticResource BrighterTranslucentBackgroundColor}">
@@ -41,7 +42,7 @@
                     <DataTemplate.Resources>
                         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BoldGrayTextBlock}"/>
                     </DataTemplate.Resources>
-                    <Grid Height="39">
+                    <Grid Height="37">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="60"/>
                             <ColumnDefinition/>
@@ -59,5 +60,16 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
         <!--#endregion-->
+        <Button x:Name="ClearItems"
+                Grid.Row="2"
+                Content="CLEAR HISTORY"
+                Style="{StaticResource HoverEffectTransparentButton}"
+                Height="20"
+                Margin="0 2 0 0"
+                Padding="5 0"
+                Background="{StaticResource DarkerTranslucentBackgroundColor}"
+                FontSize="9"
+                FontFamily="{StaticResource LatoBlackFont}"
+                HorizontalAlignment="Right"/>
     </Grid>
 </UserControl>

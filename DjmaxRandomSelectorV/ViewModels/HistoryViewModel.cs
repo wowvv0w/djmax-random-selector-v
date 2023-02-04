@@ -46,6 +46,12 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
+        public void ClearItems()
+        {
+            History.Clear();
+            _number = 0;
+        }
+
         public Task HandleAsync(MusicMessage message, CancellationToken cancellationToken)
         {
             AddItem(message.Item);
