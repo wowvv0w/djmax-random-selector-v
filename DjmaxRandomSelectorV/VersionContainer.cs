@@ -51,8 +51,8 @@ namespace DjmaxRandomSelectorV
             if (CurrentAppVersion < versions[0])
             {
                 NewAppVersionAvailable?.Invoke(this, new VersionEventArgs(versions[0]));
-                LastestAppVersion = versions[0];
             }
+            LastestAppVersion = versions[0];
             if (AllTrackVersion != versions[1])
             {
                 NewAllTrackVersionAvailable?.Invoke(this, new VersionEventArgs(versions[1]));
