@@ -8,6 +8,12 @@
         mc:Ignorable="d"
         Title="V-ARCHIVE Wizard" Height="540" Width="720"
         FontFamily="{StaticResource LatoFont}">
+    <Window.Resources>
+        <SolidColorBrush x:Key="NormalDifficultyColor" Color="#EBB900"/>
+        <SolidColorBrush x:Key="HardDifficultyColor" Color="#E95E00"/>
+        <SolidColorBrush x:Key="MaximumDifficultyColor" Color="#E81054"/>
+        <SolidColorBrush x:Key="SCDifficultyColor" Color="#653FE2"/>
+    </Window.Resources>
     <Grid Margin="30">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
@@ -100,52 +106,52 @@
                             <Setter Property="Text" Value=""/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 1">
-                                    <Setter Property="Foreground" Value="#EBB900"/>
+                                    <Setter Property="Foreground" Value="{StaticResource NormalDifficultyColor}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 2">
-                                    <Setter Property="Foreground" Value="#EBB900"/>
+                                    <Setter Property="Foreground" Value="{StaticResource NormalDifficultyColor}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 3">
-                                    <Setter Property="Foreground" Value="#EBB900"/>
+                                    <Setter Property="Foreground" Value="{StaticResource NormalDifficultyColor}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 4">
-                                    <Setter Property="Foreground" Value="#EBB900"/>
+                                    <Setter Property="Foreground" Value="{StaticResource NormalDifficultyColor}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 5">
-                                    <Setter Property="Foreground" Value="#EBB900"/>
+                                    <Setter Property="Foreground" Value="{StaticResource NormalDifficultyColor}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 6">
-                                    <Setter Property="Foreground" Value="#E95E00"/>
+                                    <Setter Property="Foreground" Value="{StaticResource HardDifficultyColor}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 7">
-                                    <Setter Property="Foreground" Value="#E95E00"/>
+                                    <Setter Property="Foreground" Value="{StaticResource HardDifficultyColor}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 8">
-                                    <Setter Property="Foreground" Value="#E95E00"/>
+                                    <Setter Property="Foreground" Value="{StaticResource HardDifficultyColor}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 9">
-                                    <Setter Property="Foreground" Value="#E95E00"/>
+                                    <Setter Property="Foreground" Value="{StaticResource HardDifficultyColor}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 10">
-                                    <Setter Property="Foreground" Value="#E95E00"/>
+                                    <Setter Property="Foreground" Value="{StaticResource HardDifficultyColor}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 11">
-                                    <Setter Property="Foreground" Value="#E81054"/>
+                                    <Setter Property="Foreground" Value="{StaticResource MaximumDifficultyColor}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="Lv. 12~15">
-                                    <Setter Property="Foreground" Value="#E81054"/>
+                                    <Setter Property="Foreground" Value="{StaticResource MaximumDifficultyColor}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="SC">
-                                    <Setter Property="Foreground" Value="#653FE2"/>
+                                    <Setter Property="Foreground" Value="{StaticResource SCDifficultyColor}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="SC~5">
-                                    <Setter Property="Foreground" Value="#653FE2"/>
+                                    <Setter Property="Foreground" Value="{StaticResource SCDifficultyColor}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="SC~10">
-                                    <Setter Property="Foreground" Value="#653FE2"/>
+                                    <Setter Property="Foreground" Value="{StaticResource SCDifficultyColor}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Text, ElementName=CurrentBoard}" Value="SC~15">
-                                    <Setter Property="Foreground" Value="#653FE2"/>
+                                    <Setter Property="Foreground" Value="{StaticResource SCDifficultyColor}"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -169,8 +175,37 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Style" DisplayMemberBinding="{Binding Style}"
-                                        Width="{Binding ActualWidth, ElementName=resizeHelper1}"/>
+                        <GridViewColumn Header="Style"
+                                        Width="{Binding ActualWidth, ElementName=resizeHelper1}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Name="styleText"
+                                               Text="{Binding Style}"
+                                               Foreground="White"
+                                               Width="22"
+                                               FontSize="10"
+                                               TextAlignment="Center"/>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding Style}" Value="NM">
+                                            <Setter TargetName="styleText" Property="Background"
+                                                    Value="{StaticResource NormalDifficultyColor}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Style}" Value="HD">
+                                            <Setter TargetName="styleText" Property="Background"
+                                                    Value="{StaticResource HardDifficultyColor}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Style}" Value="MX">
+                                            <Setter TargetName="styleText" Property="Background"
+                                                    Value="{StaticResource MaximumDifficultyColor}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Style}" Value="SC">
+                                            <Setter TargetName="styleText" Property="Background"
+                                                    Value="{StaticResource SCDifficultyColor}"/>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}"
                                         Width="{Binding ActualWidth, ElementName=resizeHelper2}"/>
                         <GridViewColumn Header="Floor" DisplayMemberBinding="{Binding Floor}"
