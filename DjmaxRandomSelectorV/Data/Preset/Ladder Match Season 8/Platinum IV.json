@@ -15,15 +15,35 @@
     "RP",
     "P1",
     "P2",
-    "GG"
+    "P3",
+    "TR",
+    "CE",
+    "BS",
+    "VE",
+    "VE2",
+    "VE3",
+    "ES",
+    "T1",
+    "T2",
+    "T3",
+    "TQ",
+    "GG",
+    "CHU",
+    "CY",
+    "DM",
+    "ESTI",
+    "GC",
+    "GF",
+    "MD",
+    "NXN"
   ],
   "Levels": [
-    1,
-    15
+    11,
+    14
   ],
   "ScLevels": [
-    1,
-    15
+    2,
+    9
   ],
   "IncludesFavorite": false
 }

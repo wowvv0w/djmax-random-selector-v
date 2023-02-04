@@ -8,22 +8,41 @@
   "Difficulties": [
     "NM",
     "HD",
-    "MX",
-    "SC"
+    "MX"
   ],
   "Categories": [
     "RP",
     "P1",
     "P2",
-    "GG"
+    "P3",
+    "TR",
+    "CE",
+    "BS",
+    "VE",
+    "VE2",
+    "VE3",
+    "ES",
+    "T1",
+    "T2",
+    "T3",
+    "TQ",
+    "GG",
+    "CHU",
+    "CY",
+    "DM",
+    "ESTI",
+    "GC",
+    "GF",
+    "MD",
+    "NXN"
   ],
   "Levels": [
     1,
-    15
+    6
   ],
   "ScLevels": [
     1,
-    15
+    1
   ],
   "IncludesFavorite": false
 }

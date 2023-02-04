@@ -110,10 +110,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Data\Playlist\" />
-    <Folder Include="ViewModels\Abstracts\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Dmrsv.RandomSelector\Dmrsv.RandomSelector.csproj" />
   </ItemGroup>
   <ItemGroup>
