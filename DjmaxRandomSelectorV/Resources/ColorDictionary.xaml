@@ -98,18 +98,18 @@
         <GradientStop Color="#E17543" Offset="0.782"/>
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="BgVExtension3" StartPoint=".5 0" EndPoint=".5 1">
-        <GradientStop Color="#7100f3" Offset="0.158"/>
-        <GradientStop Color="#5100c0" Offset="0.159"/>
-        <GradientStop Color="#5100c0" Offset="0.316"/>
-        <GradientStop Color="#7100f3" Offset="0.317"/>
-        <GradientStop Color="#7100f3" Offset="0.421"/>
-        <GradientStop Color="#5100c0" Offset="0.422"/>
-        <GradientStop Color="#5100c0" Offset="0.579"/>
-        <GradientStop Color="#7100f3" Offset="0.580"/>
-        <GradientStop Color="#7100f3" Offset="0.684"/>
-        <GradientStop Color="#5100c0" Offset="0.685"/>
-        <GradientStop Color="#5100c0" Offset="0.842"/>
-        <GradientStop Color="#7100f3" Offset="0.843"/>
+        <GradientStop Color="#811EF4" Offset="0.158"/>
+        <GradientStop Color="#6211C1" Offset="0.159"/>
+        <GradientStop Color="#6211C1" Offset="0.316"/>
+        <GradientStop Color="#811EF4" Offset="0.317"/>
+        <GradientStop Color="#811EF4" Offset="0.421"/>
+        <GradientStop Color="#6211C1" Offset="0.422"/>
+        <GradientStop Color="#6211C1" Offset="0.579"/>
+        <GradientStop Color="#811EF4" Offset="0.580"/>
+        <GradientStop Color="#811EF4" Offset="0.684"/>
+        <GradientStop Color="#6211C1" Offset="0.685"/>
+        <GradientStop Color="#6211C1" Offset="0.842"/>
+        <GradientStop Color="#811EF4" Offset="0.843"/>
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="BgEmotionalS" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Color="#0C82CC"/>
@@ -173,7 +173,10 @@
         <GradientStop Color="#5E2E2C" Offset="0.5"/>
         <GradientStop Color="#5E3929" Offset="1"/>
     </LinearGradientBrush>
-    <SolidColorBrush x:Key="FgVExtension3" Color="#430D7D"/>
+    <LinearGradientBrush x:Key="FgVExtension3" StartPoint="0 .5" EndPoint="1 .5">
+        <GradientStop Color="#422B5E"/>
+        <GradientStop Color="#33275E" Offset="1"/>
+    </LinearGradientBrush>
     <SolidColorBrush x:Key="FgEmotionalS" Color="#20541D"/>
     <SolidColorBrush x:Key="FgTechnika1" Color="#5E275B"/>
     <SolidColorBrush x:Key="FgTechnika2" Color="#5E2B13"/>
@@ -194,6 +197,10 @@
     <SolidColorBrush x:Key="BgCytus" Color="#EF1434"/>
     <SolidColorBrush x:Key="BgDeemo" Color="#9FF0E0"/>
     <SolidColorBrush x:Key="BgEstimate" Color="#E9D19B"/>
+    <LinearGradientBrush x:Key="BgEz2on" StartPoint=".5 0" EndPoint=".5 1">
+        <GradientStop Color="#01E4F5" Offset=".499"/>
+        <GradientStop Color="#00B8CA" Offset=".5"/>
+    </LinearGradientBrush>
     <SolidColorBrush x:Key="BgGrooveCoaster" Color="#55EFFF"/>
     <SolidColorBrush x:Key="BgGirlsFrontline" Color="#DF9300"/>
     <LinearGradientBrush x:Key="BgNexon" StartPoint="0,0.5" EndPoint="1,0.5">

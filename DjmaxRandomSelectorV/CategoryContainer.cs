@@ -28,6 +28,7 @@ namespace DjmaxRandomSelectorV
             new Category("CYTUS", "CY", "1356221"),
             new Category("DEEMO", "DM", "1356220"),
             new Category("ESTIMATE", "ESTI", "1664550"),
+            new Category("EZ2ON", "EZ2", "2307470"),
             new Category("GROOVE COASTER", "GC", "1271671"),
             new Category("GIRLS' FRONTLINE", "GF", "1472191"),
             new Category("MUSE DASH", "MD", "1782170"),

@@ -616,7 +616,7 @@
                                           Content="{Binding Name}"
                                           IsChecked="{Binding Path=IsValueContained, Mode=TwoWay}"
                                           Style="{StaticResource CollaborationButton}"
-                                          Margin="8 0">
+                                          Margin="4 0">
                             </ToggleButton>
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding Name}" Value="COLLABORATION">
@@ -650,11 +650,16 @@
                                 <DataTrigger Binding="{Binding Name}" Value="ESTIMATE">
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgEstimate}"/>
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="EZ2ON">
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgEz2on}"/>
+                                </DataTrigger>
                                 <DataTrigger Binding="{Binding Name}" Value="GROOVE COASTER">
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgGrooveCoaster}"/>
+                                    <Setter TargetName="Button" Property="FontSize" Value="10"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Name}" Value="GIRLS' FRONTLINE">
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgGirlsFrontline}"/>
+                                    <Setter TargetName="Button" Property="FontSize" Value="10"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Name}" Value="MUSE DASH">
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgMuseDash}"/>
@@ -667,7 +672,7 @@
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <UniformGrid Columns="5"/>
+                            <UniformGrid Columns="6"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
