@@ -575,6 +575,10 @@
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgVExtension3}"/>
                                     <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgVExtension3}"/>
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="V EXTENSION 4">
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgVExtension4}"/>
+                                    <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgVExtension4}"/>
+                                </DataTrigger>
                                 <DataTrigger Binding="{Binding Name}" Value="EMOTIONAL S.">
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgEmotionalS}"/>
                                     <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgEmotionalS}"/>

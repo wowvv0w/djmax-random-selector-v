@@ -17,6 +17,7 @@ namespace DjmaxRandomSelectorV
             new Category("V EXTENSION", "VE", "1080550"),
             new Category("V EXTENSION 2", "VE2", "1843020"),
             new Category("V EXTENSION 3", "VE3", "2164540"),
+            new Category("V EXTENSION 4", "VE4", "2307471"),
             new Category("EMOTIONAL S.", "ES", "1238760"),
             new Category("TECHNIKA 1", "T1", "1386610"),
             new Category("TECHNIKA 2", "T2", "1386611"),
