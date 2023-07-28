@@ -6,7 +6,7 @@ A program for selecting music randomly in DJMAX RESPECT V. Set the filter you wa
 
 ## Installation
 
-- Download lastest release at [Releases](https://github.com/wowvv0w/djmax-random-selector-v/releases) page.
+- Download lastest release at [Releases](https://github.com/tuska298/djmax-random-selector-v/releases) page.
 - Extract the files.
 - Run DJMAX Random Selector V.exe
 - Click the setting button at the bottom right.
