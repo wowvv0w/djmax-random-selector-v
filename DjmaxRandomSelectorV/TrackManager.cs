@@ -13,7 +13,7 @@ namespace DjmaxRandomSelectorV
 {
     public class TrackManager
     {
-        private const string AllTrackUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Data/AllTrackList.csv";
+        private const string AllTrackUrl = "https://raw.githubusercontent.com/tuska298/djmax-random-selector-v/main/DjmaxRandomSelectorV/Data/AllTrackList.csv";
         private const string AllTrackPath = @"Data\AllTrackList.csv";
 
         private readonly Dictionary<string, string[]> _dlcMusicInRespect = new()
