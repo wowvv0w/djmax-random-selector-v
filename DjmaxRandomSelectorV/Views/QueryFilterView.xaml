@@ -600,6 +600,11 @@
                                     <Setter TargetName="Button" Property="BorderBrush" Value="{StaticResource BgTechnikaTQ1}"/>
                                     <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgTechnikaTQ}"/>
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="PREMIUM TRACK">
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgPremiumTrack1}"/>
+                                    <Setter TargetName="Button" Property="BorderBrush" Value="{StaticResource BgPremiumTrack2}"/>
+                                    <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgPremiumTrack}"/>
+                                </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

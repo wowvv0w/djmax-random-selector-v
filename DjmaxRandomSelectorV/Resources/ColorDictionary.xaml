@@ -181,10 +181,7 @@
         <GradientStop Color="#422B5E"/>
         <GradientStop Color="#33275E" Offset="1"/>
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="FgVExtension4" StartPoint="0 .5" EndPoint="1 .5">
-        <GradientStop Color="#790610"/>
-        <GradientStop Color="#300306" Offset="1"/>
-    </LinearGradientBrush>
+    <SolidColorBrush x:Key="FgVExtension4" Color="#5c060c"/>
     <SolidColorBrush x:Key="FgEmotionalS" Color="#20541D"/>
     <SolidColorBrush x:Key="FgTechnika1" Color="#5E275B"/>
     <SolidColorBrush x:Key="FgTechnika2" Color="#5E2B13"/>
@@ -198,6 +195,20 @@
         <GradientStop Color="#353535" Offset="0.53"/>
         <GradientStop Color="#195015" Offset="0.531"/>
     </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgPremiumTrack2" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#F8BE0C" />
+        <GradientStop Color="#FF7900" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgPremiumTrack1" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#FFD801" />
+        <GradientStop Color="#00000000" Offset="0.1"/>
+        <GradientStop Color="#FFD801" Offset="0.9"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="FgPremiumTrack" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#634c05" />
+        <GradientStop Color="#663000" Offset="1"/>
+    </LinearGradientBrush>
+
     <SolidColorBrush x:Key="FgFavorite" Color="#686C19"/>
 
     <SolidColorBrush x:Key="BgGuiltyGear" Color="#E0480A"/>
