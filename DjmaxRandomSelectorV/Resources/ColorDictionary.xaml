@@ -195,14 +195,9 @@
         <GradientStop Color="#353535" Offset="0.53"/>
         <GradientStop Color="#195015" Offset="0.531"/>
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="BgPremiumTrack2" StartPoint="0,0.5" EndPoint="1,0.5">
+    <LinearGradientBrush x:Key="BgPremiumTrack" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Color="#F8BE0C" />
         <GradientStop Color="#FF7900" Offset="1"/>
-    </LinearGradientBrush>
-    <LinearGradientBrush x:Key="BgPremiumTrack1" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Color="#FFD801" />
-        <GradientStop Color="#00000000" Offset="0.1"/>
-        <GradientStop Color="#FFD801" Offset="0.9"/>
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="FgPremiumTrack" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Color="#634c05" />
@@ -234,6 +229,10 @@
         <GradientStop Color="#E08D70" Offset="0.4"/>
         <GradientStop Color="#DE2D9A" Offset="0.6"/>
         <GradientStop Color="#DB0268" Offset="0.9"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgMapleStory" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#FF9D00" />
+        <GradientStop Color="#CF3424" Offset="1" />
     </LinearGradientBrush>
     <!--#endregion-->
 

@@ -601,8 +601,7 @@
                                     <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgTechnikaTQ}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Name}" Value="PREMIUM TRACK">
-                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgPremiumTrack1}"/>
-                                    <Setter TargetName="Button" Property="BorderBrush" Value="{StaticResource BgPremiumTrack2}"/>
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgPremiumTrack}"/>
                                     <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgPremiumTrack}"/>
                                 </DataTrigger>
                             </DataTemplate.Triggers>
@@ -675,6 +674,9 @@
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Name}" Value="NEXON">
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgNexon}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="MAPLESTORY">
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgMapleStory}"/>
                                 </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>

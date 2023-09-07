@@ -23,7 +23,7 @@ namespace DjmaxRandomSelectorV
             new Category("TECHNIKA 2", "T2", "1386611"),
             new Category("TECHNIKA 3", "T3", "1386612"),
             new Category("TECHNIKA T&Q", "TQ", "1958171"),
-            new Category("PREMIUM TRACK", "PT", "2522600"),
+            new Category("PREMIUM TRACK", "CP", "2522600"),
             new Category("COLLABORATION", null, null),
             new Category("GUILTY GEAR", "GG", null),
             new Category("CHUNITHM", "CHU", "1472190"),
@@ -35,6 +35,7 @@ namespace DjmaxRandomSelectorV
             new Category("GIRLS' FRONTLINE", "GF", "1472191"),
             new Category("MUSE DASH", "MD", "1782170"),
             new Category("NEXON", "NXN", "1958170"),
+            new Category("MAPLESTORY", "MAP", "2530380")
         };
 
         public List<Category> GetCategories()
