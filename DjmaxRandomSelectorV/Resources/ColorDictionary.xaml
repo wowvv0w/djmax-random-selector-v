@@ -272,6 +272,16 @@
         <GradientStop Color="#FF9D00" />
         <GradientStop Color="#CF3424" Offset="1" />
     </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgFalcom" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#F29EC4" />
+        <GradientStop Color="#F29EC4" Offset="0.25" />
+        <GradientStop Color="#FFF34C" Offset="0.251" />
+        <GradientStop Color="#FFF34C" Offset="0.5" />
+        <GradientStop Color="#8BC260" Offset="0.501" />
+        <GradientStop Color="#8BC260" Offset="0.75" />
+        <GradientStop Color="#55C2F0" Offset="0.751" />
+        <GradientStop Color="#55C2F0" Offset="1" />
+    </LinearGradientBrush>
     <!--#endregion-->
 
 </ResourceDictionary>
