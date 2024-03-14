@@ -36,7 +36,8 @@ namespace DjmaxRandomSelectorV
             new Category("GIRLS' FRONTLINE", "GF", "1472191"),
             new Category("MUSE DASH", "MD", "1782170"),
             new Category("NEXON", "NXN", "1958170"),
-            new Category("MAPLESTORY", "MAP", "2530380")
+            new Category("MAPLESTORY", "MAP", "2530380"),
+            new Category("FALCOM", "FC", "2829200")
         };
 
         public List<Category> GetCategories()
