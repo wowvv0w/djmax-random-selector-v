@@ -6,7 +6,7 @@
         xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d"
         Title="DJMAX Random Selector V"
-        Width="740" Height="500"
+        Width="740" Height="530"
         WindowStyle="None"
         FontFamily="{StaticResource LatoBlackFont}"
         WindowStartupLocation="CenterScreen"
