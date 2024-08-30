@@ -25,7 +25,7 @@ namespace DjmaxRandomSelectorV
             new Category("TECHNIKA 2", "T2", "1386611"),
             new Category("TECHNIKA 3", "T3", "1386612"),
             new Category("TECHNIKA T&Q", "TQ", "1958171"),
-            new Category("PREMIUM TRACK", "CP", "2947560"),
+            new Category("PREMIUM TRACK", "CP", "3155240"),
             new Category("COLLABORATION", null, null),
             new Category("GUILTY GEAR", "GG", null),
             new Category("CHUNITHM", "CHU", "1472190"),
