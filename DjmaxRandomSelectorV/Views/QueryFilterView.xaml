@@ -689,6 +689,9 @@
                                 <DataTrigger Binding="{Binding Name}" Value="FALCOM">
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgFalcom}"/>
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="TEKKEN">
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgTekken}"/>
+                                </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
