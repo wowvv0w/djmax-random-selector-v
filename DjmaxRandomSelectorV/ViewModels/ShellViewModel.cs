@@ -58,7 +58,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void OpenReleasePage()
         {
-            string url = "https://github.com/wowvv0w/djmax-random-selector-v/releases";
+            string url = "https://github.com/tuska298/djmax-random-selector-v/releases";
             System.Diagnostics.Process.Start("explorer.exe", url);
         }
 
