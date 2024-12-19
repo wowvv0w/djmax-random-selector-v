@@ -587,6 +587,10 @@
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgVLiberty}"/>
                                     <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgVLiberty}"/>
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="V LIBERTY 2">
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgVLiberty2}"/>
+                                    <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgVLiberty2}"/>
+                                </DataTrigger>
                                 <DataTrigger Binding="{Binding Name}" Value="EMOTIONAL S.">
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgEmotionalS}"/>
                                     <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgEmotionalS}"/>

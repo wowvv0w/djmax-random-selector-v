@@ -151,6 +151,25 @@
             <GradientStop Color="#fd59bb" Offset="0.8501"/>
         </RadialGradientBrush.GradientStops>
     </RadialGradientBrush>
+    <DrawingBrush x:Key="BgVLiberty2">
+        <DrawingBrush.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="#91e72a">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0,0,110,30"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="#0A0854">
+                    <GeometryDrawing.Geometry>
+                        <GeometryGroup>
+                            <PathGeometry Figures="M80 0 h -10 v 8 Z"/>
+                            <PathGeometry Figures="M82 30 H 110 V 8 Z"/>
+                        </GeometryGroup>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
     <LinearGradientBrush x:Key="BgPremiumTrack" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Color="#F8BE0C" />
         <GradientStop Color="#FF7900" Offset="1"/>
@@ -240,6 +259,7 @@
         <GradientStop Color="#3f7374" Offset="0.84"/>
         <GradientStop Color="#757575" Offset="0.8401"/>
     </LinearGradientBrush>
+    <SolidColorBrush x:Key="FgVLiberty2" Color="#609a1c"/>
     <SolidColorBrush x:Key="FgEmotionalS" Color="#20541D"/>
     <SolidColorBrush x:Key="FgTechnika1" Color="#5E275B"/>
     <SolidColorBrush x:Key="FgTechnika2" Color="#5E2B13"/>
