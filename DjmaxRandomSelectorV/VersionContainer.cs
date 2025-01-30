@@ -15,7 +15,7 @@ namespace DjmaxRandomSelectorV
     }
     public class VersionContainer
     {
-        private const string VersionsUrl = "https://raw.githubusercontent.com/tuska298/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
+        private const string VersionsUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";
 
         public delegate void NewVersionAvailableEventHandler(object sender, VersionEventArgs e);
         public event NewVersionAvailableEventHandler NewAppVersionAvailable;
