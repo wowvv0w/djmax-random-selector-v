@@ -4,9 +4,13 @@
 
 <br>
 
-For personal reasons, this repository won't be updated until January 2025. Thankfully, [tuska298](https://github.com/tuska298) is updating it on my behalf, so please use his program.<br>
+This repository has been archived and is no longer updated.
 
-### [:link:LINK](https://github.com/tuska298/djmax-random-selector-v)
+Future updates will be available from the original author's [repository.](https://github.com/wowvv0w/djmax-random-selector-v)
+
+본 리포지토리는 아카이브 처리 되었으며, 더 이상 업데이트 되지 않습니다.
+
+향후 업데이트는 원 제작자의 [리포지토리](https://github.com/wowvv0w/djmax-random-selector-v)에서 진행됩니다.
 
 <br>
 
