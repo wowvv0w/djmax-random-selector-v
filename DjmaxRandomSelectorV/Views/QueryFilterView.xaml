@@ -487,7 +487,7 @@
         <Border Grid.Row="2"
                 Grid.ColumnSpan="2"
                 Margin="0 2.5 0 0">
-            <Grid Margin="5 0">
+            <Grid Margin="5,0,5,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition/>
@@ -575,6 +575,22 @@
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgVExtension3}"/>
                                     <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgVExtension3}"/>
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="V EXTENSION 4">
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgVExtension4}"/>
+                                    <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgVExtension4}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="V EXTENSION 5">
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgVExtension5}"/>
+                                    <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgVExtension5}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="V LIBERTY">
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgVLiberty}"/>
+                                    <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgVLiberty}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="V LIBERTY 2">
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgVLiberty2}"/>
+                                    <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgVLiberty2}"/>
+                                </DataTrigger>
                                 <DataTrigger Binding="{Binding Name}" Value="EMOTIONAL S.">
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgEmotionalS}"/>
                                     <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgEmotionalS}"/>
@@ -595,6 +611,10 @@
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgTechnikaTQ2}"/>
                                     <Setter TargetName="Button" Property="BorderBrush" Value="{StaticResource BgTechnikaTQ1}"/>
                                     <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgTechnikaTQ}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="PREMIUM TRACK">
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgPremiumTrack}"/>
+                                    <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgPremiumTrack}"/>
                                 </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>
@@ -666,6 +686,15 @@
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Name}" Value="NEXON">
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgNexon}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="MAPLESTORY">
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgMapleStory}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="FALCOM">
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgFalcom}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="TEKKEN">
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgTekken}"/>
                                 </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>

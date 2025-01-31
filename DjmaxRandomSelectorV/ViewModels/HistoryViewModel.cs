@@ -40,9 +40,9 @@ namespace DjmaxRandomSelectorV.ViewModels
             };
 
             History.Insert(0, historyItem);
-            if (History.Count > 8)
+            if (History.Count > 10)
             {
-                History.RemoveAt(8);
+                History.RemoveAt(10);
             }
         }
 

@@ -15,19 +15,9 @@ namespace DjmaxRandomSelectorV.ViewModels
         public InfoViewModel()
         {
             var vc = IoC.Get<VersionContainer>();
-            CurrentVersion = "Current Version: " + IntToString(vc.CurrentAppVersion);
-            LastestVersion = "Lastest Version: " + IntToString(vc.LastestAppVersion);
+            CurrentVersion = "Current Version: " + vc.CurrentAppVersion.ToString(3);
+            LastestVersion = "Lastest Version: " + vc.LastestAppVersion.ToString(3);
             AllTrackVersion = "All Track Version : " + vc.AllTrackVersion.ToString();
-
-            string IntToString(int version)
-            {
-                var str = version.ToString();
-                for (int i = 1; i <= 3; i += 2)
-                {
-                    str = str.Insert(i, ".");
-                }
-                return str;
-            }
         }
 
         public void OpenGithubPage()

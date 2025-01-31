@@ -6,9 +6,9 @@ namespace DjmaxRandomSelectorV
 {
     public class VersionEventArgs : EventArgs
     {
-        public int Version { get; }
+        public string Version { get; }
 
-        public VersionEventArgs(int version)
+        public VersionEventArgs(string version)
         {
             Version = version;
         }
@@ -21,11 +21,11 @@ namespace DjmaxRandomSelectorV
         public event NewVersionAvailableEventHandler NewAppVersionAvailable;
         public event NewVersionAvailableEventHandler NewAllTrackVersionAvailable;
 
-        public int CurrentAppVersion { get; private set; }
-        public int LastestAppVersion { get; private set; }
+        public Version CurrentAppVersion { get; private set; }
+        public Version LastestAppVersion { get; private set; }
         public int AllTrackVersion { get; private set; }
 
-        public VersionContainer(int appVersion, int allTrackVersion)
+        public VersionContainer(Version appVersion, int allTrackVersion)
         {
             CurrentAppVersion = appVersion;
             LastestAppVersion = appVersion;
@@ -46,17 +46,19 @@ namespace DjmaxRandomSelectorV
                 throw new Exception("Failed to check lastest versions.");
             }
 
-            int[] versions = Array.ConvertAll(result.Split(','), int.Parse);
-
-            if (CurrentAppVersion < versions[0])
+            string[] versions = result.Split(',');
+            LastestAppVersion = new Version(versions[0]);
+            
+            if (CurrentAppVersion < LastestAppVersion)
             {
-                NewAppVersionAvailable?.Invoke(this, new VersionEventArgs(versions[0]));
+                NewAppVersionAvailable?.Invoke(this, new VersionEventArgs(LastestAppVersion.ToString(3)));
             }
-            LastestAppVersion = versions[0];
-            if (AllTrackVersion != versions[1])
+
+            int latestAllTrackVersion = Int32.Parse(versions[1]);
+            if (AllTrackVersion != latestAllTrackVersion)
             {
                 NewAllTrackVersionAvailable?.Invoke(this, new VersionEventArgs(versions[1]));
-                AllTrackVersion = versions[1];
+                AllTrackVersion = latestAllTrackVersion;
             }
         }
     }

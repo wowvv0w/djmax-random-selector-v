@@ -17,11 +17,16 @@ namespace DjmaxRandomSelectorV
             new Category("V EXTENSION", "VE", "1080550"),
             new Category("V EXTENSION 2", "VE2", "1843020"),
             new Category("V EXTENSION 3", "VE3", "2164540"),
+            new Category("V EXTENSION 4", "VE4", "2307471"),
+            new Category("V EXTENSION 5", "VE5", "2681820"),
+            new Category("V LIBERTY", "VL", "3038800"),
+            new Category("V LIBERTY 2", "VL2", "3371120"),
             new Category("EMOTIONAL S.", "ES", "1238760"),
             new Category("TECHNIKA 1", "T1", "1386610"),
             new Category("TECHNIKA 2", "T2", "1386611"),
             new Category("TECHNIKA 3", "T3", "1386612"),
             new Category("TECHNIKA T&Q", "TQ", "1958171"),
+            new Category("PREMIUM TRACK", "CP", "3319810"),
             new Category("COLLABORATION", null, null),
             new Category("GUILTY GEAR", "GG", null),
             new Category("CHUNITHM", "CHU", "1472190"),
@@ -33,6 +38,9 @@ namespace DjmaxRandomSelectorV
             new Category("GIRLS' FRONTLINE", "GF", "1472191"),
             new Category("MUSE DASH", "MD", "1782170"),
             new Category("NEXON", "NXN", "1958170"),
+            new Category("MAPLESTORY", "MAP", "2530380"),
+            new Category("FALCOM", "FAL", "2829200"),
+            new Category("TEKKEN", "TEK", "3222500")
         };
 
         public List<Category> GetCategories()

@@ -44,10 +44,7 @@ namespace DjmaxRandomSelectorV
             _rs = new RandomSelector(eventAggregator);
 
             Version assemblyVersion = Assembly.GetEntryAssembly().GetName().Version;
-            int appVersion = assemblyVersion.Major * 100 +
-                             assemblyVersion.Minor * 10 +
-                             assemblyVersion.Build;
-            _versionContainer = new VersionContainer(appVersion, _configuration.AllTrackVersion);
+            _versionContainer = new VersionContainer(assemblyVersion, _configuration.AllTrackVersion);
             _versionContainer.NewAllTrackVersionAvailable += (s, e) =>
             {
                 try
@@ -63,7 +60,7 @@ namespace DjmaxRandomSelectorV
                     MessageBox.Show($"All track list is updated to the version {e.Version}.",
                         "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
                 });
-                _configuration.AllTrackVersion = e.Version;
+                _configuration.AllTrackVersion = Int32.Parse(e.Version);
             };
             _container.Instance(_versionContainer);
         }
