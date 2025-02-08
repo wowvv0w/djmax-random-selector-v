@@ -1,0 +1,25 @@
+﻿{
+    "Setting": {
+        "FilterType": 0,
+        "InputInterval": 30,
+        "Favorite": [],
+        "Blacklist": [],
+        "OwnedDlcs": [],
+        "SavesRecent": false,
+        "RecentPlayed": [],
+        "StartKeyCode": 118
+    },
+    "FilterOption": {
+        "RecentsCount": 0,
+        "Mode": 0,
+        "Aider": 0,
+        "Level": 0
+    },
+    "WindowProperty": {
+        "Position": [],
+        "Size": []
+    },
+    "VersionInfo": {
+        "AllTrackVersion": 0
+    }
+}

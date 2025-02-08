@@ -1,0 +1,258 @@
+﻿{
+    "DataFolderName": "DMRSV3_Data",
+    "OldDataFolderName": "Data",
+    "ConfigFileName": "Config.json",
+    "AllTrackFileName": "AllTrackList.json",
+    "AllTrackDownloadUrl": "https://v-archive.net/db/songs.json",
+    "AllTrackDownloadUrlAlt": "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/DMRSV3_Data/AllTrackList.json",
+    "CurrentFilterFileName": "CurrentFilter.json",
+    "VersionCheckUrl": "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version3.json",
+    "CategoryType": [
+        "Regular",
+        "CollabVariety",
+        "CollabMusicGame",
+        "PLI"
+    ],
+    "Categories": [
+        {
+            "Name": "RESPECT",
+            "Id": "RP",
+            "SteamId": null,
+            "Type": 0
+        },
+        {
+            "Name": "PORTABLE 1",
+            "Id": "P1",
+            "SteamId": null,
+            "Type": 0
+        },
+        {
+            "Name": "PORTABLE 2",
+            "Id": "P2",
+            "SteamId": null,
+            "Type": 0
+        },
+        {
+            "Name": "PORTABLE 3",
+            "Id": "P3",
+            "SteamId": "1568680",
+            "Type": 0
+        },
+        {
+            "Name": "TRILOGY",
+            "Id": "TR",
+            "SteamId": "1271670",
+            "Type": 0
+        },
+        {
+            "Name": "CLAZZIQUAI",
+            "Id": "CE",
+            "SteamId": "1300210",
+            "Type": 0
+        },
+        {
+            "Name": "BLACK SQUARE",
+            "Id": "BS",
+            "SteamId": "1300211",
+            "Type": 0
+        },
+        {
+            "Name": "V EXTENSION",
+            "Id": "VE",
+            "SteamId": "1080550",
+            "Type": 0
+        },
+        {
+            "Name": "V EXTENSION 2",
+            "Id": "VE2",
+            "SteamId": "1843020",
+            "Type": 0
+        },
+        {
+            "Name": "V EXTENSION 3",
+            "Id": "VE3",
+            "SteamId": "2164540",
+            "Type": 0
+        },
+        {
+            "Name": "V EXTENSION 4",
+            "Id": "VE4",
+            "SteamId": "2307471",
+            "Type": 0
+        },
+        {
+            "Name": "V EXTENSION 5",
+            "Id": "VE5",
+            "SteamId": "2681820",
+            "Type": 0
+        },
+        {
+            "Name": "V LIBERTY",
+            "Id": "VL",
+            "SteamId": "3038800",
+            "Type": 0
+        },
+        {
+            "Name": "V LIBERTY 2",
+            "Id": "VL2",
+            "SteamId": "3371120",
+            "Type": 0
+        },
+        {
+            "Name": "EMOTIONAL S.",
+            "Id": "ES",
+            "SteamId": "1238760",
+            "Type": 0
+        },
+        {
+            "Name": "TECHNIKA 1",
+            "Id": "T1",
+            "SteamId": "1386610",
+            "Type": 0
+        },
+        {
+            "Name": "TECHNIKA 2",
+            "Id": "T2",
+            "SteamId": "1386611",
+            "Type": 0
+        },
+        {
+            "Name": "TECHNIKA 3",
+            "Id": "T3",
+            "SteamId": "1386612",
+            "Type": 0
+        },
+        {
+            "Name": "TECHNIKA T&Q",
+            "Id": "TQ",
+            "SteamId": "1958171",
+            "Type": 0
+        },
+        {
+            "Name": "CLEAR PASS",
+            "Id": "CP",
+            "SteamId": "3319810",
+            "Type": 0
+        },
+        {
+            "Name": "GUILTY GEAR",
+            "Id": "GG",
+            "SteamId": null,
+            "Type": 1
+        },
+        {
+            "Name": "CHUNITHM",
+            "Id": "CHU",
+            "SteamId": "1472190",
+            "Type": 2
+        },
+        {
+            "Name": "CYTUS",
+            "Id": "CY",
+            "SteamId": "1356221",
+            "Type": 2
+        },
+        {
+            "Name": "DEEMO",
+            "Id": "DM",
+            "SteamId": "1356220",
+            "Type": 2
+        },
+        {
+            "Name": "ESTIMATE",
+            "Id": "ESTI",
+            "SteamId": "1664550",
+            "Type": 1
+        },
+        {
+            "Name": "EZ2ON",
+            "Id": "EZ2",
+            "SteamId": "2307470",
+            "Type": 2
+        },
+        {
+            "Name": "GROOVE COASTER",
+            "Id": "GC",
+            "SteamId": "1271671",
+            "Type": 2
+        },
+        {
+            "Name": "GIRLS' FRONTLINE",
+            "Id": "GF",
+            "SteamId": "1472191",
+            "Type": 1
+        },
+        {
+            "Name": "MUSE DASH",
+            "Id": "MD",
+            "SteamId": "1782170",
+            "Type": 2
+        },
+        {
+            "Name": "NEXON",
+            "Id": "NXN",
+            "SteamId": "1958170",
+            "Type": 1
+        },
+        {
+            "Name": "MAPLESTORY",
+            "Id": "MAP",
+            "SteamId": "2530380",
+            "Type": 1
+        },
+        {
+            "Name": "FALCOM",
+            "Id": "FAL",
+            "SteamId": "2829200",
+            "Type": 1
+        },
+        {
+            "Name": "TEKKEN",
+            "Id": "TEK",
+            "SteamId": "3222500",
+            "Type": 1
+        }
+    ],
+    "LinkDisc": [
+        {
+            "Id": 373,
+            "RequiredDlc": [
+                [ "BS", "CE" ],
+                [ "BS", "T1" ]
+            ]
+        },
+        {
+            "Id": 374,
+            "RequiredDlc": [
+                [ "T1", "CE" ],
+                [ "T1", "BS" ]
+            ]
+        },
+        {
+            "Id": 375,
+            "RequiredDlc": [
+                [ "CE", "BS" ],
+                [ "CE", "T1" ]
+            ]
+        },
+        {
+            "Id": 462,
+            "RequiredDlc": [
+                [ "VE", "VE2" ]
+            ]
+        },
+        {
+            "Id": 548,
+            "RequiredDlc": [
+                [ "VE3", "VE4" ]
+            ]
+        },
+        {
+            "Id": 674,
+            "RequiredDlc": [
+                [ "VL", "VL2" ]
+            ]
+        }
+    ],
+    "GameWindowTitle": "DJMAX RESPECT V"
+}

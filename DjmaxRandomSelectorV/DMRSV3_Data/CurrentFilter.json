@@ -1,0 +1,34 @@
+﻿{
+    "BasicFilter": {
+        "ButtonTunes": [
+            "4B",
+            "5B",
+            "6B",
+            "8B"
+        ],
+        "Difficulties": [
+            "NM",
+            "HD",
+            "MX",
+            "SC"
+        ],
+        "Categories": [
+            "RP",
+            "P1",
+            "P2",
+            "GG"
+        ],
+        "Levels": [
+            1,
+            15
+        ],
+        "ScLevels": [
+            1,
+            15
+        ],
+        "IncludesFavorite": false
+    },
+    "AdvancedFilter": {
+        "Playlist": []
+    }
+}
