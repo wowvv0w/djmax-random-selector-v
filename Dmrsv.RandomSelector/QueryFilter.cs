@@ -111,7 +111,7 @@ namespace Dmrsv.RandomSelector
             }
         }
 
-        public override List<Music> Filter(IEnumerable<Track> trackList)
+        public override List<Music> Filter(IEnumerable<OldTrack> trackList)
         {
             var musicList = from t in trackList
                             where Categories.Contains(t.Category) || (IncludesFavorite && Favorites.Contains(t.Title))

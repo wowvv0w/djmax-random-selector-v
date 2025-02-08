@@ -4,6 +4,6 @@
     {
         bool IsUpdated { get; }
         OutputMethodCallback? OutputMethod { get; set; }
-        List<Music> Filter(IEnumerable<Track> trackList);
+        List<Music> Filter(IEnumerable<OldTrack> trackList);
     }
 }

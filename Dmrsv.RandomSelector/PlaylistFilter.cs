@@ -24,7 +24,7 @@ namespace Dmrsv.RandomSelector
             _items.CollectionChanged += (s, e) => IsUpdated = true;
         }
 
-        public override List<Music> Filter(IEnumerable<Track> trackList)
+        public override List<Music> Filter(IEnumerable<OldTrack> trackList)
         {
             var musicList = from item in Items
                             let track = trackList.FirstOrDefault(t => t.Title == item.Title)

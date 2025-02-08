@@ -16,7 +16,7 @@ namespace DjmaxRandomSelectorV
     {
         private readonly IEventAggregator _eventAggregator;
 
-        private List<Track> _playable;
+        private List<OldTrack> _playable;
         private List<Music> _candidates;
 
         private bool _isRunning;

@@ -6,6 +6,6 @@
         int InputInterval { get; set; }
         bool InvokesInput { get; set; }
 
-        void Locate(Music music, IEnumerable<Track> trackList);
+        void Locate(Music music, IEnumerable<OldTrack> trackList);
     }
 }

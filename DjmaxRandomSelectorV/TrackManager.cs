@@ -44,13 +44,13 @@ namespace DjmaxRandomSelectorV
             writer.Write(result);
         }
 
-        public IEnumerable<Track> GetAllTrack()
+        public IEnumerable<OldTrack> GetAllTrack()
         {
             using var reader = new StreamReader(AllTrackPath, Encoding.UTF8);
             using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
 
             csv.Context.RegisterClassMap<TrackMap>();
-            var records = csv.GetRecords<Track>();
+            var records = csv.GetRecords<OldTrack>();
 
             foreach (var record in records)
             {
@@ -58,7 +58,7 @@ namespace DjmaxRandomSelectorV
             }
         }
 
-        public List<Track> CreateTracks(IEnumerable<string> dlcs)
+        public List<OldTrack> CreateTracks(IEnumerable<string> dlcs)
         {
             var basicCategories = new string[] { "RP", "P1", "P2", "GG" };
             var categories = dlcs.Concat(basicCategories);
@@ -75,7 +75,7 @@ namespace DjmaxRandomSelectorV
             return trackQuery.ToList();
         }
 
-        public sealed class TrackMap : ClassMap<Track>
+        public sealed class TrackMap : ClassMap<OldTrack>
         {
             public TrackMap()
             {

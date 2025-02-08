@@ -20,7 +20,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
         private readonly IFileManager _fileManager;
-        private readonly List<Track> _tracks;
+        private readonly List<OldTrack> _tracks;
         private readonly List<string> _titles;
 
         private PlaylistFilter _filter;

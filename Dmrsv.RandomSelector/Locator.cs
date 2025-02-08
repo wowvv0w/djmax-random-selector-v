@@ -36,7 +36,7 @@ namespace Dmrsv.RandomSelector
             _keyMap.Add("down", (ushort)MapVirtualKey(0x28, 0));
         }
         
-        public void Locate(Music music, IEnumerable<Track> trackList)
+        public void Locate(Music music, IEnumerable<OldTrack> trackList)
         {
             if (!InvokesInput)
             {
@@ -127,7 +127,7 @@ namespace Dmrsv.RandomSelector
 
         private class LocationFinder
         {
-            public LocationInfo FindLocation(Music target, IEnumerable<Track> list)
+            public LocationInfo FindLocation(Music target, IEnumerable<OldTrack> list)
             {
                 string initial = target.Title[..1];
                 bool isAlphabet = Regex.IsMatch(initial, "[a-z]", RegexOptions.IgnoreCase);
@@ -163,7 +163,7 @@ namespace Dmrsv.RandomSelector
                 else
                 {
                     button = target.ButtonTunes[0];
-                    Track trackOfTarget = sameInitials[index];
+                    OldTrack trackOfTarget = sameInitials[index];
                     var difficulties = trackOfTarget.Patterns.Where(x => x.Key[0] == button)
                                        .Where(x => x.Value != 0).ToList();
                     order = difficulties.FindIndex(p => p.Key[2..4] == target.Difficulty);
