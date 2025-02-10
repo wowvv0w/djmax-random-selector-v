@@ -3,11 +3,11 @@ using System.Text.RegularExpressions;
 
 namespace Dmrsv.RandomSelector
 {
-    public class Locator : ILocator
+    public class Locator
     {
-        public bool StartsAutomatically { get; set; }
-        public int InputInterval { get; set; }
-        public bool InvokesInput { get; set; }
+        public bool StartsAutomatically { get; private set; }
+        public int InputInterval { get; private set; }
+        public bool InvokesInput { get; private set; }
 
         private readonly Dictionary<string, ushort> _keyMap = new()
         {
@@ -34,6 +34,21 @@ namespace Dmrsv.RandomSelector
             _keyMap.Add("up", (ushort)MapVirtualKey(0x26, 0));
             _keyMap.Add("right", (ushort)MapVirtualKey(0x27, 0));
             _keyMap.Add("down", (ushort)MapVirtualKey(0x28, 0));
+        }
+
+        public void SetStartsAutomatically(MusicForm form, InputMethod method)
+        {
+            StartsAutomatically = form == MusicForm.Default && method == InputMethod.WithAutoStart;
+        }
+
+        public void SetInputInterval(int inputInterval)
+        {
+            InputInterval = inputInterval;
+        }
+
+        public void SetInvokesInput(InputMethod method)
+        {
+            InvokesInput = method != InputMethod.NotInput;
         }
         
         public void Locate(Music music, IEnumerable<OldTrack> trackList)
