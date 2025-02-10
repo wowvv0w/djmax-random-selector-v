@@ -7,7 +7,7 @@ using DjmaxRandomSelectorV.Models;
 
 namespace DjmaxRandomSelectorV
 {
-    public class Dmrsv3CoreAppData
+    public class Dmrsv3AppData
     {
         public string DataFolderName { get; set; }
         public string OldDataFolderName { get; set; }

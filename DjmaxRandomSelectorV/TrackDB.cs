@@ -28,7 +28,7 @@ namespace DjmaxRandomSelectorV
         public IEnumerable<Track> AllTrack { get; private set; }
         public IEnumerable<Track> Playable { get; private set; }
         
-        public TrackDB(Dmrsv3CoreAppData appdata, IEventAggregator eventAggregator)
+        public TrackDB(Dmrsv3AppData appdata, IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
