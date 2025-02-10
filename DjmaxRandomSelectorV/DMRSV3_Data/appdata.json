@@ -7,11 +7,18 @@
     "AllTrackDownloadUrlAlt": "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/DMRSV3_Data/AllTrackList.json",
     "CurrentFilterFileName": "CurrentFilter.json",
     "VersionCheckUrl": "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version3.json",
+    "HomepageUrl": "https://github.com/wowvv0w/djmax-random-selector-v",
     "CategoryType": [
         "Regular",
         "CollabVariety",
         "CollabMusicGame",
         "PLI"
+    ],
+    "BasicCategories": [
+        "RP",
+        "P1",
+        "P2",
+        "GG"
     ],
     "Categories": [
         {
