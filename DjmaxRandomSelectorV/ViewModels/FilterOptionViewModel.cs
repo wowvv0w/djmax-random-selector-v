@@ -41,7 +41,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 _except = value;
                 NotifyOfPropertyChange();
-                Publish(new CapacityMessage(value));
+                Publish(new FilterOptionMessage(_except, _mode, _aider, _level));
             }
         }
         public string ModeText { get => _modeItems[_mode]; }
@@ -83,8 +83,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             value ^= 0x1;
             _mode = (MusicForm)value;
             NotifyOfPropertyChange(nameof(ModeText));
-            Publish(new ModeWithAiderMessage(_mode, _aider));
-            Publish(new ModeWithLevelMessage(_mode, _level));
+            Publish(new FilterOptionMessage(_except, _mode, _aider, _level));
         }
 
         public void SwitchAider(int move)
@@ -94,7 +93,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             value = (value % 3 + 3) % 3;
             _aider = (InputMethod)value;
             NotifyOfPropertyChange(nameof(AiderText));
-            Publish(new ModeWithAiderMessage(_mode, _aider));
+            Publish(new FilterOptionMessage(_except, _mode, _aider, _level));
         }
 
         public void SwitchLevel(int move)
@@ -104,7 +103,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             value = (value % 3 + 3) % 3;
             _level = (LevelPreference)value;
             NotifyOfPropertyChange(nameof(LevelText));
-            Publish(new ModeWithLevelMessage(_mode, _level));
+            Publish(new FilterOptionMessage(_except, _mode, _aider, _level));
         }
     }
 }
