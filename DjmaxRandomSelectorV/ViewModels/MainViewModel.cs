@@ -36,7 +36,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private Type GetFilterPanelType(FilterType filterType) => filterType switch
         {
-            FilterType.Query => typeof(QueryFilterViewModel),
+            FilterType.Query => typeof(BasicFilterViewModel),
             FilterType.Playlist => typeof(PlaylistFilterViewModel),
             _ => throw new NotSupportedException(),
         };

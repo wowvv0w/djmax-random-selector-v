@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Dmrsv.RandomSelector
 {
-    public class QueryFilter : FilterBase
+    public class BasicFilter : FilterBase
     {
         private ObservableCollection<string> _buttonTunes;
         private ObservableCollection<string> _difficulties;
@@ -91,7 +91,7 @@ namespace Dmrsv.RandomSelector
             }
         }
 
-        public QueryFilter()
+        public BasicFilter()
         {
             _buttonTunes = new ObservableCollection<string>() { "4B", "5B", "6B", "8B" };
             _difficulties = new ObservableCollection<string>() { "NM", "HD", "MX", "SC" };

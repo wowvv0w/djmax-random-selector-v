@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class QueryFilterViewModel : Screen, IHandle<FavoriteMessage>
+    public class BasicFilterViewModel : Screen, IHandle<FavoriteMessage>
     {
         private const string DefaultPath = @"Data\CurrentFilter.json";
         private readonly IEventAggregator _eventAggregator;
@@ -21,7 +21,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private readonly IFileManager _fileManager;
         private readonly List<Category> _categories;
 
-        private QueryFilter _filter;
+        private BasicFilter _filter;
 
         public BindableCollection<ListUpdater> ButtonTunesUpdaters { get; set; }
         public BindableCollection<ListUpdater> RegularCategories { get; set; }
@@ -116,7 +116,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public BindableCollection<LevelIndicator> LevelIndicators { get; set; }
         public BindableCollection<LevelIndicator> ScLevelIndicators { get; set; }
 
-        public QueryFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, IFileManager fileManager)
+        public BasicFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, IFileManager fileManager)
         {
             DisplayName = "FILTER";
             _eventAggregator = eventAggregator;
@@ -132,7 +132,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             catch
             {
-                _filter = new QueryFilter();
+                _filter = new BasicFilter();
             }
             Initialize();
         }
@@ -178,7 +178,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private void ImportFilter(string path)
         {
-            _filter = _fileManager.Import<QueryFilter>(path);
+            _filter = _fileManager.Import<BasicFilter>(path);
             var config = IoC.Get<Configuration>();
             _filter.Favorites = config.Favorite;
             _filter.Blacklist = config.Blacklist;
