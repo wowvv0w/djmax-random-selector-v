@@ -3,7 +3,6 @@
     public interface IFilter
     {
         bool IsUpdated { get; }
-        OutputMethodCallback? OutputMethod { get; set; }
-        List<Music> Filter(IEnumerable<OldTrack> trackList);
+        IEnumerable<Pattern> Filter(IEnumerable<Track> trackList);
     }
 }
