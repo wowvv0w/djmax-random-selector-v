@@ -1,5 +1,6 @@
 ﻿namespace Dmrsv.RandomSelector
 {
+    [Obsolete]
     public record OldTrack
     {
         public string Title { get; init; } = string.Empty;

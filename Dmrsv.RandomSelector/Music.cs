@@ -2,6 +2,7 @@
 
 namespace Dmrsv.RandomSelector
 {
+    [Obsolete]
     public record Music
     {
         public string Title { get; init; } = string.Empty;

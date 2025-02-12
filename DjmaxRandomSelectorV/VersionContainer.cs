@@ -13,6 +13,7 @@ namespace DjmaxRandomSelectorV
             Version = version;
         }
     }
+    [Obsolete]
     public class VersionContainer
     {
         private const string VersionsUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version.txt";

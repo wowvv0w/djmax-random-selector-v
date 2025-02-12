@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace DjmaxRandomSelectorV
 {
+    [Obsolete]
     public class Configuration
     {
         public int RecentsCount { get; set; } = 5;
