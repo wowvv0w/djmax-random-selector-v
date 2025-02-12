@@ -2,5 +2,5 @@
 
 namespace DjmaxRandomSelectorV.Messages
 {
-    public record MusicMessage(Music Item);
+    public record PatternMessage(Pattern Item);
 }

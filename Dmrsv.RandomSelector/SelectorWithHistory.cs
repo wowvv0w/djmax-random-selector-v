@@ -2,32 +2,32 @@
 {
     public class SelectorWithHistory : SelectorBase
     {
-        public IHistory<string> History { get; set; }
+        public IHistory<int> History { get; set; }
 
-        public SelectorWithHistory(IHistory<string> recent)
+        public SelectorWithHistory(IHistory<int> recent)
         {
             History = recent;
         }
 
-        public override Music? Select(IList<Music> musicList)
+        public override Pattern? Select(IList<Pattern> patternList)
         {
-            var recentExcluded = from music in musicList
-                                 where !History.Contains(music.Title)
-                                 select music;
+            var recentExcluded = from p in patternList
+                                 where !History.Contains(p.TrackId)
+                                 select p;
 
             if (!recentExcluded.Any() && History.Count > 0)
             {
-                string title = History.Dequeue();
-                recentExcluded = from music in musicList
-                                 where music.Title == title
-                                 select music;
+                int trackId = History.Dequeue();
+                recentExcluded = from p in patternList
+                                 where p.TrackId == trackId
+                                 select p;
             }
 
             var selected = base.Select(recentExcluded.ToList());
 
             if (selected is not null)
             {
-                History.Enqueue(selected.Title);
+                History.Enqueue(selected.TrackId);
             }
 
             return selected;

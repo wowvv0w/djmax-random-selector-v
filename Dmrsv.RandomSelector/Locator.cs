@@ -8,6 +8,7 @@ namespace Dmrsv.RandomSelector
         public bool StartsAutomatically { get; private set; }
         public int InputInterval { get; private set; }
         public bool InvokesInput { get; private set; }
+        public bool IsFreeSelect { get; private set; }
 
         private readonly Dictionary<string, ushort> _keyMap = new()
         {
@@ -23,7 +24,6 @@ namespace Dmrsv.RandomSelector
             ["shiftleft"] = 0x2A, ["shiftright"] = 0x36,
             ["pageup"] = 0xC9 + 1024, ["pagedown"] = 0xD1 + 1024,
         };
-        private readonly LocationFinder _locationFinder = new LocationFinder();
 
         public Locator()
         {
@@ -50,15 +50,20 @@ namespace Dmrsv.RandomSelector
         {
             InvokesInput = method != InputMethod.NotInput;
         }
+
+        public void SetIsFreeSelect(MusicForm form)
+        {
+            IsFreeSelect = form == MusicForm.Free;
+        }
         
-        public void Locate(Music music, IEnumerable<OldTrack> trackList)
+        public void Locate(Pattern pattern, IEnumerable<Track> trackList)
         {
             if (!InvokesInput)
             {
                 return;
             }
 
-            LocationInfo info = _locationFinder.FindLocation(music, trackList);
+            LocationInfo info = FindLocation(pattern, trackList);
 
             ResetMusicCursor();
             if (!string.IsNullOrEmpty(info.Initial))
@@ -66,7 +71,7 @@ namespace Dmrsv.RandomSelector
                 Input(_keyMap[info.Initial]);
             }
             RepeatInputs(info.VerticalDistance, _keyMap[info.VerticalDirection], true);
-            if (info.Button != '\0')
+            if (!IsFreeSelect)
             {
                 SelectButton(info.Button);
                 RepeatInputs(info.DifficultyOrder, _keyMap["right"], true);
@@ -140,60 +145,52 @@ namespace Dmrsv.RandomSelector
             public int DifficultyOrder { get; init; }
         }
 
-        private class LocationFinder
+        private LocationInfo FindLocation(Pattern target, IEnumerable<Track> list)
         {
-            public LocationInfo FindLocation(Music target, IEnumerable<OldTrack> list)
+            Track targetTrack = list.First(track => track.Id == target.TrackId);
+            string initial = targetTrack.Title[..1];
+            bool isAlphabet = Regex.IsMatch(initial, "[a-z]", RegexOptions.IgnoreCase);
+
+            var sameInitials = (isAlphabet
+                             ? list.Where(x => string.Compare(x.Title[..1], initial, true) == 0)
+                             : list.Where(x => Regex.IsMatch(x.Title[..1], "[^a-z]", RegexOptions.IgnoreCase))
+                             ).ToList();
+
+            int index = sameInitials.FindIndex(x => x.Title == targetTrack.Title);
+            int count = sameInitials.Count;
+            bool isDirectionDown = index <= Math.Ceiling((double)count / 2) || "wxyzWXYZ".Contains(initial);
+            int distance;
+            if (isDirectionDown)
             {
-                string initial = target.Title[..1];
-                bool isAlphabet = Regex.IsMatch(initial, "[a-z]", RegexOptions.IgnoreCase);
-
-                var sameInitials = (isAlphabet
-                                 ? list.Where(x => string.Compare(x.Title[..1], initial, true) == 0)
-                                 : list.Where(x => Regex.IsMatch(x.Title[..1], "[^a-z]", RegexOptions.IgnoreCase))
-                                 ).ToList();
-                
-                int index = sameInitials.FindIndex(x => x.Title == target.Title);
-                int count = sameInitials.Count;
-                bool isDirectionDown = index <= Math.Ceiling((double)count / 2) || "wxyzWXYZ".Contains(initial);
-                int distance;
-                if (isDirectionDown)
-                {
-                    initial = isAlphabet ? initial : string.Empty;
-                    distance = index;
-                }
-                else
-                {
-                    char parsedInitial = char.Parse(initial);
-                    initial = isAlphabet ? ((char)(parsedInitial + 1)).ToString() : "a";
-                    distance = count - index;
-                }
-
-                char button;
-                int order;
-                if (string.IsNullOrEmpty(target.Style))
-                {
-                    button = '\0';
-                    order = 0;
-                }
-                else
-                {
-                    button = target.ButtonTunes[0];
-                    OldTrack trackOfTarget = sameInitials[index];
-                    var difficulties = trackOfTarget.Patterns.Where(x => x.Key[0] == button)
-                                       .Where(x => x.Value != 0).ToList();
-                    order = difficulties.FindIndex(p => p.Key[2..4] == target.Difficulty);
-                }
-
-                var result = new LocationInfo()
-                {
-                    Initial = initial.ToLower(),
-                    VerticalDirection = isDirectionDown ? "down" : "up",
-                    VerticalDistance = distance,
-                    Button = button,
-                    DifficultyOrder = order,
-                };
-                return result;
+                initial = isAlphabet ? initial : string.Empty;
+                distance = index;
             }
+            else
+            {
+                char parsedInitial = char.Parse(initial);
+                initial = isAlphabet ? ((char)(parsedInitial + 1)).ToString() : "a";
+                distance = count - index;
+            }
+
+            char button = '\0';
+            int order = -1;
+            if (!IsFreeSelect)
+            {
+                button = target.ButtonTunes[0];
+                var difficulties = targetTrack.PatternLevelTable.Where(x => x.Key[0] == button)
+                                   .Where(x => x.Value != 0).ToList();
+                order = difficulties.FindIndex(p => p.Key[2..4] == target.Difficulty);
+            }
+
+            var result = new LocationInfo()
+            {
+                Initial = initial.ToLower(),
+                VerticalDirection = isDirectionDown ? "down" : "up",
+                VerticalDistance = distance,
+                Button = button,
+                DifficultyOrder = order,
+            };
+            return result;
         }
 
         private bool SendKeyDown(ushort ScanCode, bool isArrowKey = false)

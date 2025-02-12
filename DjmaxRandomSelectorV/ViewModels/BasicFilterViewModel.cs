@@ -179,9 +179,9 @@ namespace DjmaxRandomSelectorV.ViewModels
         private void ImportFilter(string path)
         {
             _filter = _fileManager.Import<BasicFilter>(path);
-            var config = IoC.Get<Configuration>();
-            _filter.Favorites = config.Favorite;
-            _filter.Blacklist = config.Blacklist;
+            var setting = IoC.Get<Dmrsv3Configuration>().Setting;
+            _filter.Favorite = setting.Favorite;
+            _filter.Blacklist = setting.Blacklist;
             _eventAggregator.PublishOnUIThreadAsync(new FilterMessage(_filter));
         }
 
@@ -257,7 +257,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public Task HandleAsync(FavoriteMessage message, CancellationToken cancellationToken)
         {
-            _filter.Favorites = message.Favorite;
+            _filter.Favorite = message.Favorite;
             _filter.Blacklist = message.Blacklist;
             return Task.CompletedTask;
         }
