@@ -2,7 +2,7 @@
 {
     public class PatternPicker
     {
-        public Func<IEnumerable<Pattern>, IEnumerable<Pattern>>? pickMethod;
+        private Func<IEnumerable<Pattern>, IEnumerable<Pattern>>? pickMethod;
 
         public PatternPicker()
         {
@@ -18,24 +18,27 @@
         {
             pickMethod = (form, preference) switch
             {
-                (MusicForm.Free, _) => (musicList) =>
+                (MusicForm.Free, _) => (patternList) =>
                 {
-                    return from m in musicList
-                           group m by new { m.Id } into g
+                    return from p in patternList
+                           group p by new { p.TrackId } into g
                            select g.First();
-                },
-                (MusicForm.Default, LevelPreference.Lowest) => (musicList) =>
+                }
+                ,
+                (MusicForm.Default, LevelPreference.Lowest) => (patternList) =>
                 {
-                    return from m in musicList
-                           group m by new { m.Id, m.ButtonTunes } into g
+                    return from p in patternList
+                           group p by new { p.TrackId, p.ButtonTunes } into g
                            select g.First();
-                },
-                (MusicForm.Default, LevelPreference.Highest) => (musicList) =>
+                }
+                ,
+                (MusicForm.Default, LevelPreference.Highest) => (patternList) =>
                 {
-                    return from m in musicList
-                           group m by new { m.Id, m.ButtonTunes } into g
+                    return from p in patternList
+                           group p by new { p.TrackId, p.ButtonTunes } into g
                            select g.Last();
-                },
+                }
+                ,
                 _ => null
             };
         }

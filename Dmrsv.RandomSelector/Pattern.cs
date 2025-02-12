@@ -4,7 +4,7 @@
     {
         public int Id { get; init; } = -1;
         public int Level { get; init; } = 0;
-        public int SongId => Id / 100;
+        public int TrackId => Id / 100;
         public string ButtonTunes => (Id / 10 % 10) switch
         {
             4 => "4B",
