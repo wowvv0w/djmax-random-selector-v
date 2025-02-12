@@ -15,7 +15,7 @@ using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV
 {
-    public class TrackDB : IHandle<SettingMessage>
+    public class TrackDB
     {
         private readonly IEventAggregator _eventAggregator;
 
@@ -25,14 +25,11 @@ namespace DjmaxRandomSelectorV
         private readonly string[] _basicCategories;
         private readonly (int Id, string[][] RequiredDlc)[] _linkDisc;
 
-        public IEnumerable<Track> AllTrack { get; private set; }
-        public IEnumerable<Track> Playable { get; private set; }
+        public IReadOnlyList<Track> AllTrack { get; private set; }
+        public IReadOnlyList<Track> Playable { get; private set; }
         
-        public TrackDB(Dmrsv3AppData appdata, IEventAggregator eventAggregator)
-        {
-            _eventAggregator = eventAggregator;
-            _eventAggregator.SubscribeOnUIThread(this);
-            
+        public TrackDB(Dmrsv3AppData appdata)
+        {   
             _allTrackDownloadUrl = appdata.AllTrackDownloadUrl;
             _allTrackDownloadUrlAlt = appdata.AllTrackDownloadUrlAlt;
             _allTrackFilePath = $@"{appdata.DataFolderName}\{appdata.AllTrackFileName}";
@@ -68,10 +65,10 @@ namespace DjmaxRandomSelectorV
                                      .Where(table => table.pattern is not null)
                                      .Select(table => new KeyValuePair<string, int>(table.style, table.pattern.Level))
                                      .ToDictionary(pair => pair.Key, pair => pair.Value)
-            });
+            }).AsReadOnly();
         }
 
-        private void SetPlayable(List<string> ownedDlcs)
+        public void SetPlayable(List<string> ownedDlcs)
         {
             var categories = ownedDlcs.Concat(_basicCategories);
             var exclusions = _linkDisc.Where(x => x.RequiredDlc.Any(dlcs => dlcs.All(dlc => ownedDlcs.Contains(dlc))))
@@ -80,13 +77,7 @@ namespace DjmaxRandomSelectorV
                            where categories.Contains(track.Category)
                            where !exclusions.Contains(track.Id)
                            select track;
-            Playable = playable;
-        }
-
-        public Task HandleAsync(SettingMessage message, CancellationToken cancellationToken)
-        {
-            SetPlayable(message.OwnedDlcs);
-            return Task.CompletedTask;
+            Playable = playable.ToList().AsReadOnly();
         }
 
         public record VArchiveDBTrack
