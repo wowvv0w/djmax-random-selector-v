@@ -9,40 +9,40 @@ namespace DjmaxRandomSelectorV
 {
     public class Dmrsv3Configuration
     {
-        public Dmrsv3Setting Setting { get; set; }
-        public Dmrsv3FilterOption FilterOption { get; set; }
-        public Dmrsv3WindowProperty WindowProperty { get; set; }
-        public Dmrsv3VersionInfo VersionInfo { get; set; }
+        public Dmrsv3Setting Setting { get; set; } = new();
+        public Dmrsv3FilterOption FilterOption { get; set; } = new();
+        public Dmrsv3WindowProperty WindowProperty { get; set; } = new();
+        public Dmrsv3VersionInfo VersionInfo { get; set; } = new();
 
         public class Dmrsv3Setting
         {
-            public FilterType FilterType { get; set; }
-            public int InputInterval { get; set; }
-            public List<int> Favorite { get; set; }
-            public List<int> Blacklist { get; set; }
-            public List<string> OwnedDlcs { get; set; }
-            public bool SavesRecent { get; set; }
-            public List<int> RecentPlayed { get; set; }
-            public uint StartKeyCode { get; set; }
+            public FilterType FilterType { get; set; } = FilterType.Query;
+            public int InputInterval { get; set; } = 30;
+            public List<int> Favorite { get; set; } = new();
+            public List<int> Blacklist { get; set; } = new();
+            public List<string> OwnedDlcs { get; set; } = new();
+            public bool SavesRecent { get; set; } = false;
+            public List<int> RecentPlayed { get; set; } = new();
+            public uint StartKeyCode { get; set; } = 118;
         }
 
         public class Dmrsv3FilterOption
         {
-            public int RecentsCount { get; set; }
-            public MusicForm MusicForm { get; set; }
-            public InputMethod InputMethod { get; set; }
-            public LevelPreference LevelPreference { get; set; }
+            public int RecentsCount { get; set; } = 5;
+            public MusicForm MusicForm { get; set; } = MusicForm.Default;
+            public InputMethod InputMethod { get; set; } = InputMethod.Default;
+            public LevelPreference LevelPreference { get; set; } = LevelPreference.None;
         }
 
         public class Dmrsv3WindowProperty
         {
-            public double[] Position { get; set; }
-            public double[] Size { get; set; }
+            public double[] Position { get; set; } = Array.Empty<double>();
+            public double[] Size { get; set; } = Array.Empty<double>();
         }
 
         public class Dmrsv3VersionInfo
         {
-            public int AllTrackVersion { get; set; }
+            public int AllTrackVersion { get; set; } = 0;
         }
     }
 }
