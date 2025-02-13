@@ -61,7 +61,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             };
 
             _categories = IoC.Get<CategoryContainer>().GetCategories();
-            _categories.RemoveAll(x => string.IsNullOrEmpty(x.Code));
+            _categories.RemoveAll(x => string.IsNullOrEmpty(x.Code) && (!x.Id?.StartsWith("P-") ?? true));
             var updaters = _categories.ConvertAll(x => new ListUpdater(x.Name, x.Id, _message.OwnedDlcs));
             CategoryUpdaters = new BindableCollection<ListUpdater>(updaters);
         }
