@@ -639,7 +639,7 @@
                                           Margin="4 0">
                             </ToggleButton>
                             <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding Name}" Value="COLLABORATION">
+                                <DataTrigger Binding="{Binding Name}" Value="COLLAB/PLI">
                                     <Setter TargetName="Button" Property="Style" Value="{StaticResource CategoryButton}"/>
                                     <Setter TargetName="Button" Property="IsEnabled" Value="False"/>
                                     <Setter TargetName="Button" Property="Foreground" Value="{StaticResource DefaultGrayColor}"/>
@@ -695,6 +695,9 @@
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Name}" Value="TEKKEN">
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgTekken}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="TRIBUTE #1">
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgTribute1}"/>
                                 </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>

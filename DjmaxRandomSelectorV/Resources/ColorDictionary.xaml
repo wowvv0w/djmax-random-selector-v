@@ -319,6 +319,7 @@
         <GradientStop Color="#55C2F0" Offset="1" />
     </LinearGradientBrush>
     <SolidColorBrush x:Key="BgTekken" Color="#F6F6F6" />
+    <SolidColorBrush x:Key="BgTribute1" Color="#DCD8B2" />
     <!--#endregion-->
 
 </ResourceDictionary>
