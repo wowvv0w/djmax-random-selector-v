@@ -1,9 +1,11 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Messages;
+using DjmaxRandomSelectorV.Models;
 using Dmrsv.RandomSelector;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -13,17 +15,17 @@ using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class PlaylistFilterViewModel : Screen, IHandle<VArchiveMessage>
+    public class AdvancedFilterViewModel : Screen, IHandle<VArchiveMessage>
     {
         private const string DefaultPath = @"Data\CurrentPlaylist.json";
 
         private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
         private readonly IFileManager _fileManager;
-        private readonly List<OldTrack> _tracks;
-        private readonly List<string> _titles;
+        private readonly IReadOnlyList<Track> _allTrack;
 
-        private PlaylistFilter _filter;
+        private AdvancedFilter _filter;
+        private Track _selectedTrack;
         private string _searchBox;
 
         public string SearchBox
@@ -38,32 +40,32 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
 
         public BindableCollection<string> TitleSuggestions { get; }
-        public BindableCollection<Music> SearchResult { get; }
-        public BindableCollection<Music> PlaylistItems { get; }
+        public BindableCollection<Pattern> SearchResult { get; }
+        public BindableCollection<PlaylistItem> PlaylistItems { get; }
 
-        public PlaylistFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, IFileManager fileManager)
+        public AdvancedFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, IFileManager fileManager)
         {
             DisplayName = "FILTER";
             _eventAggregator = eventAggregator;
+            _eventAggregator.SubscribeOnUIThread(this);
             _windowManager = windowManager;
             _fileManager = fileManager;
-            _eventAggregator.SubscribeOnUIThread(this);
+            _allTrack = IoC.Get<TrackDB>().AllTrack;
+
+            _filter = new AdvancedFilter();
+            PlaylistItems = new BindableCollection<PlaylistItem>();
             try
             {
-                _filter = _fileManager.Import<PlaylistFilter>(DefaultPath);
+                var playlist = _fileManager.Import<Playlist>(DefaultPath);
+                AddToFilterAndPlaylist(playlist.Items);
             }
             catch
             {
-                _filter = new PlaylistFilter();
+                MessageBox.Show("Failed to load previous filter.", "Import Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            _tracks = new TrackManager().GetAllTrack().ToList();
-            _titles = _tracks.ConvertAll(x => x.Title);
-
-            PlaylistItems = new BindableCollection<Music>(_filter.Items);
-            _filter.Items = PlaylistItems;
             _eventAggregator.PublishOnUIThreadAsync(new FilterMessage(_filter));
 
-            SearchResult = new BindableCollection<Music>();
+            SearchResult = new BindableCollection<Pattern>();
             TitleSuggestions = new BindableCollection<string>();
         }
 
@@ -84,9 +86,40 @@ namespace DjmaxRandomSelectorV.ViewModels
             return Task.CompletedTask;
         }
 
-        public void AddItem(Music item)
+        public void AddItem(Pattern pattern)
         {
-            PlaylistItems.Add(item with { Level = -1 });
+            _filter.PatternList.Add(pattern);
+            PlaylistItems.Add(new PlaylistItem
+            {
+                PatternId = pattern.Id,
+                Title = _selectedTrack.Title,
+                Composer = _selectedTrack.Composer,
+                Category = _selectedTrack.Category,
+                Style = pattern.Style,
+                Level = pattern.Level.ToString()
+            });
+        }
+
+        private void AddToFilterAndPlaylist(int[] items)
+        {
+            foreach (int item in items)
+            {
+                Track track = _allTrack.FirstOrDefault(t => t.EqualsTrackId(item));
+                if (track is not null)
+                {
+                    var pattern = track.GetPatternFromId(item);
+                    _filter.PatternList.Add(pattern);
+                    PlaylistItems.Add(new PlaylistItem
+                    {
+                        PatternId = item,
+                        Title = track.Title,
+                        Composer = track.Composer,
+                        Category = track.Category,
+                        Style = pattern.Style,
+                        Level = pattern.Level.ToString()
+                    });
+                }
+            }
         }
 
         #region SELECTED methods
@@ -119,7 +152,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             foreach (var i in PlaylistItems)
             {
                 index++;
-                if (!items.Any(m => ReferenceEquals(m, i)))
+                if (!items.Any(p => ReferenceEquals(p, i)))
                 {
                     continue;
                 }
@@ -133,7 +166,11 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             PlaylistItems.IsNotifying = false;
             indexesToBeRemoved.Reverse();
-            indexesToBeRemoved.ForEach(i => PlaylistItems.RemoveAt(i));
+            indexesToBeRemoved.ForEach(i =>
+            {
+                _filter.PatternList.RemoveAt(i);
+                PlaylistItems.RemoveAt(i);
+            });
             PlaylistItems.IsNotifying = true;
             PlaylistItems.Refresh();
             items.Clear();
@@ -146,8 +183,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             var difficultyOrder = new string[] { "NM", "HD", "MX", "SC" };
             var sorted = PlaylistItems.OrderBy(x => !Regex.IsMatch(x.Title[..1], "[ㄱ-ㅎ가-힣]"))
                 .ThenBy(x => x.Title)
-                .ThenBy(x => x.ButtonTunes)
-                .ThenBy(x => Array.IndexOf(difficultyOrder, x.Difficulty)).ToList();
+                .ThenBy(x => x.Style[..2])
+                .ThenBy(x => Array.IndexOf(difficultyOrder, x.Style[2..4])).ToList();
             PlaylistItems.Clear();
             PlaylistItems.AddRange(sorted);
         }
@@ -158,9 +195,10 @@ namespace DjmaxRandomSelectorV.ViewModels
                 "Prompt", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
-                var deduplicated = PlaylistItems.Distinct().ToList();
+                var deduplicated = PlaylistItems.Distinct();
                 PlaylistItems.Clear();
                 PlaylistItems.AddRange(deduplicated);
+                _filter.PatternList = new ObservableCollection<Pattern>(_filter.PatternList.Distinct());
             }
         }
 
@@ -171,6 +209,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (result == MessageBoxResult.Yes)
             {
                 PlaylistItems.Clear();
+                _filter.PatternList.Clear();
             }
         }
         #endregion
@@ -194,7 +233,11 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (result == true)
             {
                 string fileName = dialog.FileName;
-                _fileManager.Export(_filter, fileName);
+                var playlist = new Playlist()
+                {
+                    Items = _filter.PatternList.Select(p => p.Id).ToArray()
+                };
+                _fileManager.Export(playlist, fileName);
             }
         }
 
@@ -215,10 +258,10 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                PlaylistFilter filter;
+                Playlist playlist;
                 try
                 {
-                    filter = _fileManager.Import<PlaylistFilter>(dialog.FileName);
+                    playlist = _fileManager.Import<Playlist>(dialog.FileName);
                 }
                 catch (Exception ex)
                 {
@@ -226,9 +269,10 @@ namespace DjmaxRandomSelectorV.ViewModels
                         "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-                var items = filter.Items;
+
                 PlaylistItems.Clear();
-                PlaylistItems.AddRange(items);
+                _filter.PatternList.Clear();
+                AddToFilterAndPlaylist(playlist.Items);
             }
         }
 
@@ -247,10 +291,10 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                PlaylistFilter filter;
+                Playlist playlist;
                 try
                 {
-                    filter = _fileManager.Import<PlaylistFilter>(dialog.FileName);
+                    playlist = _fileManager.Import<Playlist>(dialog.FileName);
                 }
                 catch (Exception ex)
                 {
@@ -258,8 +302,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                         "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-                var concat = filter.Items;
-                PlaylistItems.AddRange(concat);
+                AddToFilterAndPlaylist(playlist.Items);
             }
         }
         #endregion
@@ -291,13 +334,13 @@ namespace DjmaxRandomSelectorV.ViewModels
             IEnumerable<string> titles;
             if (SearchBox.Equals("#"))
             {
-                titles = from title in _titles
+                titles = from title in _allTrack.Select(t => t.Title)
                          where !Regex.IsMatch(title[..1], "[a-z]", RegexOptions.IgnoreCase)
                          select title;
             }
             else
             {
-                titles = from title in _titles
+                titles = from title in _allTrack.Select(t => t.Title)
                          where title.StartsWith(SearchBox, true, null)
                          select title;
             }
@@ -307,11 +350,11 @@ namespace DjmaxRandomSelectorV.ViewModels
         private void UpdateResult()
         {
             SearchResult.Clear();
-            var query = from t in _tracks
+            var query = from t in _allTrack
                         where t.Title.ToLower() == (SearchBox?.ToLower() ?? string.Empty)
-                        select t.GetMusicList() into musicList
-                        from m in musicList
-                        select m;
+                        select t.GetPatterns() into patternList
+                        from p in patternList
+                        select p;
             SearchResult.AddRange(query);
         }
         #endregion
@@ -330,6 +373,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 if (result == MessageBoxResult.Yes)
                 {
                     PlaylistItems.Clear();
+                    _filter.PatternList.Clear();
                 }
             }
             PlaylistItems.AddRange(message.Items);

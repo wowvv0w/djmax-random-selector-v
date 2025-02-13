@@ -28,7 +28,7 @@
         ],
         "IncludesFavorite": false
     },
-    "AdvancedFilter": {
-        "Playlist": []
+    "Playlist": {
+        "Items": []
     }
 }
