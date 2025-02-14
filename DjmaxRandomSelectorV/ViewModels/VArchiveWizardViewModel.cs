@@ -43,12 +43,12 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
-        public BindableCollection<PatternItem> PatternItems { get; }
+        public BindableCollection<VArchivePatternItem> PatternItems { get; }
 
         public VArchiveWizardViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            PatternItems = new BindableCollection<PatternItem>();
+            PatternItems = new BindableCollection<VArchivePatternItem>();
         }
 
         public void RequestBoard()
@@ -84,8 +84,9 @@ namespace DjmaxRandomSelectorV.ViewModels
             var items = from floor in root.Floors
                         let floorNumber = floor.FloorNumber
                         from p in floor.Patterns
-                        select new PatternItem()
+                        select new VArchivePatternItem()
                         {
+                            Id = p.Title,
                             Style = p.Pattern,
                             Title = p.Name,
                             Floor = floorNumber,
@@ -111,7 +112,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void ApplyQuery(string command)
         {
-            IEnumerable<PatternItem> items = PatternItems;
+            IEnumerable<VArchivePatternItem> items = PatternItems;
             if (IncludesPlayed)
             {
                 items = IsPlayed
@@ -153,8 +154,8 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             var items = from item in PatternItems
                         where item.IsChecked
-                        select new Music(item.Title, CurrentButton + item.Style, -1);
-            _eventAggregator.PublishOnUIThreadAsync(new VArchiveMessage(items, command));
+                        select Pattern.CreateId(item.Id, item.Style);
+            _eventAggregator.PublishOnUIThreadAsync(new VArchiveMessage(items.ToArray(), command));
         }
 
         public record BoardRoot
@@ -174,6 +175,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public record BoardPattern
         {
+            public int Title { get; init; }
             public string Name { get; init; }
             public string Pattern { get; init; }
             public string Score { get; init; }

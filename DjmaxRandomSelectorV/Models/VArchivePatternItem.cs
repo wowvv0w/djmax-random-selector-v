@@ -2,7 +2,7 @@
 
 namespace DjmaxRandomSelectorV.Models
 {
-    public class PatternItem : PropertyChangedBase
+    public class VArchivePatternItem : PropertyChangedBase
     {
         private bool _isChecked = false;
         public bool IsChecked
@@ -14,6 +14,7 @@ namespace DjmaxRandomSelectorV.Models
                 NotifyOfPropertyChange();
             }
         }
+        public int Id { get; init; }
         public string Style { get; init; }
         public string Title { get; init; }
         public double Floor { get; init; }

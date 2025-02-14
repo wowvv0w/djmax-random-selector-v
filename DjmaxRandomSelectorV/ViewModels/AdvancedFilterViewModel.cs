@@ -376,7 +376,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                     _filter.PatternList.Clear();
                 }
             }
-            PlaylistItems.AddRange(message.Items);
+            AddToFilterAndPlaylist(message.Items);
             return Task.CompletedTask;
         }
     }
