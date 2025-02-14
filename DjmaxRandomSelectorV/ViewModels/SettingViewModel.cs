@@ -68,7 +68,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void DetectDlcs()
         {
-            Dictionary<string, string> dlcCodes = _categories.ToDictionary(x => x.Code, x => x.Id);
+            Dictionary<string, string> dlcCodes = _categories.Where(x => x.Code is not null).ToDictionary(x => x.Code, x => x.Id);
 
             var ownedDlcs = _message.OwnedDlcs;
             ownedDlcs.Clear();
@@ -78,15 +78,12 @@ namespace DjmaxRandomSelectorV.ViewModels
             
             var libraryPath = new DirectoryInfo($"{steamPath}\\appcache\\librarycache");
 
-            foreach (FileInfo file in libraryPath.GetFiles())
+            foreach (DirectoryInfo dir in libraryPath.GetDirectories())
             {
-                if (file.Extension.ToLower().Equals(".jpg"))
+                string dlc = dlcCodes.GetValueOrDefault(dir.Name, null);
+                if (!string.IsNullOrEmpty(dlc))
                 {
-                    string dlc = dlcCodes.GetValueOrDefault(file.Name[..^11], null);
-                    if (!string.IsNullOrEmpty(dlc))
-                    {
-                        ownedDlcs.Add(dlc);
-                    }
+                    ownedDlcs.Add(dlc);
                 }
             }
 
