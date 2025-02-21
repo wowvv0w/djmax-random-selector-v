@@ -51,11 +51,11 @@ namespace DjmaxRandomSelectorV.ViewModels
         public FilterOptionViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            var config = IoC.Get<Configuration>();
-            _except = config.RecentsCount;
-            _mode = config.Mode;
-            _aider = config.Aider;
-            _level = config.Level;
+            var filterOption = IoC.Get<Dmrsv3Configuration>().FilterOption;
+            _except = filterOption.RecentsCount;
+            _mode = filterOption.MusicForm;
+            _aider = filterOption.InputMethod;
+            _level = filterOption.LevelPreference;
             ActivateItemAsync(IoC.Get<FilterOptionIndicatorViewModel>());
         }
 
@@ -63,11 +63,11 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             if (close)
             {
-                var config = IoC.Get<Configuration>();
-                config.RecentsCount = _except;
-                config.Mode = _mode;
-                config.Aider = _aider;
-                config.Level = _level;
+                var filterOption = IoC.Get<Dmrsv3Configuration>().FilterOption;
+                filterOption.RecentsCount = _except;
+                filterOption.MusicForm = _mode;
+                filterOption.InputMethod = _aider;
+                filterOption.LevelPreference = _level;
             }
             return Task.CompletedTask;
         }
