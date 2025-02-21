@@ -14,10 +14,10 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public InfoViewModel()
         {
-            var vc = IoC.Get<VersionContainer>();
-            CurrentVersion = "Current Version: " + vc.CurrentAppVersion.ToString(3);
-            LastestVersion = "Lastest Version: " + vc.LastestAppVersion.ToString(3);
-            AllTrackVersion = "All Track Version : " + vc.AllTrackVersion.ToString();
+            var updater = IoC.Get<UpdateManager>();
+            CurrentVersion = "Current Version: " + updater.CurrentAppVersion.ToString(3);
+            LastestVersion = "Lastest Version: " + updater.LatestAppVersion.ToString(3);
+            AllTrackVersion = "All Track Version : " + updater.AllTrackVersion.ToString();
         }
 
         public void OpenGithubPage()
