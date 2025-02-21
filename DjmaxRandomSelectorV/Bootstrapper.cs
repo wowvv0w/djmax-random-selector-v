@@ -3,6 +3,7 @@ using DjmaxRandomSelectorV.ViewModels;
 using Dmrsv.RandomSelector;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -14,14 +15,17 @@ namespace DjmaxRandomSelectorV
 {
     public class Bootstrapper : BootstrapperBase
     {
-        private const string ConfigPath = @"Data\Config.json";
+        private const string AppDataFilePath = @"DMRSV3_Data\appdata.json";
+        private readonly string _configFilePath;
 
         private readonly SimpleContainer _container = new SimpleContainer();
-        private readonly Configuration _configuration;
+        private readonly Dmrsv3AppData _appdata;
+        private readonly Dmrsv3Configuration _config;
         private readonly RandomSelector _rs;
+        private readonly TrackDB _db;
         private readonly IFileManager _fileManager;
         private readonly CategoryContainer _categoryContainer = new CategoryContainer();
-        private readonly VersionContainer _versionContainer;
+        private readonly UpdateManager _updater;
 
         private Mutex _mutex;
 
@@ -32,41 +36,38 @@ namespace DjmaxRandomSelectorV
             _fileManager = IoC.Get<IFileManager>();
             try
             {
-                _configuration = _fileManager.Import<Configuration>(ConfigPath);
+                _appdata = _fileManager.Import<Dmrsv3AppData>(AppDataFilePath);
             }
             catch
             {
-                _configuration = new Configuration();
+                // TODO: web download process
+                var result = MessageBox.Show("Failed to load appdata.json", "Notice", MessageBoxButton.YesNo, MessageBoxImage.Information);
             }
-            _container.Instance(_configuration);
+
+            try
+            {
+                _config = _fileManager.Import<Dmrsv3Configuration>(_configFilePath);
+            }
+            catch
+            {
+                _config = new Dmrsv3Configuration();
+            }
+            _container.Instance(_config);
+            
+            _db = new TrackDB(_appdata);
+            _container.Instance(_db);
 
             var eventAggregator = IoC.Get<IEventAggregator>();
             _rs = new RandomSelector(eventAggregator);
 
             Version assemblyVersion = Assembly.GetEntryAssembly().GetName().Version;
-            _versionContainer = new VersionContainer(assemblyVersion, _configuration.AllTrackVersion);
-            _versionContainer.NewAllTrackVersionAvailable += (s, e) =>
-            {
-                try
-                {
-                    new TrackManager().DownloadAllTrack();
-                }
-                catch
-                {
-                    throw new Exception($"Failed to download lastest all track list (Version {e.Version})");
-                }
-                Task.Run(() =>
-                {
-                    MessageBox.Show($"All track list is updated to the version {e.Version}.",
-                        "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
-                });
-                _configuration.AllTrackVersion = Int32.Parse(e.Version);
-            };
-            _container.Instance(_versionContainer);
+            _updater = new UpdateManager(_appdata, _config, assemblyVersion);
+            _container.Instance(_updater);
         }
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
+            // Prevent redundant running
             _mutex = new Mutex(true, "DjmaxRandomSelectorV", out bool createsNew);
             if (!createsNew)
             {
@@ -76,10 +77,24 @@ namespace DjmaxRandomSelectorV
                 Application.Shutdown();
                 return;
             }
-
+            // Update all track file
             try
             {
-                await _versionContainer.CheckLastestVersionsAsync();
+                bool[] result = _updater.CheckUpdates();
+                try
+                {
+                    _db.RequestDB();
+                }
+                catch
+                {
+                    throw new Exception($"Failed to download lastest all track list (Version {_updater.AllTrackVersion})");
+                }
+                _ = Task.Run(() =>
+                {
+                    MessageBox.Show($"All track list is updated to the version {_updater.AllTrackVersion}.",
+                        "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
+                });
+                _config.VersionInfo.AllTrackVersion = _updater.AllTrackVersion;
             }
             catch (Exception ex)
             {
@@ -89,29 +104,32 @@ namespace DjmaxRandomSelectorV
                         "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 });
             }
-
+            // Bind views and viewmodels
             await DisplayRootViewForAsync(typeof(ShellViewModel));
+            // Set window property
+            var winProp = _config.WindowProperty;
             Window window = Application.MainWindow;
-            double[] position = _configuration.Position;
+            double[] position = winProp.Position;
             if (position?.Length == 2)
             {
                 window.Top = position[0];
                 window.Left = position[1];
             }
-
-            _rs.Initialize(_configuration);
+            // Set random selector
+            _rs.Initialize(_config);
             _rs.RegisterHandle(new WindowInteropHelper(window).Handle);
             _rs.SetHotkey(0x0000, 118);
         }
 
         protected override void OnExit(object sender, EventArgs e)
         {
+            var setting = _config.Setting;
             var historyItems = _rs.History.GetItems().ToList();
-            if (_configuration.SavesRecents)
+            if (setting.SavesRecent)
             {
-                _configuration.Exclusions = historyItems;
+                setting.RecentPlayed = historyItems;
             }
-            _fileManager.Export(_configuration, ConfigPath);
+            _fileManager.Export(_config, _configFilePath);
         }
 
         protected override void Configure()

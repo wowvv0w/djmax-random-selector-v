@@ -16,7 +16,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
 
-            var type = GetFilterPanelType(IoC.Get<Configuration>().FilterType);
+            var type = GetFilterPanelType(IoC.Get<Dmrsv3Configuration>().Setting.FilterType);
             ActivateItemAsync(IoC.GetInstance(type, null));
             ActivateItemAsync(IoC.Get<HistoryViewModel>());
             ChangeActiveItemAsync(Items[0], false);
@@ -37,7 +37,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private Type GetFilterPanelType(FilterType filterType) => filterType switch
         {
             FilterType.Query => typeof(BasicFilterViewModel),
-            FilterType.Playlist => typeof(PlaylistFilterViewModel),
+            FilterType.Playlist => typeof(AdvancedFilterViewModel),
             _ => throw new NotSupportedException(),
         };
     }
