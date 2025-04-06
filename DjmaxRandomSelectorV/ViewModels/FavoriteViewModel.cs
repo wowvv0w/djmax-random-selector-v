@@ -1,5 +1,7 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Messages;
+using DjmaxRandomSelectorV.Models;
+using Dmrsv.RandomSelector;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -10,9 +12,10 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class FavoriteViewModel : Screen
     {
         private readonly IEventAggregator _eventAggregator;
-        private readonly List<string> _titleList;
+        private readonly TrackDB _db;
 
         private string _searchBox;
+        private List<string> _titleList;
 
         public string SearchBox
         {
@@ -24,29 +27,55 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
-        public BindableCollection<string> FavoriteItems { get; }
-        public BindableCollection<string> BlacklistItems { get; }
+        public BindableCollection<FavoriteItem> TrackItems { get; }
+        public BindableCollection<FavoriteItem> FavoriteItems { get; }
+        public BindableCollection<FavoriteItem> BlacklistItems { get; }
         public BindableCollection<string> TitleSuggestions { get; }
 
         public FavoriteViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            _titleList = new TrackManager().GetAllTrack().Select(x => x.Title).ToList();
+            _db = IoC.Get<TrackDB>();
+            _titleList = _db.AllTrack.Select(t => t.Title).ToList();
 
-            var config = IoC.Get<Configuration>();
-            FavoriteItems = new BindableCollection<string>(config.Favorite);
-            BlacklistItems = new BindableCollection<string>(config.Blacklist);
+            var setting = IoC.Get<Dmrsv3Configuration>().Setting;
+            var favorite = setting.Favorite.Where(id => 0 <= id && id < setting.Favorite.Count);
+            var blacklist = setting.Blacklist.Where(id => 0 <= id && id < setting.Blacklist.Count);
+            FavoriteItems = new BindableCollection<FavoriteItem>(favorite.Select(id =>
+            {
+                var track = _db.AllTrack[id];
+                return new FavoriteItem()
+                {
+                    Id = id,
+                    Title = track.Title,
+                    Composer = track.Composer,
+                    Category = track.Category,
+                    IsPlayable = _db.Playable.Any(t => t.Id == id)
+                };
+            }));
+            BlacklistItems = new BindableCollection<FavoriteItem>(blacklist.Select(id =>
+            {
+                var track = _db.AllTrack[id];
+                return new FavoriteItem()
+                {
+                    Id = id,
+                    Title = track.Title,
+                    Composer = track.Composer,
+                    Category = track.Category,
+                    IsPlayable = _db.Playable.Any(t => t.Id == id)
+                };
+            }));
 
             TitleSuggestions = new BindableCollection<string>();
         }
         public void CloseDialog()
         {
-            List<string> favorite = FavoriteItems.ToList();
-            List<string> blacklist = BlacklistItems.ToList();
+            List<int> favorite = FavoriteItems.Select(item => item.Id).ToList();
+            List<int> blacklist = BlacklistItems.Select(item => item.Id).ToList();
 
-            var config = IoC.Get<Configuration>();
-            config.Favorite = favorite;
-            config.Blacklist = blacklist;
+            var setting = IoC.Get<Dmrsv3Configuration>().Setting;
+            setting.Favorite = favorite;
+            setting.Blacklist = blacklist;
 
             var message = new FavoriteMessage(favorite, blacklist);
             _eventAggregator.PublishOnUIThreadAsync(message);
@@ -104,7 +133,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                     MessageBoxImage.Error);
                 return;
             }
-            else if (FavoriteItems.Contains(SearchBox) || BlacklistItems.Contains(SearchBox))
+            else if (FavoriteItems.Any(item => item.Title.Equals(SearchBox)) || BlacklistItems.Any(item => item.Title.Equals(SearchBox)))
             {
                 MessageBox.Show("Already exists.",
                     "Favorite Error",
@@ -113,11 +142,13 @@ namespace DjmaxRandomSelectorV.ViewModels
                 return;
             }
 
-            FavoriteItems.Add(SearchBox);
+            Track track = _db.AllTrack.First(t => t.Title.Equals(SearchBox));
+            var item = new FavoriteItem(track);
+            FavoriteItems.Add(item);
 
             SearchBox = string.Empty;
         }
-        public void RemoveFromFavorite(string child) => FavoriteItems.Remove(child);
+        public void RemoveFromFavorite(string child) => FavoriteItems.Remove(FavoriteItems.First(item => item.Title.Equals(child)));
         #endregion
 
         #region Blacklist Item Adjustment
@@ -131,7 +162,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                     MessageBoxImage.Error);
                 return;
             }
-            else if (BlacklistItems.Contains(SearchBox) || BlacklistItems.Contains(SearchBox))
+            else if (BlacklistItems.Any(item => item.Title.Equals(SearchBox)) || BlacklistItems.Any(item => item.Title.Equals(SearchBox)))
             {
                 MessageBox.Show("Already exists.",
                     "Favorite Error",
@@ -140,11 +171,13 @@ namespace DjmaxRandomSelectorV.ViewModels
                 return;
             }
 
-            BlacklistItems.Add(SearchBox);
+            Track track = _db.AllTrack.First(t => t.Title.Equals(SearchBox));
+            var item = new FavoriteItem(track);
+            BlacklistItems.Add(item);
 
             SearchBox = string.Empty;
         }
-        public void RemoveFromBlacklist(string child) => BlacklistItems.Remove(child);
+        public void RemoveFromBlacklist(string child) => BlacklistItems.Remove(BlacklistItems.First(item => item.Title.Equals(child)));
         #endregion
     }
 }
