@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Shapes;
 using Caliburn.Micro;
 using DjmaxRandomSelectorV.Messages;
+using DjmaxRandomSelectorV.Models;
 using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV
@@ -24,7 +25,7 @@ namespace DjmaxRandomSelectorV
         private readonly IEventAggregator _eventAggregator;
 
         private readonly string[] _basicCategories;
-        private readonly (int Id, string[][] RequiredDlc)[] _linkDisc;
+        private readonly LinkDiscItem[] _linkDisc;
 
         public IReadOnlyList<Track> AllTrack { get; private set; }
         public IReadOnlyList<Track> Playable { get; private set; }
@@ -49,7 +50,8 @@ namespace DjmaxRandomSelectorV
         {
             using var reader = new StreamReader(AllTrackFilePath);
             string json = reader.ReadToEnd();
-            var db = JsonSerializer.Deserialize<List<VArchiveDBTrack>>(json);
+            var option = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+            var db = JsonSerializer.Deserialize<List<VArchiveDBTrack>>(json, option);
 
             AllTrack = db.ConvertAll(x => new Track()
             {

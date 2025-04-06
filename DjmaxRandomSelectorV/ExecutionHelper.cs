@@ -28,6 +28,7 @@ namespace DjmaxRandomSelectorV
         public ExecutionHelper(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
+            _eventAggregator.SubscribeOnUIThread(this);
         }
 
         public void Initialize(Func<bool> canExecute, Action execute, Dmrsv3Configuration config)

@@ -3,7 +3,9 @@ using DjmaxRandomSelectorV.ViewModels;
 using Dmrsv.RandomSelector;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Threading;
@@ -16,7 +18,8 @@ namespace DjmaxRandomSelectorV
     public class Bootstrapper : BootstrapperBase
     {
         private const string AppDataFilePath = @"DMRSV3_Data\appdata.json";
-        private readonly string _configFilePath;
+        private const string ConfigFilePath = @"DMRSV3_Data\Config.json";
+        private const string AppDataDownloadUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/DMRSV3_Data/appdata.json";
 
         private readonly SimpleContainer _container = new SimpleContainer();
         private readonly Dmrsv3AppData _appdata;
@@ -41,13 +44,23 @@ namespace DjmaxRandomSelectorV
             }
             catch
             {
-                // TODO: web download process
-                var result = MessageBox.Show("Failed to load appdata.json", "Notice", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                /*
+                string msg = "Failed to load appdata.json.\nWould you like to download new one?";
+                var result = MessageBox.Show(msg, "Notice", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                if (result == MessageBoxResult.Yes)
+                {
+                    using var client = new HttpClient();
+                    string appdata = client.GetStringAsync(AppDataDownloadUrl).Result;
+                    using var writer = new StreamWriter(AppDataFilePath);
+                    writer.Write(appdata);
+                    _appdata = _fileManager.Import<Dmrsv3AppData>(AppDataFilePath);
+                }
+                */
             }
 
             try
             {
-                _config = _fileManager.Import<Dmrsv3Configuration>(_configFilePath);
+                _config = _fileManager.Import<Dmrsv3Configuration>(ConfigFilePath);
             }
             catch
             {
@@ -83,20 +96,24 @@ namespace DjmaxRandomSelectorV
             try
             {
                 bool[] result = _updater.CheckUpdates();
-                try
+                // If AllTrack update is available
+                if (result[1])
                 {
-                    _db.RequestDB();
+                    try
+                    {
+                        _db.RequestDB();
+                    }
+                    catch
+                    {
+                        throw new Exception($"Failed to download lastest all track list (Version {_updater.AllTrackVersion})");
+                    }
+                    _ = Task.Run(() =>
+                    {
+                        MessageBox.Show($"All track list is updated to the version {_updater.AllTrackVersion}.",
+                            "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
+                    });
+                    _config.VersionInfo.AllTrackVersion = _updater.AllTrackVersion;
                 }
-                catch
-                {
-                    throw new Exception($"Failed to download lastest all track list (Version {_updater.AllTrackVersion})");
-                }
-                _ = Task.Run(() =>
-                {
-                    MessageBox.Show($"All track list is updated to the version {_updater.AllTrackVersion}.",
-                        "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
-                });
-                _config.VersionInfo.AllTrackVersion = _updater.AllTrackVersion;
             }
             catch (Exception ex)
             {
@@ -118,6 +135,7 @@ namespace DjmaxRandomSelectorV
                 window.Left = position[1];
             }
             // Set random selector
+            _db.ImportDB();
             _rs.Initialize(_config);
             _executor.Initialize(_rs.CanStart, _rs.Start, _config);
             _executor.RegisterHandle(new WindowInteropHelper(window).Handle);
@@ -132,7 +150,7 @@ namespace DjmaxRandomSelectorV
             {
                 setting.RecentPlayed = historyItems;
             }
-            _fileManager.Export(_config, _configFilePath);
+            _fileManager.Export(_config, ConfigFilePath);
         }
 
         protected override void Configure()

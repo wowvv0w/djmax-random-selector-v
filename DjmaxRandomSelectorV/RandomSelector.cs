@@ -48,6 +48,7 @@ namespace DjmaxRandomSelectorV
             _history = new History<int>(setting.RecentPlayed, filterOption.RecentsCount);
             _selector = new SelectorWithHistory(_history);
             _locator = new Locator();
+            _db.SetPlayable(setting.OwnedDlcs);
         }
 
         public bool CanStart()

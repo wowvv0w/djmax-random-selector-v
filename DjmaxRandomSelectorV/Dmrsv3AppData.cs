@@ -12,7 +12,7 @@ namespace DjmaxRandomSelectorV
         public string[] CategoryType { get; set; }
         public string[] BasicCategories { get; set; }
         public Category[] Categories { get; set; }
-        public (int Id, string[][] RequiredDlc)[] LinkDisc { get; set; }
+        public LinkDiscItem[] LinkDisc { get; set; }
         public string GameWindowTitle { get; set; }
     }
 }

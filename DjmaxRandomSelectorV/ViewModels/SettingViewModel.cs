@@ -61,14 +61,14 @@ namespace DjmaxRandomSelectorV.ViewModels
             };
 
             _categories = IoC.Get<CategoryContainer>().GetCategories();
-            _categories.RemoveAll(x => string.IsNullOrEmpty(x.Code));
+            _categories.RemoveAll(x => string.IsNullOrEmpty(x.SteamId));
             var updaters = _categories.ConvertAll(x => new ListUpdater(x.Name, x.Id, _message.OwnedDlcs));
             CategoryUpdaters = new BindableCollection<ListUpdater>(updaters);
         }
 
         public void DetectDlcs()
         {
-            Dictionary<string, string> dlcCodes = _categories.ToDictionary(x => x.Code, x => x.Id);
+            Dictionary<string, string> dlcCodes = _categories.ToDictionary(x => x.SteamId, x => x.Id);
 
             var ownedDlcs = _message.OwnedDlcs;
             ownedDlcs.Clear();
