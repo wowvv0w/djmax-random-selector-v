@@ -3,9 +3,9 @@ using DjmaxRandomSelectorV.ViewModels;
 using Dmrsv.RandomSelector;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,6 +26,7 @@ namespace DjmaxRandomSelectorV
         private readonly IFileManager _fileManager;
         private readonly CategoryContainer _categoryContainer = new CategoryContainer();
         private readonly UpdateManager _updater;
+        private readonly ExecutionHelper _executor;
 
         private Mutex _mutex;
 
@@ -59,9 +60,10 @@ namespace DjmaxRandomSelectorV
 
             var eventAggregator = IoC.Get<IEventAggregator>();
             _rs = new RandomSelector(eventAggregator);
+            _executor = new ExecutionHelper(eventAggregator);
 
             Version assemblyVersion = Assembly.GetEntryAssembly().GetName().Version;
-            _updater = new UpdateManager(_appdata, _config, assemblyVersion);
+            _updater = new UpdateManager(_config, assemblyVersion);
             _container.Instance(_updater);
         }
 
@@ -117,8 +119,9 @@ namespace DjmaxRandomSelectorV
             }
             // Set random selector
             _rs.Initialize(_config);
-            _rs.RegisterHandle(new WindowInteropHelper(window).Handle);
-            _rs.SetHotkey(0x0000, 118);
+            _executor.Initialize(_rs.CanStart, _rs.Start, _config);
+            _executor.RegisterHandle(new WindowInteropHelper(window).Handle);
+            _executor.SetHotkey(0x0000, 118);
         }
 
         protected override void OnExit(object sender, EventArgs e)
