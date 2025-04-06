@@ -27,7 +27,6 @@ namespace DjmaxRandomSelectorV
         private Locator _locator;
 
         private readonly WindowTitleHelper _windowTitleHelper;
-        private readonly ExecutionHelper _executionHelper;
 
         public IHistory<int> History => _history;
 
@@ -38,7 +37,6 @@ namespace DjmaxRandomSelectorV
             _db = IoC.Get<TrackDB>();
             _isRunning = false;
             _windowTitleHelper = new WindowTitleHelper();
-            _executionHelper = new ExecutionHelper(CanStart, Start);
         }
 
         public void Initialize(Dmrsv3Configuration config)
@@ -50,7 +48,6 @@ namespace DjmaxRandomSelectorV
             _history = new History<int>(setting.RecentPlayed, filterOption.RecentsCount);
             _selector = new SelectorWithHistory(_history);
             _locator = new Locator();
-            _executionHelper.IgnoreCanExecute = filterOption.InputMethod == InputMethod.NotInput;
         }
 
         public bool CanStart()
@@ -92,16 +89,6 @@ namespace DjmaxRandomSelectorV
             _history.Clear();
         }
 
-        public void RegisterHandle(IntPtr handle)
-        {
-            HwndSource source = HwndSource.FromHwnd(handle);
-            _executionHelper.Register(handle, 9000);
-            source.AddHook(_executionHelper.HwndHook);
-        }
-        public void SetHotkey(uint fsModifiers, uint vk)
-        {
-            _executionHelper.SetHotkey(fsModifiers, vk);
-        }
 
         public Task HandleAsync(FilterMessage message, CancellationToken cancellationToken)
         {
@@ -116,7 +103,6 @@ namespace DjmaxRandomSelectorV
             }
             _locator.SetStartsAutomatically(message.MusicForm, message.InputMethod);
             _locator.SetInvokesInput(message.InputMethod);
-            _executionHelper.IgnoreCanExecute = message.InputMethod == InputMethod.NotInput;
             _picker.SetPickMethod(message.MusicForm, message.LevelPreference);
             return Task.CompletedTask;
         }
