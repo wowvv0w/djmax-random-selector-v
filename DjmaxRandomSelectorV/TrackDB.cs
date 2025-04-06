@@ -17,11 +17,12 @@ namespace DjmaxRandomSelectorV
 {
     public class TrackDB
     {
+        private const string AllTrackDownloadUrl = "https://v-archive.net/db/songs.json";
+        private const string AllTrackDownloadUrlAlt = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/DMRSV3_Data/AllTrackList.json";
+        private const string AllTrackFilePath = @"DMRSV3_Data\AllTrackList.json";
+
         private readonly IEventAggregator _eventAggregator;
 
-        private readonly string _allTrackDownloadUrl;
-        private readonly string _allTrackDownloadUrlAlt;
-        private readonly string _allTrackFilePath;
         private readonly string[] _basicCategories;
         private readonly (int Id, string[][] RequiredDlc)[] _linkDisc;
 
@@ -29,10 +30,7 @@ namespace DjmaxRandomSelectorV
         public IReadOnlyList<Track> Playable { get; private set; }
         
         public TrackDB(Dmrsv3AppData appdata)
-        {   
-            _allTrackDownloadUrl = appdata.AllTrackDownloadUrl;
-            _allTrackDownloadUrlAlt = appdata.AllTrackDownloadUrlAlt;
-            _allTrackFilePath = $@"{appdata.DataFolderName}\{appdata.AllTrackFileName}";
+        {
             _basicCategories = appdata.BasicCategories;
             _linkDisc = appdata.LinkDisc;
         }
@@ -40,16 +38,16 @@ namespace DjmaxRandomSelectorV
         public void RequestDB(bool useAltDB = false)
         {
             using var client = new HttpClient();
-            string url = useAltDB ? _allTrackDownloadUrlAlt : _allTrackDownloadUrl;
+            string url = useAltDB ? AllTrackDownloadUrlAlt : AllTrackDownloadUrl;
             string result = client.GetStringAsync(url).Result;
 
-            using var writer = new StreamWriter(_allTrackFilePath);
+            using var writer = new StreamWriter(AllTrackFilePath);
             writer.Write(result);
         }
 
         public void ImportDB()
         {
-            using var reader = new StreamReader(_allTrackFilePath);
+            using var reader = new StreamReader(AllTrackFilePath);
             string json = reader.ReadToEnd();
             var db = JsonSerializer.Deserialize<List<VArchiveDBTrack>>(json);
 

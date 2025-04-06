@@ -17,7 +17,8 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class AdvancedFilterViewModel : Screen, IHandle<VArchiveMessage>
     {
-        private const string DefaultPath = @"Data\CurrentPlaylist.json";
+        private const string DefaultPath = @"DMRSV3_Data\CurrentFilter.json";
+        private const string PresetPath = @"DMRSV3_Data\Preset\Playlist";
 
         private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
@@ -218,7 +219,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void SaveItems()
         {
             string app = AppDomain.CurrentDomain.BaseDirectory;
-            string path = Path.Combine(app, @"Data\Playlist");
+            string path = Path.Combine(app, PresetPath);
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             var dialog = new SaveFileDialog()
@@ -244,7 +245,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void LoadItems()
         {
             string app = AppDomain.CurrentDomain.BaseDirectory;
-            string path = Path.Combine(app, @"Data\Playlist");
+            string path = Path.Combine(app, PresetPath);
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             var dialog = new OpenFileDialog()
@@ -279,7 +280,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void ConcatenateItems()
         {
             string app = AppDomain.CurrentDomain.BaseDirectory;
-            string path = Path.Combine(app, @"Data\Playlist");
+            string path = Path.Combine(app, PresetPath);
             var dialog = new OpenFileDialog()
             {
                 InitialDirectory = path,

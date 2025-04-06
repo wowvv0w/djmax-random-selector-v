@@ -1,13 +1,4 @@
 ﻿{
-    "DataFolderName": "DMRSV3_Data",
-    "OldDataFolderName": "Data",
-    "ConfigFileName": "Config.json",
-    "AllTrackFileName": "AllTrackList.json",
-    "AllTrackDownloadUrl": "https://v-archive.net/db/songs.json",
-    "AllTrackDownloadUrlAlt": "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/DMRSV3_Data/AllTrackList.json",
-    "CurrentFilterFileName": "CurrentFilter.json",
-    "VersionCheckUrl": "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version3.json",
-    "HomepageUrl": "https://github.com/wowvv0w/djmax-random-selector-v",
     "CategoryType": [
         "Regular",
         "CollabVariety",

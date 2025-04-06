@@ -15,7 +15,9 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class BasicFilterViewModel : Screen, IHandle<FavoriteMessage>
     {
-        private const string DefaultPath = @"Data\CurrentFilter.json";
+        private const string DefaultPath = @"DMRSV3_Data\CurrentFilter.json";
+        private const string PresetPath = @"DMRSV3_Data\Preset\Filter";
+
         private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
         private readonly IFileManager _fileManager;
@@ -205,7 +207,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void SavePreset()
         {
             string app = AppDomain.CurrentDomain.BaseDirectory;
-            string path = Path.Combine(app, @"Data\Preset");
+            string path = Path.Combine(app, PresetPath);
             var dialog = new SaveFileDialog()
             {
                 InitialDirectory = path,
@@ -223,7 +225,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void LoadPreset()
         {
             string app = AppDomain.CurrentDomain.BaseDirectory;
-            string path = Path.Combine(app, @"Data\Preset");
+            string path = Path.Combine(app, PresetPath);
             var dialog = new OpenFileDialog()
             {
                 InitialDirectory = path,

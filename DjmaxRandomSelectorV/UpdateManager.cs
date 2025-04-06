@@ -5,14 +5,14 @@ namespace DjmaxRandomSelectorV
 {
     public class UpdateManager
     {
-        private readonly string _versionCheckUrl;
+        private const string VersionCheckUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version3.json";
+        
         public Version CurrentAppVersion { get; private set; }
         public Version LatestAppVersion { get; private set; }
         public int AllTrackVersion { get; private set; }
 
-        public UpdateManager(Dmrsv3AppData appdata, Dmrsv3Configuration config, Version appVer)
+        public UpdateManager(Dmrsv3Configuration config, Version appVer)
         {
-            _versionCheckUrl = appdata.VersionCheckUrl;
             CurrentAppVersion = appVer;
             LatestAppVersion = appVer;
             AllTrackVersion = config.VersionInfo.AllTrackVersion;
@@ -25,7 +25,7 @@ namespace DjmaxRandomSelectorV
             string result;
             try
             {
-                result = client.GetStringAsync(_versionCheckUrl).Result;
+                result = client.GetStringAsync(VersionCheckUrl).Result;
             }
             catch
             {
