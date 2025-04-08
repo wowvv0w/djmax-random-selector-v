@@ -5,7 +5,7 @@ namespace DjmaxRandomSelectorV
 {
     public class UpdateManager
     {
-        private const string VersionCheckUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version3.json";
+        private const string VersionCheckUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/refs/heads/feature-new-db/DjmaxRandomSelectorV/Version3.txt";
         
         public Version CurrentAppVersion { get; private set; }
         public Version LatestAppVersion { get; private set; }
@@ -32,7 +32,7 @@ namespace DjmaxRandomSelectorV
                 throw new Exception("Failed to check lastest versions.");
             }
 
-            string[] versions = result.Split(',');
+            string[] versions = result.Split('\n');
             LatestAppVersion = new Version(versions[0]);
             int latestAllTrackVersion = int.Parse(versions[1]);
             bool allTrackUpdateAvailable = AllTrackVersion != latestAllTrackVersion;
