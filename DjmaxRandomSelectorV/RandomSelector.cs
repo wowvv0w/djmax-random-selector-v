@@ -48,6 +48,10 @@ namespace DjmaxRandomSelectorV
             _history = new History<int>(setting.RecentPlayed, filterOption.RecentsCount);
             _selector = new SelectorWithHistory(_history);
             _locator = new Locator();
+            _locator.SetInputInterval(setting.InputInterval);
+            _locator.SetStartsAutomatically(filterOption.MusicForm, filterOption.InputMethod);
+            _locator.SetIsFreeSelect(filterOption.MusicForm);
+            _locator.SetInvokesInput(filterOption.InputMethod);
             _db.SetPlayable(setting.OwnedDlcs);
         }
 
@@ -103,6 +107,7 @@ namespace DjmaxRandomSelectorV
                 _history.Capacity = message.RecentsCount;
             }
             _locator.SetStartsAutomatically(message.MusicForm, message.InputMethod);
+            _locator.SetIsFreeSelect(message.MusicForm);
             _locator.SetInvokesInput(message.InputMethod);
             _picker.SetPickMethod(message.MusicForm, message.LevelPreference);
             return Task.CompletedTask;
