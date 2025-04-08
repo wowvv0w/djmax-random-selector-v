@@ -27,7 +27,7 @@ namespace DjmaxRandomSelectorV
         private readonly RandomSelector _rs;
         private readonly TrackDB _db;
         private readonly IFileManager _fileManager;
-        private readonly CategoryContainer _categoryContainer = new CategoryContainer();
+        private readonly CategoryContainer _categoryContainer;
         private readonly UpdateManager _updater;
         private readonly ExecutionHelper _executor;
 
@@ -70,6 +70,9 @@ namespace DjmaxRandomSelectorV
             
             _db = new TrackDB(_appdata);
             _container.Instance(_db);
+
+            _categoryContainer = new CategoryContainer(_appdata);
+            _container.Instance(_categoryContainer);
 
             var eventAggregator = IoC.Get<IEventAggregator>();
             _rs = new RandomSelector(eventAggregator);
@@ -156,7 +159,6 @@ namespace DjmaxRandomSelectorV
         protected override void Configure()
         {
             _container.Instance(_container);
-            _container.Instance(_categoryContainer);
 
             _container
                 .Singleton<IWindowManager, WindowManager>()

@@ -163,11 +163,10 @@ namespace DjmaxRandomSelectorV.ViewModels
             var buttons = new List<string>() { "4B", "5B", "6B", "8B" }.ConvertAll(x => new ListUpdater(x, x, _filter.ButtonTunes));
             ButtonTunesUpdaters = new BindableCollection<ListUpdater>(buttons);
 
-            int boundary = _categories.FindIndex(x => x.Name == "COLLABORATION");
-            int collabCount = _categories.Count - boundary;
-            var updaters = _categories.ConvertAll(x => new ListUpdater(x.Name, x.Id, _filter.Categories));
-            RegularCategories = new BindableCollection<ListUpdater>(updaters.GetRange(0, boundary));
-            CollabCategories = new BindableCollection<ListUpdater>(updaters.GetRange(boundary, collabCount));
+            var updatersRegular = _categories.Where(cat => cat.Type == 0).Select(cat => new ListUpdater(cat.Name, cat.Id, _filter.Categories));
+            var updatersNotRegular = _categories.Where(cat => cat.Type != 0).Select(cat => new ListUpdater(cat.Name, cat.Id, _filter.Categories));
+            RegularCategories = new BindableCollection<ListUpdater>(updatersRegular);
+            CollabCategories = new BindableCollection<ListUpdater>(updatersNotRegular);
 
             LevelIndicators = new BindableCollection<LevelIndicator>();
             ScLevelIndicators = new BindableCollection<LevelIndicator>();
