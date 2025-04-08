@@ -57,8 +57,9 @@ namespace DjmaxRandomSelectorV.ViewModels
             PlaylistItems = new BindableCollection<PlaylistItem>();
             try
             {
-                var playlist = _fileManager.Import<Playlist>(DefaultPath);
-                AddToFilterAndPlaylist(playlist.Items);
+                // TODO: ddaembbang
+                var playlist = _fileManager.Import<AdvancedFilter>(DefaultPath);
+                AddToFilterAndPlaylist(playlist.PatternList.Select(x => x.Id).ToArray());
             }
             catch
             {
@@ -103,6 +104,10 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private void AddToFilterAndPlaylist(int[] items)
         {
+            if (items is null)
+            {
+                return;
+            }
             foreach (int item in items)
             {
                 Track track = _allTrack.FirstOrDefault(t => t.EqualsTrackId(item));
@@ -351,6 +356,8 @@ namespace DjmaxRandomSelectorV.ViewModels
         private void UpdateResult()
         {
             SearchResult.Clear();
+            // TODO: This can't recognize the songs that have same title
+            _selectedTrack = _allTrack.FirstOrDefault(t => t.Title == SearchBox, null);
             var query = from t in _allTrack
                         where t.Title.ToLower() == (SearchBox?.ToLower() ?? string.Empty)
                         select t.GetPatterns() into patternList

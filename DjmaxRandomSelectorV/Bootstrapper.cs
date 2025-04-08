@@ -126,6 +126,7 @@ namespace DjmaxRandomSelectorV
                         "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 });
             }
+            _db.ImportDB();
             // Bind views and viewmodels
             await DisplayRootViewForAsync(typeof(ShellViewModel));
             // Set window property
@@ -138,7 +139,6 @@ namespace DjmaxRandomSelectorV
                 window.Left = position[1];
             }
             // Set random selector
-            _db.ImportDB();
             _rs.Initialize(_config);
             _executor.Initialize(_rs.CanStart, _rs.Start, _config);
             _executor.RegisterHandle(new WindowInteropHelper(window).Handle);

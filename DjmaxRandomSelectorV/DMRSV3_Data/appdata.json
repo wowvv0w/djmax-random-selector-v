@@ -6,7 +6,7 @@
         "PLI"
     ],
     "BasicCategories": [
-        "RP",
+        "R",
         "P1",
         "P2",
         "GG"
@@ -14,7 +14,7 @@
     "Categories": [
         {
             "Name": "RESPECT",
-            "Id": "RP",
+            "Id": "R",
             "SteamId": null,
             "Type": 0
         },

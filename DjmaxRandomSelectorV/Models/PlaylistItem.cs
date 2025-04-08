@@ -14,6 +14,8 @@ namespace DjmaxRandomSelectorV.Models
         public string Composer { get; init; }
         public string Category { get; init; }
         public string Style { get; init; }
+        public string ButtonTunes => Style[..2];
+        public string Difficulty => Style[2..];
         public string Level { get; init; }
     }
 }

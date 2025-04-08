@@ -33,6 +33,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private void AddItem(Pattern pattern)
         {
             _number++;
+            // TODO: Error when the song in the playlist, but not in playable, is selected
             string title = _db.Playable.First(track => track.Id == pattern.TrackId).Title;
             string style = _isFreeSelect ? "FREE" : pattern.Style;
             string level = _isFreeSelect ? "-" : pattern.Level.ToString();
