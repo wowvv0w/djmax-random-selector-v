@@ -2,10 +2,16 @@
 {
     public record Track
     {
-        public int Id { get; init; } = -1;
-        public string Title { get; init; } = string.Empty;
-        public string Composer { get; init; } = string.Empty;
-        public string Category { get; init; } = string.Empty;
+        public MusicInfo Info { get; init; } = new();
+        public Pattern[] Patterns { get; init; } = Array.Empty<Pattern>();
+
+        public int Id => Info.Id;
+        public string Title => Info.Title;
+        public string Composer => Info.Composer;
+        public string Category => Info.Category;
+
+
+        // Obsolete
         public Dictionary<string, int> PatternLevelTable { get; init; } = new();
 
         public IEnumerable<Pattern> GetPatterns()
