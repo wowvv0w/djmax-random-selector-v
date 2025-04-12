@@ -59,7 +59,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 // TODO: ddaembbang
                 var playlist = _fileManager.Import<AdvancedFilter>(DefaultPath);
-                AddToFilterAndPlaylist(playlist.PatternList.Select(x => x.Id).ToArray());
+                AddToFilterAndPlaylist(playlist.PatternList.Select(x => x.PatternId).ToArray());
             }
             catch
             {
@@ -93,7 +93,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _filter.PatternList.Add(pattern);
             PlaylistItems.Add(new PlaylistItem
             {
-                PatternId = pattern.Id,
+                PatternId = pattern.PatternId,
                 Title = _selectedTrack.Title,
                 Composer = _selectedTrack.Composer,
                 Category = _selectedTrack.Category,
@@ -110,10 +110,14 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             foreach (int item in items)
             {
-                Track track = _allTrack.FirstOrDefault(t => t.EqualsTrackId(item));
+                Track track = _allTrack.FirstOrDefault(t => t.Id == item/100);
                 if (track is not null)
                 {
-                    var pattern = track.GetPatternFromId(item);
+                    var pattern = track.Patterns.FirstOrDefault(p => p.PatternId == item);
+                    if (pattern is null)
+                    {
+                        continue;
+                    }
                     _filter.PatternList.Add(pattern);
                     PlaylistItems.Add(new PlaylistItem
                     {
@@ -241,7 +245,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 string fileName = dialog.FileName;
                 var playlist = new Playlist()
                 {
-                    Items = _filter.PatternList.Select(p => p.Id).ToArray()
+                    Items = _filter.PatternList.Select(p => p.PatternId).ToArray()
                 };
                 _fileManager.Export(playlist, fileName);
             }
@@ -360,7 +364,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _selectedTrack = _allTrack.FirstOrDefault(t => t.Title == SearchBox, null);
             var query = from t in _allTrack
                         where t.Title.ToLower() == (SearchBox?.ToLower() ?? string.Empty)
-                        select t.GetPatterns() into patternList
+                        select t.Patterns into patternList
                         from p in patternList
                         select p;
             SearchResult.AddRange(query);

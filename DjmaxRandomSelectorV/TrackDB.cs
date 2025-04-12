@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Shapes;
 using Caliburn.Micro;
 using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.Models;
 using Dmrsv.RandomSelector;
+using Dmrsv.RandomSelector.Enums;
 
 namespace DjmaxRandomSelectorV
 {
@@ -53,18 +49,29 @@ namespace DjmaxRandomSelectorV
             var option = new JsonSerializerOptions(JsonSerializerDefaults.Web);
             var db = JsonSerializer.Deserialize<List<VArchiveDBTrack>>(json, option);
 
-            AllTrack = db.ConvertAll(x => new Track()
+            AllTrack = db.ConvertAll(x =>
             {
-                Id = x.Title,
-                Title = x.Name,
-                Composer = x.Composer,
-                Category = x.DlcCode,
-                PatternLevelTable = x.Patterns
-                                     .SelectMany(btList => btList.Value,
-                                                 (btList, dfList) => new { style = $"{btList.Key}{dfList.Key}", pattern = dfList.Value })
-                                     .Where(table => table.pattern is not null)
-                                     .Select(table => new KeyValuePair<string, int>(table.style, table.pattern.Level))
-                                     .ToDictionary(pair => pair.Key, pair => pair.Value)
+                var info = new MusicInfo()
+                {
+                    Id = x.Title,
+                    Title = x.Name,
+                    Composer = x.Composer,
+                    Category = x.DlcCode
+                };
+                return new Track()
+                {
+                    Info = info,
+                    Patterns = x.Patterns
+                                .SelectMany(bt => bt.Value, (bt, df) => new Pattern()
+                                {
+                                    Info = info,
+                                    Button = bt.Key.AsButtonTunes(),
+                                    Difficulty = df.Key.AsDifficulty(),
+                                    Level = df.Value.Level
+                                })
+                                .OrderBy(p => p.PatternId)
+                                .ToArray()
+                };
             }).AsReadOnly();
         }
 

@@ -28,14 +28,14 @@
                 (MusicForm.Default, LevelPreference.Lowest) => (patternList) =>
                 {
                     return from p in patternList
-                           group p by new { p.TrackId, p.ButtonTunes } into g
+                           group p by new { p.TrackId, p.Button } into g
                            select g.First();
                 }
                 ,
                 (MusicForm.Default, LevelPreference.Highest) => (patternList) =>
                 {
                     return from p in patternList
-                           group p by new { p.TrackId, p.ButtonTunes } into g
+                           group p by new { p.TrackId, p.Button } into g
                            select g.Last();
                 }
                 ,

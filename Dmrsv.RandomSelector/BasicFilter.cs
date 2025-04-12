@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Text.Json.Serialization;
+using Dmrsv.RandomSelector.Enums;
 
 namespace Dmrsv.RandomSelector
 {
@@ -119,9 +120,9 @@ namespace Dmrsv.RandomSelector
             var musicList = from t in trackList
                             where Categories.Contains(t.Category) || (IncludesFavorite && Favorite.Contains(t.Id))
                             where !Blacklist.Contains(t.Id)
-                            from p in t.GetPatterns()
+                            from p in t.Patterns
                             where styles.Contains(p.Style)
-                            let levels = p.Difficulty == "SC" ? ScLevels : Levels
+                            let levels = p.Difficulty == Difficulty.SC ? ScLevels : Levels
                             where levels[0] <= p.Level && p.Level <= levels[1]
                             select p;
             IsUpdated = false;
