@@ -1,14 +1,18 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using Dmrsv.RandomSelector.Enums;
 
 namespace Dmrsv.RandomSelector
 {
     public class Locator
     {
-        public bool StartsAutomatically { get; private set; }
-        public int InputInterval { get; private set; }
-        public bool InvokesInput { get; private set; }
-        public bool IsFreeSelect { get; private set; }
+        public int InputInterval { get; set; } = 30;
+        public bool LocatesStyle { get; set; } = true;
+        public bool CanLocate { get; set; } = true;
+        public bool PressesStart { get; set; } = false;
+
+        private List<LocationInfo?> _locations;
 
         private readonly Dictionary<string, ushort> _keyMap = new()
         {
@@ -27,58 +31,100 @@ namespace Dmrsv.RandomSelector
 
         public Locator()
         {
-            StartsAutomatically = false;
-            InputInterval = 30;
-            InvokesInput = true;
+            _locations = new List<LocationInfo?>();
             _keyMap.Add("left", (ushort)MapVirtualKey(0x25, 0));
             _keyMap.Add("up", (ushort)MapVirtualKey(0x26, 0));
             _keyMap.Add("right", (ushort)MapVirtualKey(0x27, 0));
             _keyMap.Add("down", (ushort)MapVirtualKey(0x28, 0));
         }
 
-        public void SetStartsAutomatically(MusicForm form, InputMethod method)
+        public void MakeLocations(IEnumerable<Track> trackList)
         {
-            StartsAutomatically = form == MusicForm.Default && method == InputMethod.WithAutoStart;
-        }
+            var getGroup = (Track t) =>
+            {
+                char initial = char.ToLower(t.Title[0]);
+                return Regex.IsMatch(initial.ToString(), "[a-z]", RegexOptions.IgnoreCase) ? initial : '#';
+            };
+            var groupByInitial = trackList.Where(t => t.IsPlayable)
+                                          .OrderBy(t => t.Title, StringComparer.OrdinalIgnoreCase)
+                                          .GroupBy(t => getGroup(t))
+                                          .ToDictionary(g => g.Key, g => g.ToList());
+            var getIndex = (Track t) =>
+            {
+                char initial = char.ToLower(getGroup(t));
+                int index = groupByInitial[initial].IndexOf(t);
+                int count = groupByInitial[initial].Count();
+                return index <= (count - 1) / 2 || "wxyzWXYZ".Contains(initial) ? index : index - count;
+            };
 
-        public void SetInputInterval(int inputInterval)
-        {
-            InputInterval = inputInterval;
-        }
-
-        public void SetInvokesInput(InputMethod method)
-        {
-            InvokesInput = method != InputMethod.NotInput;
-        }
-
-        public void SetIsFreeSelect(MusicForm form)
-        {
-            IsFreeSelect = form == MusicForm.Free;
+            _locations = trackList.Select(track => 
+            {
+                if (!track.IsPlayable)
+                {
+                    return null;
+                }
+                return new LocationInfo()
+                {
+                    TrackId = track.Id,
+                    Group = getGroup(track),
+                    Index = getIndex(track),
+                    DifficultyOrder = track.Patterns
+                                           .GroupBy(p => p.Button)
+                                           .SelectMany(g => g.Select((p, order) => new { p.Style, order }))
+                                           .ToDictionary(o => o.Style, o => o.order)
+                };
+            }).ToList();
         }
         
-        public void Locate(Pattern pattern, IEnumerable<Track> trackList)
+        public void Locate(Pattern pattern)
         {
-            if (!InvokesInput)
+            if (!CanLocate)
             {
                 return;
             }
-
-            LocationInfo info = FindLocation(pattern, trackList);
-
+            LocationInfo? loc = _locations[pattern.TrackId];
+            if (loc is null)
+            {
+                return;
+            }
             ResetMusicCursor();
-            if (!string.IsNullOrEmpty(info.Initial))
+
+            // input initial letter of title
+            char group = loc.Group;
+            if (loc.Index < 0)
             {
-                Input(_keyMap[info.Initial]);
+                if (group == '#')
+                {
+                    group = 'a';
+                }
+                else if (group == 'z')
+                {
+                    group = '#';
+                }
+                else
+                {
+                    group = (char)(group + 1);
+                }
             }
-            RepeatInputs(info.VerticalDistance, _keyMap[info.VerticalDirection], true);
-            if (!IsFreeSelect)
+            if (group != '#')
             {
-                SelectButton(info.Button);
-                RepeatInputs(info.DifficultyOrder, _keyMap["right"], true);
+                Input(_keyMap[group.ToString()]);
             }
-            if (StartsAutomatically)
+
+            // locate to track
+            string arrow = loc.Index < 0 ? "up" : "down";
+            int distance = Math.Abs(loc.Index);
+            RepeatInputs(distance, _keyMap[arrow], true);
+
+            int difficultyOrder = loc.DifficultyOrder[pattern.Style];
+            if (LocatesStyle)
             {
-                int startDelay = 800 - InputInterval * (info.DifficultyOrder + 1);
+                SelectButton(pattern.Button.AsString()[0]);
+                RepeatInputs(difficultyOrder, _keyMap["right"], true);
+            }
+            if (PressesStart)
+            {
+                int startDelay = 800 - InputInterval * (difficultyOrder + 1);
                 startDelay = startDelay < 0 ? 0 : startDelay;
                 Thread.Sleep(startDelay);
                 Input(_keyMap["f5"]);
@@ -134,63 +180,6 @@ namespace Dmrsv.RandomSelector
             KeyDown(scancode);
             KeyUp(scancode);
             KeyUp(ctrl);
-        }
-
-        private record LocationInfo
-        {
-            public string Initial { get; init; } = default!;
-            public string VerticalDirection { get; init; } = default!;
-            public int VerticalDistance { get; init; }
-            public char Button { get; init; }
-            public int DifficultyOrder { get; init; }
-        }
-
-        private LocationInfo FindLocation(Pattern target, IEnumerable<Track> list)
-        {
-            Track targetTrack = list.First(track => track.Id == target.TrackId);
-            string initial = targetTrack.Title[..1];
-            bool isAlphabet = Regex.IsMatch(initial, "[a-z]", RegexOptions.IgnoreCase);
-
-            var sameInitials = (isAlphabet
-                             ? list.Where(x => string.Compare(x.Title[..1], initial, true) == 0)
-                             : list.Where(x => Regex.IsMatch(x.Title[..1], "[^a-z]", RegexOptions.IgnoreCase))
-                             ).ToList();
-
-            int index = sameInitials.FindIndex(x => x.Title == targetTrack.Title);
-            int count = sameInitials.Count;
-            bool isDirectionDown = index <= Math.Ceiling((double)count / 2) || "wxyzWXYZ".Contains(initial);
-            int distance;
-            if (isDirectionDown)
-            {
-                initial = isAlphabet ? initial : string.Empty;
-                distance = index;
-            }
-            else
-            {
-                char parsedInitial = char.Parse(initial);
-                initial = isAlphabet ? ((char)(parsedInitial + 1)).ToString() : "a";
-                distance = count - index;
-            }
-
-            char button = '\0';
-            int order = -1;
-            if (!IsFreeSelect)
-            {
-                button = target.ButtonTunes[0];
-                var difficulties = targetTrack.PatternLevelTable.Where(x => x.Key[0] == button)
-                                   .Where(x => x.Value != 0).ToList();
-                order = difficulties.FindIndex(p => p.Key[2..4] == target.Difficulty);
-            }
-
-            var result = new LocationInfo()
-            {
-                Initial = initial.ToLower(),
-                VerticalDirection = isDirectionDown ? "down" : "up",
-                VerticalDistance = distance,
-                Button = button,
-                DifficultyOrder = order,
-            };
-            return result;
         }
 
         private bool SendKeyDown(ushort ScanCode, bool isArrowKey = false)

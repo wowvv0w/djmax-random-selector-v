@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using Caliburn.Micro;
-using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.Models;
 using Dmrsv.RandomSelector;
 using Dmrsv.RandomSelector.Enums;
@@ -24,7 +23,8 @@ namespace DjmaxRandomSelectorV
         private readonly LinkDiscItem[] _linkDisc;
 
         public IReadOnlyList<Track> AllTrack { get; private set; }
-        public IReadOnlyList<Track> Playable { get; private set; }
+
+        public IEnumerable<Track> Playable => AllTrack.Where(t => t.IsPlayable);
         
         public TrackDB(Dmrsv3AppData appdata)
         {
@@ -75,16 +75,15 @@ namespace DjmaxRandomSelectorV
             }).AsReadOnly();
         }
 
-        public void SetPlayable(List<string> ownedDlcs)
+        public void SetPlayable(IEnumerable<string> ownedDlcs)
         {
             var categories = ownedDlcs.Concat(_basicCategories);
             var exclusions = _linkDisc.Where(x => !x.RequiredDlc.Any(dlcs => dlcs.All(dlc => ownedDlcs.Contains(dlc))))
                                       .Select(x => x.Id);
-            var playable = from track in AllTrack
-                           where categories.Contains(track.Category)
-                           where !exclusions.Contains(track.Id)
-                           select track;
-            Playable = playable.ToList().AsReadOnly();
+            AllTrack = AllTrack
+                .Select(track => track with { IsPlayable = categories.Contains(track.Category) && !exclusions.Contains(track.Id) })
+                .ToList()
+                .AsReadOnly();
         }
 
         public record VArchiveDBTrack

@@ -48,11 +48,12 @@ namespace DjmaxRandomSelectorV
             _history = new History<int>(setting.RecentPlayed, filterOption.RecentsCount);
             _selector = new SelectorWithHistory(_history);
             _locator = new Locator();
-            _locator.SetInputInterval(setting.InputInterval);
-            _locator.SetStartsAutomatically(filterOption.MusicForm, filterOption.InputMethod);
-            _locator.SetIsFreeSelect(filterOption.MusicForm);
-            _locator.SetInvokesInput(filterOption.InputMethod);
-            _db.SetPlayable(setting.OwnedDlcs);
+            _locator.MakeLocations(_db.AllTrack);
+            SetLocatorProperties(new FilterOptionMessage(
+                filterOption.RecentsCount,
+                filterOption.MusicForm,
+                filterOption.InputMethod,
+                filterOption.LevelPreference));
         }
 
         public bool CanStart()
@@ -76,15 +77,13 @@ namespace DjmaxRandomSelectorV
                 UpdateCandidates();
             }
             Pattern selected = _selector.Select(_candidates);
-            if (selected is not null)
-            {
-                _locator.Locate(selected, _db.Playable);
-                _eventAggregator.PublishOnUIThreadAsync(new PatternMessage(selected));
-            }
-            else
+            if (selected is null)
             {
                 ShowErrorMessageBox("There is no music that meets the filter conditions.");
+                return;
             }
+            _locator.Locate(selected);
+            _eventAggregator.PublishOnUIThreadAsync(new PatternMessage(selected));
             _isRunning = false;
         }
 
@@ -92,6 +91,13 @@ namespace DjmaxRandomSelectorV
         {
             _candidates = _picker.Pick(_filter.Filter(_db.Playable)).ToList();
             _history.Clear();
+        }
+
+        private void SetLocatorProperties(FilterOptionMessage message)
+        {
+            _locator.CanLocate = message.InputMethod != InputMethod.NotInput;
+            _locator.LocatesStyle = message.MusicForm == MusicForm.Default;
+            _locator.PressesStart = message.MusicForm == MusicForm.Default && message.InputMethod == InputMethod.WithAutoStart;
         }
 
 
@@ -106,17 +112,16 @@ namespace DjmaxRandomSelectorV
             {
                 _history.Capacity = message.RecentsCount;
             }
-            _locator.SetStartsAutomatically(message.MusicForm, message.InputMethod);
-            _locator.SetIsFreeSelect(message.MusicForm);
-            _locator.SetInvokesInput(message.InputMethod);
+            SetLocatorProperties(message);
             _picker.SetPickMethod(message.MusicForm, message.LevelPreference);
             return Task.CompletedTask;
         }
 
         public Task HandleAsync(SettingMessage message, CancellationToken cancellationToken)
         {
-            _locator.SetInputInterval(message.InputInterval);
+            _locator.InputInterval = message.InputInterval;
             _db.SetPlayable(message.OwnedDlcs);
+            _locator.MakeLocations(_db.AllTrack);
             UpdateCandidates();
             return Task.CompletedTask;
         }

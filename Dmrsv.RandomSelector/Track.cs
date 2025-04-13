@@ -4,6 +4,7 @@
     {
         public MusicInfo Info { get; init; } = new();
         public Pattern[] Patterns { get; init; } = Array.Empty<Pattern>();
+        public bool IsPlayable { get; init; } = false;
 
         public int Id => Info.Id;
         public string Title => Info.Title;

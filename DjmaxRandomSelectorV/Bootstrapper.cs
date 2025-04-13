@@ -126,7 +126,9 @@ namespace DjmaxRandomSelectorV
                         "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 });
             }
+            // Set AllTrack
             _db.ImportDB();
+            _db.SetPlayable(_config.Setting.OwnedDlcs);
             // Bind views and viewmodels
             await DisplayRootViewForAsync(typeof(ShellViewModel));
             // Set window property
