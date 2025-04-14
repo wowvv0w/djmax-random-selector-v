@@ -23,11 +23,11 @@ namespace DjmaxRandomSelectorV.ViewModels
         private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
         private readonly IFileManager _fileManager;
-        private readonly IReadOnlyList<Track> _allTrack;
+        private readonly TrackDB _db;
 
         private AdvancedFilter _filter;
-        private Track _selectedTrack;
         private string _searchBox;
+        private List<string> _namesake;
 
         public string SearchBox
         {
@@ -51,7 +51,12 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator.SubscribeOnUIThread(this);
             _windowManager = windowManager;
             _fileManager = fileManager;
-            _allTrack = IoC.Get<TrackDB>().AllTrack;
+            _db = IoC.Get<TrackDB>();
+            _namesake = _db.AllTrack
+                           .GroupBy(t => t.Title)
+                           .Where(g => g.Count() > 1)
+                           .SelectMany(g => g, (g, t) => t.Title)
+                           .ToList();
 
             _filter = new AdvancedFilter();
             PlaylistItems = new BindableCollection<PlaylistItem>();
@@ -94,9 +99,11 @@ namespace DjmaxRandomSelectorV.ViewModels
             PlaylistItems.Add(new PlaylistItem
             {
                 PatternId = pattern.PatternId,
-                Title = _selectedTrack.Title,
-                Composer = _selectedTrack.Composer,
-                Category = _selectedTrack.Category,
+                Title = _namesake.Contains(pattern.Info.Title)
+                        ? $"{pattern.Info.Title} ({pattern.Info.Composer})"
+                        : pattern.Info.Title,
+                Composer = pattern.Info.Composer,
+                Category = pattern.Info.Category,
                 Style = pattern.Style,
                 Level = pattern.Level.ToString()
             });
@@ -108,27 +115,37 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 return;
             }
+
             foreach (int item in items)
             {
-                Track track = _allTrack.FirstOrDefault(t => t.Id == item/100);
-                if (track is not null)
+                Track track;
+                try
                 {
-                    var pattern = track.Patterns.FirstOrDefault(p => p.PatternId == item);
-                    if (pattern is null)
-                    {
-                        continue;
-                    }
-                    _filter.PatternList.Add(pattern);
-                    PlaylistItems.Add(new PlaylistItem
-                    {
-                        PatternId = item,
-                        Title = track.Title,
-                        Composer = track.Composer,
-                        Category = track.Category,
-                        Style = pattern.Style,
-                        Level = pattern.Level.ToString()
-                    });
+                    track = _db.AllTrack[item / 100];
                 }
+                catch (IndexOutOfRangeException)
+                {
+                    continue;
+                }
+
+                var pattern = track.Patterns.FirstOrDefault(p => p.PatternId == item);
+                if (pattern is null)
+                {
+                    continue;
+                }
+
+                _filter.PatternList.Add(pattern);
+                PlaylistItems.Add(new PlaylistItem
+                {
+                    PatternId = item,
+                    Title = _namesake.Contains(track.Title)
+                            ? $"{track.Title} ({track.Composer})"
+                            : track.Title,
+                    Composer = track.Composer,
+                    Category = track.Category,
+                    Style = pattern.Style,
+                    Level = pattern.Level.ToString()
+                });
             }
         }
 
@@ -341,18 +358,16 @@ namespace DjmaxRandomSelectorV.ViewModels
                 return;
             }
 
-            IEnumerable<string> titles;
+            var titles = from track in _db.AllTrack
+                         let title = track.Title
+                         select _namesake.Contains(title) ? $"{title} ({track.Composer})" : title;
             if (SearchBox.Equals("#"))
             {
-                titles = from title in _allTrack.Select(t => t.Title)
-                         where !Regex.IsMatch(title[..1], "[a-z]", RegexOptions.IgnoreCase)
-                         select title;
+                titles = titles.Where(title => !Regex.IsMatch(title[..1], "[a-z]", RegexOptions.IgnoreCase));
             }
             else
             {
-                titles = from title in _allTrack.Select(t => t.Title)
-                         where title.StartsWith(SearchBox, true, null)
-                         select title;
+                titles = titles.Where(title => title.StartsWith(SearchBox, true, null));
             }
             TitleSuggestions.AddRange(titles);
         }
@@ -361,13 +376,19 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             SearchResult.Clear();
             // TODO: This can't recognize the songs that have same title
-            _selectedTrack = _allTrack.FirstOrDefault(t => t.Title == SearchBox, null);
-            var query = from t in _allTrack
-                        where t.Title.ToLower() == (SearchBox?.ToLower() ?? string.Empty)
-                        select t.Patterns into patternList
-                        from p in patternList
-                        select p;
-            SearchResult.AddRange(query);
+            var track = _namesake.Any(title => SearchBox.StartsWith(title))
+                        ? _db.AllTrack.FirstOrDefault(t => SearchBox.Equals($"{t.Title} ({t.Composer})"), null)
+                        : _db.AllTrack.FirstOrDefault(t => t.Title == SearchBox, null);
+            if (track is null)
+            {
+                return;
+            }
+            var buttonTunes = new string[] { "4B", "5B", "6B", "8B" };
+            var difficulty = new string[] { "NM", "HD", "MX", "SC" };
+            var result = from bt in buttonTunes
+                         from df in difficulty
+                         select track.Patterns.FirstOrDefault(p => p.Style == $"{bt}{df}", null);
+            SearchResult.AddRange(result);
         }
         #endregion
 
