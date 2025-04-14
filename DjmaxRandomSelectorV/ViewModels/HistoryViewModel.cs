@@ -4,6 +4,7 @@ using DjmaxRandomSelectorV.Models;
 using Dmrsv.RandomSelector;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,10 +13,9 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class HistoryViewModel : Screen, IHandle<PatternMessage>, IHandle<FilterOptionMessage>
     {
         private readonly IEventAggregator _eventAggregator;
-        private readonly TrackDB _db;
 
         private int _number;
-        private bool _isFreeSelect;
+        private bool _showsStyle;
 
         public BindableCollection<HistoryItem> History { get; }
 
@@ -23,27 +23,22 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
-            _db = IoC.Get<TrackDB>();
             _number = 0;
-            _isFreeSelect = false;
             History = new BindableCollection<HistoryItem>();
             DisplayName = "HISTORY";
+            SetShowsStyle(IoC.Get<Dmrsv3Configuration>().FilterOption.MusicForm);
         }
 
         private void AddItem(Pattern pattern)
         {
             _number++;
-            // TODO: Error when the song in the playlist, but not in playable, is selected
-            string title = _db.Playable.First(track => track.Id == pattern.TrackId).Title;
-            string style = _isFreeSelect ? "FREE" : pattern.Style;
-            string level = _isFreeSelect ? "-" : pattern.Level.ToString();
             var historyItem = new HistoryItem()
             {
                 Number = _number,
-                Title = title,
-                Style = style,
-                Level = level,
-                Time = DateTime.Now.ToString("HH:mm:ss"),
+                Info = pattern.Info,
+                Style = _showsStyle ? pattern.Style : "FREE",
+                Level = _showsStyle ? pattern.Level.ToString() : "-",
+                Time = new Regex(Regex.Escape(" ")).Replace(DateTime.Now.ToString("g"), "\n", 1),
             };
 
             History.Insert(0, historyItem);
@@ -59,6 +54,11 @@ namespace DjmaxRandomSelectorV.ViewModels
             _number = 0;
         }
 
+        private void SetShowsStyle(MusicForm musicForm)
+        {
+            _showsStyle = musicForm == MusicForm.Default;
+        }
+
         public Task HandleAsync(PatternMessage message, CancellationToken cancellationToken)
         {
             AddItem(message.Item);
@@ -67,8 +67,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         
         public Task HandleAsync(FilterOptionMessage message, CancellationToken cancellationToken)
         {
-            // TODO: is it work well on initializing?
-            _isFreeSelect = message.MusicForm == MusicForm.Free;
+            SetShowsStyle(message.MusicForm);
             return Task.CompletedTask;
         }
     }

@@ -25,8 +25,11 @@ namespace Dmrsv.RandomSelector
 
         public override IEnumerable<Pattern> Filter(IEnumerable<Track> trackList)
         {
+            var result = from pattern in _patternList
+                         where trackList.Any(track => track.Id == pattern.Info.Id)
+                         select pattern;
             IsUpdated = false;
-            return _patternList;
+            return result;
         }
     }
 }

@@ -8,7 +8,7 @@
              d:DesignHeight="340" d:DesignWidth="680">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="16"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -23,11 +23,11 @@
             </Grid.ColumnDefinitions>
             <Grid.Resources>
                 <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BoldGrayTextBlock}">
-                    <Setter Property="FontSize" Value="12"/>
+                    <Setter Property="FontSize" Value="10"/>
                 </Style>
             </Grid.Resources>
             <TextBlock Text="NO."/>
-            <TextBlock Text="TITLE" Grid.Column="1"/>
+            <TextBlock Text="TRACK" Grid.Column="1"/>
             <TextBlock Text="STYLE" Grid.Column="2"/>
             <TextBlock Text="LEVEL" Grid.Column="3"/>
             <TextBlock Text="TIME" Grid.Column="4"/>
@@ -40,9 +40,11 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <DataTemplate.Resources>
-                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BoldGrayTextBlock}"/>
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BoldGrayTextBlock}">
+                            <Setter Property="FontSize" Value="13"/>
+                        </Style>
                     </DataTemplate.Resources>
-                    <Grid Height="37">
+                    <Grid Height="36">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="60"/>
                             <ColumnDefinition/>
@@ -51,10 +53,35 @@
                             <ColumnDefinition Width="120"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding Number}"/>
-                        <TextBlock Text="{Binding Title}" Grid.Column="1" TextWrapping="Wrap"/>
+                        <Grid Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.Resources>
+                                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BoldGrayTextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                                </Style>
+                            </Grid.Resources>
+                            <TextBlock Text="{Binding Info.Title}" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="4"
+                                       FontSize="13"/>
+                            <TextBlock Text="{Binding Info.Composer}" Grid.Column="1" Grid.Row="1"
+                                       FontSize="10" Opacity=".7"/>
+                            <TextBlock Text="{Binding Info.Category}" Grid.Column="3" Grid.Row="1"
+                                       FontSize="9" Background="{StaticResource DarkestTranslucentBackgroundColor}"
+                                       Padding="4 0" VerticalAlignment="Center"/>
+                        </Grid>
                         <TextBlock Text="{Binding Style}" Grid.Column="2"/>
                         <TextBlock Text="{Binding Level}" Grid.Column="3"/>
-                        <TextBlock Text="{Binding Time}" Grid.Column="4"/>
+                        <TextBlock Text="{Binding Time}" Grid.Column="4"
+                                   TextAlignment="Center" FontSize="12"/>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
