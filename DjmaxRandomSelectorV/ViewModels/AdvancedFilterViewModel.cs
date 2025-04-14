@@ -375,7 +375,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         private void UpdateResult()
         {
             SearchResult.Clear();
-            // TODO: This can't recognize the songs that have same title
             var track = _namesake.Any(title => SearchBox.StartsWith(title))
                         ? _db.AllTrack.FirstOrDefault(t => SearchBox.Equals($"{t.Title} ({t.Composer})"), null)
                         : _db.AllTrack.FirstOrDefault(t => t.Title == SearchBox, null);
