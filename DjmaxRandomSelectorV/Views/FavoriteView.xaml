@@ -21,7 +21,13 @@
         <Grid DockPanel.Dock="Bottom"
               Style="{StaticResource DialogBar}">
             <Button x:Name="CloseDialog"
-                    Content="OK"
+                    Content="APPLY"
+                    Style="{StaticResource DialogButton}"
+                    HorizontalAlignment="Right"
+                    Margin="0 0 110 0"
+                    Width="90"/>
+            <Button x:Name="CloseDialogWithoutSave"
+                    Content="CANCEL"
                     Style="{StaticResource DialogButton}"
                     HorizontalAlignment="Right"
                     Margin="0 0 10 0"

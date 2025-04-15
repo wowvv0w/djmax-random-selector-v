@@ -126,6 +126,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             TryCloseAsync(true);
         }
 
+        public void CloseDialogWithoutSave() => TryCloseAsync(true);
+
         public void GetSearchedItems()
         {
             var searched = _items.Select(item => item);
