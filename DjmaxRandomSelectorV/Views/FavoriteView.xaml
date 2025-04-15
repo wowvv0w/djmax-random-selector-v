@@ -39,17 +39,19 @@
                 <RowDefinition Height="10"/>
                 <RowDefinition/>
                 <RowDefinition Height="10"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10"/>
             </Grid.RowDefinitions>
             <Border BorderBrush="Black"
                     BorderThickness="3"
-                    Grid.RowSpan="4"
+                    Grid.RowSpan="7"
                     Grid.ColumnSpan="5"/>
-            <Grid Grid.Row ="1" Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+            <Grid Grid.Row ="1" Grid.Column="1"
+                  Height="30">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
                 <Border x:Name="searchBoxBorder"
                         Background="{StaticResource BrighterTranslucentBackgroundColor}"
                         Padding="5 0">
@@ -80,8 +82,7 @@
                                  CaretBrush="White"
                                  VerticalAlignment="Center"
                                  FontFamily="{StaticResource LatoFont}"
-                                 FontSize="15"
-                                 cal:Message.Attach="[Event KeyUp] = [Action SearchTitle]"/>
+                                 FontSize="15"/>
                         <Button x:Name="ClearSearchBox"
                                 Grid.Column="1"
                                 Width="25">
@@ -98,6 +99,31 @@
                         </Button>
                     </Grid>
                 </Border>
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal">
+                    <RadioButton x:Name="FiltersAllTrack"
+                                 Content="ALL TRACK"
+                                 Style="{StaticResource CategoryButton}"
+                                 Width="70"
+                                 FontSize="16"
+                                 Foreground="{StaticResource DefaultGrayColor}"
+                                 Background="#DFDFDF"/>
+                    <RadioButton x:Name="FiltersFavorite"
+                                 Content="FAVORITE"
+                                 Style="{StaticResource CategoryButton}"
+                                 Width="70"
+                                 FontSize="16"
+                                 Foreground="{StaticResource FgFavorite}"
+                                 Background="{StaticResource BgFavorite}"/>
+                    <RadioButton x:Name="FiltersBlacklist"
+                                 Content="BLACKLIST"
+                                 Style="{StaticResource CategoryButton}"
+                                 Width="70"
+                                 FontSize="16"
+                                 Foreground="{StaticResource FgBlackSquare}"
+                                 Background="{StaticResource BgBlackSquare}"/>
+                </StackPanel>
+                <!-- save just in case
                 <Popup StaysOpen="False"
                        Placement="Bottom">
                     <Popup.Style>
@@ -123,14 +149,23 @@
                              ItemContainerStyle="{StaticResource PopupListBoxItem}"
                              cal:Message.Attach="[Event SelectionChanged] = [Action SelectSuggestion(SuggestionBox.SelectedItem)]"/>
                 </Popup>
+                -->
             </Grid>
             
-            <ScrollViewer VerticalScrollBarVisibility="Hidden"
+            <ScrollViewer x:Name="FavoriteScrollViewer"
                           Grid.Row="3" Grid.Column="1">
+                <ScrollViewer.Resources>
+                    <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">10</sys:Double>
+                    <Style TargetType="{x:Type ScrollViewer}" BasedOn="{StaticResource PlaylistScrollViewer}">
+                        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+                        <Setter Property="VerticalScrollBarVisibility" Value="Visible"/>
+                        <Setter Property="CanContentScroll" Value="False"/>
+                    </Style>
+                </ScrollViewer.Resources>
                 <ItemsControl x:Name="SearchResult">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Background="{StaticResource DarkerTranslucentBackgroundColor}"/>
+                            <VirtualizingStackPanel Background="{StaticResource DarkerTranslucentBackgroundColor}"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
@@ -143,7 +178,7 @@
                             </DataTemplate.Resources>
                             <Grid x:Name="trackItem"
                                   Height="30"
-                                  Margin="10 5">
+                                  Margin="10 4">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
@@ -234,6 +269,33 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
+            <StackPanel Grid.Row="5" Grid.Column="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Button cal:Message.Attach="TurnPage('-1')"
+                        Style="{StaticResource DialogButton}"
+                        Width="20"
+                        Height="20"
+                        FontSize="10"
+                        Content="◀">
+                </Button>
+                <TextBlock x:Name="PageText"
+                           Style="{StaticResource GrayTextBlock}"
+                           FontSize="13"
+                           Margin="10 0"/>
+                <Button cal:Message.Attach="TurnPage('1')"
+                        Style="{StaticResource DialogButton}"
+                        Width="20"
+                        Height="20"
+                        FontSize="10"
+                        Content="▶">
+                </Button>
+            </StackPanel>
+            <TextBlock Grid.Row="5" Grid.Column="1"
+                       x:Name="ItemCountText"
+                       Style="{StaticResource GrayTextBlock}"
+                       HorizontalAlignment="Right"
+                       FontSize="13"/>
         </Grid>
     </DockPanel>
 </Window>

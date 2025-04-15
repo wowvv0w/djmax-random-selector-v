@@ -291,6 +291,7 @@
     <Style x:Key="DialogButton" TargetType="Button">
         <Setter Property="Background" Value="#2D2D2D"/>
         <Setter Property="Height" Value="30"/>
+        <Setter Property="FontSize" Value="15"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -299,7 +300,7 @@
                         <TextBlock Text="{TemplateBinding Content}"
                                    Foreground="White"
                                    FontFamily="{StaticResource LatoBlackFont}"
-                                   FontSize="15"
+                                   FontSize="{TemplateBinding FontSize}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"/>
                     </Border>
