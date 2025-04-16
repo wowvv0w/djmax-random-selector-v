@@ -2,6 +2,7 @@
 using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.Models;
 using Dmrsv.RandomSelector;
+using Dmrsv.RandomSelector.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -154,7 +155,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             var items = from item in PatternItems
                         where item.IsChecked
-                        select Pattern.CreateId(item.Id, item.Style);
+                        select 100 * item.Id + 10 * (int)CurrentButton.AsButtonTunes() + (int)item.Style.AsDifficulty();
             _eventAggregator.PublishOnUIThreadAsync(new VArchiveMessage(items.ToArray(), command));
         }
 
