@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Text.Json;
 using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
 using Dmrsv.RandomSelector;
@@ -13,42 +10,31 @@ namespace DjmaxRandomSelectorV
 {
     public class TrackDB
     {
-        private const string AllTrackDownloadUrl = "https://v-archive.net/db/songs.json";
-        private const string AllTrackDownloadUrlAlt = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/DMRSV3_Data/AllTrackList.json";
         private const string AllTrackFilePath = @"DMRSV3_Data\AllTrackList.json";
 
-        private readonly IEventAggregator _eventAggregator;
+        private readonly IFileManager _fileManager;
 
-        private readonly string[] _basicCategories;
-        private readonly LinkDiscItem[] _linkDisc;
+        private string[] _basicCategories;
+        private LinkDiscItem[] _linkDisc;
 
         public IReadOnlyList<Track> AllTrack { get; private set; }
 
         public IEnumerable<Track> Playable => AllTrack.Where(t => t.IsPlayable);
         
-        public TrackDB(Dmrsv3AppData appdata)
+        public TrackDB(IFileManager fileManager)
+        {
+            _fileManager = fileManager;
+        }
+
+        public void Initialize(Dmrsv3AppData appdata)
         {
             _basicCategories = appdata.BasicCategories;
             _linkDisc = appdata.LinkDisc;
         }
 
-        public void RequestDB(bool useAltDB = false)
-        {
-            using var client = new HttpClient();
-            string url = useAltDB ? AllTrackDownloadUrlAlt : AllTrackDownloadUrl;
-            string result = client.GetStringAsync(url).Result;
-
-            using var writer = new StreamWriter(AllTrackFilePath);
-            writer.Write(result);
-        }
-
         public void ImportDB()
         {
-            using var reader = new StreamReader(AllTrackFilePath);
-            string json = reader.ReadToEnd();
-            var option = new JsonSerializerOptions(JsonSerializerDefaults.Web);
-            var db = JsonSerializer.Deserialize<List<VArchiveDBTrack>>(json, option);
-
+            var db = _fileManager.Import<List<VArchiveDBTrack>>(AllTrackFilePath);
             AllTrack = db.ConvertAll(x =>
             {
                 var info = new MusicInfo()

@@ -5,16 +5,16 @@ namespace DjmaxRandomSelectorV
 {
     public class CategoryContainer
     {
-        private readonly List<Category> _categories;
-
-        public CategoryContainer(Dmrsv3AppData appData)
-        {
-            _categories = new List<Category>(appData.Categories);
-        }
+        private List<Category> _categories;
 
         public List<Category> GetCategories()
         {
             return _categories.ConvertAll(x => x);
+        }
+
+        public void SetCategories(Dmrsv3AppData appData)
+        {
+            _categories = new List<Category>(appData.Categories);
         }
     }
 }

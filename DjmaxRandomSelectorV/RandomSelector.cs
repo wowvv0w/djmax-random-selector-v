@@ -30,11 +30,11 @@ namespace DjmaxRandomSelectorV
 
         public IHistory<int> History => _history;
 
-        public RandomSelector(IEventAggregator eventAggregator)
+        public RandomSelector(IEventAggregator eventAggregator, TrackDB db)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
-            _db = IoC.Get<TrackDB>();
+            _db = db;
             _isRunning = false;
             _windowTitleHelper = new WindowTitleHelper();
         }

@@ -1,17 +1,12 @@
-﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.ViewModels;
-using Dmrsv.RandomSelector;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Reflection;
-using System.Reflection.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
+using Caliburn.Micro;
+using DjmaxRandomSelectorV.ViewModels;
 
 namespace DjmaxRandomSelectorV
 {
@@ -19,15 +14,15 @@ namespace DjmaxRandomSelectorV
     {
         private const string AppDataFilePath = @"DMRSV3_Data\appdata.json";
         private const string ConfigFilePath = @"DMRSV3_Data\Config.json";
-        private const string AppDataDownloadUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/DMRSV3_Data/appdata.json";
 
+        private readonly IFileManager _fileManager;
         private readonly SimpleContainer _container = new SimpleContainer();
-        private readonly Dmrsv3AppData _appdata;
+
         private readonly Dmrsv3Configuration _config;
         private readonly RandomSelector _rs;
         private readonly TrackDB _db;
-        private readonly IFileManager _fileManager;
         private readonly CategoryContainer _categoryContainer;
+        private readonly VersionContainer _versionContainer;
         private readonly UpdateManager _updater;
         private readonly ExecutionHelper _executor;
 
@@ -36,27 +31,7 @@ namespace DjmaxRandomSelectorV
         public Bootstrapper()
         {
             Initialize();
-
             _fileManager = IoC.Get<IFileManager>();
-            try
-            {
-                _appdata = _fileManager.Import<Dmrsv3AppData>(AppDataFilePath);
-            }
-            catch
-            {
-                /*
-                string msg = "Failed to load appdata.json.\nWould you like to download new one?";
-                var result = MessageBox.Show(msg, "Notice", MessageBoxButton.YesNo, MessageBoxImage.Information);
-                if (result == MessageBoxResult.Yes)
-                {
-                    using var client = new HttpClient();
-                    string appdata = client.GetStringAsync(AppDataDownloadUrl).Result;
-                    using var writer = new StreamWriter(AppDataFilePath);
-                    writer.Write(appdata);
-                    _appdata = _fileManager.Import<Dmrsv3AppData>(AppDataFilePath);
-                }
-                */
-            }
 
             try
             {
@@ -68,19 +43,20 @@ namespace DjmaxRandomSelectorV
             }
             _container.Instance(_config);
             
-            _db = new TrackDB(_appdata);
-            _container.Instance(_db);
-
-            _categoryContainer = new CategoryContainer(_appdata);
+            _categoryContainer = new CategoryContainer();
             _container.Instance(_categoryContainer);
 
+            _db = new TrackDB(_fileManager);
+            _container.Instance(_db);
+
             var eventAggregator = IoC.Get<IEventAggregator>();
-            _rs = new RandomSelector(eventAggregator);
+            _rs = new RandomSelector(eventAggregator, _db);
             _executor = new ExecutionHelper(eventAggregator);
 
-            Version assemblyVersion = Assembly.GetEntryAssembly().GetName().Version;
-            _updater = new UpdateManager(_config, assemblyVersion);
-            _container.Instance(_updater);
+
+            _versionContainer = new VersionContainer();
+            _container.Instance(_versionContainer);
+            _updater = new UpdateManager(_config, _versionContainer, _fileManager);
         }
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
@@ -98,35 +74,29 @@ namespace DjmaxRandomSelectorV
             // Update all track file
             try
             {
-                bool[] result = _updater.CheckUpdates();
-                // If AllTrack update is available
-                if (result[1])
-                {
-                    try
-                    {
-                        _db.RequestDB();
-                    }
-                    catch
-                    {
-                        throw new Exception($"Failed to download lastest all track list (Version {_updater.AllTrackVersion})");
-                    }
-                    _ = Task.Run(() =>
-                    {
-                        MessageBox.Show($"All track list is updated to the version {_updater.AllTrackVersion}.",
-                            "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
-                    });
-                    _config.VersionInfo.AllTrackVersion = _updater.AllTrackVersion;
-                }
+                await _updater.UpdateAsync();
             }
             catch (Exception ex)
             {
-                _ = Task.Run(() =>
-                {
-                    MessageBox.Show(ex.Message,
-                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                });
+                _ = Task.Run(() => MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error));
             }
+            // Import appdata
+            Dmrsv3AppData appdata;
+            try
+            {
+                appdata = _fileManager.Import<Dmrsv3AppData>(AppDataFilePath);
+            }
+            catch
+            {
+                MessageBox.Show("Cannot import appdata.json. Try again or download the file manually.",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Exit -= OnExit;
+                Application.Shutdown();
+                return;
+            }
+            _categoryContainer.SetCategories(appdata);
             // Set AllTrack
+            _db.Initialize(appdata);
             _db.ImportDB();
             _db.SetPlayable(_config.Setting.OwnedDlcs);
             // Bind views and viewmodels
