@@ -1,9 +1,4 @@
-﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.Messages;
-using DjmaxRandomSelectorV.Models;
-using Dmrsv.RandomSelector;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -12,6 +7,11 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Caliburn.Micro;
+using DjmaxRandomSelectorV.Messages;
+using DjmaxRandomSelectorV.Models;
+using Dmrsv.RandomSelector;
+using Microsoft.Win32;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -28,6 +28,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private AdvancedFilter _filter;
         private string _searchBox;
         private List<string> _namesake;
+        private bool _isWizardOpen;
 
         public string SearchBox
         {
@@ -57,6 +58,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                            .Where(g => g.Count() > 1)
                            .SelectMany(g => g, (g, t) => t.Title)
                            .ToList();
+            _isWizardOpen = false;
 
             _filter = new AdvancedFilter();
             PlaylistItems = new BindableCollection<PlaylistItem>();
@@ -393,11 +395,21 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public Task RunVArchiveWizard()
         {
+            if (_isWizardOpen)
+            {
+                return Task.CompletedTask;
+            }
+            _isWizardOpen = true;
             return _windowManager.ShowWindowAsync(IoC.Get<VArchiveWizardViewModel>());
         }
 
         public Task HandleAsync(VArchiveMessage message, CancellationToken cancellationToken)
         {
+            if (message.Command == "close")
+            {
+                _isWizardOpen = false;
+                return Task.CompletedTask;
+            }
             if (message.Command == "overwrite" && PlaylistItems.Any())
             {
                 var result = MessageBox.Show("The playlist will be overwrited.\nContinue?",
@@ -406,6 +418,10 @@ namespace DjmaxRandomSelectorV.ViewModels
                 {
                     PlaylistItems.Clear();
                     _filter.PatternList.Clear();
+                }
+                else
+                {
+                    return Task.CompletedTask;
                 }
             }
             AddToFilterAndPlaylist(message.Items);

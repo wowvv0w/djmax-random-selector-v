@@ -1,18 +1,15 @@
-﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.Messages;
-using DjmaxRandomSelectorV.Models;
-using Dmrsv.RandomSelector;
-using Dmrsv.RandomSelector.Enums;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Caliburn.Micro;
+using DjmaxRandomSelectorV.Messages;
+using DjmaxRandomSelectorV.Models;
+using Dmrsv.RandomSelector.Enums;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -157,6 +154,15 @@ namespace DjmaxRandomSelectorV.ViewModels
                         where item.IsChecked
                         select 100 * item.Id + 10 * (int)CurrentButton.AsButtonTunes() + (int)item.Style.AsDifficulty();
             _eventAggregator.PublishOnUIThreadAsync(new VArchiveMessage(items.ToArray(), command));
+        }
+
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            if (close)
+            {
+                _eventAggregator.PublishOnUIThreadAsync(new VArchiveMessage(null, "close"));
+            }
+            return Task.CompletedTask;
         }
 
         public record BoardRoot
