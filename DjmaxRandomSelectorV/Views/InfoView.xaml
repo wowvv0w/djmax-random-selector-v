@@ -29,11 +29,12 @@
 
         <Border BorderBrush="Black"
                 BorderThickness="3"
-                Padding="30">
+                Padding="20">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="90"/>
                     <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -77,8 +78,15 @@
                 </UniformGrid>
                 
                 <TextBlock x:Name="AllTrackVersion"
-                           Text="All Track Version:"
+                           Text="All Track Last Updated:"
                            Grid.Row="2"
+                           Grid.ColumnSpan="2"
+                           Foreground="{StaticResource DefaultGrayColor}"
+                           FontFamily="{StaticResource LatoFont}"
+                           FontSize="16"/>
+                <TextBlock x:Name="AppdataVersion"
+                           Text="Appdata Version:"
+                           Grid.Row="3"
                            Grid.ColumnSpan="2"
                            Foreground="{StaticResource DefaultGrayColor}"
                            FontFamily="{StaticResource LatoFont}"

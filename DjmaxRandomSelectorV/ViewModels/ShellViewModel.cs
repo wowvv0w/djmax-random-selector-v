@@ -23,8 +23,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator.SubscribeOnUIThread(this);
             _windowManager = windowManager;
 
-            var updater = IoC.Get<UpdateManager>();
-            bool visible = updater.CurrentAppVersion < updater.LatestAppVersion;
+            var container = IoC.Get<VersionContainer>();
+            bool visible = container.CurrentAppVersion < container.LatestAppVersion;
             OpenReleasePageVisibility = visible ? Visibility.Visible : Visibility.Hidden;
 
             var childrenType = new List<Type>()
