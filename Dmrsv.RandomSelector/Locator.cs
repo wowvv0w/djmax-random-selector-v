@@ -46,7 +46,7 @@ namespace Dmrsv.RandomSelector
                 return Regex.IsMatch(initial.ToString(), "[a-z]", RegexOptions.IgnoreCase) ? initial : '#';
             };
             var groupByInitial = trackList.Where(t => t.IsPlayable)
-                                          .OrderBy(t => t.Title, StringComparer.OrdinalIgnoreCase)
+                                          .OrderBy(t => t.Title, new TitleComparer())
                                           .GroupBy(t => getGroup(t))
                                           .ToDictionary(g => g.Key, g => g.ToList());
             var getIndex = (Track t) =>

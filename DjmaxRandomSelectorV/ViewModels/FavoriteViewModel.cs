@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.Models;
+using Dmrsv.RandomSelector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -100,7 +101,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 Info = track.Info,
                 IsPlayable = track.IsPlayable, // TODO: apply the track is playable (required to respond to change setting)
                 Status = favorite.Contains(track.Id) ? 1 : (blacklist.Contains(track.Id) ? -1 : 0)
-            }).OrderBy(item => item.Title).ToList();
+            }).OrderBy(item => item.Title, new TitleComparer()).ToList();
             _searchedItems = new List<FavoriteItem>();
             _filtersAllTrack = true;
             _filtersFavorite = false;
