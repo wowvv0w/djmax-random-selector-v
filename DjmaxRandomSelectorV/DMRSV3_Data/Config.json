@@ -1,25 +1,26 @@
 ﻿{
-    "Setting": {
-        "FilterType": 0,
-        "InputInterval": 30,
-        "Favorite": [],
-        "Blacklist": [],
-        "OwnedDlcs": [],
-        "SavesRecent": false,
-        "RecentPlayed": [],
-        "StartKeyCode": 118
+    "setting": {
+        "filterType": 0,
+        "inputInterval": 30,
+        "favorite": [],
+        "blacklist": [],
+        "ownedDlcs": [],
+        "savesRecent": false,
+        "recentPlayed": [],
+        "startKeyCode": 118
     },
-    "FilterOption": {
-        "RecentsCount": 5,
-        "Mode": 0,
-        "Aider": 0,
-        "Level": 0
+    "filterOption": {
+        "recentsCount": 5,
+        "mode": 0,
+        "aider": 0,
+        "level": 0
     },
-    "WindowProperty": {
-        "Position": [],
-        "Size": []
+    "windowProperty": {
+        "position": [],
+        "size": []
     },
-    "VersionInfo": {
-        "AllTrackVersion": 0
+    "versionInfo": {
+        "allTrackVersion": "0",
+        "appdataVersion": "0"
     }
 }

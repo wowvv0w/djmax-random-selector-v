@@ -1,256 +1,255 @@
 ﻿{
-    "CategoryType": [
+    "categoryType": [
         "Regular",
         "CollabVariety",
         "CollabMusicGame",
         "PLI"
     ],
-    "BasicCategories": [
+    "basicCategories": [
         "R",
         "P1",
         "P2",
         "GG"
     ],
-    "Categories": [
+    "categories": [
         {
-            "Name": "RESPECT",
-            "Id": "R",
-            "SteamId": null,
-            "Type": 0
+            "name": "RESPECT",
+            "id": "R",
+            "steamId": null,
+            "type": 0
         },
         {
-            "Name": "PORTABLE 1",
-            "Id": "P1",
-            "SteamId": null,
-            "Type": 0
+            "name": "PORTABLE 1",
+            "id": "P1",
+            "steamId": null,
+            "type": 0
         },
         {
-            "Name": "PORTABLE 2",
-            "Id": "P2",
-            "SteamId": null,
-            "Type": 0
+            "name": "PORTABLE 2",
+            "id": "P2",
+            "steamId": null,
+            "type": 0
         },
         {
-            "Name": "PORTABLE 3",
-            "Id": "P3",
-            "SteamId": "1568680",
-            "Type": 0
+            "name": "PORTABLE 3",
+            "id": "P3",
+            "steamId": "1568680",
+            "type": 0
         },
         {
-            "Name": "TRILOGY",
-            "Id": "TR",
-            "SteamId": "1271670",
-            "Type": 0
+            "name": "TRILOGY",
+            "id": "TR",
+            "steamId": "1271670",
+            "type": 0
         },
         {
-            "Name": "CLAZZIQUAI",
-            "Id": "CE",
-            "SteamId": "1300210",
-            "Type": 0
+            "name": "CLAZZIQUAI",
+            "id": "CE",
+            "steamId": "1300210",
+            "type": 0
         },
         {
-            "Name": "BLACK SQUARE",
-            "Id": "BS",
-            "SteamId": "1300211",
-            "Type": 0
+            "name": "BLACK SQUARE",
+            "id": "BS",
+            "steamId": "1300211",
+            "type": 0
         },
         {
-            "Name": "V EXTENSION",
-            "Id": "VE",
-            "SteamId": "1080550",
-            "Type": 0
+            "name": "V EXTENSION",
+            "id": "VE",
+            "steamId": "1080550",
+            "type": 0
         },
         {
-            "Name": "V EXTENSION 2",
-            "Id": "VE2",
-            "SteamId": "1843020",
-            "Type": 0
+            "name": "V EXTENSION 2",
+            "id": "VE2",
+            "steamId": "1843020",
+            "type": 0
         },
         {
-            "Name": "V EXTENSION 3",
-            "Id": "VE3",
-            "SteamId": "2164540",
-            "Type": 0
+            "name": "V EXTENSION 3",
+            "id": "VE3",
+            "steamId": "2164540",
+            "type": 0
         },
         {
-            "Name": "V EXTENSION 4",
-            "Id": "VE4",
-            "SteamId": "2307471",
-            "Type": 0
+            "name": "V EXTENSION 4",
+            "id": "VE4",
+            "steamId": "2307471",
+            "type": 0
         },
         {
-            "Name": "V EXTENSION 5",
-            "Id": "VE5",
-            "SteamId": "2681820",
-            "Type": 0
+            "name": "V EXTENSION 5",
+            "id": "VE5",
+            "steamId": "2681820",
+            "type": 0
         },
         {
-            "Name": "V LIBERTY",
-            "Id": "VL",
-            "SteamId": "3038800",
-            "Type": 0
+            "name": "V LIBERTY",
+            "id": "VL",
+            "steamId": "3038800",
+            "type": 0
         },
         {
-            "Name": "V LIBERTY 2",
-            "Id": "VL2",
-            "SteamId": "3371120",
-            "Type": 0
+            "name": "V LIBERTY 2",
+            "id": "VL2",
+            "steamId": "3371120",
+            "type": 0
         },
         {
-            "Name": "EMOTIONAL S.",
-            "Id": "ES",
-            "SteamId": "1238760",
-            "Type": 0
+            "name": "EMOTIONAL S.",
+            "id": "ES",
+            "steamId": "1238760",
+            "type": 0
         },
         {
-            "Name": "TECHNIKA 1",
-            "Id": "T1",
-            "SteamId": "1386610",
-            "Type": 0
+            "name": "TECHNIKA 1",
+            "id": "T1",
+            "steamId": "1386610",
+            "type": 0
         },
         {
-            "Name": "TECHNIKA 2",
-            "Id": "T2",
-            "SteamId": "1386611",
-            "Type": 0
+            "name": "TECHNIKA 2",
+            "id": "T2",
+            "steamId": "1386611",
+            "type": 0
         },
         {
-            "Name": "TECHNIKA 3",
-            "Id": "T3",
-            "SteamId": "1386612",
-            "Type": 0
+            "name": "TECHNIKA 3",
+            "id": "T3",
+            "steamId": "1386612",
+            "type": 0
         },
         {
-            "Name": "TECHNIKA T&Q",
-            "Id": "TQ",
-            "SteamId": "1958171",
-            "Type": 0
+            "name": "TECHNIKA T&Q",
+            "id": "TQ",
+            "steamId": "1958171",
+            "type": 0
         },
         {
-            "Name": "CLEAR PASS",
-            "Id": "CP",
-            "SteamId": "3319810",
-            "Type": 0
+            "name": "CLEAR PASS",
+            "id": "CP",
+            "steamId": "3319810",
+            "type": 0
         },
         {
-            "Name": "GUILTY GEAR",
-            "Id": "GG",
-            "SteamId": null,
-            "Type": 1
+            "name": "GUILTY GEAR",
+            "id": "GG",
+            "steamId": null,
+            "type": 1
         },
         {
-            "Name": "CHUNITHM",
-            "Id": "CHU",
-            "SteamId": "1472190",
-            "Type": 2
+            "name": "CHUNITHM",
+            "id": "CHU",
+            "steamId": "1472190",
+            "type": 2
         },
         {
-            "Name": "CYTUS",
-            "Id": "CY",
-            "SteamId": "1356221",
-            "Type": 2
+            "name": "CYTUS",
+            "id": "CY",
+            "steamId": "1356221",
+            "type": 2
         },
         {
-            "Name": "DEEMO",
-            "Id": "DM",
-            "SteamId": "1356220",
-            "Type": 2
+            "name": "DEEMO",
+            "id": "DM",
+            "steamId": "1356220",
+            "type": 2
         },
         {
-            "Name": "ESTIMATE",
-            "Id": "ESTI",
-            "SteamId": "1664550",
-            "Type": 1
+            "name": "ESTIMATE",
+            "id": "ESTI",
+            "steamId": "1664550",
+            "type": 1
         },
         {
-            "Name": "EZ2ON",
-            "Id": "EZ2",
-            "SteamId": "2307470",
-            "Type": 2
+            "name": "EZ2ON",
+            "id": "EZ2",
+            "steamId": "2307470",
+            "type": 2
         },
         {
-            "Name": "GROOVE COASTER",
-            "Id": "GC",
-            "SteamId": "1271671",
-            "Type": 2
+            "name": "GROOVE COASTER",
+            "id": "GC",
+            "steamId": "1271671",
+            "type": 2
         },
         {
-            "Name": "GIRLS' FRONTLINE",
-            "Id": "GF",
-            "SteamId": "1472191",
-            "Type": 1
+            "name": "GIRLS' FRONTLINE",
+            "id": "GF",
+            "steamId": "1472191",
+            "type": 1
         },
         {
-            "Name": "MUSE DASH",
-            "Id": "MD",
-            "SteamId": "1782170",
-            "Type": 2
+            "name": "MUSE DASH",
+            "id": "MD",
+            "steamId": "1782170",
+            "type": 2
         },
         {
-            "Name": "NEXON",
-            "Id": "NXN",
-            "SteamId": "1958170",
-            "Type": 1
+            "name": "NEXON",
+            "id": "NXN",
+            "steamId": "1958170",
+            "type": 1
         },
         {
-            "Name": "MAPLESTORY",
-            "Id": "MAP",
-            "SteamId": "2530380",
-            "Type": 1
+            "name": "MAPLESTORY",
+            "id": "MAP",
+            "steamId": "2530380",
+            "type": 1
         },
         {
-            "Name": "FALCOM",
-            "Id": "FAL",
-            "SteamId": "2829200",
-            "Type": 1
+            "name": "FALCOM",
+            "id": "FAL",
+            "steamId": "2829200",
+            "type": 1
         },
         {
-            "Name": "TEKKEN",
-            "Id": "TEK",
-            "SteamId": "3222500",
-            "Type": 1
+            "name": "TEKKEN",
+            "id": "TEK",
+            "steamId": "3222500",
+            "type": 1
         }
     ],
-    "LinkDisc": [
+    "linkDisc": [
         {
-            "Id": 373,
-            "RequiredDlc": [
+            "id": 373,
+            "requiredDlc": [
                 [ "BS", "CE" ],
                 [ "BS", "T1" ]
             ]
         },
         {
-            "Id": 374,
-            "RequiredDlc": [
+            "id": 374,
+            "requiredDlc": [
                 [ "T1", "CE" ],
                 [ "T1", "BS" ]
             ]
         },
         {
-            "Id": 375,
-            "RequiredDlc": [
+            "id": 375,
+            "requiredDlc": [
                 [ "CE", "BS" ],
                 [ "CE", "T1" ]
             ]
         },
         {
-            "Id": 462,
-            "RequiredDlc": [
+            "id": 462,
+            "requiredDlc": [
                 [ "VE", "VE2" ]
             ]
         },
         {
-            "Id": 548,
-            "RequiredDlc": [
+            "id": 548,
+            "requiredDlc": [
                 [ "VE3", "VE4" ]
             ]
         },
         {
-            "Id": 674,
-            "RequiredDlc": [
+            "id": 674,
+            "requiredDlc": [
                 [ "VL", "VL2" ]
             ]
         }
-    ],
-    "GameWindowTitle": "DJMAX RESPECT V"
+    ]
 }
