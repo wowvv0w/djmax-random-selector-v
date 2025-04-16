@@ -80,6 +80,11 @@ namespace DjmaxRandomSelectorV
             {
                 _ = Task.Run(() => MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error));
             }
+            if (_versionContainer.AppdataVersion.CompareTo(_config.VersionInfo.AppdataVersion) > 0)
+            {
+                _ = Task.Run(() => MessageBox.Show($"App data has been updated to the version {_versionContainer.AppdataVersion}.",
+                             "Update", MessageBoxButton.OK, MessageBoxImage.Information));
+            }
             // Import appdata
             Dmrsv3AppData appdata;
             try
@@ -125,6 +130,9 @@ namespace DjmaxRandomSelectorV
             {
                 setting.RecentPlayed = historyItems;
             }
+            var versionInfo = _config.VersionInfo;
+            versionInfo.AllTrackVersion = _versionContainer.AllTrackVersion;
+            versionInfo.AppdataVersion = _versionContainer.AppdataVersion;
             _fileManager.Export(_config, ConfigFilePath);
         }
 
