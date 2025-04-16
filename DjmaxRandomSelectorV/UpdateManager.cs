@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -45,16 +46,19 @@ namespace DjmaxRandomSelectorV
 
             var tasks = new List<Task<int>>();
             // update all track
-            DateTime now = DateTime.Now, past = DateTime.MinValue;
+            DateTime now = DateTime.Parse(DateTime.Now.ToString("g"));
+            DateTime past = DateTime.MinValue;
             if (!File.Exists(AppdataFilePath)
                 || !DateTime.TryParse(_container.AllTrackVersion, out past)
                 || now.CompareTo(past) > 0)
             {
+                Debug.WriteLine("all track update start");
                 tasks.Add(DownloadAllTrackAsync());
             }
             // update appdata
             if (versions[1].CompareTo(_container.AppdataVersion) > 0)
             {
+                Debug.WriteLine("appdata update start");
                 tasks.Add(DownloadAppdataAsync());
             }
 
