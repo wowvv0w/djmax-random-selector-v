@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV
@@ -42,7 +39,8 @@ namespace DjmaxRandomSelectorV
 
         public class Dmrsv3VersionInfo
         {
-            public int AllTrackVersion { get; set; } = 0;
+            public string AllTrackVersion { get; set; } = string.Empty;
+            public string AppdataVersion { get; set; } = string.Empty;
         }
     }
 }
