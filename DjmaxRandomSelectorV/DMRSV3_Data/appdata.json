@@ -1,8 +1,8 @@
 ﻿{
     "categoryType": [
         "Regular",
-        "CollabVariety",
         "CollabMusicGame",
+        "CollabVariety",
         "PLI"
     ],
     "basicCategories": [
@@ -136,91 +136,91 @@
             "name": "GUILTY GEAR",
             "id": "GG",
             "steamId": null,
-            "type": 1
+            "type": 2
+        },
+        {
+            "name": "BLUE ARCHIVE",
+            "id": "BA",
+            "steamId": "3653040",
+            "type": 2
         },
         {
             "name": "CHUNITHM",
             "id": "CHU",
             "steamId": "1472190",
-            "type": 2
+            "type": 1
         },
         {
             "name": "CYTUS",
             "id": "CY",
             "steamId": "1356221",
-            "type": 2
+            "type": 1
         },
         {
             "name": "DEEMO",
             "id": "DM",
             "steamId": "1356220",
-            "type": 2
+            "type": 1
         },
         {
             "name": "ESTIMATE",
             "id": "ESTI",
             "steamId": "1664550",
-            "type": 1
+            "type": 2
         },
         {
             "name": "EZ2ON",
             "id": "EZ2",
             "steamId": "2307470",
-            "type": 2
+            "type": 1
         },
         {
             "name": "GROOVE COASTER",
             "id": "GC",
             "steamId": "1271671",
-            "type": 2
+            "type": 1
         },
         {
             "name": "GIRLS' FRONTLINE",
             "id": "GF",
             "steamId": "1472191",
-            "type": 1
+            "type": 2
         },
         {
             "name": "MUSE DASH",
             "id": "MD",
             "steamId": "1782170",
-            "type": 2
+            "type": 1
         },
         {
             "name": "NEXON",
             "id": "NXN",
             "steamId": "1958170",
-            "type": 1
+            "type": 2
         },
         {
             "name": "MAPLESTORY",
             "id": "MAP",
             "steamId": "2530380",
-            "type": 1
+            "type": 2
         },
         {
             "name": "FALCOM",
             "id": "FAL",
             "steamId": "2829200",
-            "type": 1
+            "type": 2
         },
         {
             "name": "TEKKEN",
             "id": "TEK",
             "steamId": "3222500",
-            "type": 1
+            "type": 2
         },
         {
             "name": "TRIBUTE #1",
             "id": "PLI1",
             "steamId": null,
             "type": 3
-        },
-        {
-            "name": "BLUE ARCHIVE",
-            "id": "BA",
-            "steamId": "3653040",
-            "type": 1
         }
     ],
     "linkDisc": [
