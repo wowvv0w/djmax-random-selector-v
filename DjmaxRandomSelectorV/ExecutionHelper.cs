@@ -54,7 +54,7 @@ namespace DjmaxRandomSelectorV
             _hotkeyID = 9000;
             _hotkeyWithShiftID = 9001;
             RegisterHotKey(_handle, _hotkeyID, (uint)KeyModifiers.None, vk);
-            RegisterHotKey(_handle, _hotkeyWithShiftID, (uint)KeyModifiers.Shift, vk);
+            RegisterHotKey(_handle, _hotkeyWithShiftID, (uint)KeyModifiers.Alt, vk);
         }
 
         public Task HandleAsync(FilterOptionMessage message, CancellationToken cancellationToken)
@@ -72,7 +72,7 @@ namespace DjmaxRandomSelectorV
                 {
                     if (IgnoreCanExecute || _canExecute.Invoke())
                     {
-                        var task = (KeyModifiers)((int)lParam & 0xFFFF) == KeyModifiers.Shift
+                        var task = (KeyModifiers)((int)lParam & 0xFFFF) == KeyModifiers.Alt
                                    ? Task.Run(() => _executeAgain.Invoke())
                                    : Task.Run(() => _execute.Invoke());
                     }
