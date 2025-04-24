@@ -1,13 +1,11 @@
-﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.Messages;
-using Dmrsv.RandomSelector;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Interop;
+using Caliburn.Micro;
+using DjmaxRandomSelectorV.Messages;
+using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV
 {
@@ -19,6 +17,7 @@ namespace DjmaxRandomSelectorV
         private List<Pattern> _candidates;
 
         private bool _isRunning;
+        private Pattern _lastPlayed;
 
         private IFilter _filter;
         private PatternPicker _picker;
@@ -81,7 +80,15 @@ namespace DjmaxRandomSelectorV
                 return;
             }
             _locator.Locate(selected);
+            _lastPlayed = selected;
             _eventAggregator.PublishOnUIThreadAsync(new PatternMessage(selected));
+            _isRunning = false;
+        }
+        public void StartAgain()
+        {
+            _isRunning = true;
+            _locator.Locate(_lastPlayed);
+            _eventAggregator.PublishOnUIThreadAsync(new PatternMessage(_lastPlayed));
             _isRunning = false;
         }
 

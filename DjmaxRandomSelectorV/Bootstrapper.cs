@@ -116,9 +116,9 @@ namespace DjmaxRandomSelectorV
             }
             // Set random selector
             _rs.Initialize(_config);
-            _executor.Initialize(_rs.CanStart, _rs.Start, _config);
+            _executor.Initialize(_rs, _config);
             _executor.RegisterHandle(new WindowInteropHelper(window).Handle);
-            _executor.SetHotkey(0x0000, 118);
+            _executor.SetHotkey(_config.StartKeyCode);
         }
 
         protected override void OnExit(object sender, EventArgs e)
