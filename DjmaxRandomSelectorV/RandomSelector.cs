@@ -87,8 +87,11 @@ namespace DjmaxRandomSelectorV
         public void StartAgain()
         {
             _isRunning = true;
-            _locator.Locate(_lastPlayed);
-            _eventAggregator.PublishOnUIThreadAsync(new PatternMessage(_lastPlayed));
+            if (_lastPlayed is not null)
+            {
+                _locator.Locate(_lastPlayed);
+                _eventAggregator.PublishOnUIThreadAsync(new PatternMessage(_lastPlayed));
+            }
             _isRunning = false;
         }
 
