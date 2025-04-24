@@ -61,7 +61,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             };
 
             _categories = IoC.Get<CategoryContainer>().GetCategories();
-            _categories.RemoveAll(x => string.IsNullOrEmpty(x.SteamId));
+            _categories.RemoveAll(x => string.IsNullOrEmpty(x.SteamId) && x.Type != 3); //TODO: use enum
             var updaters = _categories.ConvertAll(x => new ListUpdater(x.Name, x.Id, _message.OwnedDlcs));
             CategoryUpdaters = new BindableCollection<ListUpdater>(updaters);
         }
