@@ -51,7 +51,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator = eventAggregator;
             _fileManager = fileManager;
 
-            var config = IoC.Get<Configuration>();
+            var config = IoC.Get<Dmrsv3Configuration>();
             _message = new SettingMessage()
             {
                 FilterType = config.FilterType,
@@ -61,14 +61,14 @@ namespace DjmaxRandomSelectorV.ViewModels
             };
 
             _categories = IoC.Get<CategoryContainer>().GetCategories();
-            _categories.RemoveAll(x => string.IsNullOrEmpty(x.Code) && (!x.Id?.StartsWith("P-") ?? true));
+            _categories.RemoveAll(x => string.IsNullOrEmpty(x.SteamId));
             var updaters = _categories.ConvertAll(x => new ListUpdater(x.Name, x.Id, _message.OwnedDlcs));
             CategoryUpdaters = new BindableCollection<ListUpdater>(updaters);
         }
 
         public void DetectDlcs()
         {
-            Dictionary<string, string> dlcCodes = _categories.Where(x => x.Code is not null).ToDictionary(x => x.Code, x => x.Id);
+            Dictionary<string, string> dlcCodes = _categories.Where(x => x.SteamId is not null).ToDictionary(x => x.SteamId, x => x.Id);
 
             var ownedDlcs = _message.OwnedDlcs;
             ownedDlcs.Clear();
@@ -94,7 +94,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void Apply()
         {
-            var config = IoC.Get<Configuration>();
+            var config = IoC.Get<Dmrsv3Configuration>();
             config.FilterType = _message.FilterType;
             config.InputDelay = _message.InputInterval;
             config.SavesRecents = _message.SavesExclusion;

@@ -1,0 +1,255 @@
+﻿{
+    "categoryType": [
+        "Regular",
+        "CollabVariety",
+        "CollabMusicGame",
+        "PLI"
+    ],
+    "basicCategories": [
+        "R",
+        "P1",
+        "P2",
+        "GG"
+    ],
+    "categories": [
+        {
+            "name": "RESPECT",
+            "id": "R",
+            "steamId": null,
+            "type": 0
+        },
+        {
+            "name": "PORTABLE 1",
+            "id": "P1",
+            "steamId": null,
+            "type": 0
+        },
+        {
+            "name": "PORTABLE 2",
+            "id": "P2",
+            "steamId": null,
+            "type": 0
+        },
+        {
+            "name": "PORTABLE 3",
+            "id": "P3",
+            "steamId": "1568680",
+            "type": 0
+        },
+        {
+            "name": "TRILOGY",
+            "id": "TR",
+            "steamId": "1271670",
+            "type": 0
+        },
+        {
+            "name": "CLAZZIQUAI",
+            "id": "CE",
+            "steamId": "1300210",
+            "type": 0
+        },
+        {
+            "name": "BLACK SQUARE",
+            "id": "BS",
+            "steamId": "1300211",
+            "type": 0
+        },
+        {
+            "name": "V EXTENSION",
+            "id": "VE",
+            "steamId": "1080550",
+            "type": 0
+        },
+        {
+            "name": "V EXTENSION 2",
+            "id": "VE2",
+            "steamId": "1843020",
+            "type": 0
+        },
+        {
+            "name": "V EXTENSION 3",
+            "id": "VE3",
+            "steamId": "2164540",
+            "type": 0
+        },
+        {
+            "name": "V EXTENSION 4",
+            "id": "VE4",
+            "steamId": "2307471",
+            "type": 0
+        },
+        {
+            "name": "V EXTENSION 5",
+            "id": "VE5",
+            "steamId": "2681820",
+            "type": 0
+        },
+        {
+            "name": "V LIBERTY",
+            "id": "VL",
+            "steamId": "3038800",
+            "type": 0
+        },
+        {
+            "name": "V LIBERTY 2",
+            "id": "VL2",
+            "steamId": "3371120",
+            "type": 0
+        },
+        {
+            "name": "EMOTIONAL S.",
+            "id": "ES",
+            "steamId": "1238760",
+            "type": 0
+        },
+        {
+            "name": "TECHNIKA 1",
+            "id": "T1",
+            "steamId": "1386610",
+            "type": 0
+        },
+        {
+            "name": "TECHNIKA 2",
+            "id": "T2",
+            "steamId": "1386611",
+            "type": 0
+        },
+        {
+            "name": "TECHNIKA 3",
+            "id": "T3",
+            "steamId": "1386612",
+            "type": 0
+        },
+        {
+            "name": "TECHNIKA T&Q",
+            "id": "TQ",
+            "steamId": "1958171",
+            "type": 0
+        },
+        {
+            "name": "CLEAR PASS",
+            "id": "CP",
+            "steamId": "3319810",
+            "type": 0
+        },
+        {
+            "name": "GUILTY GEAR",
+            "id": "GG",
+            "steamId": null,
+            "type": 1
+        },
+        {
+            "name": "CHUNITHM",
+            "id": "CHU",
+            "steamId": "1472190",
+            "type": 2
+        },
+        {
+            "name": "CYTUS",
+            "id": "CY",
+            "steamId": "1356221",
+            "type": 2
+        },
+        {
+            "name": "DEEMO",
+            "id": "DM",
+            "steamId": "1356220",
+            "type": 2
+        },
+        {
+            "name": "ESTIMATE",
+            "id": "ESTI",
+            "steamId": "1664550",
+            "type": 1
+        },
+        {
+            "name": "EZ2ON",
+            "id": "EZ2",
+            "steamId": "2307470",
+            "type": 2
+        },
+        {
+            "name": "GROOVE COASTER",
+            "id": "GC",
+            "steamId": "1271671",
+            "type": 2
+        },
+        {
+            "name": "GIRLS' FRONTLINE",
+            "id": "GF",
+            "steamId": "1472191",
+            "type": 1
+        },
+        {
+            "name": "MUSE DASH",
+            "id": "MD",
+            "steamId": "1782170",
+            "type": 2
+        },
+        {
+            "name": "NEXON",
+            "id": "NXN",
+            "steamId": "1958170",
+            "type": 1
+        },
+        {
+            "name": "MAPLESTORY",
+            "id": "MAP",
+            "steamId": "2530380",
+            "type": 1
+        },
+        {
+            "name": "FALCOM",
+            "id": "FAL",
+            "steamId": "2829200",
+            "type": 1
+        },
+        {
+            "name": "TEKKEN",
+            "id": "TEK",
+            "steamId": "3222500",
+            "type": 1
+        }
+    ],
+    "linkDisc": [
+        {
+            "id": 373,
+            "requiredDlc": [
+                [ "BS", "CE" ],
+                [ "BS", "T1" ]
+            ]
+        },
+        {
+            "id": 374,
+            "requiredDlc": [
+                [ "T1", "CE" ],
+                [ "T1", "BS" ]
+            ]
+        },
+        {
+            "id": 375,
+            "requiredDlc": [
+                [ "CE", "BS" ],
+                [ "CE", "T1" ]
+            ]
+        },
+        {
+            "id": 462,
+            "requiredDlc": [
+                [ "VE", "VE2" ]
+            ]
+        },
+        {
+            "id": 548,
+            "requiredDlc": [
+                [ "VE3", "VE4" ]
+            ]
+        },
+        {
+            "id": 674,
+            "requiredDlc": [
+                [ "VL", "VL2" ]
+            ]
+        }
+    ]
+}

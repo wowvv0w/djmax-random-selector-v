@@ -23,8 +23,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator.SubscribeOnUIThread(this);
             _windowManager = windowManager;
 
-            var version = IoC.Get<VersionContainer>();
-            bool visible = version.CurrentAppVersion < version.LastestAppVersion;
+            var container = IoC.Get<VersionContainer>();
+            bool visible = container.CurrentAppVersion < container.LatestAppVersion;
             OpenReleasePageVisibility = visible ? Visibility.Visible : Visibility.Hidden;
 
             var childrenType = new List<Type>()
@@ -51,7 +51,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void CloseWindow(object view)
         {
             var window = view as Window;
-            var config = IoC.Get<Configuration>();
+            var config = IoC.Get<Dmrsv3Configuration>();
             config.Position = new double[2] { window.Top, window.Left };
             window.Close();
         }

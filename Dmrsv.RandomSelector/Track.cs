@@ -2,16 +2,13 @@
 {
     public record Track
     {
-        public string Title { get; init; } = string.Empty;
-        public string Category { get; init; } = string.Empty;
-        public Dictionary<string, int> Patterns { get; init; } = new();
+        public MusicInfo Info { get; init; } = new();
+        public Pattern[] Patterns { get; init; } = Array.Empty<Pattern>();
+        public bool IsPlayable { get; init; } = false;
 
-        public IEnumerable<Music> GetMusicList()
-        {
-            var musicList = from p in Patterns
-                            select new Music(Title, p.Key, p.Value);
-
-            return musicList;
-        }
+        public int Id => Info.Id;
+        public string Title => Info.Title;
+        public string Composer => Info.Composer;
+        public string Category => Info.Category;
     }
 }

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="DjmaxRandomSelectorV.Views.PlaylistFilterView"
+﻿<UserControl x:Class="DjmaxRandomSelectorV.Views.AdvancedFilterView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -176,8 +176,8 @@
                                 FontFamily="{StaticResource LatoBlackFont}"
                                 cal:Message.Attach="AddItem($dataContext)"/>
                         <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding Level}" Value="0">
-                                <Setter TargetName="patternButton" Property="Content" Value="-"/>
+                            <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                                <Setter TargetName="patternButton" Property="Content" Value=""/>
                                 <Setter TargetName="patternButton" Property="IsEnabled" Value="False"/>
                             </DataTrigger>
                         </DataTemplate.Triggers>
@@ -186,7 +186,7 @@
             </ItemsControl>
         </Grid>
         <!--#endregion-->
-        
+
         <Button x:Name="RunVArchiveWizard"
                 Content="Run V-ARCHIVE Wizard"
                 Background="{StaticResource DarkerTranslucentBackgroundColor}"
@@ -395,3 +395,4 @@
         <!--#endregion-->
     </Grid>
 </UserControl>
+

@@ -13,15 +13,17 @@ using System.Windows;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class QueryFilterViewModel : Screen, IHandle<FavoriteMessage>
+    public class BasicFilterViewModel : Screen, IHandle<FavoriteMessage>
     {
-        private const string DefaultPath = @"Data\CurrentFilter.json";
+        private const string DefaultPath = @"DMRSV3_Data\CurrentFilter.json";
+        private const string PresetPath = @"DMRSV3_Data\Preset\Filter";
+
         private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
         private readonly IFileManager _fileManager;
         private readonly List<Category> _categories;
 
-        private QueryFilter _filter;
+        private BasicFilter _filter;
 
         public BindableCollection<ListUpdater> ButtonTunesUpdaters { get; set; }
         public BindableCollection<ListUpdater> RegularCategories { get; set; }
@@ -116,7 +118,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public BindableCollection<LevelIndicator> LevelIndicators { get; set; }
         public BindableCollection<LevelIndicator> ScLevelIndicators { get; set; }
 
-        public QueryFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, IFileManager fileManager)
+        public BasicFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, IFileManager fileManager)
         {
             DisplayName = "FILTER";
             _eventAggregator = eventAggregator;
@@ -132,7 +134,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             catch
             {
-                _filter = new QueryFilter();
+                _filter = new BasicFilter();
             }
             Initialize();
         }
@@ -161,11 +163,10 @@ namespace DjmaxRandomSelectorV.ViewModels
             var buttons = new List<string>() { "4B", "5B", "6B", "8B" }.ConvertAll(x => new ListUpdater(x, x, _filter.ButtonTunes));
             ButtonTunesUpdaters = new BindableCollection<ListUpdater>(buttons);
 
-            int boundary = _categories.FindIndex(x => x.Name == "COLLAB/PLI");
-            int collabCount = _categories.Count - boundary;
-            var updaters = _categories.ConvertAll(x => new ListUpdater(x.Name, x.Id, _filter.Categories));
-            RegularCategories = new BindableCollection<ListUpdater>(updaters.GetRange(0, boundary));
-            CollabCategories = new BindableCollection<ListUpdater>(updaters.GetRange(boundary, collabCount));
+            var updatersRegular = _categories.Where(cat => cat.Type == 0).Select(cat => new ListUpdater(cat.Name, cat.Id, _filter.Categories));
+            var updatersNotRegular = _categories.Where(cat => cat.Type != 0).Select(cat => new ListUpdater(cat.Name, cat.Id, _filter.Categories));
+            RegularCategories = new BindableCollection<ListUpdater>(updatersRegular);
+            CollabCategories = new BindableCollection<ListUpdater>(updatersNotRegular);
 
             LevelIndicators = new BindableCollection<LevelIndicator>();
             ScLevelIndicators = new BindableCollection<LevelIndicator>();
@@ -178,9 +179,9 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private void ImportFilter(string path)
         {
-            _filter = _fileManager.Import<QueryFilter>(path);
-            var config = IoC.Get<Configuration>();
-            _filter.Favorites = config.Favorite;
+            _filter = _fileManager.Import<BasicFilter>(path);
+            var config = IoC.Get<Dmrsv3Configuration>();
+            _filter.Favorite = config.Favorite;
             _filter.Blacklist = config.Blacklist;
             _eventAggregator.PublishOnUIThreadAsync(new FilterMessage(_filter));
         }
@@ -205,7 +206,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void SavePreset()
         {
             string app = AppDomain.CurrentDomain.BaseDirectory;
-            string path = Path.Combine(app, @"Data\Preset");
+            string path = Path.Combine(app, PresetPath);
             var dialog = new SaveFileDialog()
             {
                 InitialDirectory = path,
@@ -223,7 +224,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void LoadPreset()
         {
             string app = AppDomain.CurrentDomain.BaseDirectory;
-            string path = Path.Combine(app, @"Data\Preset");
+            string path = Path.Combine(app, PresetPath);
             var dialog = new OpenFileDialog()
             {
                 InitialDirectory = path,
@@ -257,7 +258,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public Task HandleAsync(FavoriteMessage message, CancellationToken cancellationToken)
         {
-            _filter.Favorites = message.Favorite;
+            _filter.Favorite = message.Favorite;
             _filter.Blacklist = message.Blacklist;
             return Task.CompletedTask;
         }

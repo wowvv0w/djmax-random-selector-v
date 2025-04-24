@@ -1,10 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Text.Json.Serialization;
+using Dmrsv.RandomSelector.Enums;
 
 namespace Dmrsv.RandomSelector
 {
-    public class QueryFilter : FilterBase
+    public class BasicFilter : FilterBase
     {
         private ObservableCollection<string> _buttonTunes;
         private ObservableCollection<string> _difficulties;
@@ -12,8 +13,8 @@ namespace Dmrsv.RandomSelector
         private ObservableCollection<int> _levels;
         private ObservableCollection<int> _scLevels;
         private bool _includesFavorite;
-        private List<string> _favorites;
-        private List<string> _blacklist;
+        private List<int> _favorite;
+        private List<int> _blacklist;
 
         public ObservableCollection<string> ButtonTunes
         {
@@ -71,17 +72,17 @@ namespace Dmrsv.RandomSelector
         }
 
         [JsonIgnore]
-        public List<string> Favorites
+        public List<int> Favorite
         {
-            get { return _favorites; }
+            get { return _favorite; }
             set
             {
-                _favorites = value;
+                _favorite = value;
                 IsUpdated = true;
             }
         }
         [JsonIgnore]
-        public List<string> Blacklist
+        public List<int> Blacklist
         {
             get { return _blacklist; }
             set
@@ -91,15 +92,15 @@ namespace Dmrsv.RandomSelector
             }
         }
 
-        public QueryFilter()
+        public BasicFilter()
         {
             _buttonTunes = new ObservableCollection<string>() { "4B", "5B", "6B", "8B" };
             _difficulties = new ObservableCollection<string>() { "NM", "HD", "MX", "SC" };
-            _categories = new ObservableCollection<string>() { "RP", "P1", "P2", "GG" };
+            _categories = new ObservableCollection<string>();
             _levels = new ObservableCollection<int>() { 1, 15 };
             _scLevels = new ObservableCollection<int>() { 1, 15 };
-            _favorites = new List<string>();
-            _blacklist = new List<string>();
+            _favorite = new List<int>();
+            _blacklist = new List<int>();
 
             foreach (var o in GetType().GetProperties())
             {
@@ -111,25 +112,19 @@ namespace Dmrsv.RandomSelector
             }
         }
 
-        public override List<Music> Filter(IEnumerable<Track> trackList)
+        public override IEnumerable<Pattern> Filter(IEnumerable<Track> trackList)
         {
+            var styles = from bt in ButtonTunes
+                         from df in Difficulties
+                         select $"{bt}{df}";
             var musicList = from t in trackList
-                            where Categories.Contains(t.Category) || (IncludesFavorite && Favorites.Contains(t.Title))
-                            where !Blacklist.Contains(t.Title)
-                            from m in t.GetMusicList()
-                            let styles = (from b in ButtonTunes
-                                          from d in Difficulties
-                                          select $"{b}{d}")
-                            where styles.Contains(m.Style)
-                            let levels = m.Difficulty == "SC" ? ScLevels : Levels
-                            where levels[0] <= m.Level && m.Level <= levels[1]
-                            select m;
-
-            if (OutputMethod is not null)
-            {
-                musicList = OutputMethod.Invoke(musicList);
-            }
-
+                            where Categories.Contains(t.Category) || (IncludesFavorite && Favorite.Contains(t.Id))
+                            where !Blacklist.Contains(t.Id)
+                            from p in t.Patterns
+                            where styles.Contains(p.Style)
+                            let levels = p.Difficulty == Difficulty.SC ? ScLevels : Levels
+                            where levels[0] <= p.Level && p.Level <= levels[1]
+                            select p;
             IsUpdated = false;
             return musicList.ToList();
         }

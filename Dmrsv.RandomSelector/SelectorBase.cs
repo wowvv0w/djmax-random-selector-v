@@ -2,16 +2,16 @@
 {
     public abstract class SelectorBase : ISelector
     {
-        public virtual Music? Select(IList<Music> musicList)
+        public virtual Pattern? Select(IList<Pattern> patternList)
         {
-            if (!musicList.Any() || musicList == null)
+            if (!patternList.Any() || patternList == null)
             {
                 return null;
             }
 
             var random = new Random();
-            int index = random.Next(musicList.Count);
-            return musicList[index];
+            int index = random.Next(patternList.Count);
+            return patternList[index];
         }
     }
 }

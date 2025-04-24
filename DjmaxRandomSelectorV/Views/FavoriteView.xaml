@@ -4,8 +4,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:cal="http://www.caliburnproject.org"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d" 
-        Height="400" Width="640"
+        Height="480" Width="600"
         ResizeMode="NoResize"
         WindowStyle="None"
         Background="#1A1A1A"
@@ -20,37 +21,41 @@
         <Grid DockPanel.Dock="Bottom"
               Style="{StaticResource DialogBar}">
             <Button x:Name="CloseDialog"
-                    Content="OK"
+                    Content="APPLY"
+                    Style="{StaticResource DialogButton}"
+                    HorizontalAlignment="Right"
+                    Margin="0 0 110 0"
+                    Width="90"/>
+            <Button x:Name="CloseDialogWithoutSave"
+                    Content="CANCEL"
                     Style="{StaticResource DialogButton}"
                     HorizontalAlignment="Right"
                     Margin="0 0 10 0"
                     Width="90"/>
         </Grid>
-
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="10"/>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="10"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="20"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10"/>
                 <RowDefinition/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10"/>
             </Grid.RowDefinitions>
             <Border BorderBrush="Black"
                     BorderThickness="3"
-                    Grid.RowSpan="4"
+                    Grid.RowSpan="7"
                     Grid.ColumnSpan="5"/>
             <Grid Grid.Row ="1" Grid.Column="1"
-                  Grid.ColumnSpan="3"
-                  Margin="0 5">
+                  Height="30">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Border x:Name="searchBoxBorder"
@@ -83,8 +88,7 @@
                                  CaretBrush="White"
                                  VerticalAlignment="Center"
                                  FontFamily="{StaticResource LatoFont}"
-                                 FontSize="15"
-                                 cal:Message.Attach="[Event KeyUp] = [Action SearchTitle]"/>
+                                 FontSize="15"/>
                         <Button x:Name="ClearSearchBox"
                                 Grid.Column="1"
                                 Width="25">
@@ -101,6 +105,31 @@
                         </Button>
                     </Grid>
                 </Border>
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal">
+                    <RadioButton x:Name="FiltersAllTrack"
+                                 Content="ALL TRACK"
+                                 Style="{StaticResource CategoryButton}"
+                                 Width="70"
+                                 FontSize="16"
+                                 Foreground="{StaticResource DefaultGrayColor}"
+                                 Background="#DFDFDF"/>
+                    <RadioButton x:Name="FiltersFavorite"
+                                 Content="FAVORITE"
+                                 Style="{StaticResource CategoryButton}"
+                                 Width="70"
+                                 FontSize="16"
+                                 Foreground="{StaticResource FgFavorite}"
+                                 Background="{StaticResource BgFavorite}"/>
+                    <RadioButton x:Name="FiltersBlacklist"
+                                 Content="BLACKLIST"
+                                 Style="{StaticResource CategoryButton}"
+                                 Width="70"
+                                 FontSize="16"
+                                 Foreground="{StaticResource FgBlackSquare}"
+                                 Background="{StaticResource BgBlackSquare}"/>
+                </StackPanel>
+                <!-- save just in case
                 <Popup StaysOpen="False"
                        Placement="Bottom">
                     <Popup.Style>
@@ -126,99 +155,153 @@
                              ItemContainerStyle="{StaticResource PopupListBoxItem}"
                              cal:Message.Attach="[Event SelectionChanged] = [Action SelectSuggestion(SuggestionBox.SelectedItem)]"/>
                 </Popup>
-                <Button x:Name="AddToFavorite"
-                        Content="FAVORITE"
-                        Grid.Column="1"
-                        Width="100"
-                        Margin="10 0 0 0"
-                        Style="{StaticResource DialogButton}">
-                </Button>
-                <Button x:Name="AddToBlacklist"
-                        Content="BLACKLIST"
-                        Grid.Column="2"
-                        Width="100"
-                        Margin="10 0 0 0"
-                        Style="{StaticResource DialogButton}">
-                </Button>
+                -->
             </Grid>
-            <TextBlock Text="FAVORITE"
-                       Grid.Row="2" Grid.Column="1"
-                       Style="{StaticResource BoldGrayTextBlock}"
-                       FontSize="12"/>
-            <TextBlock Text="BLACKLIST"
-                       Grid.Row="2" Grid.Column="3"
-                       Style="{StaticResource BoldGrayTextBlock}"
-                       FontSize="12"/>
-            <ScrollViewer VerticalScrollBarVisibility="Hidden"
+            
+            <ScrollViewer x:Name="FavoriteScrollViewer"
                           Grid.Row="3" Grid.Column="1">
-                <ItemsControl x:Name="FavoriteItems">
+                <ScrollViewer.Resources>
+                    <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">10</sys:Double>
+                    <Style TargetType="{x:Type ScrollViewer}" BasedOn="{StaticResource PlaylistScrollViewer}">
+                        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+                        <Setter Property="VerticalScrollBarVisibility" Value="Visible"/>
+                        <Setter Property="CanContentScroll" Value="False"/>
+                    </Style>
+                </ScrollViewer.Resources>
+                <ItemsControl x:Name="SearchResult">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel Background="{StaticResource DarkestTranslucentBackgroundColor}"/>
+                            <VirtualizingStackPanel Background="{StaticResource DarkerTranslucentBackgroundColor}"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid Background="#252419"
-                                  HorizontalAlignment="Left"
-                                  VerticalAlignment="Top"
-                                  Margin="0 0 5 5">
+                            <DataTemplate.Resources>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="FontFamily" Value="{StaticResource LatoBlackFont}"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataTemplate.Resources>
+                            <Grid x:Name="trackItem"
+                                  Height="30"
+                                  Margin="10 4">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding}"
-                                           Foreground="White"
-                                           FontFamily="{StaticResource LatoFont}"
-                                           FontSize="13"
-                                           Margin="5"/>
-                                <Button Grid.Column="1"
-                                        Width="20"
-                                        cal:Message.Attach="RemoveFromFavorite($dataContext)"
-                                        Margin="0 2.5 5 2.5"
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="8"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.Resources>
+                                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BoldGrayTextBlock}">
+                                            <Setter Property="HorizontalAlignment" Value="Left"/>
+                                        </Style>
+                                    </Grid.Resources>
+                                    <TextBlock x:Name="textTitle" Text="{Binding Title}"
+                                               Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="4"
+                                               FontSize="13"/>
+                                    <TextBlock x:Name="textComp" Text="{Binding Composer}"
+                                               Grid.Column="1" Grid.Row="1"
+                                               FontSize="10" Opacity=".7"/>
+                                    <TextBlock x:Name="textCat" Text="{Binding Category}"
+                                               Grid.Column="3" Grid.Row="1"
+                                               FontSize="9" Background="{StaticResource DarkestTranslucentBackgroundColor}"
+                                               Padding="4 0" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Button cal:Message.Attach="ChangeItemStatus($dataContext, '1')"
+                                        x:Name="btnFavor"
+                                        Grid.Column="1"
+                                        Content="★"
+                                        FontSize="18"
+                                        Width="30"
                                         Style="{StaticResource HoverEffectTransparentButton}">
-                                    <Image Style="{StaticResource XMarkImage}" Width="12"/>
+                                </Button>
+                                <Button cal:Message.Attach="ChangeItemStatus($dataContext, '-1')"
+                                        x:Name="btnBlack"
+                                        Grid.Column="2"
+                                        Content="×"
+                                        FontSize="22"
+                                        Width="30"
+                                        Style="{StaticResource HoverEffectTransparentButton}">
                                 </Button>
                             </Grid>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Status}" Value="1">
+                                    <Setter TargetName="trackItem" Property="Background"
+                                            Value="{StaticResource BgFavorite}"/>
+                                    <Setter TargetName="textTitle" Property="Foreground"
+                                            Value="#000000"/>
+                                    <Setter TargetName="textComp" Property="Foreground"
+                                            Value="#000000"/>
+                                    <Setter TargetName="textCat" Property="Foreground"
+                                            Value="#DFDFDF"/>
+                                    <Setter TargetName="btnFavor" Property="Foreground"
+                                            Value="#000000"/>
+                                    <Setter TargetName="btnFavor" Property="Content"
+                                            Value="-"/>
+                                    <Setter TargetName="btnFavor" Property="FontSize"
+                                            Value="22"/>
+                                    <Setter TargetName="btnBlack" Property="Foreground"
+                                            Value="#000000"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Status}" Value="-1">
+                                    <Setter TargetName="trackItem" Property="Background"
+                                            Value="{StaticResource BgBlackSquare}"/>
+                                    <Setter TargetName="textTitle" Property="Foreground"
+                                            Value="#FFFFFF"/>
+                                    <Setter TargetName="textComp" Property="Foreground"
+                                            Value="#FFFFFF"/>
+                                    <Setter TargetName="textCat" Property="Foreground"
+                                            Value="#DFDFDF"/>
+                                    <Setter TargetName="btnFavor" Property="Foreground"
+                                            Value="#FFFFFF"/>
+                                    <Setter TargetName="btnBlack" Property="Foreground"
+                                            Value="#FFFFFF"/>
+                                    <Setter TargetName="btnBlack" Property="Content"
+                                            Value="-"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
-            <ScrollViewer VerticalScrollBarVisibility="Hidden"
-                          Grid.Row="3" Grid.Column="3">
-                <ItemsControl x:Name="BlacklistItems">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Background="{StaticResource DarkestTranslucentBackgroundColor}"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Background="#291B26"
-                                  HorizontalAlignment="Left"
-                                  VerticalAlignment="Top"
-                                  Margin="0 0 5 5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding}"
-                                           Foreground="White"
-                                           FontFamily="{StaticResource LatoFont}"
-                                           FontSize="13"
-                                           Margin="5"/>
-                                <Button Grid.Column="1"
-                                        Width="20"
-                                        cal:Message.Attach="RemoveFromBlacklist($dataContext)"
-                                        Margin="0 2.5 5 2.5"
-                                        Style="{StaticResource HoverEffectTransparentButton}">
-                                    <Image Style="{StaticResource XMarkImage}" Width="12"/>
-                                </Button>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
+            <StackPanel Grid.Row="5" Grid.Column="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Button cal:Message.Attach="TurnPage('-1')"
+                        Style="{StaticResource DialogButton}"
+                        Width="20"
+                        Height="20"
+                        FontSize="10"
+                        Content="◀">
+                </Button>
+                <TextBlock x:Name="PageText"
+                           Style="{StaticResource GrayTextBlock}"
+                           FontSize="13"
+                           Margin="10 0"/>
+                <Button cal:Message.Attach="TurnPage('1')"
+                        Style="{StaticResource DialogButton}"
+                        Width="20"
+                        Height="20"
+                        FontSize="10"
+                        Content="▶">
+                </Button>
+            </StackPanel>
+            <TextBlock Grid.Row="5" Grid.Column="1"
+                       x:Name="ItemCountText"
+                       Style="{StaticResource GrayTextBlock}"
+                       HorizontalAlignment="Right"
+                       FontSize="13"/>
         </Grid>
     </DockPanel>
 </Window>

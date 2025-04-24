@@ -2,5 +2,5 @@
 
 namespace DjmaxRandomSelectorV.Messages
 {
-    public record FavoriteMessage(List<string> Favorite, List<string> Blacklist);
+    public record FavoriteMessage(List<int> Favorite, List<int> Blacklist);
 }

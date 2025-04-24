@@ -1,72 +1,67 @@
-﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.ViewModels;
-using Dmrsv.RandomSelector;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
+using Caliburn.Micro;
+using DjmaxRandomSelectorV.ViewModels;
 
 namespace DjmaxRandomSelectorV
 {
     public class Bootstrapper : BootstrapperBase
     {
-        private const string ConfigPath = @"Data\Config.json";
+        private const string AppDataFilePath = @"DMRSV3_Data\appdata.json";
+        private const string ConfigFilePath = @"DMRSV3_Data\Config.json";
 
-        private readonly SimpleContainer _container = new SimpleContainer();
-        private readonly Configuration _configuration;
-        private readonly RandomSelector _rs;
         private readonly IFileManager _fileManager;
-        private readonly CategoryContainer _categoryContainer = new CategoryContainer();
+        private readonly SimpleContainer _container = new SimpleContainer();
+
+        private readonly Dmrsv3Configuration _config;
+        private readonly RandomSelector _rs;
+        private readonly TrackDB _db;
+        private readonly CategoryContainer _categoryContainer;
         private readonly VersionContainer _versionContainer;
+        private readonly UpdateManager _updater;
+        private readonly ExecutionHelper _executor;
 
         private Mutex _mutex;
 
         public Bootstrapper()
         {
             Initialize();
-
             _fileManager = IoC.Get<IFileManager>();
+
             try
             {
-                _configuration = _fileManager.Import<Configuration>(ConfigPath);
+                _config = _fileManager.Import<Dmrsv3Configuration>(ConfigFilePath);
             }
             catch
             {
-                _configuration = new Configuration();
+                _config = new Dmrsv3Configuration();
             }
-            _container.Instance(_configuration);
+            _container.Instance(_config);
+            
+            _categoryContainer = new CategoryContainer();
+            _container.Instance(_categoryContainer);
+
+            _db = new TrackDB(_fileManager);
+            _container.Instance(_db);
 
             var eventAggregator = IoC.Get<IEventAggregator>();
-            _rs = new RandomSelector(eventAggregator);
+            _rs = new RandomSelector(eventAggregator, _db);
+            _executor = new ExecutionHelper(eventAggregator);
 
-            Version assemblyVersion = Assembly.GetEntryAssembly().GetName().Version;
-            _versionContainer = new VersionContainer(assemblyVersion, _configuration.AllTrackVersion);
-            _versionContainer.NewAllTrackVersionAvailable += (s, e) =>
-            {
-                try
-                {
-                    new TrackManager().DownloadAllTrack();
-                }
-                catch
-                {
-                    throw new Exception($"Failed to download lastest all track list (Version {e.Version})");
-                }
-                Task.Run(() =>
-                {
-                    MessageBox.Show($"All track list is updated to the version {e.Version}.",
-                        "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
-                });
-                _configuration.AllTrackVersion = Int32.Parse(e.Version);
-            };
+
+            _versionContainer = new VersionContainer();
             _container.Instance(_versionContainer);
+            _updater = new UpdateManager(_config, _versionContainer, _fileManager);
         }
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
+            // Prevent redundant running
             _mutex = new Mutex(true, "DjmaxRandomSelectorV", out bool createsNew);
             if (!createsNew)
             {
@@ -76,48 +71,71 @@ namespace DjmaxRandomSelectorV
                 Application.Shutdown();
                 return;
             }
-
+            // Update all track file
             try
             {
-                await _versionContainer.CheckLastestVersionsAsync();
+                await _updater.UpdateAsync();
             }
             catch (Exception ex)
             {
-                _ = Task.Run(() =>
-                {
-                    MessageBox.Show(ex.Message,
-                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                });
+                _ = Task.Run(() => MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error));
             }
-
+            if (_versionContainer.AppdataVersion.CompareTo(_config.AppdataVersion) > 0)
+            {
+                _ = Task.Run(() => MessageBox.Show($"App data has been updated to the version {_versionContainer.AppdataVersion}.",
+                             "Update", MessageBoxButton.OK, MessageBoxImage.Information));
+            }
+            // Import appdata
+            Dmrsv3AppData appdata;
+            try
+            {
+                appdata = _fileManager.Import<Dmrsv3AppData>(AppDataFilePath);
+            }
+            catch
+            {
+                MessageBox.Show("Cannot import appdata.json. Try again or download the file manually.",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Exit -= OnExit;
+                Application.Shutdown();
+                return;
+            }
+            _categoryContainer.SetCategories(appdata);
+            // Set AllTrack
+            _db.Initialize(appdata);
+            _db.ImportDB();
+            _db.SetPlayable(_config.OwnedDlcs);
+            // Bind views and viewmodels
             await DisplayRootViewForAsync(typeof(ShellViewModel));
+            // Set window property
             Window window = Application.MainWindow;
-            double[] position = _configuration.Position;
+            double[] position = _config.Position;
             if (position?.Length == 2)
             {
                 window.Top = position[0];
                 window.Left = position[1];
             }
-
-            _rs.Initialize(_configuration);
-            _rs.RegisterHandle(new WindowInteropHelper(window).Handle);
-            _rs.SetHotkey(0x0000, 118);
+            // Set random selector
+            _rs.Initialize(_config);
+            _executor.Initialize(_rs.CanStart, _rs.Start, _config);
+            _executor.RegisterHandle(new WindowInteropHelper(window).Handle);
+            _executor.SetHotkey(0x0000, 118);
         }
 
         protected override void OnExit(object sender, EventArgs e)
         {
             var historyItems = _rs.History.GetItems().ToList();
-            if (_configuration.SavesRecents)
+            if (_config.SavesRecents)
             {
-                _configuration.Exclusions = historyItems;
+                _config.RecentPlayed = historyItems;
             }
-            _fileManager.Export(_configuration, ConfigPath);
+            _config.AllTrackVersion = _versionContainer.AllTrackVersion;
+            _config.AppdataVersion = _versionContainer.AppdataVersion;
+            _fileManager.Export(_config, ConfigFilePath);
         }
 
         protected override void Configure()
         {
             _container.Instance(_container);
-            _container.Instance(_categoryContainer);
 
             _container
                 .Singleton<IWindowManager, WindowManager>()

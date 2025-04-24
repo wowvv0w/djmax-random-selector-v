@@ -2,6 +2,6 @@
 {
     public interface ISelector
     {
-        Music? Select(IList<Music> musicList);
+        Pattern? Select(IList<Pattern> patternList);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Caliburn.Micro;
+using System;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -11,13 +13,17 @@ namespace DjmaxRandomSelectorV.ViewModels
         public string CurrentVersion { get; }
         public string LastestVersion { get; }
         public string AllTrackVersion { get; }
+        public string AppdataVersion { get; }
 
         public InfoViewModel()
         {
-            var vc = IoC.Get<VersionContainer>();
-            CurrentVersion = "Current Version: " + vc.CurrentAppVersion.ToString(3);
-            LastestVersion = "Lastest Version: " + vc.LastestAppVersion.ToString(3);
-            AllTrackVersion = "All Track Version : " + vc.AllTrackVersion.ToString();
+            var container = IoC.Get<VersionContainer>();
+            CurrentVersion = "Current Version: " + container.CurrentAppVersion.ToString(3);
+            LastestVersion = "Lastest Version: " + container.LatestAppVersion.ToString(3);
+            AllTrackVersion = "All Track Last Updated : " + DateTime.ParseExact(container.AllTrackVersion.ToString(),
+                                                                                "yyMMddHHmm",
+                                                                                CultureInfo.InvariantCulture);
+            AppdataVersion = "Appdata Version : " + container.AppdataVersion;
         }
 
         public void OpenGithubPage()

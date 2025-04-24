@@ -11,53 +11,47 @@ using System.Windows.Interop;
 
 namespace DjmaxRandomSelectorV
 {
-    public class RandomSelector : IHandle<FilterMessage>, IHandle<CapacityMessage>,
-        IHandle<ModeWithAiderMessage>, IHandle<ModeWithLevelMessage>, IHandle<SettingMessage>
+    public class RandomSelector : IHandle<FilterMessage>, IHandle<FilterOptionMessage>, IHandle<SettingMessage>
     {
         private readonly IEventAggregator _eventAggregator;
 
-        private List<Track> _playable;
-        private List<Music> _candidates;
+        private readonly TrackDB _db;
+        private List<Pattern> _candidates;
 
         private bool _isRunning;
 
         private IFilter _filter;
-        private OutputMethodCallback _outputMethod;
-        private IHistory<string> _history;
+        private PatternPicker _picker;
+        private IHistory<int> _history;
         private ISelector _selector;
-        private ILocator _locator;
+        private Locator _locator;
 
         private readonly WindowTitleHelper _windowTitleHelper;
-        private readonly ExecutionHelper _executionHelper;
 
-        public IHistory<string> History => _history;
+        public IHistory<int> History => _history;
 
-        public RandomSelector(IEventAggregator eventAggregator)
+        public RandomSelector(IEventAggregator eventAggregator, TrackDB db)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
+            _db = db;
             _isRunning = false;
             _windowTitleHelper = new WindowTitleHelper();
-            _executionHelper = new ExecutionHelper(CanStart, Start);
         }
 
-        public void Initialize(Configuration config)
+        public void Initialize(Dmrsv3Configuration config)
         {
-            _playable = new TrackManager().CreateTracks(config.OwnedDlcs);
-            _candidates = new List<Music>();
-
-            _outputMethod = new OutputMethodCreator().Create(config.Mode, config.Level);
-
-            _history = new History<string>(config.Exclusions, config.RecentsCount);
+            _candidates = new List<Pattern>();
+            _picker = new PatternPicker();
+            _history = new History<int>(config.RecentPlayed, config.RecentsCount);
             _selector = new SelectorWithHistory(_history);
-
-            _locator = new Locator()
-            {
-                StartsAutomatically = config.Mode == MusicForm.Default && config.Aider == InputMethod.WithAutoStart,
-                InputInterval = config.InputDelay,
-                InvokesInput = config.Aider != InputMethod.NotInput,
-            };
-            _executionHelper.IgnoreCanExecute = config.Aider == InputMethod.NotInput;
+            _locator = new Locator();
+            _locator.MakeLocations(_db.AllTrack);
+            SetLocatorProperties(new FilterOptionMessage(
+                config.RecentsCount,
+                config.Mode,
+                config.Aider,
+                config.Level));
         }
 
         public bool CanStart()
@@ -78,68 +72,56 @@ namespace DjmaxRandomSelectorV
             _isRunning = true;
             if (_filter.IsUpdated)
             {
-                _candidates = _filter.Filter(_playable);
-                _history.Clear();
+                UpdateCandidates();
             }
-            var selected = _selector.Select(_candidates);
-            if (selected is not null)
-            {
-                _locator.Locate(selected, _playable);
-                _eventAggregator.PublishOnUIThreadAsync(new MusicMessage(selected));
-            }
-            else
+            Pattern selected = _selector.Select(_candidates);
+            if (selected is null)
             {
                 ShowErrorMessageBox("There is no music that meets the filter conditions.");
+                return;
             }
+            _locator.Locate(selected);
+            _eventAggregator.PublishOnUIThreadAsync(new PatternMessage(selected));
             _isRunning = false;
         }
 
-        public void RegisterHandle(IntPtr handle)
+        private void UpdateCandidates()
         {
-            HwndSource source = HwndSource.FromHwnd(handle);
-            _executionHelper.Register(handle, 9000);
-            source.AddHook(_executionHelper.HwndHook);
+            _candidates = _picker.Pick(_filter.Filter(_db.Playable)).ToList();
+            _history.Clear();
         }
-        public void SetHotkey(uint fsModifiers, uint vk)
+
+        private void SetLocatorProperties(FilterOptionMessage message)
         {
-            _executionHelper.SetHotkey(fsModifiers, vk);
+            _locator.CanLocate = message.InputMethod != InputMethod.NotInput;
+            _locator.LocatesStyle = message.MusicForm == MusicForm.Default;
+            _locator.PressesStart = message.MusicForm == MusicForm.Default && message.InputMethod == InputMethod.WithAutoStart;
         }
+
 
         public Task HandleAsync(FilterMessage message, CancellationToken cancellationToken)
         {
             _filter = message.Item;
-            _filter.OutputMethod = _outputMethod;
             return Task.CompletedTask;
         }
-
-        public Task HandleAsync(CapacityMessage message, CancellationToken cancellationToken)
+        public Task HandleAsync(FilterOptionMessage message, CancellationToken cancellationToken)
         {
-            _history.Capacity = message.Value;
-            return Task.CompletedTask;
-        }
-
-        public Task HandleAsync(ModeWithAiderMessage message, CancellationToken cancellationToken)
-        {
-            InputMethod aider = message.Aider;
-            _locator.StartsAutomatically = message.Mode == MusicForm.Default && aider == InputMethod.WithAutoStart;
-            _locator.InvokesInput = aider != InputMethod.NotInput;
-            _executionHelper.IgnoreCanExecute = aider == InputMethod.NotInput;
-            return Task.CompletedTask;
-        }
-
-        public Task HandleAsync(ModeWithLevelMessage message, CancellationToken cancellationToken)
-        {
-            _outputMethod = new OutputMethodCreator().Create(message.Mode, message.Level);
-            _filter.OutputMethod = _outputMethod;
+            if (_history.Capacity != message.RecentsCount)
+            {
+                _history.Capacity = message.RecentsCount;
+            }
+            SetLocatorProperties(message);
+            _picker.SetPickMethod(message.MusicForm, message.LevelPreference);
+            UpdateCandidates();
             return Task.CompletedTask;
         }
 
         public Task HandleAsync(SettingMessage message, CancellationToken cancellationToken)
         {
             _locator.InputInterval = message.InputInterval;
-            _playable = new TrackManager().CreateTracks(message.OwnedDlcs);
-            _candidates = _filter.Filter(_playable);
-            _history.Clear();
+            _db.SetPlayable(message.OwnedDlcs);
+            _locator.MakeLocations(_db.AllTrack);
+            UpdateCandidates();
             return Task.CompletedTask;
         }
 

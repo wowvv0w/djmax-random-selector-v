@@ -8,8 +8,7 @@ using System.Windows.Media.Imaging;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class FilterOptionIndicatorViewModel : Screen,
-        IHandle<CapacityMessage>, IHandle<ModeWithAiderMessage>, IHandle<ModeWithLevelMessage>
+    public class FilterOptionIndicatorViewModel : Screen, IHandle<FilterOptionMessage>
     {
         private readonly IEventAggregator _eventAggregator;
 
@@ -60,30 +59,19 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
 
-            var config = IoC.Get<Configuration>();
+            var config = IoC.Get<Dmrsv3Configuration>();
             SetExceptCount(config.RecentsCount);
             SetModeImage(config.Mode);
             SetAiderImage(config.Mode, config.Aider);
             SetLevelImage(config.Mode, config.Level);
         }
 
-        public Task HandleAsync(CapacityMessage message, CancellationToken cancellationToken)
+        public Task HandleAsync(FilterOptionMessage message, CancellationToken cancellationToken)
         {
-            SetExceptCount(message.Value);
-            return Task.CompletedTask;
-        }
-
-        public Task HandleAsync(ModeWithAiderMessage message, CancellationToken cancellationToken)
-        {
-            SetModeImage(message.Mode);
-            SetAiderImage(message.Mode, message.Aider);
-            return Task.CompletedTask;
-        }
-
-        public Task HandleAsync(ModeWithLevelMessage message, CancellationToken cancellationToken)
-        {
-            SetModeImage(message.Mode);
-            SetLevelImage(message.Mode, message.Level);
+            SetExceptCount(message.RecentsCount);
+            SetModeImage(message.MusicForm);
+            SetAiderImage(message.MusicForm, message.InputMethod);
+            SetLevelImage(message.MusicForm, message.LevelPreference);
             return Task.CompletedTask;
         }
 

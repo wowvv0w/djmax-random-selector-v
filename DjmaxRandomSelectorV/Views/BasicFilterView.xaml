@@ -1,8 +1,8 @@
-﻿<UserControl x:Class="DjmaxRandomSelectorV.Views.QueryFilterView"
+﻿<UserControl x:Class="DjmaxRandomSelectorV.Views.BasicFilterView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
@@ -612,7 +612,7 @@
                                     <Setter TargetName="Button" Property="BorderBrush" Value="{StaticResource BgTechnikaTQ1}"/>
                                     <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgTechnikaTQ}"/>
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding Name}" Value="PREMIUM TRACK">
+                                <DataTrigger Binding="{Binding Name}" Value="CLEAR PASS">
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgPremiumTrack}"/>
                                     <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgPremiumTrack}"/>
                                 </DataTrigger>

@@ -1,17 +1,15 @@
-﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.Messages;
-using DjmaxRandomSelectorV.Models;
-using Dmrsv.RandomSelector;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Caliburn.Micro;
+using DjmaxRandomSelectorV.Messages;
+using DjmaxRandomSelectorV.Models;
+using Dmrsv.RandomSelector.Enums;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -43,12 +41,12 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
-        public BindableCollection<PatternItem> PatternItems { get; }
+        public BindableCollection<VArchivePatternItem> PatternItems { get; }
 
         public VArchiveWizardViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            PatternItems = new BindableCollection<PatternItem>();
+            PatternItems = new BindableCollection<VArchivePatternItem>();
         }
 
         public void RequestBoard()
@@ -84,8 +82,9 @@ namespace DjmaxRandomSelectorV.ViewModels
             var items = from floor in root.Floors
                         let floorNumber = floor.FloorNumber
                         from p in floor.Patterns
-                        select new PatternItem()
+                        select new VArchivePatternItem()
                         {
+                            Id = p.Title,
                             Style = p.Pattern,
                             Title = p.Name,
                             Floor = floorNumber,
@@ -111,7 +110,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void ApplyQuery(string command)
         {
-            IEnumerable<PatternItem> items = PatternItems;
+            IEnumerable<VArchivePatternItem> items = PatternItems;
             if (IncludesPlayed)
             {
                 items = IsPlayed
@@ -153,8 +152,17 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             var items = from item in PatternItems
                         where item.IsChecked
-                        select new Music(item.Title, CurrentButton + item.Style, -1);
-            _eventAggregator.PublishOnUIThreadAsync(new VArchiveMessage(items, command));
+                        select 100 * item.Id + 10 * (int)CurrentButton.AsButtonTunes() + (int)item.Style.AsDifficulty();
+            _eventAggregator.PublishOnUIThreadAsync(new VArchiveMessage(items.ToArray(), command));
+        }
+
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            if (close)
+            {
+                _eventAggregator.PublishOnUIThreadAsync(new VArchiveMessage(null, "close"));
+            }
+            return Task.CompletedTask;
         }
 
         public record BoardRoot
@@ -174,6 +182,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public record BoardPattern
         {
+            public int Title { get; init; }
             public string Name { get; init; }
             public string Pattern { get; init; }
             public string Score { get; init; }
