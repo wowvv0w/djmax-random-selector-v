@@ -320,6 +320,22 @@
     </LinearGradientBrush>
     <SolidColorBrush x:Key="BgTekken" Color="#F6F6F6" />
     <SolidColorBrush x:Key="BgTribute1" Color="#DCD8B2" />
+    <DrawingBrush x:Key="BgBlueArchive">
+        <DrawingBrush.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="#01caf7">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0,0,110,30"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="#fbfbfc">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="38,2,70,25"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
     <!--#endregion-->
 
 </ResourceDictionary>

@@ -658,6 +658,9 @@
                                 <DataTrigger Binding="{Binding Name}" Value="GUILTY GEAR">
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgGuiltyGear}"/>
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="BLUE ARCHIVE">
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgBlueArchive}"/>
+                                </DataTrigger>
                                 <DataTrigger Binding="{Binding Name}" Value="CHUNITHM">
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgChunithm}"/>
                                 </DataTrigger>
