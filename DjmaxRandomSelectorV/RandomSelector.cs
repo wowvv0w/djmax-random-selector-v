@@ -41,19 +41,17 @@ namespace DjmaxRandomSelectorV
 
         public void Initialize(Dmrsv3Configuration config)
         {
-            var setting = config.Setting;
-            var filterOption = config.FilterOption;
             _candidates = new List<Pattern>();
             _picker = new PatternPicker();
-            _history = new History<int>(setting.RecentPlayed, filterOption.RecentsCount);
+            _history = new History<int>(config.RecentPlayed, config.RecentsCount);
             _selector = new SelectorWithHistory(_history);
             _locator = new Locator();
             _locator.MakeLocations(_db.AllTrack);
             SetLocatorProperties(new FilterOptionMessage(
-                filterOption.RecentsCount,
-                filterOption.MusicForm,
-                filterOption.InputMethod,
-                filterOption.LevelPreference));
+                config.RecentsCount,
+                config.Mode,
+                config.Aider,
+                config.Level));
         }
 
         public bool CanStart()

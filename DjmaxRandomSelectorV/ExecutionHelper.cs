@@ -35,8 +35,7 @@ namespace DjmaxRandomSelectorV
         {
             _canExecute = canExecute;
             _execute = execute;
-            var filterOption = config.FilterOption;
-            IgnoreCanExecute = filterOption.InputMethod == InputMethod.NotInput;
+            IgnoreCanExecute = config.Aider == InputMethod.NotInput;
         }
 
         public void RegisterHandle(IntPtr handle)

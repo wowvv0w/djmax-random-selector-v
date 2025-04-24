@@ -26,7 +26,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _number = 0;
             History = new BindableCollection<HistoryItem>();
             DisplayName = "HISTORY";
-            SetShowsStyle(IoC.Get<Dmrsv3Configuration>().FilterOption.MusicForm);
+            SetShowsStyle(IoC.Get<Dmrsv3Configuration>().Mode);
         }
 
         private void AddItem(Pattern pattern)

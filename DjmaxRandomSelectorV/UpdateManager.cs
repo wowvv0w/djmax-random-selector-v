@@ -25,9 +25,8 @@ namespace DjmaxRandomSelectorV
             _fileManager = fileManager;
             Version assemblyVersion = Assembly.GetEntryAssembly().GetName().Version;
             _container.CurrentAppVersion = _container.LatestAppVersion = assemblyVersion;
-            var versionInfo = config.VersionInfo;
-            _container.AllTrackVersion = versionInfo.AllTrackVersion;
-            _container.AppdataVersion = versionInfo.AppdataVersion;
+            _container.AllTrackVersion = config.AllTrackVersion;
+            _container.AppdataVersion = config.AppdataVersion;
         }
 
         public async Task UpdateAsync()

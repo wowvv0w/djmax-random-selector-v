@@ -51,8 +51,8 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void CloseWindow(object view)
         {
             var window = view as Window;
-            var winProp = IoC.Get<Dmrsv3Configuration>().WindowProperty;
-            winProp.Position = new double[2] { window.Top, window.Left };
+            var config = IoC.Get<Dmrsv3Configuration>();
+            config.Position = new double[2] { window.Top, window.Left };
             window.Close();
         }
 

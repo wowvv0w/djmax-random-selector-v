@@ -51,13 +51,13 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator = eventAggregator;
             _fileManager = fileManager;
 
-            var setting = IoC.Get<Dmrsv3Configuration>().Setting;
+            var config = IoC.Get<Dmrsv3Configuration>();
             _message = new SettingMessage()
             {
-                FilterType = setting.FilterType,
-                InputInterval = setting.InputInterval,
-                SavesExclusion = setting.SavesRecent,
-                OwnedDlcs = setting.OwnedDlcs.ConvertAll(x => x)
+                FilterType = config.FilterType,
+                InputInterval = config.InputDelay,
+                SavesExclusion = config.SavesRecents,
+                OwnedDlcs = config.OwnedDlcs.ConvertAll(x => x)
             };
 
             _categories = IoC.Get<CategoryContainer>().GetCategories();
@@ -97,13 +97,13 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void Apply()
         {
-            var setting = IoC.Get<Dmrsv3Configuration>().Setting;
-            setting.FilterType = _message.FilterType;
-            setting.InputInterval = _message.InputInterval;
-            setting.SavesRecent = _message.SavesExclusion;
-            setting.OwnedDlcs = _message.OwnedDlcs.ConvertAll(x => x);
+            var config = IoC.Get<Dmrsv3Configuration>();
+            config.FilterType = _message.FilterType;
+            config.InputDelay = _message.InputInterval;
+            config.SavesRecents = _message.SavesExclusion;
+            config.OwnedDlcs = _message.OwnedDlcs.ConvertAll(x => x);
 
-            _fileManager.Export(setting, @"Data\Config.json");
+            _fileManager.Export(config, @"Data\Config.json");
             _eventAggregator.PublishOnUIThreadAsync(_message);
             TryCloseAsync(true);
         }

@@ -180,9 +180,9 @@ namespace DjmaxRandomSelectorV.ViewModels
         private void ImportFilter(string path)
         {
             _filter = _fileManager.Import<BasicFilter>(path);
-            var setting = IoC.Get<Dmrsv3Configuration>().Setting;
-            _filter.Favorite = setting.Favorite;
-            _filter.Blacklist = setting.Blacklist;
+            var config = IoC.Get<Dmrsv3Configuration>();
+            _filter.Favorite = config.Favorite;
+            _filter.Blacklist = config.Blacklist;
             _eventAggregator.PublishOnUIThreadAsync(new FilterMessage(_filter));
         }
 

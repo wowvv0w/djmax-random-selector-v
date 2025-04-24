@@ -59,11 +59,11 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
 
-            var filterOption = IoC.Get<Dmrsv3Configuration>().FilterOption;
-            SetExceptCount(filterOption.RecentsCount);
-            SetModeImage(filterOption.MusicForm);
-            SetAiderImage(filterOption.MusicForm, filterOption.InputMethod);
-            SetLevelImage(filterOption.MusicForm, filterOption.LevelPreference);
+            var config = IoC.Get<Dmrsv3Configuration>();
+            SetExceptCount(config.RecentsCount);
+            SetModeImage(config.Mode);
+            SetAiderImage(config.Mode, config.Aider);
+            SetLevelImage(config.Mode, config.Level);
         }
 
         public Task HandleAsync(FilterOptionMessage message, CancellationToken cancellationToken)

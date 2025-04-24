@@ -80,7 +80,7 @@ namespace DjmaxRandomSelectorV
             {
                 _ = Task.Run(() => MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error));
             }
-            if (_versionContainer.AppdataVersion.CompareTo(_config.VersionInfo.AppdataVersion) > 0)
+            if (_versionContainer.AppdataVersion.CompareTo(_config.AppdataVersion) > 0)
             {
                 _ = Task.Run(() => MessageBox.Show($"App data has been updated to the version {_versionContainer.AppdataVersion}.",
                              "Update", MessageBoxButton.OK, MessageBoxImage.Information));
@@ -103,13 +103,12 @@ namespace DjmaxRandomSelectorV
             // Set AllTrack
             _db.Initialize(appdata);
             _db.ImportDB();
-            _db.SetPlayable(_config.Setting.OwnedDlcs);
+            _db.SetPlayable(_config.OwnedDlcs);
             // Bind views and viewmodels
             await DisplayRootViewForAsync(typeof(ShellViewModel));
             // Set window property
-            var winProp = _config.WindowProperty;
             Window window = Application.MainWindow;
-            double[] position = winProp.Position;
+            double[] position = _config.Position;
             if (position?.Length == 2)
             {
                 window.Top = position[0];
@@ -124,15 +123,13 @@ namespace DjmaxRandomSelectorV
 
         protected override void OnExit(object sender, EventArgs e)
         {
-            var setting = _config.Setting;
             var historyItems = _rs.History.GetItems().ToList();
-            if (setting.SavesRecent)
+            if (_config.SavesRecents)
             {
-                setting.RecentPlayed = historyItems;
+                _config.RecentPlayed = historyItems;
             }
-            var versionInfo = _config.VersionInfo;
-            versionInfo.AllTrackVersion = _versionContainer.AllTrackVersion;
-            versionInfo.AppdataVersion = _versionContainer.AppdataVersion;
+            _config.AllTrackVersion = _versionContainer.AllTrackVersion;
+            _config.AppdataVersion = _versionContainer.AppdataVersion;
             _fileManager.Export(_config, ConfigFilePath);
         }
 

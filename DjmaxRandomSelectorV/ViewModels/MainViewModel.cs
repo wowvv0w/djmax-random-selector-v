@@ -16,7 +16,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
 
-            var type = GetFilterPanelType(IoC.Get<Dmrsv3Configuration>().Setting.FilterType);
+            var type = GetFilterPanelType(IoC.Get<Dmrsv3Configuration>().FilterType);
             ActivateItemAsync(IoC.GetInstance(type, null));
             ActivateItemAsync(IoC.Get<HistoryViewModel>());
             ChangeActiveItemAsync(Items[0], false);

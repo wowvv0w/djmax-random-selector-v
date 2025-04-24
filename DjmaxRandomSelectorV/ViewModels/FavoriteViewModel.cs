@@ -92,9 +92,9 @@ namespace DjmaxRandomSelectorV.ViewModels
         public FavoriteViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            var setting = IoC.Get<Dmrsv3Configuration>().Setting;
-            var favorite = setting.Favorite;
-            var blacklist = setting.Blacklist;
+            var config = IoC.Get<Dmrsv3Configuration>();
+            var favorite = config.Favorite;
+            var blacklist = config.Blacklist;
             _db = IoC.Get<TrackDB>();
             _items = _db.AllTrack.Select(track => new FavoriteItem()
             {
@@ -117,9 +117,9 @@ namespace DjmaxRandomSelectorV.ViewModels
             List<int> favorite = _items.Where(item => item.Status == 1).Select(item => item.Id).ToList();
             List<int> blacklist = _items.Where(item => item.Status == -1).Select(item => item.Id).ToList();
 
-            var setting = IoC.Get<Dmrsv3Configuration>().Setting;
-            setting.Favorite = favorite;
-            setting.Blacklist = blacklist;
+            var config = IoC.Get<Dmrsv3Configuration>();
+            config.Favorite = favorite;
+            config.Blacklist = blacklist;
 
             var message = new FavoriteMessage(favorite, blacklist);
             _eventAggregator.PublishOnUIThreadAsync(message);
