@@ -114,6 +114,7 @@ namespace DjmaxRandomSelectorV
             }
             SetLocatorProperties(message);
             _picker.SetPickMethod(message.MusicForm, message.LevelPreference);
+            UpdateCandidates();
             return Task.CompletedTask;
         }
 
