@@ -209,6 +209,18 @@
             "id": "TEK",
             "steamId": "3222500",
             "type": 1
+        },
+        {
+            "name": "TRIBUTE #1",
+            "id": "PLI1",
+            "steamId": null,
+            "type": 3
+        },
+        {
+            "name": "BLUE ARCHIVE",
+            "id": "BA",
+            "steamId": "3653040",
+            "type": 1
         }
     ],
     "linkDisc": [
