@@ -45,17 +45,16 @@ namespace DjmaxRandomSelectorV
 
             var tasks = new List<Task<int>>();
             // update all track
-            DateTime now = DateTime.Parse(DateTime.Now.ToString("g"));
-            DateTime past = DateTime.MinValue;
-            if (!File.Exists(AppdataFilePath)
-                || !DateTime.TryParse(_container.AllTrackVersion, out past)
-                || now.CompareTo(past) > 0)
+            long now = long.Parse(DateTime.Now.ToString("yyMMddHHmm"));
+            long past = _container.AllTrackVersion;
+            if (now > past || !File.Exists(AllTrackFilePath))
             {
                 Debug.WriteLine("all track update start");
                 tasks.Add(DownloadAllTrackAsync());
             }
             // update appdata
-            if (versions[1].CompareTo(_container.AppdataVersion) > 0)
+            if (!File.Exists(AllTrackFilePath)
+                || versions[1].CompareTo(_container.AppdataVersion) > 0)
             {
                 Debug.WriteLine("appdata update start");
                 tasks.Add(DownloadAppdataAsync());
@@ -68,7 +67,7 @@ namespace DjmaxRandomSelectorV
                 switch (result)
                 {
                     case 0:
-                        _container.AllTrackVersion = now.ToString("g");
+                        _container.AllTrackVersion = now;
                         break;
                     case 1:
                         _container.AppdataVersion = versions[1];
