@@ -18,7 +18,7 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class AdvancedFilterViewModel : Screen, IHandle<VArchiveMessage>
     {
         private const string DefaultPath = @"DMRSV3_Data\CurrentPlaylist.json";
-        private const string PresetPath = @"DMRSV3_Data\Preset\Playlist";
+        private const string PresetPath = @"DMRSV3_Data\Playlist";
 
         private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
