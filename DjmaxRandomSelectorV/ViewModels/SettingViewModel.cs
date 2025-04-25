@@ -12,6 +12,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class SettingViewModel : Screen
     {
+        private const string ConfigPath = @"DMRSV3_Data\Config.json";
         private readonly IEventAggregator _eventAggregator;
         private readonly IFileManager _fileManager;
         private readonly SettingMessage _message;
@@ -100,7 +101,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             config.SavesRecents = _message.SavesExclusion;
             config.OwnedDlcs = _message.OwnedDlcs.ConvertAll(x => x);
 
-            _fileManager.Export(config, @"Data\Config.json");
+            _fileManager.Export(config, ConfigPath);
             _eventAggregator.PublishOnUIThreadAsync(_message);
             TryCloseAsync(true);
         }
