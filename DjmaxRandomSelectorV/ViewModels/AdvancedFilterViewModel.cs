@@ -64,9 +64,8 @@ namespace DjmaxRandomSelectorV.ViewModels
             PlaylistItems = new BindableCollection<PlaylistItem>();
             try
             {
-                // TODO: ddaembbang
-                var playlist = _fileManager.Import<AdvancedFilter>(DefaultPath);
-                AddToFilterAndPlaylist(playlist.PatternList.Select(x => x.PatternId).ToArray());
+                var playlist = ImportPlaylist(DefaultPath);
+                AddToFilterAndPlaylist(playlist.Items);
             }
             catch
             {
@@ -93,6 +92,28 @@ namespace DjmaxRandomSelectorV.ViewModels
                 }
             }
             return Task.CompletedTask;
+        }
+
+        private Playlist ImportPlaylist(string path)
+        {
+            var playlist = _fileManager.Import<Playlist>(path);
+            if (playlist.Items is null) // playlist is for old versions or is empty
+            {
+                var old = _fileManager.Import<OldPlaylist>(path);
+                if (old.Playlist is not null)
+                {
+                    playlist = new Playlist()
+                    {
+                        Items = (from item in old.Playlist
+                                 let track = _db.AllTrack.FirstOrDefault(t => t.Title.Equals(item.Title), null)
+                                 where track is not null
+                                 let pattern = track.Patterns.FirstOrDefault(p => p.Style.Equals(item.Style), null)
+                                 where pattern is not null
+                                 select pattern.PatternId).ToArray()
+                    };
+                }
+            }
+            return playlist;
         }
 
         public void AddItem(Pattern pattern)
@@ -290,7 +311,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 Playlist playlist;
                 try
                 {
-                    playlist = _fileManager.Import<Playlist>(dialog.FileName);
+                    playlist = ImportPlaylist(dialog.FileName);
                 }
                 catch (Exception ex)
                 {
@@ -309,6 +330,8 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             string app = AppDomain.CurrentDomain.BaseDirectory;
             string path = Path.Combine(app, PresetPath);
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
             var dialog = new OpenFileDialog()
             {
                 InitialDirectory = path,
@@ -323,7 +346,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 Playlist playlist;
                 try
                 {
-                    playlist = _fileManager.Import<Playlist>(dialog.FileName);
+                    playlist = ImportPlaylist(dialog.FileName);
                 }
                 catch (Exception ex)
                 {
