@@ -539,6 +539,10 @@
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgRespect}"/>
                                     <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgRespect}"/>
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="RESPECT/V">
+                                    <Setter TargetName="Button" Property="Background" Value="{StaticResource BgRespectV}"/>
+                                    <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgRespectV}"/>
+                                </DataTrigger>
                                 <DataTrigger Binding="{Binding Name}" Value="PORTABLE 1">
                                     <Setter TargetName="Button" Property="Background" Value="{StaticResource BgPortable1}"/>
                                     <Setter TargetName="Button" Property="Foreground" Value="{StaticResource FgPortable1}"/>

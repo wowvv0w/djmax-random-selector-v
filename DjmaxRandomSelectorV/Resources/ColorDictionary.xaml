@@ -29,6 +29,10 @@
         <GradientStop Color="#F96775" Offset="0.1"/>
         <GradientStop Color="#F0B405" Offset="0.9"/>
     </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BgRespectV" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#ffae00" Offset="0.1"/>
+        <GradientStop Color="#9c43f6" Offset="0.9"/>
+    </LinearGradientBrush>
     <LinearGradientBrush x:Key="BgPortable1" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Color="#AA45F9" Offset="0"/>
         <GradientStop Color="#00B3D2" Offset="1"/>
@@ -224,6 +228,7 @@
     </LinearGradientBrush>
 
     <SolidColorBrush x:Key="FgRespect" Color="#594713"/>
+    <SolidColorBrush x:Key="FgRespectV" Color="#5e3e5b"/>
     <SolidColorBrush x:Key="FgPortable1" Color="#0E6677"/>
     <SolidColorBrush x:Key="FgPortable2" Color="#761A3f"/>
     <SolidColorBrush x:Key="FgPortable3" Color="#563914"/>
