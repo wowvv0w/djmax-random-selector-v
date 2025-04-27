@@ -7,6 +7,7 @@
     ],
     "basicCategories": [
         "R",
+        "RV",
         "P1",
         "P2",
         "GG"
@@ -15,6 +16,12 @@
         {
             "name": "RESPECT",
             "id": "R",
+            "steamId": null,
+            "type": 0
+        },
+        {
+            "name": "RESPECT/V",
+            "id": "RV",
             "steamId": null,
             "type": 0
         },
@@ -189,13 +196,13 @@
         {
             "name": "MUSE DASH",
             "id": "MD",
-            "steamId": "1782170",
+            "steamId": "1958170",
             "type": 1
         },
         {
             "name": "NEXON",
             "id": "NXN",
-            "steamId": "1958170",
+            "steamId": "1782170",
             "type": 2
         },
         {
