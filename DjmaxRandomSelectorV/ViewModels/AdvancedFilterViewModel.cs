@@ -81,7 +81,11 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             if (close)
             {
-                _fileManager.Export(_filter, DefaultPath);
+                var playlist = new Playlist()
+                {
+                    Items = _filter.PatternList.Select(p => p.PatternId).ToArray()
+                };
+                _fileManager.Export(playlist, DefaultPath);
                 foreach (Window window in Application.Current.Windows)
                 {
                     if (window.Title == "V-ARCHIVE Wizard")
@@ -245,7 +249,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 "Prompt", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
-                var deduplicated = PlaylistItems.Distinct();
+                var deduplicated = PlaylistItems.Distinct().ToList();
                 PlaylistItems.Clear();
                 PlaylistItems.AddRange(deduplicated);
                 _filter.PatternList = new ObservableCollection<Pattern>(_filter.PatternList.Distinct());
