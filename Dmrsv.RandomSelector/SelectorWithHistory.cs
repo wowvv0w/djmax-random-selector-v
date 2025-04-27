@@ -15,7 +15,7 @@
                                  where !History.Contains(p.TrackId)
                                  select p;
 
-            if (!recentExcluded.Any() && History.Count > 0)
+            while (!recentExcluded.Any() && History.Count > 0)
             {
                 int trackId = History.Dequeue();
                 recentExcluded = from p in patternList

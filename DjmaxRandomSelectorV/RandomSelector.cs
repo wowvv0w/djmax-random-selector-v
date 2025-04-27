@@ -100,7 +100,6 @@ namespace DjmaxRandomSelectorV
         private void UpdateCandidates()
         {
             _candidates = _picker.Pick(_filter.Filter(_db.Playable)).ToList();
-            _history.Clear();
         }
 
         private void SetLocatorProperties(FilterOptionMessage message)
