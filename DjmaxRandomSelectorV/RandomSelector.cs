@@ -74,14 +74,16 @@ namespace DjmaxRandomSelectorV
                 UpdateCandidates();
             }
             Pattern selected = _selector.Select(_candidates);
-            if (selected is null)
+            if (selected is not null)
+            {
+                _locator.Locate(selected);
+                _lastPlayed = selected;
+                _eventAggregator.PublishOnUIThreadAsync(new PatternMessage(selected));
+            }
+            else
             {
                 ShowErrorMessageBox("There is no music that meets the filter conditions.");
-                return;
             }
-            _locator.Locate(selected);
-            _lastPlayed = selected;
-            _eventAggregator.PublishOnUIThreadAsync(new PatternMessage(selected));
             _isRunning = false;
         }
         public void StartAgain()
