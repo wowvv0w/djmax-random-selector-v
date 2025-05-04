@@ -26,15 +26,42 @@
                     </TextBlock.Foreground>
                 </TextBlock>
             </Grid>
-            <Image x:Name="ModeImage"
-                   Source="pack://application:,,,/Images/mode_fs.png"
-                   Margin="2.5"/>
-            <Image x:Name="AiderImage"
-                   Source="pack://application:,,,/Images/addon_none.png"
-                   Margin="2.5"/>
-            <Image x:Name="LevelImage"
-                   Source="pack://application:,,,/Images/addon_none.png"
-                   Margin="2.5"/>
+            <Image Margin="2.5">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Setter Property="Source" Value="{Binding ModeImage}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ModeImage}" Value="{x:Null}">
+                                <Setter Property="Source" Value="pack://application:,,,/Images/mode_fs.png"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+            <Image Margin="2.5">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Setter Property="Source" Value="{Binding AiderImage}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AiderImage}" Value="{x:Null}">
+                                <Setter Property="Source" Value="pack://application:,,,/Images/addon_none.png"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+            <Image Margin="2.5">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Setter Property="Source" Value="{Binding LevelImage}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding LevelImage}" Value="{x:Null}">
+                                <Setter Property="Source" Value="pack://application:,,,/Images/addon_none.png"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
         </StackPanel>
     </Viewbox>
 </UserControl>
