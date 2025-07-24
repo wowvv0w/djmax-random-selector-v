@@ -47,6 +47,7 @@ namespace Dmrsv.RandomSelector
             };
             var groupByInitial = trackList.Where(t => t.IsPlayable)
                                           .OrderBy(t => t.Title, new TitleComparer())
+                                          .ThenByDescending(t => t.Id == 170 || t.Id == 267 ? t.Id : 0)
                                           .GroupBy(t => getGroup(t))
                                           .ToDictionary(g => g.Key, g => g.ToList());
             var getIndex = (Track t) =>

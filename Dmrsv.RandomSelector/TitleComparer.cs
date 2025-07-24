@@ -4,7 +4,7 @@
     {
         public int Compare(string? x, string? y)
         {
-            if (ReferenceEquals(x, y))
+            if (string.Equals(x, y))
             {
                 return 0;
             }
@@ -26,8 +26,8 @@
             }
             // priority order: white-space -> non-alphabetic letter -> special character -> number -> alphabet
             char a = x[index], b = y[index];
-            int priorityA = GetPriority(a);
-            int priorityB = GetPriority(b);
+            int priorityA = GetPriority(a, index);
+            int priorityB = GetPriority(b, index);
             if (priorityA == priorityB)
             {
                 return a.CompareTo(b);
@@ -35,7 +35,7 @@
             return priorityA - priorityB;
         }
 
-        private int GetPriority(char ch)
+        private int GetPriority(char ch, int idx)
         {
             if (char.IsWhiteSpace(ch))
             {
@@ -47,7 +47,7 @@
             }
             if (char.IsLetter(ch)) // non-alphabetic letter
             {
-                return 1;
+                return idx == 0 ? 1 : 5;
             }
             if (char.IsDigit(ch))
             {
