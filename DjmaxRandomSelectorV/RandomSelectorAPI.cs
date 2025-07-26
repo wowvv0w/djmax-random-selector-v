@@ -9,7 +9,7 @@ using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV
 {
-    public class RandomSelector : IHandle<FilterMessage>, IHandle<FilterOptionMessage>, IHandle<SettingMessage>
+    public class RandomSelectorAPI : IHandle<FilterMessage>, IHandle<FilterOptionMessage>, IHandle<SettingMessage>
     {
         private readonly IEventAggregator _eventAggregator;
 
@@ -29,7 +29,7 @@ namespace DjmaxRandomSelectorV
 
         public IHistory<int> History => _history;
 
-        public RandomSelector(IEventAggregator eventAggregator, TrackDB db)
+        public RandomSelectorAPI(IEventAggregator eventAggregator, TrackDB db)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);

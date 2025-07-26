@@ -19,7 +19,7 @@ namespace DjmaxRandomSelectorV
         private readonly SimpleContainer _container = new SimpleContainer();
 
         private readonly Dmrsv3Configuration _config;
-        private readonly RandomSelector _rs;
+        private readonly RandomSelectorAPI _rs;
         private readonly TrackDB _db;
         private readonly CategoryContainer _categoryContainer;
         private readonly VersionContainer _versionContainer;
@@ -50,7 +50,7 @@ namespace DjmaxRandomSelectorV
             _container.Instance(_db);
 
             var eventAggregator = IoC.Get<IEventAggregator>();
-            _rs = new RandomSelector(eventAggregator, _db);
+            _rs = new RandomSelectorAPI(eventAggregator, _db);
             _executor = new ExecutionHelper(eventAggregator);
 
 

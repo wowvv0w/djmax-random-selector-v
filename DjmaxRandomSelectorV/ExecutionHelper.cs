@@ -33,7 +33,7 @@ namespace DjmaxRandomSelectorV
             _eventAggregator.SubscribeOnUIThread(this);
         }
 
-        public void Initialize(RandomSelector rs, Dmrsv3Configuration config)
+        public void Initialize(RandomSelectorAPI rs, Dmrsv3Configuration config)
         {
             _canExecute = rs.CanStart;
             _execute = rs.Start;
