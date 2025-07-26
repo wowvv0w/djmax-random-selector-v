@@ -5,7 +5,7 @@ using Dmrsv.RandomSelector.Enums;
 
 namespace Dmrsv.RandomSelector
 {
-    public class BasicFilter : FilterBase
+    public class BasicFilterOld : FilterBase
     {
         private ObservableCollection<string> _buttonTunes;
         private ObservableCollection<string> _difficulties;
@@ -92,7 +92,7 @@ namespace Dmrsv.RandomSelector
             }
         }
 
-        public BasicFilter()
+        public BasicFilterOld()
         {
             _buttonTunes = new ObservableCollection<string>() { "4B", "5B", "6B", "8B" };
             _difficulties = new ObservableCollection<string>() { "NM", "HD", "MX", "SC" };

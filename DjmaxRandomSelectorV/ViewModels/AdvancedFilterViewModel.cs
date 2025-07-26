@@ -25,7 +25,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private readonly IFileManager _fileManager;
         private readonly TrackDB _db;
 
-        private AdvancedFilter _filter;
+        private AdvancedFilterOld _filter;
         private string _searchBox;
         private List<string> _namesake;
         private bool _isWizardOpen;
@@ -60,7 +60,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                            .ToList();
             _isWizardOpen = false;
 
-            _filter = new AdvancedFilter();
+            _filter = new AdvancedFilterOld();
             PlaylistItems = new BindableCollection<PlaylistItem>();
             try
             {

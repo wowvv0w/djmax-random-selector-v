@@ -2,5 +2,5 @@
 
 namespace DjmaxRandomSelectorV.Messages
 {
-    public record FilterMessage(IFilter Item);
+    public record FilterMessage(IFilterOld Item);
 }

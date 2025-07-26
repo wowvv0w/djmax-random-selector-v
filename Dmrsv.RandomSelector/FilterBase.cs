@@ -2,7 +2,7 @@
 
 namespace Dmrsv.RandomSelector
 {
-    public abstract class FilterBase : IFilter
+    public abstract class FilterBase : IFilterOld
     {
         [JsonIgnore]
         public bool IsUpdated { get; protected set; }

@@ -19,7 +19,7 @@ namespace DjmaxRandomSelectorV
         private bool _isRunning;
         private Pattern _lastPlayed;
 
-        private IFilter _filter;
+        private IFilterOld _filter;
         private PatternPicker _picker;
         private IHistory<int> _history;
         private ISelector _selector;

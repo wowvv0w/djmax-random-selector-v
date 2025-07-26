@@ -23,7 +23,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private readonly IFileManager _fileManager;
         private readonly List<Category> _categories;
 
-        private BasicFilter _filter;
+        private BasicFilterOld _filter;
 
         public BindableCollection<ListUpdater> ButtonTunesUpdaters { get; set; }
         public BindableCollection<ListUpdater> RegularCategories { get; set; }
@@ -134,7 +134,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             catch
             {
-                _filter = new BasicFilter();
+                _filter = new BasicFilterOld();
             }
             Initialize();
         }
@@ -179,7 +179,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         private void ImportFilter(string path)
         {
-            _filter = _fileManager.Import<BasicFilter>(path);
+            _filter = _fileManager.Import<BasicFilterOld>(path);
             var config = IoC.Get<Dmrsv3Configuration>();
             _filter.Favorite = config.Favorite;
             _filter.Blacklist = config.Blacklist;

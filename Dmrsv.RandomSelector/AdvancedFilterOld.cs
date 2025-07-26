@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Dmrsv.RandomSelector
 {
-    public class AdvancedFilter : FilterBase
+    public class AdvancedFilterOld : FilterBase
     {
         private ObservableCollection<Pattern> _patternList;
 
@@ -17,7 +17,7 @@ namespace Dmrsv.RandomSelector
             }
         }
 
-        public AdvancedFilter()
+        public AdvancedFilterOld()
         {
             _patternList = new ObservableCollection<Pattern>();
             _patternList.CollectionChanged += (s, e) => IsUpdated = true;
