@@ -1,4 +1,4 @@
-﻿namespace Dmrsv.RandomSelector.Enums
+﻿namespace Dmrsv.RandomSelector
 {
     public enum ButtonTunes
     {

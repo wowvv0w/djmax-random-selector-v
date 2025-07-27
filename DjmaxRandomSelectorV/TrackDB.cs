@@ -4,7 +4,6 @@ using System.Linq;
 using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
 using Dmrsv.RandomSelector;
-using Dmrsv.RandomSelector.Enums;
 
 namespace DjmaxRandomSelectorV
 {

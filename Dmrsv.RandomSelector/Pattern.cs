@@ -1,6 +1,4 @@
-﻿using Dmrsv.RandomSelector.Enums;
-
-namespace Dmrsv.RandomSelector
+﻿namespace Dmrsv.RandomSelector
 {
     public record Pattern
     {
