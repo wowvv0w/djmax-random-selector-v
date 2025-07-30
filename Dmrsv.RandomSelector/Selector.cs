@@ -2,18 +2,15 @@
 {
     public static class Selector
     {
-        public static Pattern? SelectFrom(IReadOnlyList<Pattern> candidates, int index)
+        public static Pattern? RandomSelect(IReadOnlyList<Pattern> candidates)
         {
             if (candidates is null)
             {
                 return null;
             }
-            if (index < 0 || index >= candidates.Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
 
-            return candidates[index];
+            int selectedIndex = new Random().Next(candidates.Count);
+            return candidates[selectedIndex];
         }
     }
 }
