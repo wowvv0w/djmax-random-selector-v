@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Conditions
 {
-    public record TrackIdCondition(ICollection<int> TrackIds) : ICondition
+    public record UnionCondition(IEnumerable<ICondition> Conditions) : ICondition
     {
         public bool IsSatisfiedBy(Pattern pattern)
         {
-            return TrackIds.Contains(pattern.TrackId);
+            return Conditions.All(cond => cond.IsSatisfiedBy(pattern));
         }
     }
 }
