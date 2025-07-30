@@ -3,7 +3,7 @@ using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Conditions
 {
-    public record TrackIdCondition(bool IsEnabled, bool IsBlacklist, ICollection<int> TrackIds) : ICondition
+    public record TrackIdCondition(bool IsBlacklist, ICollection<int> TrackIds) : ICondition
     {
         public bool IsSatisfiedBy(Pattern pattern)
         {

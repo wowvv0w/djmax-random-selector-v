@@ -3,7 +3,7 @@ using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Conditions
 {
-    public record ButtonCondition(bool IsEnabled, ICollection<ButtonTunes> Buttons) : ICondition
+    public record ButtonCondition(ICollection<ButtonTunes> Buttons) : ICondition
     {
         public bool IsSatisfiedBy(Pattern pattern)
         {

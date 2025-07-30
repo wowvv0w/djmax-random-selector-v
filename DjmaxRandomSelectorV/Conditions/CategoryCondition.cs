@@ -3,7 +3,7 @@ using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Conditions
 {
-    public record CategoryCondition(bool IsEnabled, ICollection<string> Categories) : ICondition
+    public record CategoryCondition(ICollection<string> Categories) : ICondition
     {
         public bool IsSatisfiedBy(Pattern pattern)
         {

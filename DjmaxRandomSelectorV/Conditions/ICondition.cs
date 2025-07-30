@@ -2,9 +2,8 @@
 
 namespace DjmaxRandomSelectorV.Conditions
 {
-    interface ICondition
+    public interface ICondition
     {
-        bool IsEnabled { get; }
         bool IsSatisfiedBy(Pattern pattern);
     }
 }

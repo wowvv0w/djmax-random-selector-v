@@ -2,7 +2,7 @@
 
 namespace DjmaxRandomSelectorV.Conditions
 {
-    public record SingleLevelCondition(bool IsEnabled, bool IsSC, int Level) : ICondition
+    public record SingleLevelCondition(bool IsSC, int Level) : ICondition
     {
         public bool IsSatisfiedBy(Pattern pattern)
         {
