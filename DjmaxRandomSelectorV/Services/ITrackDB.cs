@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DjmaxRandomSelectorV.Models;
 using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Services
@@ -7,7 +8,7 @@ namespace DjmaxRandomSelectorV.Services
     {
         IReadOnlyList<Track> AllTrack { get; }
         IReadOnlyList<Track> Playable { get; }
-        IReadOnlyList<string> Categories { get; }
+        IReadOnlyList<Category> Categories { get; }
         Track Find(int trackId);
 
     }
