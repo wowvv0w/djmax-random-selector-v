@@ -8,7 +8,7 @@ namespace DjmaxRandomSelectorV.Conditions
     {
         public bool IsSatisfiedBy(Pattern pattern)
         {
-            return Conditions.Any(cond => cond.IsSatisfiedBy(pattern));
+            return Conditions.All(cond => cond.IsSatisfiedBy(pattern));
         }
     }
 }
