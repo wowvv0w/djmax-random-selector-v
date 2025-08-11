@@ -1,0 +1,69 @@
+﻿using System.Windows;
+using DjmaxRandomSelectorV.Conditions;
+using DjmaxRandomSelectorV.Extractors;
+using Dmrsv.RandomSelector;
+
+namespace DjmaxRandomSelectorV.Services
+{
+    public class RandomSelectorExecutor : IExecutable
+    {
+        private readonly IRandomSelector _rs;
+        private readonly ITrackDB _db;
+        //private readonly IConditionBuilder _condBuild;
+        private readonly IGroupwiseExtractorBuilder _extrBuild;
+        private readonly ILocator _loc;
+
+        private bool _isStateChanged = true;
+        private bool _isRunning = false;
+
+        public bool IsRunning { get { return _isRunning; } }
+
+        public RandomSelectorExecutor(IRandomSelector rs, ITrackDB db, ILocator loc, IGroupwiseExtractorBuilder extrBuild)
+        {
+            _rs = rs;
+            _db = db;
+            _loc = loc;
+            _extrBuild = extrBuild;
+        }
+
+        public void SetStateChanged()
+        {
+            _isStateChanged = true;
+        }
+
+        public void Start()
+        {
+            _isRunning = true;
+            if (_isStateChanged)
+            {
+                // TODO: cond
+                _rs.SetCandidates(_db.Playable, null, _extrBuild.Build());
+                _isStateChanged = false;
+            }
+            Pattern selected = _rs.Select();
+            if (selected is not null)
+            {
+                _loc.Locate(selected);
+            }
+            else
+            {
+                MessageBox.Show("There is no music that meets the filter conditions.",
+                                "Error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+            }
+            _isRunning = false;
+        }
+
+        public void Restart()
+        {
+            _isRunning = true;
+            Pattern selected = _rs.Reselect();
+            if (selected is not null)
+            {
+                _loc.Locate(selected);
+            }
+            _isRunning = false;
+        }
+    }
+}

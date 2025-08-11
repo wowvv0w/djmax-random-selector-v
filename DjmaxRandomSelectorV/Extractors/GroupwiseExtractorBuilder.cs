@@ -5,11 +5,14 @@ using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Extractors
 {
-    public class GroupwiseExtractorFactory
+    public class GroupwiseExtractorBuilder : IGroupwiseExtractorBuilder
     {
-        public IGroupwiseExtractor Create(MusicForm styleType, LevelPreference levelPreference)
+        public MusicForm StyleType { get; set; }
+        public LevelPreference LevelPreference { get; set; }
+
+        public IGroupwiseExtractor Build()
         {
-            return (styleType, levelPreference) switch
+            return (StyleType, LevelPreference) switch
             {
                 (MusicForm.Free, _) => new Extractor<int>(p => p.TrackId, g => g.First()),
                 (MusicForm.Default, LevelPreference.Lowest) => new Extractor<PerButtonGroup>(p => new(p.TrackId, p.Button), g => g.First()),
@@ -17,6 +20,8 @@ namespace DjmaxRandomSelectorV.Extractors
                 _ => null
             };
         }
+
+        private record PerButtonGroup(int TrackId, ButtonTunes Button);
 
         private class Extractor<TGroupKey> : IGroupwiseExtractor
         {
@@ -32,7 +37,5 @@ namespace DjmaxRandomSelectorV.Extractors
                 return _extract(patterns);
             }
         }
-
-        private record PerButtonGroup(int TrackId, ButtonTunes Button);
     }
 }
