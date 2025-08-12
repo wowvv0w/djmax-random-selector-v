@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using DjmaxRandomSelectorV.States;
 using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV
 {
-    public class Dmrsv3Configuration : IFilterOptionState, ISettingState
+    public class Dmrsv3Configuration
     {
         /*************** Setting *****************/
         public FilterType FilterType { get; set; } = FilterType.Query;
