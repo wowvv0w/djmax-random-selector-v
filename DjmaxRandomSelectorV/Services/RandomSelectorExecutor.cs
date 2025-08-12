@@ -9,7 +9,7 @@ namespace DjmaxRandomSelectorV.Services
     {
         private readonly IRandomSelector _rs;
         private readonly ITrackDB _db;
-        //private readonly IConditionBuilder _condBuild;
+        private readonly IConditionBuilder _condBuild;
         private readonly IGroupwiseExtractorBuilder _extrBuild;
         private readonly ILocator _loc;
 
@@ -18,11 +18,13 @@ namespace DjmaxRandomSelectorV.Services
 
         public bool IsRunning { get { return _isRunning; } }
 
-        public RandomSelectorExecutor(IRandomSelector rs, ITrackDB db, ILocator loc, IGroupwiseExtractorBuilder extrBuild)
+        public RandomSelectorExecutor(IRandomSelector rs, ITrackDB db, ILocator loc,
+            IConditionBuilder condBuild, IGroupwiseExtractorBuilder extrBuild)
         {
             _rs = rs;
             _db = db;
             _loc = loc;
+            _condBuild = condBuild;
             _extrBuild = extrBuild;
         }
 
@@ -36,8 +38,7 @@ namespace DjmaxRandomSelectorV.Services
             _isRunning = true;
             if (_isStateChanged)
             {
-                // TODO: cond
-                _rs.SetCandidates(_db.Playable, null, _extrBuild.Build());
+                _rs.SetCandidates(_db.Playable, _condBuild.Build(), _extrBuild.Build());
                 _isStateChanged = false;
             }
             Pattern selected = _rs.Select();
