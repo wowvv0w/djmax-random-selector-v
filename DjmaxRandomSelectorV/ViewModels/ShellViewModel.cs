@@ -1,9 +1,9 @@
-﻿using Caliburn.Micro;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Caliburn.Micro;
+using DjmaxRandomSelectorV.States;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -17,14 +17,14 @@ namespace DjmaxRandomSelectorV.ViewModels
         public object FilterOptionPanel { get => Items[2]; }
         public Visibility OpenReleasePageVisibility { get; }
 
-        public ShellViewModel(IEventAggregator eventAggregator, IWindowManager windowManager)
+        public ShellViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, IReadOnlyVersionInfoStateManager versionInfoManager)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
             _windowManager = windowManager;
 
-            var container = IoC.Get<VersionContainer>();
-            bool visible = container.CurrentAppVersion < container.LatestAppVersion;
+            var versionInfo = versionInfoManager.GetReadOnlyVersionInfo();
+            bool visible = versionInfo.CurrentAppVersion < versionInfo.LatestAppVersion;
             OpenReleasePageVisibility = visible ? Visibility.Visible : Visibility.Hidden;
 
             var childrenType = new List<Type>()

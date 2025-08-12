@@ -1,10 +1,11 @@
-﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.Messages;
-using Dmrsv.RandomSelector;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using Caliburn.Micro;
+using DjmaxRandomSelectorV.Messages;
+using DjmaxRandomSelectorV.States;
+using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -54,16 +55,16 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
-        public FilterOptionIndicatorViewModel(IEventAggregator eventAggregator)
+        public FilterOptionIndicatorViewModel(IEventAggregator eventAggregator, IFilterOptionStateManager filterOptionManager)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
 
-            var config = IoC.Get<Dmrsv3Configuration>();
-            SetExceptCount(config.RecentsCount);
-            SetModeImage(config.Mode);
-            SetAiderImage(config.Mode, config.Aider);
-            SetLevelImage(config.Mode, config.Level);
+            var filterOption = filterOptionManager.GetFilterOption();
+            SetExceptCount(filterOption.RecentsCount);
+            SetModeImage(filterOption.Mode);
+            SetAiderImage(filterOption.Mode, filterOption.Aider);
+            SetLevelImage(filterOption.Mode, filterOption.Level);
         }
 
         public Task HandleAsync(FilterOptionMessage message, CancellationToken cancellationToken)

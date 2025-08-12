@@ -1,28 +1,29 @@
-﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.Messages;
-using Dmrsv.RandomSelector;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Caliburn.Micro;
+using DjmaxRandomSelectorV.Messages;
+using DjmaxRandomSelectorV.States;
+using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class MainViewModel : Conductor<object>.Collection.OneActive, IHandle<SettingMessage>
+    public class MainViewModel : Conductor<object>.Collection.OneActive, IHandle<FilterTypeChangedMessage>
     {
         private readonly IEventAggregator _eventAggregator;
 
-        public MainViewModel(IEventAggregator eventAggregator)
+        public MainViewModel(IEventAggregator eventAggregator, ISettingStateManager settingManager)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
 
-            var type = GetFilterPanelType(IoC.Get<Dmrsv3Configuration>().FilterType);
+            var type = GetFilterPanelType(settingManager.GetSetting().FilterType);
             ActivateItemAsync(IoC.GetInstance(type, null));
             ActivateItemAsync(IoC.Get<HistoryViewModel>());
             ChangeActiveItemAsync(Items[0], false);
         }
 
-        public Task HandleAsync(SettingMessage message, CancellationToken cancellationToken)
+        public Task HandleAsync(FilterTypeChangedMessage message, CancellationToken cancellationToken)
         {
             var type = GetFilterPanelType(message.FilterType);
             if (type != Items[0].GetType())

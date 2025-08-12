@@ -1,9 +1,10 @@
-﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.Messages;
-using Dmrsv.RandomSelector;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Caliburn.Micro;
+using DjmaxRandomSelectorV.Messages;
+using DjmaxRandomSelectorV.States;
+using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
@@ -27,35 +28,29 @@ namespace DjmaxRandomSelectorV.ViewModels
             [LevelPreference.Highest] = "MASTER",
         };
         private readonly IEventAggregator _eventAggregator;
-
-        private int _except;
-        private MusicForm _mode;
-        private InputMethod _aider;
-        private LevelPreference _level;
+        private readonly IFilterOptionStateManager _filterOptionManager;
+        private readonly IFilterOptionState _filterOption;
 
         public object FilterOptionIndicator { get => ActiveItem; }
         public int ExceptCount
         {
-            get => _except;
+            get => _filterOption.RecentsCount;
             set
             {
-                _except = value;
+                _filterOption.RecentsCount = value;
                 NotifyOfPropertyChange();
-                Publish(new FilterOptionMessage(_except, _mode, _aider, _level));
             }
         }
-        public string ModeText { get => _modeItems[_mode]; }
-        public string AiderText { get => _aiderItems[_aider]; }
-        public string LevelText { get => _levelItems[_level]; }
+        public string ModeText { get => _modeItems[_filterOption.Mode]; }
+        public string AiderText { get => _aiderItems[_filterOption.Aider]; }
+        public string LevelText { get => _levelItems[_filterOption.Level]; }
 
-        public FilterOptionViewModel(IEventAggregator eventAggregator)
+        public FilterOptionViewModel(IEventAggregator eventAggregator, IFilterOptionStateManager filterOptionManager)
         {
             _eventAggregator = eventAggregator;
-            var config = IoC.Get<Dmrsv3Configuration>();
-            _except = config.RecentsCount;
-            _mode = config.Mode;
-            _aider = config.Aider;
-            _level = config.Level;
+            _filterOptionManager = filterOptionManager;
+            _filterOption = _filterOptionManager.GetFilterOption();
+            _filterOptionManager.OnFilterOptionStateChanged += PublishMessage;
             ActivateItemAsync(IoC.Get<FilterOptionIndicatorViewModel>());
         }
 
@@ -63,47 +58,40 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             if (close)
             {
-                var config = IoC.Get<Dmrsv3Configuration>();
-                config.RecentsCount = _except;
-                config.Mode = _mode;
-                config.Aider = _aider;
-                config.Level = _level;
+                _filterOptionManager.OnFilterOptionStateChanged -= PublishMessage;
             }
             return Task.CompletedTask;
         }
 
-        private void Publish(object message)
+        private void PublishMessage(IFilterOptionState filterOption)
         {
-            _eventAggregator.PublishOnUIThreadAsync(message);
+            _eventAggregator.PublishOnUIThreadAsync(new FilterOptionMessage(filterOption));
         }
 
         public void SwitchMode()
         {
-            int value = (int)_mode;
+            int value = (int)_filterOption.Mode;
             value ^= 0x1;
-            _mode = (MusicForm)value;
+            _filterOption.Mode = (MusicForm)value;
             NotifyOfPropertyChange(nameof(ModeText));
-            Publish(new FilterOptionMessage(_except, _mode, _aider, _level));
         }
 
         public void SwitchAider(int move)
         {
-            int value = (int)_aider;
+            int value = (int)_filterOption.Aider;
             value += move;
             value = (value % 3 + 3) % 3;
-            _aider = (InputMethod)value;
+            _filterOption.Aider = (InputMethod)value;
             NotifyOfPropertyChange(nameof(AiderText));
-            Publish(new FilterOptionMessage(_except, _mode, _aider, _level));
         }
 
         public void SwitchLevel(int move)
         {
-            int value = (int)_level;
+            int value = (int)_filterOption.Level;
             value += move;
             value = (value % 3 + 3) % 3;
-            _level = (LevelPreference)value;
+            _filterOption.Level = (LevelPreference)value;
             NotifyOfPropertyChange(nameof(LevelText));
-            Publish(new FilterOptionMessage(_except, _mode, _aider, _level));
         }
     }
 }

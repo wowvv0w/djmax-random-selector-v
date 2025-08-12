@@ -1,19 +1,20 @@
-﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.Messages;
-using DjmaxRandomSelectorV.Models;
-using Dmrsv.RandomSelector;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Caliburn.Micro;
+using DjmaxRandomSelectorV.Models;
+using DjmaxRandomSelectorV.Services;
+using DjmaxRandomSelectorV.States;
+using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
     public class FavoriteViewModel : Screen
     {
         private const int ItemCountPerPage = 20;
-        private readonly IEventAggregator _eventAggregator;
-        private readonly TrackDB _db;
+        private readonly ITrackDB _db;
+        private readonly ISettingStateManager _settingManager;
 
         private string _searchBox;
         private string _pageText;
@@ -89,13 +90,13 @@ namespace DjmaxRandomSelectorV.ViewModels
         public BindableCollection<FavoriteItem> FavoriteItems { get; }
         public BindableCollection<FavoriteItem> BlacklistItems { get; }
 
-        public FavoriteViewModel(IEventAggregator eventAggregator)
+        public FavoriteViewModel(ITrackDB trackDB, ISettingStateManager settingManager)
         {
-            _eventAggregator = eventAggregator;
-            var config = IoC.Get<Dmrsv3Configuration>();
-            var favorite = config.Favorite;
-            var blacklist = config.Blacklist;
-            _db = IoC.Get<TrackDB>();
+            _settingManager = settingManager;
+            var setting = _settingManager.GetSetting();
+            var favorite = setting.Favorite;
+            var blacklist = setting.Blacklist;
+            _db = trackDB;
             _items = _db.AllTrack.Select(track => new FavoriteItem()
             {
                 Info = track.Info,
@@ -119,12 +120,10 @@ namespace DjmaxRandomSelectorV.ViewModels
             List<int> favorite = _items.Where(item => item.Status == 1).Select(item => item.Id).ToList();
             List<int> blacklist = _items.Where(item => item.Status == -1).Select(item => item.Id).ToList();
 
-            var config = IoC.Get<Dmrsv3Configuration>();
-            config.Favorite = favorite;
-            config.Blacklist = blacklist;
-
-            var message = new FavoriteMessage(favorite, blacklist);
-            _eventAggregator.PublishOnUIThreadAsync(message);
+            var setting = _settingManager.GetSetting();
+            setting.Favorite = favorite;
+            setting.Blacklist = blacklist;
+            _settingManager.SetSetting(setting);
 
             TryCloseAsync(true);
         }
