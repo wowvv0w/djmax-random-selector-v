@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
+using DjmaxRandomSelectorV.States;
 
 namespace DjmaxRandomSelectorV
 {
@@ -15,22 +15,18 @@ namespace DjmaxRandomSelectorV
         private const string AllTrackFilePath = @"DMRSV3_Data\AllTrackList.json";
         private const string AppdataFilePath = @"DMRSV3_Data\appdata.json";
 
-        private readonly VersionContainer _container;
         private readonly IFileManager _fileManager;
+        private readonly IVersionInfoStateManager _versionInfoManager;
 
-        public UpdateManager(Dmrsv3Configuration config, VersionContainer container, IFileManager fileManager)
+        public UpdateManager(IFileManager fileManager, IVersionInfoStateManager versionInfoManager)
         {
-            _container = container;
             _fileManager = fileManager;
-            Version assemblyVersion = Assembly.GetEntryAssembly().GetName().Version;
-            _container.CurrentAppVersion = _container.LatestAppVersion = assemblyVersion;
-            _container.AllTrackVersion = config.AllTrackVersion;
-            _container.AppdataVersion = config.AppdataVersion;
+            _versionInfoManager = versionInfoManager;
         }
 
         public async Task UpdateAsync()
         {
-            string[] versions; // [ app version, appdata version, notice header, notice body ]
+            string[] versions; // [ latest app version, latest appdata version, notice header, notice body ]
             try
             {
                 string result = await _fileManager.RequestAsync(VersionCheckUrl);
@@ -40,20 +36,21 @@ namespace DjmaxRandomSelectorV
             {
                 throw new Exception("Failed to check update.");
             }
-            _container.LatestAppVersion = new Version(versions[0]);
+            var versionInfo = _versionInfoManager.GetVersionInfo();
+            versionInfo.LatestAppVersion = new Version(versions[0]);
 
             var tasks = new List<Task<int>>();
             // update all track
             long now = long.Parse(DateTime.Now.ToString("yyMMddHHmm"));
-            long past = _container.AllTrackVersion;
+            long past = versionInfo.AllTrackVersion;
             if (now > past || !File.Exists(AllTrackFilePath))
             {
                 Debug.WriteLine("all track update start");
                 tasks.Add(DownloadAllTrackAsync());
             }
             // update appdata
-            if (!File.Exists(AllTrackFilePath)
-                || versions[1].CompareTo(_container.AppdataVersion) > 0)
+            if (!File.Exists(AppdataFilePath)
+                || versions[1].CompareTo(versionInfo.AppdataVersion) > 0)
             {
                 Debug.WriteLine("appdata update start");
                 tasks.Add(DownloadAppdataAsync());
@@ -66,10 +63,10 @@ namespace DjmaxRandomSelectorV
                 switch (result)
                 {
                     case 0:
-                        _container.AllTrackVersion = now;
+                        versionInfo.AllTrackVersion = now;
                         break;
                     case 1:
-                        _container.AppdataVersion = versions[1];
+                        versionInfo.AppdataVersion = versions[1];
                         break;
                 }
                 tasks.Remove(finishedTask);
