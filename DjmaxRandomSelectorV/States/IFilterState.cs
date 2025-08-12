@@ -1,10 +1,11 @@
-﻿using DjmaxRandomSelectorV.Conditions;
+﻿using System;
+using DjmaxRandomSelectorV.Conditions;
 
 namespace DjmaxRandomSelectorV.States
 {
     public interface IFilterState
     {
-        event StateChangedEventHandler OnStateChanged;
+        event Action OnStateChanged;
         ICondition ToCondition();
     }
 }
