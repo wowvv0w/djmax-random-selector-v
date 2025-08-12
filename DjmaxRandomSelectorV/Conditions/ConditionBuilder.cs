@@ -3,9 +3,9 @@ using DjmaxRandomSelectorV.States;
 
 namespace DjmaxRandomSelectorV.Conditions
 {
-    public class ConditionBuilder : IConditionBuilder, IStateChangedNotifier<IFilterState>
+    public class ConditionBuilder : IConditionBuilder, IFilterStateManager
     {
-        public event StateChangedEventHandler<IFilterState> OnStateChanged;
+        public event Action OnFilterStateChanged;
 
         private IFilterState _filterState;
 
@@ -14,20 +14,15 @@ namespace DjmaxRandomSelectorV.Conditions
             return _filterState.ToCondition();
         }
 
-        public IFilterState GetState()
+        public void SetFilterState(IFilterState filter)
         {
-            throw new NotImplementedException();
-        }
-
-        public void SetState(IFilterState state)
-        {
-            if (_filterState == state)
+            if (_filterState == filter)
             {
                 return;
             }
-            _filterState = state;
-            _filterState.OnStateChanged += () => OnStateChanged?.Invoke(null);
-            OnStateChanged?.Invoke(null);
+            _filterState = filter;
+            _filterState.OnStateChanged += () => OnFilterStateChanged?.Invoke();
+            OnFilterStateChanged?.Invoke();
         }
     }
 }

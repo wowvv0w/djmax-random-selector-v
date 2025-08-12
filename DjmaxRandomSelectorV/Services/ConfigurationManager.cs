@@ -36,15 +36,15 @@ namespace DjmaxRandomSelectorV.Services
             };
         }
 
-        public void SetSetting(ISettingState state)
+        public void SetSetting(ISettingState setting)
         {
-            _config.FilterType = state.FilterType;
-            _config.InputDelay = state.InputDelay;
-            _config.Favorite = new(state.Favorite);
-            _config.Blacklist = new(state.Blacklist);
-            _config.OwnedDlcs = new(state.OwnedDlcs);
-            _config.SavesRecents = state.SavesRecents;
-            _config.StartKeyCode = state.StartKeyCode;
+            _config.FilterType = setting.FilterType;
+            _config.InputDelay = setting.InputDelay;
+            _config.Favorite = new(setting.Favorite);
+            _config.Blacklist = new(setting.Blacklist);
+            _config.OwnedDlcs = new(setting.OwnedDlcs);
+            _config.SavesRecents = setting.SavesRecents;
+            _config.StartKeyCode = setting.StartKeyCode;
             OnSettingStateChanged?.Invoke(_config);
         }
 
