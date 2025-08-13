@@ -14,7 +14,7 @@ namespace DjmaxRandomSelectorV.Conditions
             return _filterState.ToCondition();
         }
 
-        public void SetFilterState(IFilterState filter)
+        public void RegisterFilterState(IFilterState filter)
         {
             if (_filterState == filter)
             {

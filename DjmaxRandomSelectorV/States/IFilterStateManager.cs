@@ -2,6 +2,6 @@
 {
     public interface IFilterStateManager
     {
-        void SetFilterState(IFilterState filter);
+        void RegisterFilterState(IFilterState filter);
     }
 }
