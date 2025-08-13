@@ -40,6 +40,7 @@ namespace DjmaxRandomSelectorV.Models
             Categories = new ObservableCollection<string>();
             Levels = new ObservableCollection<int>() { 1, 15 };
             ScLevels = new ObservableCollection<int>() { 1, 15 };
+            _includesFavorite = false;
             Initialize();
         }
 
@@ -51,6 +52,7 @@ namespace DjmaxRandomSelectorV.Models
             Categories = new ObservableCollection<string>(filter.Categories);
             Levels = new ObservableCollection<int>(filter.Levels);
             ScLevels = new ObservableCollection<int>(filter.ScLevels);
+            _includesFavorite = filter.IncludesFavorite;
             Initialize();
         }
 
