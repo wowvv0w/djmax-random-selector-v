@@ -4,7 +4,7 @@ using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Conditions
 {
-    public record IntersectionCondition(IEnumerable<ICondition> Conditions) : ICondition
+    public record IntersectionCondition(IEnumerable<ICondition> Conditions) : IMergedCondition, ICondition
     {
         public bool IsSatisfiedBy(Pattern pattern)
         {
