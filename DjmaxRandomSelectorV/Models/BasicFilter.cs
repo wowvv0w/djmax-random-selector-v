@@ -74,10 +74,9 @@ namespace DjmaxRandomSelectorV.Models
             {
                 return Condition.Null;
             }
-
             var setting = _settingManager.GetSetting();
             var categoryCond = Condition.CreateUnion(
-                (Categories.Any(), () => new CategoryCondition(Categories.ToHashSet())),
+                (Categories.Any(), () => new CategoryCondition(Categories)),
                 (IncludesFavorite, () => new TrackIdCondition(setting.Favorite))
             );
             var levelCond = Condition.CreateUnion(
@@ -86,8 +85,8 @@ namespace DjmaxRandomSelectorV.Models
             );
             var resultCond = Condition.CreateIntersection(
                 (true, () => categoryCond),
-                (setting.Blacklist.Any(), () => Condition.ComplementOf(new TrackIdCondition(setting.Blacklist.ToHashSet()))),
-                (true, () => new ButtonCondition(ButtonTunes.Select(bt => bt.AsButtonTunes()).ToHashSet())),
+                (setting.Blacklist.Any(), () => Condition.ComplementOf(new TrackIdCondition(setting.Blacklist))),
+                (true, () => new ButtonCondition(ButtonTunes.Select(bt => bt.AsButtonTunes()))),
                 (true, () => levelCond)
             );
             return resultCond;
