@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.Models;
+using DjmaxRandomSelectorV.States;
 using Dmrsv.RandomSelector;
 using System;
 using System.Linq;
@@ -19,14 +20,14 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public BindableCollection<HistoryItem> History { get; }
 
-        public HistoryViewModel(IEventAggregator eventAggregator)
+        public HistoryViewModel(IEventAggregator eventAggregator, IFilterOptionStateManager filterOptionManager)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.SubscribeOnUIThread(this);
             _number = 0;
             History = new BindableCollection<HistoryItem>();
             DisplayName = "HISTORY";
-            SetShowsStyle(IoC.Get<Dmrsv3Configuration>().Mode);
+            SetShowsStyle(filterOptionManager.GetFilterOption().Mode); // TODO: temp
         }
 
         private void AddItem(Pattern pattern)
