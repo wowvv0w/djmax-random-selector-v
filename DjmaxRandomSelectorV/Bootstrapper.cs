@@ -197,11 +197,11 @@ namespace DjmaxRandomSelectorV
         protected override void OnExit(object sender, EventArgs e)
         {
             //var historyItems = _rs.History.GetItems().ToList();
-            if (_config.SavesRecents)
-            {
-                //_config.RecentPlayed = historyItems;
-                _config.RecentPlayed = _history.ToList();
-            }
+            //if (_config.SavesRecents)
+            //{
+            //    _config.RecentPlayed = historyItems;
+            //}
+            _config.RecentPlayed = _config.SavesRecents ? _history.ToList() : new List<int>();
             //_config.AllTrackVersion = _versionContainer.AllTrackVersion;
             //_config.AppdataVersion = _versionContainer.AppdataVersion;
             _fileManager.Export(_config, ConfigFilePath);

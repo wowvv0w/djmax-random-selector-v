@@ -57,8 +57,8 @@
                                Foreground="{StaticResource DefaultGrayColor}"
                                FontFamily="{StaticResource LatoFont}"
                                FontSize="16"/>
-                    <TextBlock x:Name="LastestVersion"
-                               Text="Lastest Version:"
+                    <TextBlock x:Name="LatestVersion"
+                               Text="Latest Version:"
                                Foreground="{StaticResource HighlightYellowColor}"
                                FontFamily="{StaticResource LatoFont}"
                                FontSize="16"/>

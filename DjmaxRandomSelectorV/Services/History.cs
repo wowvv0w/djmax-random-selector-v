@@ -22,11 +22,11 @@ namespace DjmaxRandomSelectorV.Services
 
         public new void Enqueue(int item)
         {
-            while (Count >= _limit)
+            base.Enqueue(item);
+            while (Count > _limit)
             {
                 Dequeue();
             }
-            base.Enqueue(item);
         }
     }
 }

@@ -52,6 +52,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             ITrackDB trackDB, IFilterStateManager filterManager)
         {
             DisplayName = "FILTER";
+            eventAggregator.SubscribeOnUIThread(this);
             _windowManager = windowManager;
             _fileManager = fileManager;
             _filterManager = filterManager;
