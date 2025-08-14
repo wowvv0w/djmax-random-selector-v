@@ -47,6 +47,7 @@ namespace DjmaxRandomSelectorV.Services
             if (selected is not null)
             {
                 _lastSelected = selected;
+                _history.Enqueue(selected.TrackId);
                 OnSelectionCompleted?.Invoke(selected);
             }
             return selected;

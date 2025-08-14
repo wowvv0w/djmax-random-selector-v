@@ -4,7 +4,7 @@
     {
         public static Pattern? RandomSelect(IReadOnlyList<Pattern> candidates)
         {
-            if (candidates is null)
+            if (!candidates.Any() || candidates is null)
             {
                 return null;
             }
