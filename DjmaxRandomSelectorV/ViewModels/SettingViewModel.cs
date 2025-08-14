@@ -53,7 +53,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _eventAggregator = eventAggregator;
             _settingManager = settingManager;
 
-            var config = _settingManager.GetSetting();
+            _setting = _settingManager.GetSetting();
 
             _categories = trackDB.Categories.Where(cat => !(string.IsNullOrEmpty(cat.SteamId) && cat.Type != 3)); // TODO: use enum
             var updaters = _categories.Select(cat => new ListUpdater(cat.Name, cat.Id, _setting.OwnedDlcs));
