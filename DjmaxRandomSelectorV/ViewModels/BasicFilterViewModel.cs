@@ -1,30 +1,33 @@
-﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.Messages;
-using DjmaxRandomSelectorV.Models;
-using Dmrsv.RandomSelector;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Caliburn.Micro;
+using DjmaxRandomSelectorV.Models;
+using DjmaxRandomSelectorV.SerializableObjects;
+using DjmaxRandomSelectorV.Services;
+using DjmaxRandomSelectorV.States;
+using Microsoft.Win32;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
-    public class BasicFilterViewModel : Screen, IHandle<FavoriteMessage>
+    public class BasicFilterViewModel : Screen
     {
         private const string DefaultPath = @"DMRSV3_Data\CurrentFilter.json";
         private const string PresetPath = @"DMRSV3_Data\Preset";
 
-        private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
         private readonly IFileManager _fileManager;
-        private readonly List<Category> _categories;
+        private readonly IFilterStateManager _filterManager;
+        private readonly ISettingStateManager _settingManager;
+        private readonly IReadOnlyList<Category> _categories;
 
-        private BasicFilterOld _filter;
+        private BasicFilter _filter;
 
+        #region Filter Editor
         public BindableCollection<ListUpdater> ButtonTunesUpdaters { get; set; }
         public BindableCollection<ListUpdater> RegularCategories { get; set; }
         public BindableCollection<ListUpdater> CollabCategories { get; set; }
@@ -117,16 +120,18 @@ namespace DjmaxRandomSelectorV.ViewModels
         }
         public BindableCollection<LevelIndicator> LevelIndicators { get; set; }
         public BindableCollection<LevelIndicator> ScLevelIndicators { get; set; }
+        #endregion
 
-        public BasicFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, IFileManager fileManager)
+        public BasicFilterViewModel(IWindowManager windowManager, IFileManager fileManager,
+            IFilterStateManager filterManager, ISettingStateManager settingManager)
         {
             DisplayName = "FILTER";
-            _eventAggregator = eventAggregator;
             _windowManager = windowManager;
             _fileManager = fileManager;
-            _eventAggregator.SubscribeOnUIThread(this);
+            _filterManager = filterManager;
+            _settingManager = settingManager;
 
-            _categories = IoC.Get<CategoryContainer>().GetCategories();
+            _categories = IoC.Get<ITrackDB>().Categories;
 
             try
             {
@@ -134,28 +139,9 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             catch
             {
-                _filter = new BasicFilterOld();
+                _filter = new BasicFilter(settingManager);
             }
             Initialize();
-        }
-
-        public override void Refresh()
-        {
-            var children = new INotifyPropertyChangedEx[]
-            {
-                ButtonTunesUpdaters, RegularCategories, CollabCategories,
-                LevelIndicators, ScLevelIndicators
-            };
-            Array.ForEach(children, x => x.Refresh());
-            base.Refresh();
-        }
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
-        {
-            if (close)
-            {
-                _fileManager.Export(_filter, DefaultPath);
-            }
-            return Task.CompletedTask;
         }
 
         public void Initialize()
@@ -177,31 +163,52 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
         }
 
-        private void ImportFilter(string path)
+        public override void Refresh()
         {
-            _filter = _fileManager.Import<BasicFilterOld>(path);
-            var config = IoC.Get<Dmrsv3Configuration>();
-            _filter.Favorite = config.Favorite;
-            _filter.Blacklist = config.Blacklist;
-            _eventAggregator.PublishOnUIThreadAsync(new FilterMessage(_filter));
+            var children = new INotifyPropertyChangedEx[]
+            {
+                ButtonTunesUpdaters, RegularCategories, CollabCategories,
+                LevelIndicators, ScLevelIndicators
+            };
+            Array.ForEach(children, x => x.Refresh());
+            base.Refresh();
         }
 
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            if (close)
+            {
+                _fileManager.Export(_filter, DefaultPath);
+            }
+            return Task.CompletedTask;
+        }
+
+        private void ImportFilter(string path)
+        {
+            var preset = _fileManager.Import<Dmrsv3BasicFilterPreset>(path);
+            _filter = new BasicFilter(preset, _settingManager);
+            _filterManager.RegisterFilterState(_filter);
+        }
+
+        #region Category Selector
         public void SelectAllCategories()
         {
             _filter.Categories.Clear();
-            foreach (var c in _categories.ConvertAll(x => x.Id).Where(id => !string.IsNullOrEmpty(id)))
+            foreach (var c in _categories.Select(cat => cat.Id).Where(id => !string.IsNullOrEmpty(id)))
             {
                 _filter.Categories.Add(c);
             }
             RegularCategories.Refresh();
             CollabCategories.Refresh();
         }
+
         public void DeselectAllCategories()
         {
             _filter.Categories.Clear();
             RegularCategories.Refresh();
             CollabCategories.Refresh();
         }
+        #endregion
 
         public void SavePreset()
         {
@@ -258,13 +265,6 @@ namespace DjmaxRandomSelectorV.ViewModels
         public Task OpenFavoriteEditor()
         {
             return _windowManager.ShowDialogAsync(IoC.Get<FavoriteViewModel>());
-        }
-
-        public Task HandleAsync(FavoriteMessage message, CancellationToken cancellationToken)
-        {
-            _filter.Favorite = message.Favorite;
-            _filter.Blacklist = message.Blacklist;
-            return Task.CompletedTask;
         }
 
         #region Level Adjustment
