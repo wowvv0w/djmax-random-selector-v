@@ -37,7 +37,7 @@ namespace DjmaxRandomSelectorV.Services
 
         public Pattern Select()
         {
-            var recentExcluded = _candidates.ExceptBy(_history, p => p.TrackId);
+            var recentExcluded = _candidates.Where(p => !_history.Contains(p.TrackId));
             while (!recentExcluded.Any() && _history.Count > 0)
             {
                 int trackId = _history.Dequeue();
