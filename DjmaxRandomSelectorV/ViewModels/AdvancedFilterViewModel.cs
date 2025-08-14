@@ -10,6 +10,9 @@ using System.Windows;
 using Caliburn.Micro;
 using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.Models;
+using DjmaxRandomSelectorV.SerializableObjects.Deprecated;
+using DjmaxRandomSelectorV.Services;
+using DjmaxRandomSelectorV.States;
 using Dmrsv.RandomSelector;
 using Microsoft.Win32;
 
@@ -20,16 +23,16 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string DefaultPath = @"DMRSV3_Data\CurrentPlaylist.json";
         private const string PresetPath = @"DMRSV3_Data\Playlist";
 
-        private readonly IEventAggregator _eventAggregator;
         private readonly IWindowManager _windowManager;
         private readonly IFileManager _fileManager;
-        private readonly TrackDB _db;
+        private readonly IFilterStateManager _filterManager;
+        private readonly ITrackDB _trackDB;
 
-        private AdvancedFilterOld _filter;
-        private string _searchBox;
+        private AdvancedFilter _filter;
         private List<string> _namesake;
         private bool _isWizardOpen;
 
+        private string _searchBox;
         public string SearchBox
         {
             get => _searchBox;
@@ -45,22 +48,22 @@ namespace DjmaxRandomSelectorV.ViewModels
         public BindableCollection<Pattern> SearchResult { get; }
         public BindableCollection<PlaylistItem> PlaylistItems { get; }
 
-        public AdvancedFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, IFileManager fileManager)
+        public AdvancedFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, IFileManager fileManager,
+            ITrackDB trackDB, IFilterStateManager filterManager)
         {
             DisplayName = "FILTER";
-            _eventAggregator = eventAggregator;
-            _eventAggregator.SubscribeOnUIThread(this);
             _windowManager = windowManager;
             _fileManager = fileManager;
-            _db = IoC.Get<TrackDB>();
-            _namesake = _db.AllTrack
+            _filterManager = filterManager;
+            _trackDB = trackDB;
+            _namesake = _trackDB.AllTrack
                            .GroupBy(t => t.Title)
                            .Where(g => g.Count() > 1)
                            .SelectMany(g => g, (g, t) => t.Title)
                            .ToList();
             _isWizardOpen = false;
 
-            _filter = new AdvancedFilterOld();
+            _filter = new AdvancedFilter(_trackDB);
             PlaylistItems = new BindableCollection<PlaylistItem>();
             try
             {
@@ -71,7 +74,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 MessageBox.Show("Failed to load previous filter.", "Import Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            _eventAggregator.PublishOnUIThreadAsync(new FilterMessage(_filter));
+            _filterManager.RegisterFilterState(_filter);
 
             SearchResult = new BindableCollection<Pattern>();
             TitleSuggestions = new BindableCollection<string>();
@@ -81,7 +84,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             if (close)
             {
-                var playlist = new Playlist()
+                var playlist = new Dmrsv2PlaylistFilterPreset()
                 {
                     Items = _filter.PatternList.Select(p => p.PatternId).ToArray()
                 };
@@ -98,18 +101,18 @@ namespace DjmaxRandomSelectorV.ViewModels
             return Task.CompletedTask;
         }
 
-        private Playlist ImportPlaylist(string path)
+        private Dmrsv2PlaylistFilterPreset ImportPlaylist(string path)
         {
-            var playlist = _fileManager.Import<Playlist>(path);
+            var playlist = _fileManager.Import<Dmrsv2PlaylistFilterPreset>(path);
             if (playlist.Items is null) // playlist is for old versions or is empty
             {
-                var old = _fileManager.Import<OldPlaylist>(path);
+                var old = _fileManager.Import<Dmrsv1PlaylistFilterPreset>(path);
                 if (old.Playlist is not null)
                 {
-                    playlist = new Playlist()
+                    playlist = new Dmrsv2PlaylistFilterPreset()
                     {
                         Items = (from item in old.Playlist
-                                 let track = _db.AllTrack.FirstOrDefault(t => t.Title.Equals(item.Title), null)
+                                 let track = _trackDB.AllTrack.FirstOrDefault(t => t.Title.Equals(item.Title), null)
                                  where track is not null
                                  let pattern = track.Patterns.FirstOrDefault(p => p.Style.Equals(item.Style), null)
                                  where pattern is not null
@@ -148,7 +151,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 Track track;
                 try
                 {
-                    track = _db.AllTrack[item / 100];
+                    track = _trackDB.AllTrack[item / 100];
                 }
                 catch (IndexOutOfRangeException)
                 {
@@ -252,7 +255,8 @@ namespace DjmaxRandomSelectorV.ViewModels
                 var deduplicated = PlaylistItems.Distinct().ToList();
                 PlaylistItems.Clear();
                 PlaylistItems.AddRange(deduplicated);
-                _filter.PatternList = new ObservableCollection<Pattern>(_filter.PatternList.Distinct());
+                _filter = new AdvancedFilter(_trackDB, _filter.PatternList.Distinct());
+                _filterManager.RegisterFilterState(_filter);
             }
         }
 
@@ -312,7 +316,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                Playlist playlist;
+                Dmrsv2PlaylistFilterPreset playlist;
                 try
                 {
                     playlist = ImportPlaylist(dialog.FileName);
@@ -347,7 +351,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             if (result == true)
             {
-                Playlist playlist;
+                Dmrsv2PlaylistFilterPreset playlist;
                 try
                 {
                     playlist = ImportPlaylist(dialog.FileName);
@@ -387,7 +391,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 return;
             }
 
-            var titles = from track in _db.AllTrack
+            var titles = from track in _trackDB.AllTrack
                          let title = track.Title
                          select _namesake.Contains(title) ? $"{title} ({track.Composer})" : title;
             if (SearchBox.Equals("#"))
@@ -405,8 +409,8 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             SearchResult.Clear();
             var track = _namesake.Any(title => SearchBox.StartsWith(title))
-                        ? _db.AllTrack.FirstOrDefault(t => SearchBox.Equals($"{t.Title} ({t.Composer})"), null)
-                        : _db.AllTrack.FirstOrDefault(t => t.Title == SearchBox, null);
+                        ? _trackDB.AllTrack.FirstOrDefault(t => SearchBox.Equals($"{t.Title} ({t.Composer})"), null)
+                        : _trackDB.AllTrack.FirstOrDefault(t => t.Title == SearchBox, null);
             if (track is null)
             {
                 return;
