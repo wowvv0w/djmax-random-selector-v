@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Dmrsv.RandomSelector
 {
-    public class Locator
+    public class LocatorOld
     {
         public int InputInterval { get; set; } = 30;
         public bool LocatesStyle { get; set; } = true;
@@ -28,7 +28,7 @@ namespace Dmrsv.RandomSelector
             ["pageup"] = 0xC9 + 1024, ["pagedown"] = 0xD1 + 1024,
         };
 
-        public Locator()
+        public LocatorOld()
         {
             _locations = new List<LocationInfo?>();
             _keyMap.Add("left", (ushort)MapVirtualKey(0x25, 0));

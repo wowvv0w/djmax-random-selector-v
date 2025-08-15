@@ -23,7 +23,7 @@ namespace DjmaxRandomSelectorV
         private PatternPicker _picker;
         private IHistory<int> _history;
         private ISelector _selector;
-        private Locator _locator;
+        private LocatorOld _locator;
 
         private readonly WindowTitleHelper _windowTitleHelper;
 
@@ -44,7 +44,7 @@ namespace DjmaxRandomSelectorV
             _picker = new PatternPicker();
             _history = new History<int>(config.RecentPlayed, config.RecentsCount);
             _selector = new SelectorWithHistory(_history);
-            _locator = new Locator();
+            _locator = new LocatorOld();
             _locator.MakeLocations(_db.AllTrack);
             SetLocatorProperties(new FilterOptionMessage(
                 config.RecentsCount,
