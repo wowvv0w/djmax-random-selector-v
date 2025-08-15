@@ -75,7 +75,12 @@ namespace DjmaxRandomSelectorV
             _rs = new RandomSelectorService(_history);
             _rs.OnSelectionCompleted += pattern => eventaggregator.PublishOnUIThreadAsync(new PatternMessage(pattern));
             _db = new TrackDB(_fileManager);
-            _loc = new LocatorService(); // TODO: complete implementation
+            _loc = new LocatorService()
+            {
+                InputInterval = _config.InputDelay,
+                MusicForm = _config.Mode,
+                InputMethod = _config.Aider
+            };
             _condBuild = new ConditionBuilder();
             _extrBuild = new GroupwiseExtractorBuilder()
             {
@@ -93,7 +98,8 @@ namespace DjmaxRandomSelectorV
             _configManager = new ConfigurationManager(_config);
             _configManager.OnFilterOptionStateChanged += filterOption =>
             {
-                // set locator properties
+                _loc.MusicForm = filterOption.Mode;
+                _loc.InputMethod = filterOption.Aider;
                 _extrBuild.StyleType = filterOption.Mode;
                 _extrBuild.LevelPreference = filterOption.Level;
                 _history.Limit = filterOption.RecentsCount;
@@ -103,8 +109,8 @@ namespace DjmaxRandomSelectorV
             _configManager.OnSettingStateChanged += setting =>
             {
                 _db.SetPlayable(setting.OwnedDlcs);
-                // set locator input interval
-                // set locator map
+                _loc.InputInterval = setting.InputDelay;
+                _loc.SetLocationMap(_db.AllTrack);
                 _executor.SetStateChanged();
                 // filemanager export?
             };
@@ -175,6 +181,7 @@ namespace DjmaxRandomSelectorV
             _db.Initialize(appdata);
             _db.ImportDB();
             _db.SetPlayable(_config.OwnedDlcs);
+            _loc.SetLocationMap(_db.AllTrack);
             // Bind views and viewmodels
             await DisplayRootViewForAsync(typeof(ShellViewModel));
             // Set window property

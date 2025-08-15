@@ -42,11 +42,8 @@ namespace DjmaxRandomSelectorV.Services
                 _isStateChanged = false;
             }
             Pattern selected = _rs.Select();
-            if (selected is not null)
-            {
-                _loc.Locate(selected);
-            }
-            else
+            _loc.Locate(selected);
+            if (selected is null)
             {
                 MessageBox.Show("There is no music that meets the filter conditions.",
                                 "Error",
@@ -60,10 +57,7 @@ namespace DjmaxRandomSelectorV.Services
         {
             _isRunning = true;
             Pattern selected = _rs.Reselect();
-            if (selected is not null)
-            {
-                _loc.Locate(selected);
-            }
+            _loc.Locate(selected);
             _isRunning = false;
         }
     }
