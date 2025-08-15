@@ -74,7 +74,7 @@
                                        FontSize="13"/>
                             <TextBlock Text="{Binding Info.Composer}" Grid.Column="1" Grid.Row="1"
                                        FontSize="10" Opacity=".7"/>
-                            <TextBlock Text="{Binding Info.Category}" Grid.Column="3" Grid.Row="1"
+                            <TextBlock Text="{Binding Category}" Grid.Column="3" Grid.Row="1"
                                        FontSize="9" Background="{StaticResource DarkestTranslucentBackgroundColor}"
                                        Padding="4 0" VerticalAlignment="Center"/>
                         </Grid>

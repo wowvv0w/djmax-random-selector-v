@@ -6,6 +6,7 @@ namespace DjmaxRandomSelectorV.Models
     {
         public int Number { get; set; }
         public MusicInfo Info { get; set; }
+        public string Category { get; set; }
         public string Style { get; set; }
         public string Level { get; set; }
         public string Time { get; set; }

@@ -36,6 +36,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 Number = _number,
                 Info = pattern.Info,
+                Category = pattern.Info.Category.Split(':')[0],
                 Style = _showsStyle ? pattern.Style : "FREE",
                 Level = _showsStyle ? pattern.Level.ToString() : "-",
                 Time = new Regex(Regex.Escape(" ")).Replace(DateTime.Now.ToString("g"), "\n", 1),
