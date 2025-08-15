@@ -34,8 +34,8 @@ namespace Dmrsv.RandomSelector
             ["down"] = (ushort)MapVirtualKey(0x28, MAPVK_VK_TO_VSC),
         };
 
-        private readonly static HashSet<ushort> NumberVSC = new() { _keyMap["4"], _keyMap["5"], _keyMap["6"], _keyMap["8"] };
-        private readonly static HashSet<ushort> ArrowVSC = new() { _keyMap["left"], _keyMap["up"], _keyMap["right"], _keyMap["down"] };
+        private readonly static HashSet<string> NumberKeys = new() { "4", "5", "6", "8" };
+        private readonly static HashSet<string> ArrowKeys = new() { "left", "up", "right", "down" };
 
         public static IReadOnlyDictionary<int, LocationInfo?> MakeLocationMap(IEnumerable<Track> tracks)
         {
@@ -123,8 +123,7 @@ namespace Dmrsv.RandomSelector
         {
             // Original code from https://github.com/learncodebygaming/pydirectinput
             // Copyright(c) 2020 Ben Johnson
-            ushort scanCode = _keyMap[key];
-            bool isNumber = NumberVSC.Contains(scanCode);
+            bool isNumber = NumberKeys.Contains(key);
             int expectedPresses = nTimes;
             int completedPresses = 0;
             int ctrlStatus = 0; // for number key presses
@@ -132,7 +131,7 @@ namespace Dmrsv.RandomSelector
             if (isNumber)
             {
                 // In order to select buttons in online mode, press ctrl when the key is number
-                if (SendKeyDown(_keyMap["ctrl"]))
+                if (SendKeyDown("ctrl"))
                 {
                     ++ctrlStatus;
                 }
@@ -140,9 +139,9 @@ namespace Dmrsv.RandomSelector
             }
             for (int i = 0; i < nTimes; ++i)
             {
-                bool downed = SendKeyDown(scanCode);
+                bool downed = SendKeyDown(key);
                 Thread.Sleep(interval);
-                bool upped = SendKeyUp(scanCode);
+                bool upped = SendKeyUp(key);
                 Thread.Sleep(interval);
                 if (downed && upped)
                 {
@@ -151,7 +150,7 @@ namespace Dmrsv.RandomSelector
             }
             if (isNumber)
             {
-                if (SendKeyUp(_keyMap["ctrl"]))
+                if (SendKeyUp("ctrl"))
                 {
                     --ctrlStatus;
                 }
@@ -161,10 +160,11 @@ namespace Dmrsv.RandomSelector
             return completedPresses == expectedPresses && ctrlStatus == 0;
         }
 
-        private static bool SendKeyDown(ushort scanCode)
+        private static bool SendKeyDown(string key)
         {
             // Original code from https://github.com/learncodebygaming/pydirectinput
             // Copyright(c) 2020 Ben Johnson
+            ushort scanCode = _keyMap[key];
             uint insertedEvents = 0;
             uint expectedEvents = 1;
             uint flags = KEYEVENTF_SCANCODE;
@@ -176,7 +176,7 @@ namespace Dmrsv.RandomSelector
                 ExtraInfo = IntPtr.Zero
             };
 
-            if (ArrowVSC.Contains(scanCode))
+            if (ArrowKeys.Contains(key))
             {
                 flags |= KEYEVENTF_EXTENDEDKEY;
                 if (GetKeyState(0x90) != 0)
@@ -203,10 +203,11 @@ namespace Dmrsv.RandomSelector
             return insertedEvents == expectedEvents;
         }
 
-        private static bool SendKeyUp(ushort scanCode)
+        private static bool SendKeyUp(string key)
         {
             // Original code from https://github.com/learncodebygaming/pydirectinput
             // Copyright(c) 2020 Ben Johnson
+            ushort scanCode = _keyMap[key];
             uint insertedEvents = 0;
             uint expectedEvents = 1;
             uint flags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
@@ -218,7 +219,7 @@ namespace Dmrsv.RandomSelector
                 ExtraInfo = IntPtr.Zero
             };
 
-            if (ArrowVSC.Contains(scanCode))
+            if (ArrowKeys.Contains(key))
             {
                 flags |= KEYEVENTF_EXTENDEDKEY;
             }
@@ -229,7 +230,7 @@ namespace Dmrsv.RandomSelector
             INPUT[] inputs = new INPUT[] { input };
             insertedEvents += SendInput(1, inputs, Marshal.SizeOf(typeof(INPUT)));
 
-            if (ArrowVSC.Contains(scanCode) && GetKeyState(0x90) != 0)
+            if (ArrowKeys.Contains(key) && GetKeyState(0x90) != 0)
             {
                 INPUT input2 = new INPUT { Type = 1 };
                 input2.Data.Keyboard = new KEYBDINPUT
