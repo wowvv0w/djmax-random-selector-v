@@ -174,6 +174,38 @@
             </DrawingGroup>
         </DrawingBrush.Drawing>
     </DrawingBrush>
+    <DrawingBrush x:Key="BgVLiberty3">
+        <DrawingBrush.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing>
+                    <GeometryDrawing.Brush>
+                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                            <LinearGradientBrush.RelativeTransform>
+                                <RotateTransform Angle="-9" CenterX="0.5" CenterY="0.5"/>
+                            </LinearGradientBrush.RelativeTransform>
+                            <GradientStop Color="#f26e7b"/>
+                            <GradientStop Color="#f26e7b" Offset="0.1"/>
+                            <GradientStop Color="#f26e7b" Offset="0.101"/>
+                            <GradientStop Color="#f26e7b" Offset="0.2"/>
+                            <GradientStop Color="#f26e7b" Offset="0.3"/>
+                            <GradientStop Color="#bd3e5b" Offset="0.301"/>
+                            <GradientStop Color="#bd3e5b" Offset="0.4"/>
+                            <GradientStop Color="#f26e7b" Offset="0.401"/>
+                            <GradientStop Color="#f26e7b" Offset="0.6"/>
+                            <GradientStop Color="#bd3e5b" Offset="0.601"/>
+                            <GradientStop Color="#bd3e5b" Offset="0.7"/>
+                            <GradientStop Color="#f26e7b" Offset="0.701"/>
+                            <GradientStop Color="#f26e7b" Offset="0.9"/>
+                            <GradientStop Color="#bd3e5b" Offset="0.901"/>
+                        </LinearGradientBrush>
+                    </GeometryDrawing.Brush>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0,0,110,30"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
     <LinearGradientBrush x:Key="BgPremiumTrack" StartPoint="0,0.5" EndPoint="1,0.5">
         <GradientStop Color="#F8BE0C" />
         <GradientStop Color="#FF7900" Offset="1"/>
@@ -258,13 +290,22 @@
         <GradientStop Color="#6F5020" Offset="1"/>
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="FgVLiberty" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Color="#9a5a80" />
-        <GradientStop Color="#9a5a80" Offset="0.68"/>
-        <GradientStop Color="#3f7374" Offset="0.6801"/>
-        <GradientStop Color="#3f7374" Offset="0.84"/>
-        <GradientStop Color="#757575" Offset="0.8401"/>
+        <GradientStop Color="#5e2c4a" />
+        <GradientStop Color="#5e2c4a" Offset="0.68"/>
+        <GradientStop Color="#265b5d" Offset="0.6801"/>
+        <GradientStop Color="#265b5d" Offset="0.84"/>
+        <GradientStop Color="#595d5d" Offset="0.8401"/>
     </LinearGradientBrush>
-    <SolidColorBrush x:Key="FgVLiberty2" Color="#609a1c"/>
+    <SolidColorBrush x:Key="FgVLiberty2" Color="#245d18"/>
+    <LinearGradientBrush x:Key="FgVLiberty3" StartPoint="0,0.5" EndPoint="1,0.5">
+        <LinearGradientBrush.RelativeTransform>
+            <RotateTransform Angle="12" CenterX="0.5" CenterY="0.5"/>
+        </LinearGradientBrush.RelativeTransform>
+        <GradientStop Color="#5a3237"/>
+        <GradientStop Color="#5a3237" Offset="0.5"/>
+        <GradientStop Color="#59212e" Offset="0.501"/>
+        <GradientStop Color="#59212e" Offset="1"/>
+    </LinearGradientBrush>
     <SolidColorBrush x:Key="FgEmotionalS" Color="#20541D"/>
     <SolidColorBrush x:Key="FgTechnika1" Color="#5E275B"/>
     <SolidColorBrush x:Key="FgTechnika2" Color="#5E2B13"/>
@@ -341,6 +382,7 @@
             </DrawingGroup>
         </DrawingBrush.Drawing>
     </DrawingBrush>
+    <SolidColorBrush x:Key="Bg645141" Color="#385dcd" />
     <!--#endregion-->
 
 </ResourceDictionary>
