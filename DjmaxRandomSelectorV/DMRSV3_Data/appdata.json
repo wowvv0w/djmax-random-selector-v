@@ -14,93 +14,9 @@
     ],
     "categories": [
         {
-            "name": "RESPECT",
-            "id": "R",
-            "steamId": null,
-            "type": 0
-        },
-        {
             "name": "RESPECT/V",
             "id": "RV",
             "steamId": null,
-            "type": 0
-        },
-        {
-            "name": "PORTABLE 1",
-            "id": "P1",
-            "steamId": null,
-            "type": 0
-        },
-        {
-            "name": "PORTABLE 2",
-            "id": "P2",
-            "steamId": null,
-            "type": 0
-        },
-        {
-            "name": "PORTABLE 3",
-            "id": "P3",
-            "steamId": "1568680",
-            "type": 0
-        },
-        {
-            "name": "TRILOGY",
-            "id": "TR",
-            "steamId": "1271670",
-            "type": 0
-        },
-        {
-            "name": "CLAZZIQUAI",
-            "id": "CE",
-            "steamId": "1300210",
-            "type": 0
-        },
-        {
-            "name": "BLACK SQUARE",
-            "id": "BS",
-            "steamId": "1300211",
-            "type": 0
-        },
-        {
-            "name": "V EXTENSION",
-            "id": "VE",
-            "steamId": "1080550",
-            "type": 0
-        },
-        {
-            "name": "V EXTENSION 2",
-            "id": "VE2",
-            "steamId": "1843020",
-            "type": 0
-        },
-        {
-            "name": "V EXTENSION 3",
-            "id": "VE3",
-            "steamId": "2164540",
-            "type": 0
-        },
-        {
-            "name": "V EXTENSION 4",
-            "id": "VE4",
-            "steamId": "2307471",
-            "type": 0
-        },
-        {
-            "name": "V EXTENSION 5",
-            "id": "VE5",
-            "steamId": "2681820",
-            "type": 0
-        },
-        {
-            "name": "V LIBERTY",
-            "id": "VL",
-            "steamId": "3038800",
-            "type": 0
-        },
-        {
-            "name": "V LIBERTY 2",
-            "id": "VL2",
-            "steamId": "3371120",
             "type": 0
         },
         {
@@ -110,21 +26,57 @@
             "type": 0
         },
         {
-            "name": "EMOTIONAL S.",
-            "id": "ES",
-            "steamId": "1238760",
+            "name": "V LIBERTY 2",
+            "id": "VL2",
+            "steamId": "3371120",
             "type": 0
         },
         {
-            "name": "TECHNIKA 1",
-            "id": "T1",
-            "steamId": "1386610",
+            "name": "V LIBERTY",
+            "id": "VL",
+            "steamId": "3038800",
             "type": 0
         },
         {
-            "name": "TECHNIKA 2",
-            "id": "T2",
-            "steamId": "1386611",
+            "name": "V EXTENSION 5",
+            "id": "VE5",
+            "steamId": "2681820",
+            "type": 0
+        },
+        {
+            "name": "V EXTENSION 4",
+            "id": "VE4",
+            "steamId": "2307471",
+            "type": 0
+        },
+        {
+            "name": "V EXTENSION 3",
+            "id": "VE3",
+            "steamId": "2164540",
+            "type": 0
+        },
+        {
+            "name": "V EXTENSION 2",
+            "id": "VE2",
+            "steamId": "1843020",
+            "type": 0
+        },
+        {
+            "name": "V EXTENSION",
+            "id": "VE",
+            "steamId": "1080550",
+            "type": 0
+        },
+        {
+            "name": "RESPECT",
+            "id": "R",
+            "steamId": null,
+            "type": 0
+        },
+        {
+            "name": "TECHNIKA T&Q",
+            "id": "TQ",
+            "steamId": "1958171",
             "type": 0
         },
         {
@@ -134,9 +86,57 @@
             "type": 0
         },
         {
-            "name": "TECHNIKA T&Q",
-            "id": "TQ",
-            "steamId": "1958171",
+            "name": "TECHNIKA 2",
+            "id": "T2",
+            "steamId": "1386611",
+            "type": 0
+        },
+        {
+            "name": "TECHNIKA 1",
+            "id": "T1",
+            "steamId": "1386610",
+            "type": 0
+        },
+        {
+            "name": "EMOTIONAL S.",
+            "id": "ES",
+            "steamId": "1238760",
+            "type": 0
+        },
+        {
+            "name": "TRILOGY",
+            "id": "TR",
+            "steamId": "1271670",
+            "type": 0
+        },
+        {
+            "name": "BLACK SQUARE",
+            "id": "BS",
+            "steamId": "1300211",
+            "type": 0
+        },
+        {
+            "name": "CLAZZIQUAI",
+            "id": "CE",
+            "steamId": "1300210",
+            "type": 0
+        },
+        {
+            "name": "PORTABLE 3",
+            "id": "P3",
+            "steamId": "1568680",
+            "type": 0
+        },
+        {
+            "name": "PORTABLE 2",
+            "id": "P2",
+            "steamId": null,
+            "type": 0
+        },
+        {
+            "name": "PORTABLE 1",
+            "id": "P1",
+            "steamId": null,
             "type": 0
         },
         {
