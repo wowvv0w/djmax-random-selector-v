@@ -6,9 +6,9 @@ namespace DjmaxRandomSelectorV.Conditions
 {
     public record PatternIdCondition : ICondition
     {
-        public IReadOnlySet<int> PatternIds { get; }
+        public IReadOnlySet<PatternId> PatternIds { get; }
 
-        public PatternIdCondition(IEnumerable<int> patternIds)
+        public PatternIdCondition(IEnumerable<PatternId> patternIds)
         {
             PatternIds = patternIds.ToHashSet();
         }
