@@ -37,7 +37,7 @@ namespace DjmaxRandomSelectorV.Services
             return Find(patternId.TrackId)?.Patterns.FirstOrDefault(p => p.Id == patternId, null);
         }
 
-        public void Initialize(Dmrsv3AppData appdata)
+        public void Initialize(Dmrsv3Appdata appdata)
         {
             _basicCategories = appdata.BasicCategories;
             _linkDisc = appdata.LinkDisc;

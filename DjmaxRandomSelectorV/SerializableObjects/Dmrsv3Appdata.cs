@@ -1,6 +1,6 @@
 ﻿namespace DjmaxRandomSelectorV.SerializableObjects
 {
-    public class Dmrsv3AppData
+    public class Dmrsv3Appdata
     {
         public string[] CategoryType { get; set; }
         public string[] BasicCategories { get; set; }

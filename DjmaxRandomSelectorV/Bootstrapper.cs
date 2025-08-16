@@ -163,10 +163,10 @@ namespace DjmaxRandomSelectorV
                              "Update", MessageBoxButton.OK, MessageBoxImage.Information));
             }
             // Import appdata
-            Dmrsv3AppData appdata;
+            Dmrsv3Appdata appdata;
             try
             {
-                appdata = _fileManager.Import<Dmrsv3AppData>(AppDataFilePath);
+                appdata = _fileManager.Import<Dmrsv3Appdata>(AppDataFilePath);
             }
             catch
             {
