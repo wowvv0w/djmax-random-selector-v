@@ -1,4 +1,4 @@
-﻿using Dmrsv.RandomSelector;
+﻿using DjmaxRandomSelectorV.Enums;
 
 namespace DjmaxRandomSelectorV.Messages
 {

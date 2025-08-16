@@ -1,5 +1,5 @@
-﻿using DjmaxRandomSelectorV.States;
-using Dmrsv.RandomSelector;
+﻿using DjmaxRandomSelectorV.Enums;
+using DjmaxRandomSelectorV.States;
 
 namespace DjmaxRandomSelectorV.Messages
 {

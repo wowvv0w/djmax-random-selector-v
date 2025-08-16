@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using DjmaxRandomSelectorV.Enums;
 using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.Models;
 using DjmaxRandomSelectorV.States;

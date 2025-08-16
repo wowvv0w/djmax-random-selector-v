@@ -1,4 +1,4 @@
-﻿namespace Dmrsv.RandomSelector
+﻿namespace DjmaxRandomSelectorV.Enums
 {
     public enum FilterType
     {

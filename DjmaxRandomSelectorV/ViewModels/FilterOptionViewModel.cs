@@ -2,9 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
+using DjmaxRandomSelectorV.Enums;
 using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.States;
-using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {

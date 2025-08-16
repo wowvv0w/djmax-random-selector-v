@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DjmaxRandomSelectorV.Enums;
 using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Services

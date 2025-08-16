@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
 using DjmaxRandomSelectorV.Conditions;
+using DjmaxRandomSelectorV.Enums;
 using DjmaxRandomSelectorV.Extractors;
 using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.Services;
 using DjmaxRandomSelectorV.States;
 using DjmaxRandomSelectorV.ViewModels;
-using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV
 {

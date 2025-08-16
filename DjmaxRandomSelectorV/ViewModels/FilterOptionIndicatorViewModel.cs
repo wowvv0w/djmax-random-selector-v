@@ -3,9 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Caliburn.Micro;
+using DjmaxRandomSelectorV.Enums;
 using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.States;
-using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {

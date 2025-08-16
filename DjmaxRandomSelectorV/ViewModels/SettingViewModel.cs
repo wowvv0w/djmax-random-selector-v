@@ -3,11 +3,11 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using Caliburn.Micro;
+using DjmaxRandomSelectorV.Enums;
 using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.Models;
 using DjmaxRandomSelectorV.Services;
 using DjmaxRandomSelectorV.States;
-using Dmrsv.RandomSelector;
 using Microsoft.Win32;
 
 namespace DjmaxRandomSelectorV.ViewModels
