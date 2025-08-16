@@ -149,12 +149,8 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             foreach (int item in items)
             {
-                Track track;
-                try
-                {
-                    track = _trackDB.AllTrack[item / 100];
-                }
-                catch (IndexOutOfRangeException)
+                Track track = _trackDB.Find(item);
+                if (track is null)
                 {
                     continue;
                 }

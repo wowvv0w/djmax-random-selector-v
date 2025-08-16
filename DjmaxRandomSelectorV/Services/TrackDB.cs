@@ -15,13 +15,12 @@ namespace DjmaxRandomSelectorV.Services
 
         private string[] _basicCategories;
         private LinkDiscItem[] _linkDisc;
+        private Dictionary<int, Track> _allTrack;
 
-        public IReadOnlyList<Track> AllTrack { get; private set; }
-        public IReadOnlyList<Track> Playable { get; private set; }
+        public IEnumerable<Track> AllTrack => _allTrack.Values;
+        public IEnumerable<Track> Playable => _allTrack.Values.Where(t => t.IsPlayable);
         public IReadOnlyList<Category> Categories { get; private set; }
 
-        //public IEnumerable<Track> Playable => AllTrack.Where(t => t.IsPlayable);
-        
         public TrackDB(IFileManager fileManager)
         {
             _fileManager = fileManager;
@@ -29,7 +28,13 @@ namespace DjmaxRandomSelectorV.Services
 
         public Track Find(int trackId)
         {
-            throw new NotImplementedException();
+            _allTrack.TryGetValue(trackId, out Track result);
+            return result;
+        }
+
+        public Pattern Find(PatternId patternId)
+        {
+            return Find(patternId.TrackId)?.Patterns.FirstOrDefault(p => p.Id == patternId, null);
         }
 
         public void Initialize(Dmrsv3AppData appdata)
@@ -42,7 +47,7 @@ namespace DjmaxRandomSelectorV.Services
         public void ImportDB()
         {
             var db = _fileManager.Import<List<VArchiveDBTrack>>(AllTrackFilePath);
-            AllTrack = db.ConvertAll(x =>
+            _allTrack = db.Select(x =>
             {
                 var info = new MusicInfo()
                 {
@@ -62,19 +67,19 @@ namespace DjmaxRandomSelectorV.Services
                                     Level = df.Value.Level
                                 })
                                 .OrderBy(p => p.Id)
-                                .ToArray()
+                                .ToArray(),
+                    IsPlayable = false
                 };
-            });
+            }).ToDictionary(t => t.Id);
         }
 
         public void SetPlayable(IEnumerable<string> ownedDlcs)
         {
             var categories = ownedDlcs.Concat(_basicCategories);
             var exclusions = _linkDisc.Where(x => !x.IsRequired(ownedDlcs)).Select(x => x.Id);
-            AllTrack = AllTrack
-                .Select(track => track with { IsPlayable = categories.Contains(track.Category) && !exclusions.Contains(track.Id) })
-                .ToList();
-            Playable = AllTrack.Where(t => t.IsPlayable).ToList();
+            _allTrack = _allTrack.Values
+                .Select(t => t with { IsPlayable = categories.Contains(t.Category) && !exclusions.Contains(t.Id) })
+                .ToDictionary(t => t.Id);
         }
 
         public record VArchiveDBTrack

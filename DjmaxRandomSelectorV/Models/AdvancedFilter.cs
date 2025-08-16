@@ -39,7 +39,7 @@ namespace DjmaxRandomSelectorV.Models
 
         public ICondition ToCondition()
         {
-            var result = PatternList.Where(p => _trackDB.Playable.Any(t => t.Id == p.TrackId)).Select(p => (int)p.Id);
+            var result = PatternList.Where(p => _trackDB.Find(p.TrackId)?.IsPlayable ?? false).Select(p => (int)p.Id);
             return new PatternIdCondition(result);
         }
     }

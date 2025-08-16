@@ -6,10 +6,10 @@ namespace DjmaxRandomSelectorV.Services
 {
     public interface ITrackDB
     {
-        IReadOnlyList<Track> AllTrack { get; }
-        IReadOnlyList<Track> Playable { get; }
+        IEnumerable<Track> AllTrack { get; }
+        IEnumerable<Track> Playable { get; }
         IReadOnlyList<Category> Categories { get; }
         Track Find(int trackId);
-
+        Pattern Find(PatternId patternId);
     }
 }
