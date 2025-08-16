@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DjmaxRandomSelectorV.Models;
 using DjmaxRandomSelectorV.SerializableObjects;
 using Dmrsv.RandomSelector;
 
@@ -14,12 +13,12 @@ namespace DjmaxRandomSelectorV.Services
         private readonly IFileManager _fileManager;
 
         private string[] _basicCategories;
-        private LinkDiscItem[] _linkDisc;
+        private Dmrsv3LinkDisc[] _linkDisc;
         private Dictionary<int, Track> _allTrack;
 
         public IEnumerable<Track> AllTrack => _allTrack.Values;
         public IEnumerable<Track> Playable => _allTrack.Values.Where(t => t.IsPlayable);
-        public IReadOnlyList<Category> Categories { get; private set; }
+        public IReadOnlyList<Dmrsv3Category> Categories { get; private set; }
 
         public TrackDB(IFileManager fileManager)
         {
@@ -41,7 +40,7 @@ namespace DjmaxRandomSelectorV.Services
         {
             _basicCategories = appdata.BasicCategories;
             _linkDisc = appdata.LinkDisc;
-            Categories = new List<Category>(appdata.Categories);
+            Categories = new List<Dmrsv3Category>(appdata.Categories);
         }
 
         public void ImportDB()

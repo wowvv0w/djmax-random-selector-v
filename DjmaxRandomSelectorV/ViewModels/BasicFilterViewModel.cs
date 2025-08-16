@@ -23,7 +23,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private readonly IFileManager _fileManager;
         private readonly IFilterStateManager _filterManager;
         private readonly ISettingStateManager _settingManager;
-        private readonly IReadOnlyList<Category> _categories;
+        private readonly IReadOnlyList<Dmrsv3Category> _categories;
 
         private BasicFilter _filter;
 

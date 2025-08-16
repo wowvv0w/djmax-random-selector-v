@@ -6,6 +6,7 @@ using Caliburn.Micro;
 using DjmaxRandomSelectorV.Enums;
 using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.Models;
+using DjmaxRandomSelectorV.SerializableObjects;
 using DjmaxRandomSelectorV.Services;
 using DjmaxRandomSelectorV.States;
 using Microsoft.Win32;
@@ -17,7 +18,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private readonly IEventAggregator _eventAggregator;
         private readonly ISettingStateManager _settingManager;
         private readonly ISettingState _setting;
-        private readonly IEnumerable<Category> _categories;
+        private readonly IEnumerable<Dmrsv3Category> _categories;
 
         public bool IsPlaylist
         {
