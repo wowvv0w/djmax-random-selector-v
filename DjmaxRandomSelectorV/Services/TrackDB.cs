@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DjmaxRandomSelectorV.SerializableObjects;
+using DjmaxRandomSelectorV.SerializableObjects.VArchiveCompatible;
 using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Services
@@ -79,23 +80,6 @@ namespace DjmaxRandomSelectorV.Services
             _allTrack = _allTrack.Values
                 .Select(t => t with { IsPlayable = categories.Contains(t.Category) && !exclusions.Contains(t.Id) })
                 .ToDictionary(t => t.Id);
-        }
-
-        public record VArchiveDBTrack
-        {
-            public int Title { get; init; }
-            public string Name { get; init; }
-            public string Composer { get; init; }
-            public string DlcCode { get; init; }
-            public string Dlc { get; init; }
-            public Dictionary<string, Dictionary<string, VArchiveDBPattern>> Patterns { get; init; }
-        }
-
-        public record VArchiveDBPattern
-        {
-            public int Level { get; init; }
-            public double Floor { get; init; }
-            public int Rating { get; init; }
         }
     }
 }
