@@ -14,7 +14,7 @@ namespace DjmaxRandomSelectorV.Services
         private readonly IFileManager _fileManager;
 
         private string[] _basicCategories;
-        private Dmrsv3LinkDisc[] _linkDisc;
+        private LinkDiscChecker _linkDiscChecker;
         private Dictionary<int, Track> _allTrack;
 
         public IEnumerable<Track> AllTrack => _allTrack.Values;
@@ -40,7 +40,7 @@ namespace DjmaxRandomSelectorV.Services
         public void Initialize(Dmrsv3Appdata appdata)
         {
             _basicCategories = appdata.BasicCategories;
-            _linkDisc = appdata.LinkDisc;
+            _linkDiscChecker = new LinkDiscChecker(appdata.LinkDisc);
             Categories = new List<Dmrsv3Category>(appdata.Categories);
         }
 
@@ -75,11 +75,29 @@ namespace DjmaxRandomSelectorV.Services
 
         public void SetPlayable(IEnumerable<string> ownedDlcs)
         {
-            var categories = ownedDlcs.Concat(_basicCategories);
-            var exclusions = _linkDisc.Where(x => !x.IsRequired(ownedDlcs)).Select(x => x.Id);
+            var categories = ownedDlcs.Concat(_basicCategories).ToHashSet();
+            var exclusions = _linkDiscChecker.GetExclusionSet(ownedDlcs);
+            bool GetIsPlayable(Track t) => categories.Contains(t.Category) && !exclusions.Contains(t.Id);
             _allTrack = _allTrack.Values
-                .Select(t => t with { IsPlayable = categories.Contains(t.Category) && !exclusions.Contains(t.Id) })
-                .ToDictionary(t => t.Id);
+                                 .Select(t => t with { IsPlayable = GetIsPlayable(t) })
+                                 .ToDictionary(t => t.Id);
+        }
+
+        private class LinkDiscChecker
+        {
+            private readonly Dmrsv3LinkDisc[] _linkDiscs;
+            public LinkDiscChecker(Dmrsv3LinkDisc[] linkDisc)
+            {
+                _linkDiscs = linkDisc;
+            }
+            public HashSet<int> GetExclusionSet(IEnumerable<string> ownedDlcs)
+            {
+                bool IsSatisfied(Dmrsv3LinkDisc disc)
+                {
+                    return disc.RequiredDlc.Any(required => required.All(dlc => ownedDlcs.Contains(dlc)));
+                }
+                return _linkDiscs.Where(disc => !IsSatisfied(disc)).Select(disc => disc.Id).ToHashSet();
+            }
         }
     }
 }
