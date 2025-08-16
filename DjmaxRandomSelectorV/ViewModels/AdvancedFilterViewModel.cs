@@ -292,7 +292,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             if (result == true)
             {
                 string fileName = dialog.FileName;
-                var playlist = new Playlist()
+                var playlist = new Dmrsv2PlaylistFilterPreset()
                 {
                     Items = _filter.PatternList.Select(p => p.PatternId).ToArray()
                 };
