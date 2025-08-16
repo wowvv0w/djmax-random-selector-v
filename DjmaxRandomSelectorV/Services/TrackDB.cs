@@ -46,23 +46,22 @@ namespace DjmaxRandomSelectorV.Services
             {
                 var info = new MusicInfo()
                 {
-                    Id = x.Title,
                     Title = x.Name,
                     Composer = x.Composer,
                     Category = x.DlcCode
                 };
                 return new Track()
                 {
+                    Id = x.Title,
                     Info = info,
                     Patterns = x.Patterns
                                 .SelectMany(bt => bt.Value, (bt, df) => new Pattern()
                                 {
+                                    Id = new PatternId(x.Title, bt.Key.AsButtonTunes(), df.Key.AsDifficulty()),
                                     Info = info,
-                                    Button = bt.Key.AsButtonTunes(),
-                                    Difficulty = df.Key.AsDifficulty(),
                                     Level = df.Value.Level
                                 })
-                                .OrderBy(p => p.PatternId)
+                                .OrderBy(p => p.Id)
                                 .ToArray()
                 };
             });

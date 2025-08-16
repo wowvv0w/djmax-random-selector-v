@@ -103,7 +103,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 IsPlayable = track.IsPlayable, // TODO: apply the track is playable (required to respond to change setting)
                 Status = favorite.Contains(track.Id) ? 1 : (blacklist.Contains(track.Id) ? -1 : 0)
             }).OrderBy(item => item.Title, new TitleComparer())
-              .ThenByDescending(t => t.Id == 170 || t.Id == 267 ? t.Id : 0)
+              .ThenByDescending(t => t.TrackId == 170 || t.TrackId == 267 ? t.TrackId : 0)
               .ToList();
             _searchedItems = new List<FavoriteItem>();
             _filtersAllTrack = true;
@@ -117,8 +117,8 @@ namespace DjmaxRandomSelectorV.ViewModels
 
         public void CloseDialog()
         {
-            List<int> favorite = _items.Where(item => item.Status == 1).Select(item => item.Id).ToList();
-            List<int> blacklist = _items.Where(item => item.Status == -1).Select(item => item.Id).ToList();
+            List<int> favorite = _items.Where(item => item.Status == 1).Select(item => item.TrackId).ToList();
+            List<int> blacklist = _items.Where(item => item.Status == -1).Select(item => item.TrackId).ToList();
 
             var setting = _settingManager.GetSetting();
             setting.Favorite = favorite;

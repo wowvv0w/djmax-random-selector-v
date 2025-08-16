@@ -2,13 +2,13 @@
 {
     public record Pattern
     {
+        public PatternId Id { get; init; } = default;
         public MusicInfo Info { get; init; } = new();
-        public ButtonTunes Button { get; init; } = default;
-        public Difficulty Difficulty { get; init; } = default;
         public int Level { get; init; } = default;
 
-        public int TrackId => Info.Id;
-        public int PatternId => TrackId * 100 + (int)Button * 10 + (int)Difficulty;
+        public int TrackId => Id.TrackId;
+        public ButtonTunes Button => Id.Button;
+        public Difficulty Difficulty => Id.Difficulty;
         public string Style => Button.AsString() + Difficulty.AsString();
     }
 }

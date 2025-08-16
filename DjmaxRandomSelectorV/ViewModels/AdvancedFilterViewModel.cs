@@ -87,7 +87,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             {
                 var playlist = new Dmrsv2PlaylistFilterPreset()
                 {
-                    Items = _filter.PatternList.Select(p => p.PatternId).ToArray()
+                    Items = _filter.PatternList.Select(p => (int)p.Id).ToArray()
                 };
                 _fileManager.Export(playlist, DefaultPath);
                 foreach (Window window in Application.Current.Windows)
@@ -117,7 +117,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                                  where track is not null
                                  let pattern = track.Patterns.FirstOrDefault(p => p.Style.Equals(item.Style), null)
                                  where pattern is not null
-                                 select pattern.PatternId).ToArray()
+                                 select (int)pattern.Id).ToArray()
                     };
                 }
             }
@@ -129,7 +129,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _filter.PatternList.Add(pattern);
             PlaylistItems.Add(new PlaylistItem
             {
-                PatternId = pattern.PatternId,
+                PatternId = pattern.Id,
                 Title = _namesake.Contains(pattern.Info.Title)
                         ? $"{pattern.Info.Title} ({pattern.Info.Composer})"
                         : pattern.Info.Title,
@@ -159,7 +159,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                     continue;
                 }
 
-                var pattern = track.Patterns.FirstOrDefault(p => p.PatternId == item);
+                var pattern = track.Patterns.FirstOrDefault(p => p.Id == item);
                 if (pattern is null)
                 {
                     continue;
@@ -294,7 +294,7 @@ namespace DjmaxRandomSelectorV.ViewModels
                 string fileName = dialog.FileName;
                 var playlist = new Dmrsv2PlaylistFilterPreset()
                 {
-                    Items = _filter.PatternList.Select(p => p.PatternId).ToArray()
+                    Items = _filter.PatternList.Select(p => (int)p.Id).ToArray()
                 };
                 _fileManager.Export(playlist, fileName);
             }

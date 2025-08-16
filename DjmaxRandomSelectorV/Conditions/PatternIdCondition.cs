@@ -15,7 +15,7 @@ namespace DjmaxRandomSelectorV.Conditions
 
         public bool IsSatisfiedBy(Pattern pattern)
         {
-            return PatternIds.Contains(pattern.PatternId);
+            return PatternIds.Contains(pattern.Id);
         }
     }
 }
