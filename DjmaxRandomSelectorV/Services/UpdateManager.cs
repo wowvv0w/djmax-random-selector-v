@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using DjmaxRandomSelectorV.States;
 
-namespace DjmaxRandomSelectorV
+namespace DjmaxRandomSelectorV.Services
 {
     public class UpdateManager
     {

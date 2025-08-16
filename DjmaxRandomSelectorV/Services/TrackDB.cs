@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using DjmaxRandomSelectorV.Models;
-using DjmaxRandomSelectorV.Services;
+using DjmaxRandomSelectorV.SerializableObjects;
 using Dmrsv.RandomSelector;
 
-namespace DjmaxRandomSelectorV
+namespace DjmaxRandomSelectorV.Services
 {
     public class TrackDB : ITrackDB
     {

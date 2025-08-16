@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using DjmaxRandomSelectorV.Enums;
 
-namespace DjmaxRandomSelectorV
+namespace DjmaxRandomSelectorV.SerializableObjects
 {
     public class Dmrsv3Configuration
     {

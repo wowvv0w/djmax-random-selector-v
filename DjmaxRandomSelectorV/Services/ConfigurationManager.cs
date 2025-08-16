@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using DjmaxRandomSelectorV.Enums;
+using DjmaxRandomSelectorV.SerializableObjects;
 using DjmaxRandomSelectorV.States;
 
 namespace DjmaxRandomSelectorV.Services

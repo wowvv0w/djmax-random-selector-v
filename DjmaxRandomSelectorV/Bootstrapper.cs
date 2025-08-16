@@ -5,10 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
-using DjmaxRandomSelectorV.Conditions;
 using DjmaxRandomSelectorV.Enums;
 using DjmaxRandomSelectorV.Extractors;
 using DjmaxRandomSelectorV.Messages;
+using DjmaxRandomSelectorV.SerializableObjects;
 using DjmaxRandomSelectorV.Services;
 using DjmaxRandomSelectorV.States;
 using DjmaxRandomSelectorV.ViewModels;
@@ -35,7 +35,7 @@ namespace DjmaxRandomSelectorV
         private readonly TrackDB _db;
         private readonly LocatorService _loc;
         private readonly History _history;
-        private readonly ConditionBuilder _condBuild;
+        private readonly ConditionManager _condManager;
         private readonly GroupwiseExtractorBuilder _extrBuild;
         private readonly RandomSelectorExecutor _executor;
         private readonly HotKeyService _hotkey;
@@ -81,15 +81,15 @@ namespace DjmaxRandomSelectorV
                 MusicForm = _config.Mode,
                 InputMethod = _config.Aider
             };
-            _condBuild = new ConditionBuilder();
+            _condManager = new ConditionManager();
             _extrBuild = new GroupwiseExtractorBuilder()
             {
                 StyleType = _config.Mode,
                 LevelPreference = _config.Level
             };
 
-            _executor = new RandomSelectorExecutor(_rs, _db, _loc, _condBuild, _extrBuild);
-            _condBuild.OnFilterStateChanged += _executor.SetStateChanged;
+            _executor = new RandomSelectorExecutor(_rs, _db, _loc, _condManager, _extrBuild);
+            _condManager.OnFilterStateChanged += _executor.SetStateChanged;
             _hotkey = new HotKeyService(_executor)
             {
                 IgnoreTitleChecker = _config.Aider == InputMethod.NotInput
@@ -117,7 +117,7 @@ namespace DjmaxRandomSelectorV
             _updateManager = new UpdateManager(_fileManager, _configManager);
             _container
                 .Instance<ITrackDB>(_db)
-                .Instance<IFilterStateManager>(_condBuild)
+                .Instance<IFilterStateManager>(_condManager)
                 .Instance<IFilterOptionStateManager>(_configManager)
                 .Instance<ISettingStateManager>(_configManager)
                 .Instance<IReadOnlyVersionInfoStateManager>(_configManager);

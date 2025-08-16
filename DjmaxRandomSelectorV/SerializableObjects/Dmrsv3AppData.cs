@@ -1,6 +1,6 @@
 ﻿using DjmaxRandomSelectorV.Models;
 
-namespace DjmaxRandomSelectorV
+namespace DjmaxRandomSelectorV.SerializableObjects
 {
     public class Dmrsv3AppData
     {

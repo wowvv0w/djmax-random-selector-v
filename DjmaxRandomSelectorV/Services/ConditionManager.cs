@@ -1,9 +1,10 @@
 ﻿using System;
+using DjmaxRandomSelectorV.Conditions;
 using DjmaxRandomSelectorV.States;
 
-namespace DjmaxRandomSelectorV.Conditions
+namespace DjmaxRandomSelectorV.Services
 {
-    public class ConditionBuilder : IConditionBuilder, IFilterStateManager
+    public class ConditionManager : IConditionBuilder, IFilterStateManager
     {
         public event Action OnFilterStateChanged;
 
