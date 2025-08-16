@@ -71,8 +71,7 @@ namespace DjmaxRandomSelectorV.Services
         public void SetPlayable(IEnumerable<string> ownedDlcs)
         {
             var categories = ownedDlcs.Concat(_basicCategories);
-            var exclusions = _linkDisc.Where(x => !x.RequiredDlc.Any(dlcs => dlcs.All(dlc => ownedDlcs.Contains(dlc))))
-                                      .Select(x => x.Id);
+            var exclusions = _linkDisc.Where(x => !x.IsRequired(ownedDlcs)).Select(x => x.Id);
             AllTrack = AllTrack
                 .Select(track => track with { IsPlayable = categories.Contains(track.Category) && !exclusions.Contains(track.Id) })
                 .ToList();
