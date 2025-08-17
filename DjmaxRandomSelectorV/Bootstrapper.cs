@@ -22,13 +22,7 @@ namespace DjmaxRandomSelectorV
         private readonly SimpleContainer _container = new SimpleContainer();
 
         private readonly Dmrsv3Configuration _config;
-        //private readonly RandomSelectorAPI _rs;
-        //private readonly CategoryContainer _categoryContainer;
-        //private readonly VersionContainer _versionContainer;
-        //private readonly UpdateManager _updater;
-        //private readonly ExecutionHelper _executor;
 
-        // NEW
         private readonly RandomSelectorService _rs;
         private readonly TrackDB _db;
         private readonly LocatorService _loc;
@@ -39,7 +33,6 @@ namespace DjmaxRandomSelectorV
         private readonly HotKeyService _hotkey;
         private readonly ConfigurationManager _configManager;
         private readonly UpdateManager _updateManager;
-        // END NEW
 
         private Mutex _mutex;
 
@@ -57,14 +50,7 @@ namespace DjmaxRandomSelectorV
                 _config = new Dmrsv3Configuration();
             }
             _container.Instance(_config); // TODO: delete it (used at ShellVM)
-
-            //_categoryContainer = new CategoryContainer();
-            //_container.Instance(_categoryContainer);
-
-            //_db = new TrackDB(_fileManager);
-            //_container.Instance(_db);
-
-            // NEW
+            // Executor Components
             var eventaggregator = IoC.Get<IEventAggregator>();
             _history = new History(_config.RecentPlayed)
             {
@@ -85,14 +71,14 @@ namespace DjmaxRandomSelectorV
                 StyleType = _config.Mode,
                 LevelPreference = _config.Level
             };
-
+            // Executor and Hotkey Manager
             _executor = new RandomSelectorExecutor(_rs, _db, _loc, _condManager, _extrBuild);
             _condManager.OnFilterStateChanged += _executor.SetStateChanged;
             _hotkey = new HotKeyService(_executor)
             {
                 IgnoreTitleChecker = _config.Aider == InputMethod.NotInput
             };
-
+            // Configuration Manager
             _configManager = new ConfigurationManager(_config);
             _configManager.OnFilterOptionStateChanged += filterOption =>
             {
@@ -112,6 +98,7 @@ namespace DjmaxRandomSelectorV
                 _executor.SetStateChanged();
                 // filemanager export?
             };
+            // Etc.
             _updateManager = new UpdateManager(_fileManager, _configManager);
             _container
                 .Instance<ITrackDB>(_db)
@@ -119,17 +106,6 @@ namespace DjmaxRandomSelectorV
                 .Instance<IFilterOptionStateManager>(_configManager)
                 .Instance<ISettingStateManager>(_configManager)
                 .Instance<IReadOnlyVersionInfoStateManager>(_configManager);
-            // END NEW
-
-
-            //var eventAggregator = IoC.Get<IEventAggregator>();
-            //_rs = new RandomSelectorAPI(eventAggregator, _db);
-            //_executor = new ExecutionHelper(eventAggregator);
-
-
-            //_versionContainer = new VersionContainer();
-            //_container.Instance(_versionContainer);
-            //_updater = new UpdateManager(_config, _versionContainer, _fileManager);
         }
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
@@ -153,7 +129,6 @@ namespace DjmaxRandomSelectorV
             {
                 _ = Task.Run(() => MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error));
             }
-            //if (_versionContainer.AppdataVersion.CompareTo(_config.AppdataVersion) > 0)
             var versionInfo = _configManager.GetReadOnlyVersionInfo();
             if (versionInfo.AppdataVersion.CompareTo(_config.AppdataVersion) > 0)
             {
@@ -174,7 +149,6 @@ namespace DjmaxRandomSelectorV
                 Application.Shutdown();
                 return;
             }
-            //_categoryContainer.SetCategories(appdata);
             // Set AllTrack
             _db.Initialize(appdata);
             _db.ImportDB();
@@ -190,25 +164,14 @@ namespace DjmaxRandomSelectorV
                 window.Top = position[0];
                 window.Left = position[1];
             }
-            // Set random selector
-            //_rs.Initialize(_config); // this was for history and locator
-            //_executor.Initialize(_rs, _config);
-            //_executor.RegisterHandle(new WindowInteropHelper(window).Handle);
-            //_executor.SetHotkey(_config.StartKeyCode);
+            // Set hotkey manager
             _hotkey.Initialize(window);
             _hotkey.SetHotKey(_config.StartKeyCode);
         }
 
         protected override void OnExit(object sender, EventArgs e)
         {
-            //var historyItems = _rs.History.GetItems().ToList();
-            //if (_config.SavesRecents)
-            //{
-            //    _config.RecentPlayed = historyItems;
-            //}
             _config.RecentPlayed = _config.SavesRecents ? _history.ToList() : new List<int>();
-            //_config.AllTrackVersion = _versionContainer.AllTrackVersion;
-            //_config.AppdataVersion = _versionContainer.AppdataVersion;
             _fileManager.Export(_config, ConfigFilePath);
         }
 
