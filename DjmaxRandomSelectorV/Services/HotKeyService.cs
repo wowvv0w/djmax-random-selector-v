@@ -30,6 +30,16 @@ namespace DjmaxRandomSelectorV.Services
         public HotKeyService(IExecutable executor)
         {
             _executor = executor;
+            _executor.OnExecutionCompleted += result =>
+            {
+                if (result == false)
+                {
+                    MessageBox.Show("There is no music that meets the filter conditions.",
+                                    "Error",
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Error);
+                }
+            };
             _titleChecker = new ForegroundWindowTitleChecker("DJMAX RESPECT V");
         }
 
@@ -62,6 +72,7 @@ namespace DjmaxRandomSelectorV.Services
                 {
                     if (!_executor.IsRunning)
                     {
+                        System.Diagnostics.Debug.WriteLine("execution start");
                         if (IgnoreTitleChecker || _titleChecker.IsAvailable())
                         {
                             var task = ((int)lParam & 0xFFFF) == MOD_ALT
@@ -70,11 +81,15 @@ namespace DjmaxRandomSelectorV.Services
                         }
                         else
                         {
-                            MessageBox.Show("The foreground window is not \"DJMAX RESPECT V\".\nPress start key in the game.",
-                                            "Error",
-                                            MessageBoxButton.OK,
-                                            MessageBoxImage.Error);
+                            var task = Task.Run(() =>
+                            {
+                                MessageBox.Show("The foreground window is not \"DJMAX RESPECT V\".\nPress start key in the game.",
+                                                "Error",
+                                                MessageBoxButton.OK,
+                                                MessageBoxImage.Error);
+                            });
                         }
+                        System.Diagnostics.Debug.WriteLine("execution end");
                     }
                 }
                 handled = true;

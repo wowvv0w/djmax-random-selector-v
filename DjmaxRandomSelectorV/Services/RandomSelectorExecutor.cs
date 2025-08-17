@@ -1,10 +1,12 @@
-﻿using System.Windows;
+﻿using System;
 using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Services
 {
     public class RandomSelectorExecutor : IExecutable
     {
+        public event Action<bool> OnExecutionCompleted;
+
         private readonly IRandomSelector _rs;
         private readonly ITrackDB _db;
         private readonly IConditionBuilder _condBuild;
@@ -41,13 +43,7 @@ namespace DjmaxRandomSelectorV.Services
             }
             Pattern selected = _rs.Select();
             _loc.Locate(selected);
-            if (selected is null)
-            {
-                MessageBox.Show("There is no music that meets the filter conditions.",
-                                "Error",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
-            }
+            OnExecutionCompleted?.Invoke(selected is not null);
             _isRunning = false;
         }
 
@@ -56,6 +52,7 @@ namespace DjmaxRandomSelectorV.Services
             _isRunning = true;
             Pattern selected = _rs.Reselect();
             _loc.Locate(selected);
+            OnExecutionCompleted?.Invoke(selected is not null);
             _isRunning = false;
         }
     }
