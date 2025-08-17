@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
 using DjmaxRandomSelectorV.Enums;
-using DjmaxRandomSelectorV.Extractors;
 using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.SerializableObjects;
 using DjmaxRandomSelectorV.Services;

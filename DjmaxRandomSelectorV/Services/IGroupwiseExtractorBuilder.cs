@@ -1,4 +1,6 @@
-﻿namespace DjmaxRandomSelectorV.Extractors
+﻿using DjmaxRandomSelectorV.Extractors;
+
+namespace DjmaxRandomSelectorV.Services
 {
     public interface IGroupwiseExtractorBuilder
     {

@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using DjmaxRandomSelectorV.Extractors;
 using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Services

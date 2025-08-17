@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using DjmaxRandomSelectorV.Enums;
+using DjmaxRandomSelectorV.Extractors;
 using Dmrsv.RandomSelector;
 
-namespace DjmaxRandomSelectorV.Extractors
+namespace DjmaxRandomSelectorV.Services
 {
     public class GroupwiseExtractorBuilder : IGroupwiseExtractorBuilder
     {
