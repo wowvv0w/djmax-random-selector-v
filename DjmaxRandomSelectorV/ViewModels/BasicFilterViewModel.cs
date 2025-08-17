@@ -9,7 +9,6 @@ using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
 using DjmaxRandomSelectorV.SerializableObjects;
 using DjmaxRandomSelectorV.Services;
-using DjmaxRandomSelectorV.States;
 using Microsoft.Win32;
 
 namespace DjmaxRandomSelectorV.ViewModels

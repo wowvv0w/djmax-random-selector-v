@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
 using DjmaxRandomSelectorV.SerializableObjects;
-using DjmaxRandomSelectorV.States;
+using DjmaxRandomSelectorV.Services;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {

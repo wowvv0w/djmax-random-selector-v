@@ -1,4 +1,6 @@
-﻿namespace DjmaxRandomSelectorV.States
+﻿using DjmaxRandomSelectorV.States;
+
+namespace DjmaxRandomSelectorV.Services
 {
     public interface IFilterOptionStateManager
     {

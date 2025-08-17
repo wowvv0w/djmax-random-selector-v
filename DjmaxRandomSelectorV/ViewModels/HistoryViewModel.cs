@@ -1,14 +1,13 @@
-﻿using Caliburn.Micro;
-using DjmaxRandomSelectorV.Enums;
-using DjmaxRandomSelectorV.Messages;
-using DjmaxRandomSelectorV.Models;
-using DjmaxRandomSelectorV.States;
-using Dmrsv.RandomSelector;
-using System;
-using System.Linq;
+﻿using System;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Caliburn.Micro;
+using DjmaxRandomSelectorV.Enums;
+using DjmaxRandomSelectorV.Messages;
+using DjmaxRandomSelectorV.Models;
+using DjmaxRandomSelectorV.Services;
+using Dmrsv.RandomSelector;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {

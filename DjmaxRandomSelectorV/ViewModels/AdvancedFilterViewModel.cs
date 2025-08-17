@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -12,7 +11,6 @@ using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.Models;
 using DjmaxRandomSelectorV.SerializableObjects.Deprecated;
 using DjmaxRandomSelectorV.Services;
-using DjmaxRandomSelectorV.States;
 using Dmrsv.RandomSelector;
 using Microsoft.Win32;
 

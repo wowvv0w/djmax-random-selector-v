@@ -5,7 +5,7 @@ using System.Windows.Media.Imaging;
 using Caliburn.Micro;
 using DjmaxRandomSelectorV.Enums;
 using DjmaxRandomSelectorV.Messages;
-using DjmaxRandomSelectorV.States;
+using DjmaxRandomSelectorV.Services;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {

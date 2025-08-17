@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using Caliburn.Micro;
-using DjmaxRandomSelectorV.States;
+using DjmaxRandomSelectorV.Services;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {
