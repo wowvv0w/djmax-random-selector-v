@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using DjmaxRandomSelectorV.Conditions;
 using DjmaxRandomSelectorV.Extractors;
 using Dmrsv.RandomSelector;
 
