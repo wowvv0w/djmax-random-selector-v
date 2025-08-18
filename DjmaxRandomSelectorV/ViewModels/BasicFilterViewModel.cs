@@ -15,9 +15,6 @@ namespace DjmaxRandomSelectorV.ViewModels
 {
     public class BasicFilterViewModel : Screen
     {
-        private const string DefaultPath = @"DMRSV3_Data\CurrentFilter.json";
-        private const string PresetPath = @"DMRSV3_Data\Preset";
-
         private readonly IWindowManager _windowManager;
         private readonly IFileManager _fileManager;
         private readonly IFilterStateManager _filterManager;
@@ -134,7 +131,7 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             try
             {
-                ImportFilter(DefaultPath);
+                ImportFilter(DmrsvPath.CurrentBasicFilterFile);
             }
             catch
             {
@@ -177,7 +174,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             if (close)
             {
-                _fileManager.Export(_filter, DefaultPath);
+                _fileManager.Export(_filter, DmrsvPath.CurrentBasicFilterFile);
             }
             return Task.CompletedTask;
         }
@@ -212,7 +209,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void SavePreset()
         {
             string app = AppDomain.CurrentDomain.BaseDirectory;
-            string path = Path.Combine(app, PresetPath);
+            string path = Path.Combine(app, DmrsvPath.BasicFilterPresetDir);
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             var dialog = new SaveFileDialog()
@@ -232,7 +229,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public void LoadPreset()
         {
             string app = AppDomain.CurrentDomain.BaseDirectory;
-            string path = Path.Combine(app, PresetPath);
+            string path = Path.Combine(app, DmrsvPath.BasicFilterPresetDir);
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             var dialog = new OpenFileDialog()

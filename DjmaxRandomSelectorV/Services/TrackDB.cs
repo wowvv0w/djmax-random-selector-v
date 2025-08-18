@@ -9,8 +9,6 @@ namespace DjmaxRandomSelectorV.Services
 {
     public class TrackDB : ITrackDB
     {
-        private const string AllTrackFilePath = @"DMRSV3_Data\AllTrackList.json";
-
         private readonly IFileManager _fileManager;
 
         private string[] _basicCategories;
@@ -46,7 +44,7 @@ namespace DjmaxRandomSelectorV.Services
 
         public void ImportDB()
         {
-            var db = _fileManager.Import<List<VArchiveDBTrack>>(AllTrackFilePath);
+            var db = _fileManager.Import<List<VArchiveDBTrack>>(DmrsvPath.AllTrackFile);
             _allTrack = db.Select(x =>
             {
                 var info = new MusicInfo()

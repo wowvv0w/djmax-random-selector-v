@@ -15,9 +15,6 @@ namespace DjmaxRandomSelectorV
 {
     public class Bootstrapper : BootstrapperBase
     {
-        private const string AppDataFilePath = @"DMRSV3_Data\appdata.json";
-        private const string ConfigFilePath = @"DMRSV3_Data\Config.json";
-
         private readonly IFileManager _fileManager;
         private readonly SimpleContainer _container = new SimpleContainer();
 
@@ -43,7 +40,7 @@ namespace DjmaxRandomSelectorV
 
             try
             {
-                _config = _fileManager.Import<Dmrsv3Configuration>(ConfigFilePath);
+                _config = _fileManager.Import<Dmrsv3Configuration>(DmrsvPath.ConfigFile);
             }
             catch
             {
@@ -139,7 +136,7 @@ namespace DjmaxRandomSelectorV
             Dmrsv3Appdata appdata;
             try
             {
-                appdata = _fileManager.Import<Dmrsv3Appdata>(AppDataFilePath);
+                appdata = _fileManager.Import<Dmrsv3Appdata>(DmrsvPath.AppdataFile);
             }
             catch
             {
@@ -172,7 +169,7 @@ namespace DjmaxRandomSelectorV
         protected override void OnExit(object sender, EventArgs e)
         {
             _config.RecentPlayed = _config.SavesRecents ? _history.ToList() : new List<int>();
-            _fileManager.Export(_config, ConfigFilePath);
+            _fileManager.Export(_config, DmrsvPath.ConfigFile);
         }
 
         protected override void Configure()

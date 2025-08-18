@@ -11,8 +11,6 @@ namespace DjmaxRandomSelectorV.Services
         private const string VersionCheckUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/Version3.txt";
         private const string AllTrackDownloadUrl = "https://v-archive.net/db/songs.json";
         private const string AppdataDownloadUrl = "https://raw.githubusercontent.com/wowvv0w/djmax-random-selector-v/main/DjmaxRandomSelectorV/DMRSV3_Data/appdata.json";
-        private const string AllTrackFilePath = @"DMRSV3_Data\AllTrackList.json";
-        private const string AppdataFilePath = @"DMRSV3_Data\appdata.json";
 
         private readonly IFileManager _fileManager;
         private readonly IVersionInfoStateManager _versionInfoManager;
@@ -42,13 +40,13 @@ namespace DjmaxRandomSelectorV.Services
             // update all track
             long now = long.Parse(DateTime.Now.ToString("yyMMddHHmm"));
             long past = versionInfo.AllTrackVersion;
-            if (now > past || !File.Exists(AllTrackFilePath))
+            if (now > past || !File.Exists(DmrsvPath.AllTrackFile))
             {
                 Debug.WriteLine("all track update start");
                 tasks.Add(DownloadAllTrackAsync());
             }
             // update appdata
-            if (!File.Exists(AppdataFilePath)
+            if (!File.Exists(DmrsvPath.AppdataFile)
                 || versions[1].CompareTo(versionInfo.AppdataVersion) > 0)
             {
                 Debug.WriteLine("appdata update start");
@@ -77,7 +75,7 @@ namespace DjmaxRandomSelectorV.Services
             try
             {
                 string result = await _fileManager.RequestAsync(AllTrackDownloadUrl);
-                _fileManager.Write(result, AllTrackFilePath);
+                _fileManager.Write(result, DmrsvPath.AllTrackFile);
             }
             catch
             {
@@ -91,7 +89,7 @@ namespace DjmaxRandomSelectorV.Services
             try
             {
                 string result = await _fileManager.RequestAsync(AppdataDownloadUrl);
-                _fileManager.Write(result, AppdataFilePath);
+                _fileManager.Write(result, DmrsvPath.AppdataFile);
             }
             catch
             {
