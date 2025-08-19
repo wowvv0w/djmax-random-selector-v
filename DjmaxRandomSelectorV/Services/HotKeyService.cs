@@ -75,6 +75,7 @@ namespace DjmaxRandomSelectorV.Services
                         System.Diagnostics.Debug.WriteLine("execution start");
                         if (IgnoreTitleChecker || _titleChecker.IsAvailable())
                         {
+                            System.Diagnostics.Debug.WriteLine("selection executed");
                             var task = ((int)lParam & 0xFFFF) == MOD_ALT
                                        ? Task.Run(() => _executor.Restart())
                                        : Task.Run(() => _executor.Start());
