@@ -1,14 +1,10 @@
 ﻿<Application x:Class="DjmaxRandomSelectorV.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:DjmaxRandomSelectorV"
-             ShutdownMode="OnMainWindowClose">
+             xmlns:local="clr-namespace:DjmaxRandomSelectorV">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary>
-                    <local:Bootstrapper x:Key="Bootstrapper"/>
-                </ResourceDictionary>
                 <ResourceDictionary Source="Resources/FontDictionary.xaml"/>
                 <ResourceDictionary Source="Resources/ColorDictionary.xaml"/>
                 <ResourceDictionary Source="Resources/StyleDictionary.xaml"/>
