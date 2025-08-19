@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using Caliburn.Micro;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using DjmaxRandomSelectorV.Enums;
-using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.SerializableObjects;
 using DjmaxRandomSelectorV.Services;
-using DjmaxRandomSelectorV.ViewModels;
+using DjmaxRandomSelectorV.Views;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DjmaxRandomSelectorV
 {
-    public class Bootstrapper : BootstrapperBase
+    public class Bootstrapper
     {
         private readonly IFileManager _fileManager;
-        private readonly SimpleContainer _container = new SimpleContainer();
 
         private readonly Dmrsv3Configuration _config;
 
@@ -35,8 +35,7 @@ namespace DjmaxRandomSelectorV
 
         public Bootstrapper()
         {
-            Initialize();
-            _fileManager = IoC.Get<IFileManager>();
+            _fileManager = new FileManager();
 
             try
             {
@@ -46,15 +45,16 @@ namespace DjmaxRandomSelectorV
             {
                 _config = new Dmrsv3Configuration();
             }
-            _container.Instance(_config); // TODO: delete it (used at ShellVM)
+
             // Executor Components
-            var eventaggregator = IoC.Get<IEventAggregator>();
             _history = new History(_config.RecentPlayed)
             {
                 Limit = _config.RecentsCount
             };
             _rs = new RandomSelectorService(_history);
-            _rs.OnSelectionCompleted += pattern => eventaggregator.PublishOnUIThreadAsync(new PatternMessage(pattern));
+            // TODO: migrate it
+            //var eventaggregator = IoC.Get<IEventAggregator>();
+            //_rs.OnSelectionCompleted += pattern => eventaggregator.PublishOnUIThreadAsync(new PatternMessage(pattern));
             _db = new TrackDB(_fileManager);
             _loc = new LocatorService()
             {
@@ -68,6 +68,7 @@ namespace DjmaxRandomSelectorV
                 StyleType = _config.Mode,
                 LevelPreference = _config.Level
             };
+
             // Executor and Hotkey Manager
             _executor = new RandomSelectorExecutor(_rs, _db, _loc, _condManager, _extrBuild);
             _condManager.OnFilterStateChanged += _executor.SetStateChanged;
@@ -75,6 +76,7 @@ namespace DjmaxRandomSelectorV
             {
                 IgnoreTitleChecker = _config.Aider == InputMethod.NotInput
             };
+
             // Configuration Manager
             _configManager = new ConfigurationManager(_config);
             _configManager.OnFilterOptionStateChanged += filterOption =>
@@ -95,28 +97,20 @@ namespace DjmaxRandomSelectorV
                 _executor.SetStateChanged();
                 // filemanager export?
             };
+
             // Etc.
             _updateManager = new UpdateManager(_fileManager, _configManager);
-            _container
-                .Instance<ITrackDB>(_db)
-                .Instance<IFilterStateManager>(_condManager)
-                .Instance<IFilterOptionStateManager>(_configManager)
-                .Instance<ISettingStateManager>(_configManager)
-                .Instance<IReadOnlyVersionInfoStateManager>(_configManager);
         }
 
-        protected override async void OnStartup(object sender, StartupEventArgs e)
+        public async Task Startup()
         {
             // Prevent redundant running
-            _mutex = new Mutex(true, "DjmaxRandomSelectorV", out bool createsNew);
-            if (!createsNew)
+            _mutex = new Mutex(true, "DjmaxRandomSelectorV", out bool createdNew);
+            if (!createdNew)
             {
-                MessageBox.Show("Already running.",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Application.Exit -= OnExit;
-                Application.Shutdown();
-                return;
+                throw new Exception("Already running.");
             }
+
             // Update all track file
             try
             {
@@ -132,6 +126,7 @@ namespace DjmaxRandomSelectorV
                 _ = Task.Run(() => MessageBox.Show($"App data has been updated to the version {versionInfo.AppdataVersion}.",
                              "Update", MessageBoxButton.OK, MessageBoxImage.Information));
             }
+
             // Import appdata
             Dmrsv3Appdata appdata;
             try
@@ -140,71 +135,55 @@ namespace DjmaxRandomSelectorV
             }
             catch
             {
-                MessageBox.Show("Cannot import appdata.json. Try again or download the file manually.",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Application.Exit -= OnExit;
-                Application.Shutdown();
-                return;
+                throw new Exception("Cannot import appdata.json. Try again or download the file manually.");
             }
+
             // Set AllTrack
             _db.Initialize(appdata);
             _db.ImportDB();
             _db.SetPlayable(_config.OwnedDlcs);
             _loc.SetLocationMap(_db.AllTrack);
-            // Bind views and viewmodels
-            await DisplayRootViewForAsync(typeof(ShellViewModel));
-            // Set window property
-            Window window = Application.MainWindow;
+
+            // Create service provider
+            var services
+                = new ServiceCollection()
+                .AddSingleton(_fileManager)
+                .AddSingleton(_config)// TODO: delete it (used at ShellVM)
+                .AddSingleton<ITrackDB>(_db)
+                .AddSingleton<IFilterStateManager>(_condManager)
+                .AddSingleton<IFilterOptionStateManager>(_configManager)
+                .AddSingleton<ISettingStateManager>(_configManager)
+                .AddSingleton<IReadOnlyVersionInfoStateManager>(_configManager);
+
+            Assembly
+                .GetEntryAssembly()
+                .GetTypes()
+                .Where(type => type.IsClass)
+                .Where(type => type.Name.EndsWith("ViewModel"))
+                .ToList()
+                .ForEach(viewModelType => services.AddTransient(viewModelType));
+
+            Ioc.Default.ConfigureServices(services.BuildServiceProvider());
+
+            // Show main window
+            var window = new MainWindow();
             double[] position = _config.Position;
             if (position?.Length == 2)
             {
                 window.Top = position[0];
                 window.Left = position[1];
             }
+            window.Show();
+
             // Set hotkey manager
             _hotkey.Initialize(window);
             _hotkey.SetHotKey(_config.StartKeyCode);
         }
 
-        protected override void OnExit(object sender, EventArgs e)
+        public void Exit()
         {
             _config.RecentPlayed = _config.SavesRecents ? _history.ToList() : new List<int>();
             _fileManager.Export(_config, DmrsvPath.ConfigFile);
-        }
-
-        protected override void Configure()
-        {
-            _container.Instance(_container);
-
-            _container
-                .Singleton<IWindowManager, WindowManager>()
-                .Singleton<IEventAggregator, EventAggregator>()
-                .Singleton<IFileManager, FileManager>();
-            
-            foreach (var assembly in SelectAssemblies())
-            {
-                assembly.GetTypes()
-                    .Where(type => type.IsClass)
-                    .Where(type => type.Name.EndsWith("ViewModel"))
-                    .ToList()
-                    .ForEach(viewModelType => _container.RegisterPerRequest(
-                        viewModelType, viewModelType.ToString(), viewModelType));
-            }
-        }
-
-        protected override object GetInstance(Type service, string key)
-        {
-            return _container.GetInstance(service, key);
-        }
-
-        protected override IEnumerable<object> GetAllInstances(Type service)
-        {
-            return _container.GetAllInstances(service);
-        }
-
-        protected override void BuildUp(object instance)
-        {
-            _container.BuildUp(instance);
         }
     }
 }

@@ -5,10 +5,6 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using CommunityToolkit.Mvvm.DependencyInjection;
-using DjmaxRandomSelectorV.ViewModels;
-using DjmaxRandomSelectorV.Views;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace DjmaxRandomSelectorV
 {
@@ -17,20 +13,30 @@ namespace DjmaxRandomSelectorV
     /// </summary>
     public partial class App : Application
     {
+        private readonly Bootstrapper _boot = new();
+
         public App()
         {
             InitializeComponent();
         }
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
-            Ioc.Default.ConfigureServices(
-                new ServiceCollection()
-                .AddTransient<MainWindowViewModel>()
-                .BuildServiceProvider());
+            try
+            {
+                await _boot.Startup();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Shutdown();
+                return;
+            }
+        }
 
-            var mainWindow = new MainWindow();
-            mainWindow.Show();
+        protected override void OnExit(ExitEventArgs e)
+        {
+            _boot.Exit();
         }
     }
 }
