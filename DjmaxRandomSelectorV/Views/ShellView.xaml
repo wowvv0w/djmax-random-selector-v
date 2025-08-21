@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
+        d:DataContext="{d:DesignInstance local:ShellView,
+                                         IsDesignTimeCreatable=False}"
         mc:Ignorable="d"
         Title="DJMAX Random Selector V"
         Width="740" Height="530"
@@ -50,9 +52,9 @@
                            Foreground="#989999"
                            VerticalAlignment="Center"
                            Margin="10 0 0 0"/>
-                <Border cal:Message.Attach="[Event MouseLeftButtonDown] = [Action MoveWindow($view)]"
+                <Border MouseLeftButtonDown="MoveWindow"
                         Background="Transparent"/>
-                <Button x:Name="OpenReleasePage"
+                <Button Command="{Binding ViewModel.OpenReleasePageCommand}"
                         Content="[New Update is Available]"
                         Style="{StaticResource HoverEffectTransparentButton}"
                         Foreground="{StaticResource HighlightYellowColor}"
@@ -62,14 +64,14 @@
                         Margin="170 0 0 0"
                         Padding="5"
                         Visibility="{Binding OpenReleasePageVisibility}"/>
-                <Button cal:Message.Attach="[Event Click] = [Action MinimizeWindow($view)]"
+                <Button Click="MinimizeWindow"
                         Grid.Column="1"
                         Style="{StaticResource HoverEffectTransparentButton}"
                         Width="40">
                     <Image Source="pack://application:,,,/Images/Minimize.png"
                            Width="16"/>
                 </Button>
-                <Button cal:Message.Attach="[Event Click] = [Action CloseWindow($view)]"
+                <Button Click="CloseWindow"
                         Grid.Column="2"
                         Style="{StaticResource HoverEffectTransparentButton}"
                         Width="40">

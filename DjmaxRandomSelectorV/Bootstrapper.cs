@@ -166,7 +166,7 @@ namespace DjmaxRandomSelectorV
             Ioc.Default.ConfigureServices(services.BuildServiceProvider());
 
             // Show main window
-            var window = new MainWindow();
+            var window = new ShellView();
             double[] position = _config.Position;
             if (position?.Length == 2)
             {
