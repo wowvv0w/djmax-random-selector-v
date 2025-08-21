@@ -22,7 +22,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         {
             MainPanel = Ioc.Default.GetRequiredService<MainViewModel>();
             //FilterOptionIndicator = Ioc.Default.GetRequiredService<FilterOptionIndicatorViewModel>();
-            //FilterOptionPanel = Ioc.Default.GetRequiredService<FilterOptionViewModel>();
+            FilterOptionPanel = Ioc.Default.GetRequiredService<FilterOptionViewModel>();
 
             var versionInfo = versionInfoManager.GetReadOnlyVersionInfo();
             bool visible = versionInfo.CurrentAppVersion < versionInfo.LatestAppVersion;

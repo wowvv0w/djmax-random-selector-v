@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using DjmaxRandomSelectorV.ViewModels;
 
 namespace DjmaxRandomSelectorV.Views
 {
@@ -20,9 +22,13 @@ namespace DjmaxRandomSelectorV.Views
     /// </summary>
     public partial class FilterOptionView : UserControl
     {
+        public FilterOptionViewModel ViewModel { get; }
+
         public FilterOptionView()
         {
             InitializeComponent();
+            DataContext = this;
+            ViewModel = Ioc.Default.GetRequiredService<FilterOptionViewModel>();
         }
     }
 }

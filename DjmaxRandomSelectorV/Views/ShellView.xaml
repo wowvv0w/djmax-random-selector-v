@@ -157,7 +157,7 @@
               Panel.ZIndex="2"
               Width="0"
               HorizontalAlignment="Left">
-            <ContentControl x:Name="FilterOptionPanel"
+            <ContentControl Content="{Binding ViewModel.FilterOptionPanel}"
                             HorizontalAlignment="Right"
                             Width="500"/>
         </Grid>

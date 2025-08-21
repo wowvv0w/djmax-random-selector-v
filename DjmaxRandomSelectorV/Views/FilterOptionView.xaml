@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
-             xmlns:cal="http://www.caliburnproject.org"
+             d:DataContext="{d:DesignInstance local:FilterOptionView,
+                                              IsDesignTimeCreatable=False}"
              mc:Ignorable="d" 
              d:DesignHeight="480" d:DesignWidth="500">
     <Grid>
@@ -55,11 +56,12 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="EXCLUDE RECENT MUSICS"/>
-                <TextBlock Text="{Binding Value, ElementName=ExceptCount}"
+                <TextBlock Text="{Binding Value, ElementName=ExceptCountSlider}"
                            HorizontalAlignment="Right"
                            Margin="0 0 10 0">
                 </TextBlock>
-                <Slider x:Name="ExceptCount"
+                <Slider x:Name="ExceptCountSlider"
+                        Value="{Binding ViewModel.ExceptCount}"
                         Minimum="0"
                         Maximum="30"/>
             </Grid>
@@ -76,14 +78,14 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="30"/>
                     </Grid.ColumnDefinitions>
-                    <Button cal:Message.Attach="SwitchMode"
+                    <Button Command="{Binding ViewModel.SwitchModeCommand}"
                             Style="{StaticResource LeftArrowButton}"/>
-                    <TextBlock x:Name="ModeText"
+                    <TextBlock Text="{Binding ViewModel.ModeText}"
                                Foreground="White"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Grid.Column="1"/>
-                    <Button cal:Message.Attach="SwitchMode"
+                    <Button Command="{Binding ViewModel.SwitchModeCommand}"
                             Grid.Column="2"
                             Style="{StaticResource RightArrowButton}"/>
                 </Grid>
@@ -101,14 +103,16 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="30"/>
                     </Grid.ColumnDefinitions>
-                    <Button cal:Message.Attach="SwitchAider('-1')"
+                    <Button Command="{Binding ViewModel.SwitchAiderCommand}"
+                            CommandParameter="prev"
                             Style="{StaticResource LeftArrowButton}"/>
-                    <TextBlock x:Name="AiderText"
+                    <TextBlock Text="{Binding ViewModel.AiderText}"
                                Foreground="White"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Grid.Column="1"/>
-                    <Button cal:Message.Attach="SwitchAider('1')"
+                    <Button Command="{Binding ViewModel.SwitchAiderCommand}"
+                            CommandParameter="next"
                             Grid.Column="2"
                             Style="{StaticResource RightArrowButton}"/>
                 </Grid>
@@ -126,14 +130,16 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="30"/>
                     </Grid.ColumnDefinitions>
-                    <Button cal:Message.Attach="SwitchLevel('-1')"
+                    <Button Command="{Binding ViewModel.SwitchLevelCommand}"
+                            CommandParameter="prev"
                             Style="{StaticResource LeftArrowButton}"/>
-                    <TextBlock x:Name="LevelText"
+                    <TextBlock Text="{Binding ViewModel.LevelText}"
                                Foreground="White"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Grid.Column="1"/>
-                    <Button cal:Message.Attach="SwitchLevel('1')"
+                    <Button Command="{Binding ViewModel.SwitchLevelCommand}"
+                            CommandParameter="next"
                             Grid.Column="2"
                             Style="{StaticResource RightArrowButton}"/>
                 </Grid>
