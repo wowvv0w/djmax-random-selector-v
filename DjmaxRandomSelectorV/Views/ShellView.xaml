@@ -81,7 +81,7 @@
             </Grid>
             <!--#endregion-->
             <!--#region Body-->
-            <ContentControl x:Name="MainPanel"
+            <ContentControl Content="{Binding ViewModel.MainPanel}"
                             Grid.Row="1"/>
             <!--#endregion-->
             <!--#region Footer-->

@@ -1,4 +1,6 @@
 ﻿using System.Windows.Controls;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using DjmaxRandomSelectorV.ViewModels;
 
 namespace DjmaxRandomSelectorV.Views
 {
@@ -7,9 +9,13 @@ namespace DjmaxRandomSelectorV.Views
     /// </summary>
     public partial class MainView : UserControl
     {
+        public MainViewModel ViewModel { get; }
+
         public MainView()
         {
             InitializeComponent();
+            DataContext = this;
+            ViewModel = Ioc.Default.GetRequiredService<MainViewModel>();
         }
     }
 }
