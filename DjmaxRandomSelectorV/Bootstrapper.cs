@@ -10,6 +10,7 @@ using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.SerializableObjects;
 using DjmaxRandomSelectorV.Services;
 using DjmaxRandomSelectorV.ViewModels;
+using DjmaxRandomSelectorV.Views;
 
 namespace DjmaxRandomSelectorV
 {
@@ -117,6 +118,10 @@ namespace DjmaxRandomSelectorV
                 Application.Shutdown();
                 return;
             }
+            var eventAggregator = IoC.Get<IEventAggregator>();
+            var windowManager = IoC.Get<IWindowManager>();
+            _ = windowManager.ShowWindowAsync(IoC.Get<SplashScreenViewModel>());
+            await eventAggregator.PublishOnUIThreadAsync(new LoadingMessage(false, "Applying available updates..."));
             // Update all track file
             try
             {
@@ -132,6 +137,7 @@ namespace DjmaxRandomSelectorV
                 _ = Task.Run(() => MessageBox.Show($"App data has been updated to the version {versionInfo.AppdataVersion}.",
                              "Update", MessageBoxButton.OK, MessageBoxImage.Information));
             }
+            await eventAggregator.PublishOnUIThreadAsync(new LoadingMessage(false, "Importing track list..."));
             // Import appdata
             Dmrsv3Appdata appdata;
             try
@@ -151,8 +157,17 @@ namespace DjmaxRandomSelectorV
             _db.ImportDB();
             _db.SetPlayable(_config.OwnedDlcs);
             _loc.SetLocationMap(_db.AllTrack);
+            await eventAggregator.PublishOnUIThreadAsync(new LoadingMessage(false, "Initializing application window..."));
             // Bind views and viewmodels
             await DisplayRootViewForAsync(typeof(ShellViewModel));
+            foreach (Window w in Application.Windows)
+            {
+                if (w is ShellView)
+                {
+                    Application.MainWindow = w;
+                    break;
+                }
+            }
             // Set window property
             Window window = Application.MainWindow;
             double[] position = _config.Position;
@@ -164,6 +179,7 @@ namespace DjmaxRandomSelectorV
             // Set hotkey manager
             _hotkey.Initialize(window);
             _hotkey.SetHotKey(_config.StartKeyCode);
+            await eventAggregator.PublishOnUIThreadAsync(new LoadingMessage(true, "Complete"));
         }
 
         protected override void OnExit(object sender, EventArgs e)
