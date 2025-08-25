@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
-        xmlns:ui="clr-namespace:DjmaxRandomSelectorV.Views.Controls"
+        xmlns:controls="clr-namespace:DjmaxRandomSelectorV.Views.Controls"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Width="660" Height="440"
@@ -14,9 +14,11 @@
         Background="Transparent"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False">
+
     <Border Background="#EF000000"
             BorderBrush="Gray"
             BorderThickness="2">
+
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="10"/>
@@ -30,6 +32,7 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="10"/>
             </Grid.RowDefinitions>
+
             <!--#region Body-->
             <ScrollViewer VerticalScrollBarVisibility="Visible"
                           Grid.Row="1" Grid.Column="1"
@@ -40,63 +43,15 @@
                     <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">8</sys:Double>
                 </ScrollViewer.Resources>
                 <StackPanel Orientation="Vertical">
-                    <StackPanel.Resources>
-                        <Style TargetType="{x:Type Grid}" BasedOn="{StaticResource SettingBar}">
-                            <Setter Property="Margin" Value="0 5 0 0"/>
-                        </Style>
-                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BoldGrayTextBlock}">
-                            <Setter Property="FontSize" Value="13"/>
-                            <Setter Property="HorizontalAlignment" Value="Left"/>
-                            <Setter Property="Margin" Value="10 0 0 0"/>
-                        </Style>
-                        <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource SettingToggleButton}">
-                            <Setter Property="Grid.Column" Value="1"/>
-                        </Style>
-                        <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource SettingSlider}">
-                            <Setter Property="Grid.Column" Value="1"/>
-                            <Setter Property="Margin" Value="40 0"/>
-                        </Style>
-                    </StackPanel.Resources>
+
                     <!--Selector Setting-->
                     <TextBlock Text="SELECTOR SETTING"
-                               Style="{StaticResource SettingCategoryText}"
-                               Margin="0 0 0 -5"/>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="PLAYLIST MODE"/>
-                        <ToggleButton x:Name="IsPlaylist"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="INPUT DELAY"/>
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Right"
-                                    Margin="0 0 10 0">
-                            <TextBlock Text="{Binding Value, ElementName=InputDelay}"/>
-                            <TextBlock Text="ms" Margin="0"/>
-                        </StackPanel>
-                        <Slider x:Name="InputDelay"
-                                Minimum="10"
-                                Maximum="50"
-                                IsSnapToTickEnabled="True"
-                                TickFrequency="5"/>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="SAVE RECENT MUSIC LIST"/>
-                        <ToggleButton x:Name="SavesRecents"/>
-                    </Grid>
-                    <ui:SettingToggleButton DataContext="{Binding SavesRecentsUpdater}"/>
+                               Style="{StaticResource SettingCategoryText}"/>
+                    <controls:SettingToggleButton DataContext="{Binding IsPlaylistUpdater}"/>
+                    <controls:SettingSlider DataContext="{Binding InputDelayUpdater}"/>
+                    <controls:SettingToggleButton DataContext="{Binding SavesRecentsUpdater}"/>
 
+                    <!--Track List Setting-->
                     <Grid Style="{x:Null}" Margin="0 10 0 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -108,15 +63,12 @@
                                 <Setter Property="BorderThickness" Value="2"/>
                                 <Setter Property="Border.CornerRadius" Value="4"/>
                                 <Setter Property="FontSize" Value="10"/>
-                                <Setter Property="Margin" Value="0 0 0 -5"/>
                                 <Setter Property="Width" Value="50"/>
                                 <Setter Property="Height" Value="20"/>
                             </Style>
                         </Grid.Resources>
-                        <!--Track List Setting-->
                         <TextBlock Text="TRACK LIST SETTING"
-                                   Style="{StaticResource SettingCategoryText}"
-                                   Margin="0 0 0 -5"/>
+                                   Style="{StaticResource SettingCategoryText}"/>
                         <Button x:Name="DetectDlcs"
                                 Content="DETECT"
                                 Grid.Column="2"/>
@@ -124,29 +76,14 @@
                     <ItemsControl x:Name="CategoryUpdaters">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <ui:SettingToggleButton/>
-                                <!--
-                                <DataTemplate.Triggers>
-                                    <DataTrigger Binding="{Binding Name}" Value="CLAZZIQUAI">
-                                        <Setter TargetName="tracklistSettingText"
-                                                Property="Text" Value="CLAZZIQUAI EDITION"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Name}" Value="EMOTIONAL S.">
-                                        <Setter TargetName="tracklistSettingText"
-                                                Property="Text" Value="EMOTIONAL SENSE"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Name}" Value="TECHNIKA T&amp;Q">
-                                        <Setter TargetName="tracklistSettingText"
-                                                Property="Text" Value="TECHNIKA TUNE &amp; Q"/>
-                                    </DataTrigger>
-                                </DataTemplate.Triggers>
-                                -->
+                                <controls:SettingToggleButton/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
             </ScrollViewer>
             <!--#endregion-->
+
             <!--#region Footer-->
             <StackPanel Orientation="Horizontal"
                         Grid.Row="3" Grid.Column="1"
@@ -157,10 +94,15 @@
                         <Setter Property="Width" Value="80"/>
                     </Style>
                 </StackPanel.Resources>
-                <Button x:Name="Apply" Content="APPLY"/>
-                <Button x:Name="Cancel" Content="CANCEL"/>
+                <Button x:Name="Apply"
+                        Content="APPLY"/>
+                <Button x:Name="Cancel"
+                        Content="CANCEL"/>
             </StackPanel>
             <!--#endregion-->
+
         </Grid>
+        
     </Border>
+
 </Window>
