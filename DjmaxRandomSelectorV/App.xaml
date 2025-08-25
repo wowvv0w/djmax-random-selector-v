@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="Resources/FontDictionary.xaml"/>
                 <ResourceDictionary Source="Resources/ColorDictionary.xaml"/>
                 <ResourceDictionary Source="Resources/StyleDictionary.xaml"/>
+                <ResourceDictionary Source="Resources/Variables.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

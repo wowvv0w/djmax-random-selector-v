@@ -2,6 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- Text Colors -->
+    <SolidColorBrush x:Key="ColorDefault" Color="#7f7f7f"/>
+    <SolidColorBrush x:Key="ColorSelected" Color="#ffffff"/>
+    <SolidColorBrush x:Key="ColorAccent" Color="#ffbe00"/>
+    
     <SolidColorBrush x:Key="DefaultGrayColor" Color="#7F7F7F"/>
     <SolidColorBrush x:Key="HighlightYellowColor" Color="#FFBE00"/>
 
@@ -13,6 +17,11 @@
     <SolidColorBrush x:Key="DarkestTranslucentBackgroundColor" Color="#9E000000"/>
 
     <!-- Difficulty Colors -->
+    <LinearGradientBrush x:Key="ColorSettingBar" StartPoint="0 .5" EndPoint="1 .5">
+        <GradientStop Color="#7f584e46" Offset=".4999"/>
+        <GradientStop Color="#ff604e41" Offset=".5"/>
+    </LinearGradientBrush>
+
     <SolidColorBrush x:Key="Normal" Color="#FFCC25"/>
     <SolidColorBrush x:Key="Hard" Color="#FE7724"/>
     <SolidColorBrush x:Key="Maximum" Color="#F91C55"/>

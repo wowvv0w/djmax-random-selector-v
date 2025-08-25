@@ -47,7 +47,9 @@ namespace DjmaxRandomSelectorV.ViewModels
                 NotifyOfPropertyChange();
             }
         }
-        public BindableCollection<ListUpdater> CategoryUpdaters { get; }
+
+        public SettingToggleItem SavesRecentsUpdater { get; }
+        public BindableCollection<object> CategoryUpdaters { get; }
 
         public SettingViewModel(IEventAggregator eventAggregator, ISettingStateManager settingManager, ITrackDB trackDB)
         {
@@ -56,9 +58,25 @@ namespace DjmaxRandomSelectorV.ViewModels
 
             _setting = _settingManager.GetSetting();
 
+            SavesRecentsUpdater = new SettingToggleItem("SavesRecents Test",
+                                                        () => _setting.SavesRecents,
+                                                        newValue => _setting.SavesRecents = newValue);
             _categories = trackDB.Categories.Where(cat => !(string.IsNullOrEmpty(cat.SteamId) && cat.Type != 3)); // TODO: use enum
-            var updaters = _categories.Select(cat => new ListUpdater(cat.Name, cat.Id, _setting.OwnedDlcs));
-            CategoryUpdaters = new BindableCollection<ListUpdater>(updaters);
+            var updaters = _categories
+                           .Select(cat => new SettingToggleItem(cat.Name,
+                                                                () => _setting.OwnedDlcs.Contains(cat.Id),
+                                                                newValue =>
+                                                                {
+                                                                    if (newValue)
+                                                                    {
+                                                                        _setting.OwnedDlcs.Add(cat.Id);
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        _setting.OwnedDlcs.Remove(cat.Id);
+                                                                    }
+                                                                }));
+            CategoryUpdaters = new BindableCollection<object>(updaters);
         }
 
         public void DetectDlcs()

@@ -340,6 +340,61 @@
     <!--#endregion-->
 
     <!--#region Setting-->
+    <Style x:Key="StyleClearBox" TargetType="{x:Type Border}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    <Style x:Key="StyleSettingBar" TargetType="{x:Type ItemsControl}">
+        <Setter Property="Background" Value="{StaticResource ColorSettingBar}"/>
+        <Setter Property="Foreground" Value="{StaticResource ColorDefault}"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="FontFamily" Value="{StaticResource FontDefaultBold}"/>
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeDefault}"/>
+        <Setter Property="Margin" Value="{DynamicResource MarginSettingBar}"/>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="StyleSettingToggleButton" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Foreground" Value="{StaticResource ColorDefault}"/>
+        <Setter Property="FontFamily" Value="{StaticResource FontDefaultBold}"/>
+        <Setter Property="FontSize" Value="{DynamicResource FontSizeDefault}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border Style="{StaticResource StyleClearBox}">
+                        <TextBlock x:Name="textBlock"
+                                   Text="OFF"
+                                   Foreground="{TemplateBinding Foreground}"
+                                   FontFamily="{TemplateBinding FontFamily}"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Text"
+                                    TargetName="textBlock"
+                                    Value="ON"/>
+                            <Setter Property="Foreground"
+                                    TargetName="textBlock"
+                                    Value="{StaticResource ColorSelected}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="SettingBar" TargetType="{x:Type Grid}">
         <Setter Property="Background" Value="{StaticResource SettingBarColor}"/>
         <Setter Property="Height" Value="30"/>
