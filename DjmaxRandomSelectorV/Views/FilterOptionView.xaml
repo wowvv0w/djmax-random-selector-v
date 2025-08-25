@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
+             xmlns:controls="clr-namespace:DjmaxRandomSelectorV.Views.Controls"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="480" d:DesignWidth="500">
@@ -24,120 +25,19 @@
                 Grid.RowSpan="3" Grid.ColumnSpan="3">
         </Border>
         <StackPanel Grid.Row="1" Grid.Column="1">
-            <StackPanel.Resources>
-                <Style TargetType="{x:Type Grid}" BasedOn="{StaticResource SettingBar}">
-                    <Setter Property="Margin" Value="0 5 0 0"/>
-                </Style>
-                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BoldGrayTextBlock}">
-                    <Setter Property="FontSize" Value="13"/>
-                    <Setter Property="HorizontalAlignment" Value="Left"/>
-                    <Setter Property="Margin" Value="10 0 0 0"/>
-                </Style>
-                <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource SettingToggleButton}">
-                    <Setter Property="Grid.Column" Value="1"/>
-                </Style>
-                <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource SettingSlider}">
-                    <Setter Property="Grid.Column" Value="1"/>
-                    <Setter Property="Margin" Value="20 0"/>
-                </Style>
-            </StackPanel.Resources>
             <TextBlock Text="FILTER OPTION"
                        Style="{StaticResource SettingCategoryText}"/>
             <Grid Style="{x:Null}"
                   Background="#7F584E46"
+                  Margin="{DynamicResource MarginSettingBar}"
                   Height="90">
                 <ContentControl x:Name="FilterOptionIndicator"
                                 Height="55"/>
             </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="EXCLUDE RECENT MUSICS"/>
-                <TextBlock Text="{Binding Value, ElementName=ExceptCount}"
-                           HorizontalAlignment="Right"
-                           Margin="0 0 10 0">
-                </TextBlock>
-                <Slider x:Name="ExceptCount"
-                        Minimum="0"
-                        Maximum="30"/>
-            </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="MODE"/>
-                <Grid Grid.Column="1"
-                      Style="{x:Null}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="30"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="30"/>
-                    </Grid.ColumnDefinitions>
-                    <Button cal:Message.Attach="SwitchMode"
-                            Style="{StaticResource LeftArrowButton}"/>
-                    <TextBlock x:Name="ModeText"
-                               Foreground="White"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Grid.Column="1"/>
-                    <Button cal:Message.Attach="SwitchMode"
-                            Grid.Column="2"
-                            Style="{StaticResource RightArrowButton}"/>
-                </Grid>
-            </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="AIDER"/>
-                <Grid Grid.Column="1"
-                      Style="{x:Null}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="30"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="30"/>
-                    </Grid.ColumnDefinitions>
-                    <Button cal:Message.Attach="SwitchAider('-1')"
-                            Style="{StaticResource LeftArrowButton}"/>
-                    <TextBlock x:Name="AiderText"
-                               Foreground="White"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Grid.Column="1"/>
-                    <Button cal:Message.Attach="SwitchAider('1')"
-                            Grid.Column="2"
-                            Style="{StaticResource RightArrowButton}"/>
-                </Grid>
-            </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="LEVEL"/>
-                <Grid Grid.Column="1"
-                      Style="{x:Null}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="30"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="30"/>
-                    </Grid.ColumnDefinitions>
-                    <Button cal:Message.Attach="SwitchLevel('-1')"
-                            Style="{StaticResource LeftArrowButton}"/>
-                    <TextBlock x:Name="LevelText"
-                               Foreground="White"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Grid.Column="1"/>
-                    <Button cal:Message.Attach="SwitchLevel('1')"
-                            Grid.Column="2"
-                            Style="{StaticResource RightArrowButton}"/>
-                </Grid>
-            </Grid>
+            <controls:SettingSlider DataContext="{Binding ExceptCountUpdater}"/>
+            <controls:SettingSpinBox DataContext="{Binding ModeUpdater}"/>
+            <controls:SettingSpinBox DataContext="{Binding AiderUpdater}"/>
+            <controls:SettingSpinBox DataContext="{Binding LevelUpdater}"/>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -581,6 +581,33 @@
     </Style>
     <!--#endregion-->
 
+    <!--#region Setting SpinBox-->
+    <Style x:Key="StyleSettingSpinBoxLeftButton" TargetType="{x:Type Button}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="Transparent">
+                        <Image Source="pack://application:,,,/Images/btn_left.png"
+                               Width="12"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="StyleSettingSpinBoxRightButton" TargetType="{x:Type Button}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="Transparent">
+                        <Image Source="pack://application:,,,/Images/btn_right.png"
+                               Width="12"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+    
     <!--#region Playlist-->
     <Style x:Key="PlaylistScrollBarThumb" TargetType="{x:Type Thumb}">
         <Setter Property="Template">
