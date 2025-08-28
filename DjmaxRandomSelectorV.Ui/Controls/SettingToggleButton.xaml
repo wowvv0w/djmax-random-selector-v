@@ -6,21 +6,20 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:SettingToggleButton}">
-                    <ItemsControl Style="{StaticResource StyleSettingBar}">
+                    <ItemsControl Style="{DynamicResource StyleSettingBar}">
                         <ItemsControl.Resources>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="VerticalAlignment" Value="Center"/>
                             </Style>
                         </ItemsControl.Resources>
-                        <Border Style="{StaticResource StyleClearBox}"
-                                Padding="{StaticResource PaddingSettingBarLabelArea}">
-                            <TextBlock Text="{Binding Name}"/>
+                        <Border Style="{DynamicResource StyleClearBox}"
+                                Padding="{DynamicResource PaddingSettingBarLabelArea}">
+                            <TextBlock Text="TEST"/>
                         </Border>
                         <ToggleButton Grid.Column="1"
-                                      IsChecked="{Binding IsOn}"
-                                      Style="{StaticResource StyleSettingToggleButton}"/>
+                                      IsChecked="False"
+                                      Style="{DynamicResource StyleSettingToggleButton}"/>
                     </ItemsControl>
-                                
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

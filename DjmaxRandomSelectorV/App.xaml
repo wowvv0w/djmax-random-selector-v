@@ -9,6 +9,7 @@
                 <ResourceDictionary>
                     <local:Bootstrapper x:Key="Bootstrapper"/>
                 </ResourceDictionary>
+                <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Themes/Generic.xaml"/>
                 <ResourceDictionary Source="Resources/FontDictionary.xaml"/>
                 <ResourceDictionary Source="Resources/ColorDictionary.xaml"/>
                 <ResourceDictionary Source="Resources/StyleDictionary.xaml"/>

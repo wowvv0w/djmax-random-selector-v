@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
-        xmlns:controls="clr-namespace:DjmaxRandomSelectorV.Views.Controls"
+        xmlns:controls="clr-namespace:DjmaxRandomSelectorV.Ui.Controls;assembly=DjmaxRandomSelectorV.Ui"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Width="660" Height="440"
@@ -47,10 +47,8 @@
                     <!--Selector Setting-->
                     <TextBlock Text="SELECTOR SETTING"
                                Style="{StaticResource SettingCategoryText}"/>
-                    <controls:SettingToggleButton DataContext="{Binding IsPlaylistUpdater}"/>
-                    <controls:SettingSlider DataContext="{Binding InputDelayUpdater}"/>
-                    <controls:SettingToggleButton DataContext="{Binding SavesRecentsUpdater}"/>
 
+                    <controls:SettingToggleButton/>
                     <!--Track List Setting-->
                     <Grid Style="{x:Null}" Margin="0 10 0 0">
                         <Grid.ColumnDefinitions>
@@ -76,7 +74,6 @@
                     <ItemsControl x:Name="CategoryUpdaters">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <controls:SettingToggleButton/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

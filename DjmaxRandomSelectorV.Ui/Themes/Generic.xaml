@@ -3,10 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:DjmaxRandomSelectorV.Ui">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Resources/Colors.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Resources/Fonts.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Resources/Styles.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Resources/Variables.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Resources/Colors.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Resources/Styles.xaml"/>
 
         <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Controls/SettingToggleButton.xaml"/>
     </ResourceDictionary.MergedDictionaries>

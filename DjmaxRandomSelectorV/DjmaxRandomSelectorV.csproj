@@ -12,6 +12,12 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Views\Controls\**" />
+    <EmbeddedResource Remove="Views\Controls\**" />
+    <None Remove="Views\Controls\**" />
+    <Page Remove="Views\Controls\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Fonts\Lato-Black.ttf" />
     <Resource Include="Fonts\Lato-Bold.ttf" />
     <Resource Include="Fonts\Lato-Light.ttf" />
@@ -184,6 +190,7 @@
     <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DjmaxRandomSelectorV.Ui\DjmaxRandomSelectorV.Ui.csproj" />
     <ProjectReference Include="..\Dmrsv.RandomSelector\Dmrsv.RandomSelector.csproj" />
   </ItemGroup>
   <ItemGroup>

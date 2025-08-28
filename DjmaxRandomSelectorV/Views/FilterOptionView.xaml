@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
-             xmlns:controls="clr-namespace:DjmaxRandomSelectorV.Views.Controls"
+             xmlns:controls="clr-namespace:DjmaxRandomSelectorV.Ui.Controls;assembly=DjmaxRandomSelectorV.Ui"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="480" d:DesignWidth="500">
@@ -34,10 +34,6 @@
                 <ContentControl x:Name="FilterOptionIndicator"
                                 Height="55"/>
             </Grid>
-            <controls:SettingSlider DataContext="{Binding ExceptCountUpdater}"/>
-            <controls:SettingSpinBox DataContext="{Binding ModeUpdater}"/>
-            <controls:SettingSpinBox DataContext="{Binding AiderUpdater}"/>
-            <controls:SettingSpinBox DataContext="{Binding LevelUpdater}"/>
         </StackPanel>
     </Grid>
 </UserControl>
