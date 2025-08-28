@@ -29,7 +29,7 @@
     </Style>
     <!--#endregion-->
 
-    <!--#region Common-->
+    <!--#region SettingToggleButton-->
     <Style x:Key="StyleSettingToggleButton" TargetType="{x:Type ToggleButton}">
         <Setter Property="Foreground" Value="{StaticResource ColorDefault}"/>
         <Setter Property="FontFamily" Value="{StaticResource FontDefaultBold}"/>
@@ -62,7 +62,7 @@
     </Style>
     <!--#endregion-->
 
-    <!--#region Common-->
+    <!--#region SettingSlider-->
     <Style x:Key="StyleSettingSliderRepeatButton" TargetType="{x:Type RepeatButton}">
         <Setter Property="Template">
             <Setter.Value>
@@ -98,7 +98,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Border x:Name="TrackBackground"
-                                Background="{StaticResource SliderBackgroundColor}"
+                                Background="{StaticResource ColorBackgroundSettingSlider}"
                                 Margin="0"
                                 Height="8"
                                 Grid.Row="1">
