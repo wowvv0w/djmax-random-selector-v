@@ -2,16 +2,10 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:DjmaxRandomSelectorV.Ui">
-    <Style TargetType="{x:Type local:CustomControl1}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:CustomControl1}">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Resources/Colors.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Resources/Fonts.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Resources/Styles.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Resources/Variables.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
