@@ -7,5 +7,7 @@
         <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Resources/Fonts.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Resources/Styles.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Resources/Variables.xaml"/>
+
+        <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Controls/SettingToggleButton.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
