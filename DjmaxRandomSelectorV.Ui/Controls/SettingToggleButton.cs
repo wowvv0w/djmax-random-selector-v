@@ -11,13 +11,8 @@ using System.Windows.Shapes;
 
 namespace DjmaxRandomSelectorV.Ui.Controls
 {
-    public class SettingToggleButton : Control
+    public class SettingToggleButton : SettingControl
     {
-        public static readonly DependencyProperty LabelProperty = DependencyProperty.Register(
-            "Label",
-            typeof(string),
-            typeof(SettingToggleButton),
-            new FrameworkPropertyMetadata("LABEL"));
         public static readonly DependencyProperty IsCheckedProperty = DependencyProperty.Register(
             "IsChecked",
             typeof(bool),
@@ -36,12 +31,6 @@ namespace DjmaxRandomSelectorV.Ui.Controls
             typeof(SettingToggleButton),
             new FrameworkPropertyMetadata("OFF"));
 
-
-        public string Label
-        {
-            get => (string)GetValue(LabelProperty);
-            set => SetValue(LabelProperty, value);
-        }
         public bool IsChecked
         {
             get => (bool)GetValue(IsCheckedProperty);
