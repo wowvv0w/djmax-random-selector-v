@@ -30,32 +30,13 @@
     <!--#endregion-->
 
     <!--#region SettingToggleButton-->
-    <Style x:Key="StyleSettingToggleButton" TargetType="{x:Type ToggleButton}">
-        <Setter Property="Foreground" Value="{DynamicResource ColorDefault}"/>
-        <Setter Property="FontFamily" Value="{DynamicResource FontDefaultBold}"/>
-        <Setter Property="FontSize" Value="{DynamicResource FontSizeDefault}"/>
+    <Style x:Key="StyleTransparentToggleButton" TargetType="{x:Type ToggleButton}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Border Style="{DynamicResource StyleClearBox}">
-                        <TextBlock x:Name="textBlock"
-                                   Text="OFF"
-                                   Foreground="{TemplateBinding Foreground}"
-                                   FontFamily="{TemplateBinding FontFamily}"
-                                   FontSize="{TemplateBinding FontSize}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
+                        <ContentPresenter/>
                     </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="Text"
-                                    TargetName="textBlock"
-                                    Value="ON"/>
-                            <Setter Property="Foreground"
-                                    TargetName="textBlock"
-                                    Value="{DynamicResource ColorSelected}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

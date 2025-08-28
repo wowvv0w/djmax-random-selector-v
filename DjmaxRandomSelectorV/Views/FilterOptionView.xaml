@@ -34,6 +34,7 @@
                 <ContentControl x:Name="FilterOptionIndicator"
                                 Height="55"/>
             </Grid>
+                <controls:SettingToggleButton IsChecked="{Binding TestBoolean}"/>
         </StackPanel>
     </Grid>
 </UserControl>

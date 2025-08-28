@@ -2,8 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
     <SolidColorBrush x:Key="ColorDefault" Color="#7f7f7f"/>
-    <SolidColorBrush x:Key="ColorSelected" Color="#ffffff"/>
     <SolidColorBrush x:Key="ColorAccent" Color="#ffbe00"/>
+    <SolidColorBrush x:Key="ColorUnselected" Color="#7f7f7f"/>
+    <SolidColorBrush x:Key="ColorSelected" Color="#ffffff"/>
     
     <LinearGradientBrush x:Key="ColorSettingBar" StartPoint="0 .5" EndPoint="1 .5">
         <GradientStop Color="#7f584e46" Offset=".4999"/>

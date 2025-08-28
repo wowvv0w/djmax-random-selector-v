@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -12,8 +11,53 @@ using System.Windows.Shapes;
 
 namespace DjmaxRandomSelectorV.Ui.Controls
 {
-    public class SettingToggleButton : ToggleButton
+    public class SettingToggleButton : Control
     {
+        public static readonly DependencyProperty LabelProperty = DependencyProperty.Register(
+            "Label",
+            typeof(string),
+            typeof(SettingToggleButton),
+            new FrameworkPropertyMetadata("LABEL"));
+        public static readonly DependencyProperty IsCheckedProperty = DependencyProperty.Register(
+            "IsChecked",
+            typeof(bool),
+            typeof(SettingToggleButton),
+            new FrameworkPropertyMetadata(
+                false,
+                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        public static readonly DependencyProperty TextWhenCheckedProperty = DependencyProperty.Register(
+            "TextWhenChecked",
+            typeof(string),
+            typeof(SettingToggleButton),
+            new FrameworkPropertyMetadata("ON"));
+        public static readonly DependencyProperty TextWhenNotCheckedProperty = DependencyProperty.Register(
+            "TextWhenNotChecked",
+            typeof(string),
+            typeof(SettingToggleButton),
+            new FrameworkPropertyMetadata("OFF"));
+
+
+        public string Label
+        {
+            get => (string)GetValue(LabelProperty);
+            set => SetValue(LabelProperty, value);
+        }
+        public bool IsChecked
+        {
+            get => (bool)GetValue(IsCheckedProperty);
+            set => SetValue(IsCheckedProperty, value);
+        }
+        public string TextWhenChecked
+        {
+            get => (string)GetValue(TextWhenCheckedProperty);
+            set => SetValue(TextWhenCheckedProperty, value);
+        }
+        public string TextWhenNotChecked
+        {
+            get => (string)GetValue(TextWhenNotCheckedProperty);
+            set => SetValue(TextWhenNotCheckedProperty, value);
+        }
+
         static SettingToggleButton()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(SettingToggleButton), new FrameworkPropertyMetadata(typeof(SettingToggleButton)));

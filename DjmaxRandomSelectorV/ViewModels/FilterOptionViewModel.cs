@@ -52,6 +52,17 @@ namespace DjmaxRandomSelectorV.ViewModels
         public object AiderUpdater { get; }
         public object LevelUpdater { get; }
 
+        private bool _testBoolean = true;
+        public bool TestBoolean
+        {
+            get => _testBoolean;
+            set
+            {
+                _testBoolean = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         public FilterOptionViewModel(IEventAggregator eventAggregator, IFilterOptionStateManager filterOptionManager)
         {
             _eventAggregator = eventAggregator;

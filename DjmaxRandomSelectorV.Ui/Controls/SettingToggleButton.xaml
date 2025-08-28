@@ -14,12 +14,27 @@
                         </ItemsControl.Resources>
                         <Border Style="{DynamicResource StyleClearBox}"
                                 Padding="{DynamicResource PaddingSettingBarLabelArea}">
-                            <TextBlock Text="TEST"/>
+                            <TextBlock Text="{Binding Label, RelativeSource={RelativeSource TemplatedParent}}"/>
                         </Border>
-                        <ToggleButton Grid.Column="1"
-                                      IsChecked="False"
-                                      Style="{DynamicResource StyleSettingToggleButton}"/>
+                        <Grid Grid.Column="1">
+                            <ToggleButton IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                                          Style="{DynamicResource StyleTransparentToggleButton}"/>
+                            <TextBlock x:Name="ToggleButtonText"
+                                       Text="{Binding TextWhenNotChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                                       Foreground="{DynamicResource ColorUnselected}"
+                                       HorizontalAlignment="Center"/>
+                        </Grid>
                     </ItemsControl>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Text"
+                                    TargetName="ToggleButtonText"
+                                    Value="{Binding TextWhenChecked, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Setter Property="Foreground"
+                                    TargetName="ToggleButtonText"
+                                    Value="{DynamicResource ColorSelected}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
