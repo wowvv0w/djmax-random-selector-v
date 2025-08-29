@@ -9,5 +9,6 @@
         <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Resources/Styles.xaml"/>
 
         <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Controls/SettingToggleButton.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Controls/SettingSlider.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

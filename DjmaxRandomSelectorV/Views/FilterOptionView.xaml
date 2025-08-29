@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DjmaxRandomSelectorV.Views"
-             xmlns:controls="clr-namespace:DjmaxRandomSelectorV.Ui.Controls;assembly=DjmaxRandomSelectorV.Ui"
+             xmlns:ui="clr-namespace:DjmaxRandomSelectorV.Ui.Controls;assembly=DjmaxRandomSelectorV.Ui"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="480" d:DesignWidth="500">
@@ -34,7 +34,12 @@
                 <ContentControl x:Name="FilterOptionIndicator"
                                 Height="55"/>
             </Grid>
-                <controls:SettingToggleButton IsChecked="{Binding TestBoolean}"/>
+            <ui:SettingSlider Label="EXCLUDE RECENT MUSICS"
+                              Value="{Binding ExceptCount}"
+                              Minimum="0"
+                              Maximum="30"
+                              TickFrequency="1"
+                              IsSnapToTickEnabled="True"/>
         </StackPanel>
     </Grid>
 </UserControl>

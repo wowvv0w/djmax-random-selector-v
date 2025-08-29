@@ -79,7 +79,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Border x:Name="TrackBackground"
-                                Background="{StaticResource ColorBackgroundSettingSlider}"
+                                Background="{DynamicResource ColorBackgroundSettingSlider}"
                                 Margin="0"
                                 Height="8"
                                 Grid.Row="1">
@@ -87,14 +87,14 @@
                         <Track Grid.Row="1"
                                x:Name="PART_Track">
                             <Track.DecreaseRepeatButton>
-                                <RepeatButton Style="{StaticResource StyleSettingSliderRepeatButton}"
+                                <RepeatButton Style="{DynamicResource StyleSettingSliderRepeatButton}"
                                               Command="Slider.DecreaseLarge" />
                             </Track.DecreaseRepeatButton>
                             <Track.Thumb>
-                                <Thumb Style="{StaticResource StyleSettingSliderThumb}" />
+                                <Thumb Style="{DynamicResource StyleSettingSliderThumb}" />
                             </Track.Thumb>
                             <Track.IncreaseRepeatButton>
-                                <RepeatButton Style="{StaticResource StyleSettingSliderRepeatButton}"
+                                <RepeatButton Style="{DynamicResource StyleSettingSliderRepeatButton}"
                                               Command="Slider.IncreaseLarge" />
                             </Track.IncreaseRepeatButton>
                         </Track>
