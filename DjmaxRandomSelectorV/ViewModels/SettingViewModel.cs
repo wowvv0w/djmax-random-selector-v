@@ -20,9 +20,33 @@ namespace DjmaxRandomSelectorV.ViewModels
         private readonly ISettingState _setting;
         private readonly IEnumerable<Dmrsv3Category> _categories;
 
-        public object IsPlaylistUpdater { get; }
-        public object InputDelayUpdater { get; }
-        public object SavesRecentsUpdater { get; }
+        public bool IsPlaylist
+        {
+            get { return _setting.FilterType == FilterType.Playlist; }
+            set
+            {
+                _setting.FilterType = value ? FilterType.Playlist : FilterType.Query;
+                NotifyOfPropertyChange();
+            }
+        }
+        public int InputDelay
+        {
+            get { return _setting.InputDelay; }
+            set
+            {
+                _setting.InputDelay = value;
+                NotifyOfPropertyChange();
+            }
+        }
+        public bool SavesRecents
+        {
+            get { return _setting.SavesRecents; }
+            set
+            {
+                _setting.SavesRecents = value;
+                NotifyOfPropertyChange();
+            }
+        }
         public BindableCollection<object> CategoryUpdaters { get; }
 
         public SettingViewModel(IEventAggregator eventAggregator, ISettingStateManager settingManager, ITrackDB trackDB)
@@ -31,29 +55,10 @@ namespace DjmaxRandomSelectorV.ViewModels
             _settingManager = settingManager;
             _setting = _settingManager.GetSetting();
 
-            IsPlaylistUpdater = new SettingToggleItem(
-                "PLAYLIST MODE",
-                () => _setting.FilterType == FilterType.Playlist,
-                newValue => _setting.FilterType = newValue ? FilterType.Playlist : FilterType.Query);
-
-            InputDelayUpdater = new SettingSliderItem(
-                "INPUT DELAY",
-                10,
-                50,
-                5,
-                () => _setting.InputDelay,
-                newValue => _setting.InputDelay = newValue,
-                value => $"{value}ms");
-
-            SavesRecentsUpdater = new SettingToggleItem(
-                "SAVE RECENT MUSIC LIST",
-                () => _setting.SavesRecents,
-                newValue => _setting.SavesRecents = newValue);
-
             _categories = trackDB.Categories.Where(cat => !(string.IsNullOrEmpty(cat.SteamId) && cat.Type != 3)); // TODO: use enum
             CategoryUpdaters = new BindableCollection<object>(_categories.Select(cat =>
             {
-               return new SettingToggleItem(
+               return new PropertyChangedNotifier<bool>(
                    cat.Name,
                    () => _setting.OwnedDlcs.Contains(cat.Id),
                    newValue =>

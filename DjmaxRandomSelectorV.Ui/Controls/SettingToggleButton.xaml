@@ -17,12 +17,12 @@
                             <TextBlock Text="{Binding Label, RelativeSource={RelativeSource TemplatedParent}}"/>
                         </Border>
                         <Grid Grid.Column="1">
-                            <ToggleButton IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
-                                          Style="{DynamicResource StyleTransparentToggleButton}"/>
                             <TextBlock x:Name="ToggleButtonText"
                                        Text="{Binding TextWhenNotChecked, RelativeSource={RelativeSource TemplatedParent}}"
                                        Foreground="{DynamicResource ColorUnselected}"
                                        HorizontalAlignment="Center"/>
+                            <ToggleButton IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                                          Style="{DynamicResource StyleTransparentToggleButton}"/>
                         </Grid>
                     </ItemsControl>
                     <ControlTemplate.Triggers>

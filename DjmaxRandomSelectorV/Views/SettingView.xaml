@@ -44,11 +44,24 @@
                 </ScrollViewer.Resources>
                 <StackPanel Orientation="Vertical">
 
-                    <!--Selector Setting-->
-                    <TextBlock Text="SELECTOR SETTING"
+                    <!--Random Selector Setting-->
+                    <TextBlock Text="RANDOM SELECTOR SETTING"
                                Style="{StaticResource SettingCategoryText}"/>
+                    <ui:SettingToggleButton Label="ENABLE ADVANCED FILTER"
+                                            IsChecked="{Binding IsPlaylist}"/>
+                    <ui:SettingSlider Label="INPUT INTERVAL"
+                                      Value="{Binding InputDelay}"
+                                      ValueText="{Binding Value,
+                                                          StringFormat={}{0}ms,
+                                                          RelativeSource={RelativeSource Self}}"
+                                      Minimum="10"
+                                      Maximum="50"
+                                      TickFrequency="5"
+                                      IsSnapToTickEnabled="True"/>
+                    <ui:SettingToggleButton Label="SAVE RECENT MUSIC LIST"
+                                            IsChecked="{Binding SavesRecents}"/>
 
-                    <!--Track List Setting-->
+                    <!--DLC Pack Setting-->
                     <Grid Style="{x:Null}" Margin="0 10 0 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -64,7 +77,7 @@
                                 <Setter Property="Height" Value="20"/>
                             </Style>
                         </Grid.Resources>
-                        <TextBlock Text="TRACK LIST SETTING"
+                        <TextBlock Text="DLC PACK SETTING"
                                    Style="{StaticResource SettingCategoryText}"/>
                         <Button x:Name="DetectDlcs"
                                 Content="DETECT"
