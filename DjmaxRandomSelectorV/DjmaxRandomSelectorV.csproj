@@ -12,12 +12,6 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Views\Controls\**" />
-    <EmbeddedResource Remove="Views\Controls\**" />
-    <None Remove="Views\Controls\**" />
-    <Page Remove="Views\Controls\**" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Fonts\Lato-Black.ttf" />
     <Resource Include="Fonts\Lato-Bold.ttf" />
     <Resource Include="Fonts\Lato-Light.ttf" />
