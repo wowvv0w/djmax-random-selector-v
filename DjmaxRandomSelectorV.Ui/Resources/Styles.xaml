@@ -106,26 +106,32 @@
     <!--#endregion-->
 
     <!--#region SettingSpinBox-->
-    <Style x:Key="StyleSettingSpinBoxLeftButton" TargetType="{x:Type Button}">
+    <Style x:Key="StyleSettingSpinBoxLeftRepeatButton" TargetType="{x:Type RepeatButton}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
                     <Border Background="Transparent">
-                        <Image Source="pack://application:,,,/Images/btn_left.png"
-                               Width="12"/>
+                        <Polygon Points="8,0 0,6 8,12"
+                                 Stroke="White" 
+                                 Fill="White"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="StyleSettingSpinBoxRightButton" TargetType="{x:Type Button}">
+    <Style x:Key="StyleSettingSpinBoxRightRepeatButton" TargetType="{x:Type RepeatButton}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
                     <Border Background="Transparent">
-                        <Image Source="pack://application:,,,/Images/btn_right.png"
-                               Width="12"/>
+                        <Polygon Points="0,0 8,6 0,12"
+                                 Stroke="White" 
+                                 Fill="White"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

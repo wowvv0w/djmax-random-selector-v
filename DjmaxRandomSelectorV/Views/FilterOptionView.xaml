@@ -19,6 +19,13 @@
             <RowDefinition/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
+        <Grid.Resources>
+            <Style TargetType="{x:Type ui:SettingSpinBox}">
+                <Setter Property="IsCircular" Value="True"/>
+                <Setter Property="Delay" Value="999999999"/>
+                <Setter Property="Interval" Value="999999999"/>
+            </Style>
+        </Grid.Resources>
         <Border Background="#DF221C15"
                 BorderBrush="Gray"
                 BorderThickness="0 0 2 0"
@@ -40,6 +47,18 @@
                               Maximum="30"
                               TickFrequency="1"
                               IsSnapToTickEnabled="True"/>
+            <ui:SettingSpinBox Label="MODE"
+                               Value="{Binding ModeValue}"
+                               Maximum="{Binding ModeMaxValue}"
+                               ValueText="{Binding ModeText}"/>
+            <ui:SettingSpinBox Label="AIDER"
+                               Value="{Binding AiderValue}"
+                               Maximum="{Binding AiderMaxValue}"
+                               ValueText="{Binding AiderText}"/>
+            <ui:SettingSpinBox Label="LEVEL"
+                               Value="{Binding LevelValue}"
+                               Maximum="{Binding LevelMaxValue}"
+                               ValueText="{Binding LevelText}"/>
         </StackPanel>
     </Grid>
 </UserControl>

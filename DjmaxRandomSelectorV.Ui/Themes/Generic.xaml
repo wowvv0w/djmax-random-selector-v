@@ -10,5 +10,6 @@
 
         <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Controls/SettingToggleButton.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Controls/SettingSlider.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/DjmaxRandomSelectorV.Ui;component/Controls/SettingSpinBox.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
