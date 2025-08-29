@@ -14,7 +14,7 @@ namespace DjmaxRandomSelectorV
         void Write(string content, string path);
     }
 
-    public class FileManager : IFileManager
+    public class FileManagerOld : IFileManager
     {
         public T Import<T>(string path)
         {
