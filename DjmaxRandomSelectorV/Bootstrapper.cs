@@ -16,7 +16,6 @@ namespace DjmaxRandomSelectorV
 {
     public class Bootstrapper : BootstrapperBase
     {
-        private readonly IFileManager _fileManager;
         private readonly SimpleContainer _container = new SimpleContainer();
 
         private readonly Dmrsv3Configuration _config;
@@ -29,6 +28,7 @@ namespace DjmaxRandomSelectorV
         private readonly GroupwiseExtractorBuilder _extrBuild;
         private readonly RandomSelectorExecutor _executor;
         private readonly HotKeyService _hotkey;
+        private readonly FileManager _fileManager;
         private readonly ConfigurationManager _configManager;
         private readonly UpdateManager _updateManager;
 
@@ -36,17 +36,9 @@ namespace DjmaxRandomSelectorV
 
         public Bootstrapper()
         {
+            _fileManager = new FileManager();
             Initialize();
-            _fileManager = IoC.Get<IFileManager>();
-
-            try
-            {
-                _config = _fileManager.Import<Dmrsv3Configuration>(DmrsvPath.ConfigFile);
-            }
-            catch
-            {
-                _config = new Dmrsv3Configuration();
-            }
+            _config = _fileManager.LoadConfig();
             _container.Instance(_config); // TODO: delete it (used at ShellVM)
             // Executor Components
             var eventaggregator = IoC.Get<IEventAggregator>();
@@ -56,7 +48,7 @@ namespace DjmaxRandomSelectorV
             };
             _rs = new RandomSelectorService(_history);
             _rs.OnSelectionCompleted += pattern => eventaggregator.PublishOnUIThreadAsync(new PatternMessage(pattern));
-            _db = new TrackDB(_fileManager);
+            _db = new TrackDB();
             _loc = new LocatorService()
             {
                 InputInterval = _config.InputDelay,
@@ -142,7 +134,7 @@ namespace DjmaxRandomSelectorV
             Dmrsv3Appdata appdata;
             try
             {
-                appdata = _fileManager.Import<Dmrsv3Appdata>(DmrsvPath.AppdataFile);
+                appdata = _fileManager.LoadAppdata();
             }
             catch
             {
@@ -153,8 +145,7 @@ namespace DjmaxRandomSelectorV
                 return;
             }
             // Set AllTrack
-            _db.Initialize(appdata);
-            _db.ImportDB();
+            _db.Initialize(appdata, _fileManager.LoadAllTrack());
             _db.SetPlayable(_config.OwnedDlcs);
             _loc.SetLocationMap(_db.AllTrack);
             await eventAggregator.PublishOnUIThreadAsync(new LoadingMessage(false, "Initializing application window..."));
@@ -185,7 +176,7 @@ namespace DjmaxRandomSelectorV
         protected override void OnExit(object sender, EventArgs e)
         {
             _config.RecentPlayed = _config.SavesRecents ? _history.ToList() : new List<int>();
-            _fileManager.Export(_config, DmrsvPath.ConfigFile);
+            _fileManager.SaveConfig(_config);
         }
 
         protected override void Configure()
