@@ -9,7 +9,7 @@ using System.Windows;
 using Caliburn.Micro;
 using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.Models;
-using Dmrsv.RandomSelector;
+using DjmaxRandomSelectorV.RandomSelector;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {

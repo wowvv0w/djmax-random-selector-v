@@ -7,7 +7,7 @@ using DjmaxRandomSelectorV.Enums;
 using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.Models;
 using DjmaxRandomSelectorV.Services;
-using Dmrsv.RandomSelector;
+using DjmaxRandomSelectorV.RandomSelector;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {

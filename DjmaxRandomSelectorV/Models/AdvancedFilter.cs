@@ -5,7 +5,7 @@ using System.Linq;
 using DjmaxRandomSelectorV.Conditions;
 using DjmaxRandomSelectorV.Services;
 using DjmaxRandomSelectorV.States;
-using Dmrsv.RandomSelector;
+using DjmaxRandomSelectorV.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Models
 {

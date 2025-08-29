@@ -1,5 +1,5 @@
 ﻿using System;
-using Dmrsv.RandomSelector;
+using DjmaxRandomSelectorV.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Services
 {

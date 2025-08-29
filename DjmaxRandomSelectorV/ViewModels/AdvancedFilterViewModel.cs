@@ -11,7 +11,7 @@ using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.Models;
 using DjmaxRandomSelectorV.SerializableObjects.Deprecated;
 using DjmaxRandomSelectorV.Services;
-using Dmrsv.RandomSelector;
+using DjmaxRandomSelectorV.RandomSelector;
 using Microsoft.Win32;
 
 namespace DjmaxRandomSelectorV.ViewModels

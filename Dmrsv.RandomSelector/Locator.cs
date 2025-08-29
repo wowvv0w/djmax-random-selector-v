@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
-namespace Dmrsv.RandomSelector
+namespace DjmaxRandomSelectorV.RandomSelector
 {
     public static class Locator
     {

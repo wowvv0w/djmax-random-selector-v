@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using Caliburn.Micro;
 using DjmaxRandomSelectorV.Models;
 using DjmaxRandomSelectorV.Services;
-using Dmrsv.RandomSelector;
+using DjmaxRandomSelectorV.RandomSelector;
 
 namespace DjmaxRandomSelectorV.ViewModels
 {

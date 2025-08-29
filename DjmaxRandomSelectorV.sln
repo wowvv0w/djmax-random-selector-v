@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DjmaxRandomSelectorV", "DjmaxRandomSelectorV\DjmaxRandomSelectorV.csproj", "{9E7B4681-5399-4F1F-BE21-49CCA80C088F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dmrsv.RandomSelector", "Dmrsv.RandomSelector\Dmrsv.RandomSelector.csproj", "{3BB18A30-684D-433A-8A79-9D98F95ABADA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DjmaxRandomSelectorV.RandomSelector", "Dmrsv.RandomSelector\DjmaxRandomSelectorV.RandomSelector.csproj", "{3BB18A30-684D-433A-8A79-9D98F95ABADA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DjmaxRandomSelectorV.Ui", "DjmaxRandomSelectorV.Ui\DjmaxRandomSelectorV.Ui.csproj", "{171BF052-AB08-4356-8FA6-9970AB201DD8}"
 EndProject

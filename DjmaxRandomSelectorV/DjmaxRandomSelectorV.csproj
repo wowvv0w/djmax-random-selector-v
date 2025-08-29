@@ -185,7 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DjmaxRandomSelectorV.Ui\DjmaxRandomSelectorV.Ui.csproj" />
-    <ProjectReference Include="..\Dmrsv.RandomSelector\Dmrsv.RandomSelector.csproj" />
+    <ProjectReference Include="..\Dmrsv.RandomSelector\DjmaxRandomSelectorV.RandomSelector.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">

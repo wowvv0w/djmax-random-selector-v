@@ -1,4 +1,4 @@
-﻿namespace Dmrsv.RandomSelector
+﻿namespace DjmaxRandomSelectorV.RandomSelector
 {
     public record MusicInfo
     {

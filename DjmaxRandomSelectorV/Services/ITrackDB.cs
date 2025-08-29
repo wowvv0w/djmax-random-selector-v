@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using DjmaxRandomSelectorV.SerializableObjects;
-using Dmrsv.RandomSelector;
+using DjmaxRandomSelectorV.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Services
 {

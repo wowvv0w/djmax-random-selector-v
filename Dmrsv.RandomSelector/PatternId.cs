@@ -1,4 +1,4 @@
-﻿namespace Dmrsv.RandomSelector
+﻿namespace DjmaxRandomSelectorV.RandomSelector
 {
     public readonly record struct PatternId : IComparable<PatternId>
     {

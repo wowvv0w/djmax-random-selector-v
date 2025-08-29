@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DjmaxRandomSelectorV.SerializableObjects;
 using DjmaxRandomSelectorV.SerializableObjects.VArchiveCompatible;
-using Dmrsv.RandomSelector;
+using DjmaxRandomSelectorV.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Services
 {

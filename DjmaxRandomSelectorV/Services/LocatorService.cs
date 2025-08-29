@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using DjmaxRandomSelectorV.Enums;
-using Dmrsv.RandomSelector;
+using DjmaxRandomSelectorV.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Services
 {

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Dmrsv.RandomSelector;
+using DjmaxRandomSelectorV.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Extractors
 {

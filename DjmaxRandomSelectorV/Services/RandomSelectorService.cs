@@ -2,7 +2,7 @@
 using System.Linq;
 using DjmaxRandomSelectorV.Conditions;
 using DjmaxRandomSelectorV.Extractors;
-using Dmrsv.RandomSelector;
+using DjmaxRandomSelectorV.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Services
 {

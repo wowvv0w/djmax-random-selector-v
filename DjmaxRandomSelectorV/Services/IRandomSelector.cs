@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using DjmaxRandomSelectorV.Conditions;
 using DjmaxRandomSelectorV.Extractors;
-using Dmrsv.RandomSelector;
+using DjmaxRandomSelectorV.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Services
 {
