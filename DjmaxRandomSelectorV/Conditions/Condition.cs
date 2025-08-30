@@ -7,6 +7,21 @@ namespace DjmaxRandomSelectorV.Conditions
     {
         public static NullCondition Null => NullCondition.Instance;
 
+        public static void ThrowIfNotCondition(Type type)
+        {
+            if (!type.IsAssignableTo(typeof(ICondition)))
+            {
+                throw new ArgumentException(
+                    $"Type must be an implementation of interface {nameof(ICondition)}",
+                    nameof(type));
+            }
+        }
+
+        public static void ThrowIfNotCondition(object obj)
+        {
+            ThrowIfNotCondition(obj.GetType());
+        }
+        
         public static ICondition ComplementOf(ICondition condition)
         {
             if (condition is ComplementCondition complement)
@@ -14,6 +29,17 @@ namespace DjmaxRandomSelectorV.Conditions
                 return complement.Condition;
             }
             return new ComplementCondition(condition);
+        }
+
+        public static ICondition CreateInstance(Type type, params object[] args)
+        {
+            ThrowIfNotCondition(type);
+            return (ICondition)Activator.CreateInstance(type, args);
+        }
+
+        public static ICondition CreateInstance(ConditionInfo entry)
+        {
+            return (ICondition)Activator.CreateInstance(entry.Type, entry.Args);
         }
 
         public static UnionCondition CreateUnion(params (bool IsEnabled, Func<ICondition> Generate)[] queries)
