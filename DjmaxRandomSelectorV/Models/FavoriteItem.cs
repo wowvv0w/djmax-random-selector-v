@@ -5,7 +5,7 @@ namespace DjmaxRandomSelectorV.Models
     public class FavoriteItem
     {
         public int TrackId { get; set; }
-        public MusicInfo Info { get; set; }
+        public TrackInfo Info { get; set; }
         public bool IsPlayable { get; set; }
         public int Status { get; set; }
 

@@ -60,7 +60,15 @@ namespace DjmaxRandomSelectorV.Services
             }
 
             _allTrack = _allTrack.Values
-                 .Select(t => t with { UserTags = GetUserTags(t) })
+                 .Select(t =>
+                 {
+                     var newInfo = t.Info with { UserTags = GetUserTags(t) };
+                     return t with
+                     {
+                         Info = newInfo,
+                         Patterns = t.Patterns.Select(p => p with { Info = newInfo }).ToArray()
+                     };
+                 })
                  .ToDictionary(t => t.Id);
         }
 

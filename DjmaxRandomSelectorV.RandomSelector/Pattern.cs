@@ -3,7 +3,7 @@
     public record Pattern
     {
         public PatternId Id { get; init; } = default;
-        public MusicInfo Info { get; init; } = new();
+        public TrackInfo Info { get; init; } = new();
         public int Level { get; init; } = default;
 
         public int TrackId => Id.TrackId;
