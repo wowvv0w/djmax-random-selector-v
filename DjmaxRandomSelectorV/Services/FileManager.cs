@@ -82,15 +82,15 @@ namespace DjmaxRandomSelectorV.Services
                     Id = x.Title,
                     Info = info,
                     Patterns = x.Patterns
-                                .SelectMany(bt => bt.Value, (bt, df) => new Pattern()
-                                {
-                                    Id = new PatternId(x.Title, bt.Key.AsButtonTunes(), df.Key.AsDifficulty()),
-                                    Info = info,
-                                    Level = df.Value.Level
-                                })
-                                .OrderBy(p => p.Id)
-                                .ToArray(),
-                    IsPlayable = false
+                        .SelectMany(bt => bt.Value, (bt, df) => new Pattern()
+                        {
+                            Id = new PatternId(x.Title, bt.Key.AsButtonTunes(), df.Key.AsDifficulty()),
+                            Info = info,
+                            Level = df.Value.Level
+                        })
+                        .OrderBy(p => p.Id)
+                        .ToArray(),
+                    UserTags = TrackUserTags.None
                 };
             }).ToDictionary(t => t.Id);
         }

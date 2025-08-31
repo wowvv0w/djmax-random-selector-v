@@ -4,6 +4,7 @@ using System.Linq;
 using DjmaxRandomSelectorV.SerializableObjects;
 using DjmaxRandomSelectorV.SerializableObjects.VArchiveCompatible;
 using DjmaxRandomSelectorV.RandomSelector;
+using DjmaxRandomSelectorV.States;
 
 namespace DjmaxRandomSelectorV.Services
 {
@@ -36,14 +37,31 @@ namespace DjmaxRandomSelectorV.Services
             _allTrack = allTrack;
         }
 
-        public void SetPlayable(IEnumerable<string> ownedDlcs)
+        public void SetPlayable(ISettingState setting)
         {
-            var categories = ownedDlcs.Concat(_basicCategories).ToHashSet();
-            var exclusions = _linkDiscChecker.GetExclusionSet(ownedDlcs);
-            bool GetIsPlayable(Track t) => categories.Contains(t.Category) && !exclusions.Contains(t.Id);
+            var categories = setting.OwnedDlcs.Concat(_basicCategories).ToHashSet();
+            var exclusions = _linkDiscChecker.GetExclusionSet(setting.OwnedDlcs);
+            TrackUserTags GetUserTags(Track t)
+            {
+                TrackUserTags userTags = TrackUserTags.None;
+                if (categories.Contains(t.Category) && !exclusions.Contains(t.Id))
+                {
+                    userTags |= TrackUserTags.Playable;
+                }
+                if (setting.Favorite.Contains(t.Id))
+                {
+                    userTags |= TrackUserTags.Favorite;
+                }
+                if (setting.Blacklist.Contains(t.Id))
+                {
+                    userTags |= TrackUserTags.Blacklist;
+                }
+                return userTags;
+            }
+
             _allTrack = _allTrack.Values
-                                 .Select(t => t with { IsPlayable = GetIsPlayable(t) })
-                                 .ToDictionary(t => t.Id);
+                 .Select(t => t with { UserTags = GetUserTags(t) })
+                 .ToDictionary(t => t.Id);
         }
 
         private class LinkDiscChecker
