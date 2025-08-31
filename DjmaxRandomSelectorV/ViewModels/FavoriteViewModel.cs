@@ -98,6 +98,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             _db = trackDB;
             _items = _db.AllTrack.Select(track => new FavoriteItem()
             {
+                TrackId = track.Id,
                 Info = track.Info,
                 IsPlayable = track.IsPlayable, // TODO: apply the track is playable (required to respond to change setting)
                 Status = favorite.Contains(track.Id) ? 1 : (blacklist.Contains(track.Id) ? -1 : 0)
