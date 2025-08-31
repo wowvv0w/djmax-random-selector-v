@@ -14,8 +14,6 @@ namespace DjmaxRandomSelectorV.Models
     {
         public event Action OnStateChanged;
 
-        private readonly ISettingStateManager _settingManager;
-
         public ObservableCollection<string> ButtonTunes { get; }
         public ObservableCollection<string> Difficulties { get; }
         public ObservableCollection<string> Categories { get; }
@@ -33,9 +31,8 @@ namespace DjmaxRandomSelectorV.Models
             }
         }
 
-        public BasicFilter(ISettingStateManager settingManager)
+        public BasicFilter()
         {
-            _settingManager = settingManager;
             ButtonTunes = new ObservableCollection<string>() { "4B", "5B", "6B", "8B" };
             Difficulties = new ObservableCollection<string>() { "NM", "HD", "MX", "SC" };
             Categories = new ObservableCollection<string>();
@@ -45,9 +42,8 @@ namespace DjmaxRandomSelectorV.Models
             Initialize();
         }
 
-        public BasicFilter(Dmrsv3BasicFilterPreset filter, ISettingStateManager settingManager)
+        public BasicFilter(Dmrsv3BasicFilterPreset filter)
         {
-            _settingManager = settingManager;
             ButtonTunes = new ObservableCollection<string>(filter.ButtonTunes);
             Difficulties = new ObservableCollection<string>(filter.Difficulties);
             Categories = new ObservableCollection<string>(filter.Categories);
@@ -75,10 +71,9 @@ namespace DjmaxRandomSelectorV.Models
             {
                 return Condition.Null;
             }
-            var setting = _settingManager.GetSetting();
             var categoryCond = Condition.CreateUnion(
                 (Categories.Any(), () => new CategoryCondition(Categories)),
-                (IncludesFavorite, () => new TrackIdCondition(setting.Favorite))
+                (IncludesFavorite, () => new TrackUserTagsCondition(TrackUserTags.Favorite))
             );
             var levelCond = Condition.CreateUnion(
                 (Difficulties.Contains("NM"), () => new RangeLevelCondition(false, Levels[0], Levels[1])),
@@ -86,7 +81,7 @@ namespace DjmaxRandomSelectorV.Models
             );
             var resultCond = Condition.CreateIntersection(
                 (true, () => categoryCond),
-                (setting.Blacklist.Any(), () => Condition.ComplementOf(new TrackIdCondition(setting.Blacklist))),
+                (true, () => Condition.ComplementOf(new TrackUserTagsCondition(TrackUserTags.Blacklist))),
                 (true, () => new ButtonCondition(ButtonTunes.Select(bt => bt.AsButtonTunes()))),
                 (true, () => levelCond)
             );

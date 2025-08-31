@@ -7,6 +7,8 @@
         public int Level { get; init; } = default;
 
         public int TrackId => Id.TrackId;
+        public TrackUserTags TrackUserTags => Info.UserTags;
+
         public ButtonTunes Button => Id.Button;
         public Difficulty Difficulty => Id.Difficulty;
         public string Style => Button.AsString() + Difficulty.AsString();

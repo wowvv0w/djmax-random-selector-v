@@ -135,7 +135,7 @@ namespace DjmaxRandomSelectorV.ViewModels
             }
             catch
             {
-                _filter = new BasicFilter(settingManager);
+                _filter = new BasicFilter();
             }
             Initialize();
         }
@@ -182,7 +182,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private void ImportFilter(string path)
         {
             var preset = _fileManager.Import<Dmrsv3BasicFilterPreset>(path);
-            _filter = new BasicFilter(preset, _settingManager);
+            _filter = new BasicFilter(preset);
             _filterManager.RegisterFilterState(_filter);
         }
 
