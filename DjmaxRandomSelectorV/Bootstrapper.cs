@@ -82,7 +82,7 @@ namespace DjmaxRandomSelectorV
             };
             _configManager.OnSettingStateChanged += setting =>
             {
-                _db.SetPlayable(setting);
+                _db.SetUserTags(setting);
                 _loc.InputInterval = setting.InputDelay;
                 _loc.SetLocationMap(_db.AllTrack);
                 _executor.SetStateChanged();
@@ -146,7 +146,7 @@ namespace DjmaxRandomSelectorV
             }
             // Set AllTrack
             _db.Initialize(appdata, _fileManager.LoadAllTrack());
-            _db.SetPlayable(_configManager.GetSetting());
+            _db.SetUserTags(_configManager.GetSetting());
             _loc.SetLocationMap(_db.AllTrack);
             await eventAggregator.PublishOnUIThreadAsync(new LoadingMessage(false, "Initializing application window..."));
             // Bind views and viewmodels

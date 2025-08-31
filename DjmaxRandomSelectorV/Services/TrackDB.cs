@@ -37,7 +37,7 @@ namespace DjmaxRandomSelectorV.Services
             _allTrack = allTrack;
         }
 
-        public void SetPlayable(ISettingState setting)
+        public void SetUserTags(ISettingState setting)
         {
             var categories = setting.OwnedDlcs.Concat(_basicCategories).ToHashSet();
             var exclusions = _linkDiscChecker.GetExclusionSet(setting.OwnedDlcs);
