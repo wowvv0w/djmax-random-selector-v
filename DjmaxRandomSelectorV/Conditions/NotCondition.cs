@@ -2,7 +2,7 @@
 
 namespace DjmaxRandomSelectorV.Conditions
 {
-    public record ComplementCondition(ICondition Condition) : ICondition
+    public record NotCondition(ICondition Condition) : ICondition
     {
         public bool IsSatisfiedBy(Pattern pattern)
         {

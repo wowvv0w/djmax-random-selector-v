@@ -64,7 +64,7 @@ namespace DjmaxRandomSelectorV.Models
 			ICondition result = _conditionInfo.Create();
 			if (IsNegation)
 			{
-				result = Condition.ComplementOf(result);
+				result = Condition.Not(result);
 			}
 			return result;
 		}

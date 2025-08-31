@@ -4,11 +4,11 @@ using DjmaxRandomSelectorV.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Conditions
 {
-    public record IntersectionCondition : IMergedCondition, ICondition
+    public record AndCondition : IMergedCondition, ICondition
     {
         public IEnumerable<ICondition> Conditions { get; }
 
-        public IntersectionCondition(IEnumerable<ICondition> conditions)
+        public AndCondition(IEnumerable<ICondition> conditions)
         {
             Conditions = conditions.ToList();
         }

@@ -16,7 +16,7 @@ namespace DjmaxRandomSelectorV.Conditions
         }
         public object[] Args { get; set; }
 
-        public bool IsNegation => Type == typeof(ComplementCondition);
+        public bool IsNegation => Type == typeof(NotCondition);
         public bool IsMergedCondition => Type.IsAssignableTo(typeof(IMergedCondition));
 
         public ICondition Create()

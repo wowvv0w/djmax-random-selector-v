@@ -67,23 +67,19 @@ namespace DjmaxRandomSelectorV.Models
 
         public ICondition ToCondition()
         {
-            if (!ButtonTunes.Any() || !Difficulties.Any() || (!Categories.Any() && !IncludesFavorite))
-            {
-                return Condition.Null;
-            }
-            var categoryCond = Condition.CreateUnion(
-                (Categories.Any(), () => new CategoryCondition(Categories)),
-                (IncludesFavorite, () => new TrackUserTagsCondition(TrackUserTags.Favorite))
+            var categoryCond = Condition.Or(
+                Categories.Any() ? new CategoryCondition(Categories) : null,
+                IncludesFavorite ? new TrackUserTagsCondition(TrackUserTags.Favorite) : null
             );
-            var levelCond = Condition.CreateUnion(
-                (Difficulties.Contains("NM"), () => new RangeLevelCondition(false, Levels[0], Levels[1])),
-                (Difficulties.Contains("SC"), () => new RangeLevelCondition(true, ScLevels[0], ScLevels[1]))
+            var levelCond = Condition.Or(
+                Difficulties.Contains("NM") ? new RangeLevelCondition(false, Levels[0], Levels[1]) : null,
+                Difficulties.Contains("SC") ? new RangeLevelCondition(true, ScLevels[0], ScLevels[1]) : null
             );
-            var resultCond = Condition.CreateIntersection(
-                (true, () => categoryCond),
-                (true, () => Condition.ComplementOf(new TrackUserTagsCondition(TrackUserTags.Blacklist))),
-                (true, () => new ButtonCondition(ButtonTunes.Select(bt => bt.AsButtonTunes()))),
-                (true, () => levelCond)
+            var resultCond = Condition.And(
+                categoryCond,
+                Condition.Not(new TrackUserTagsCondition(TrackUserTags.Blacklist)),
+                ButtonTunes.Any() ? new ButtonCondition(ButtonTunes.Select(bt => bt.AsButtonTunes())) : Condition.Null,
+                levelCond
             );
             return resultCond;
         }

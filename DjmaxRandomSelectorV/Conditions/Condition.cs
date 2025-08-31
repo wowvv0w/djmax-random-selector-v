@@ -22,13 +22,80 @@ namespace DjmaxRandomSelectorV.Conditions
             ThrowIfNotCondition(obj.GetType());
         }
         
-        public static ICondition ComplementOf(ICondition condition)
+        /// <summary>
+        /// Returns a negation of the specified <see cref="ICondition"/> element.
+        /// </summary>
+        /// <param name="condition">An <see cref="ICondition"/> element.</param>
+        /// <returns>
+        /// A <see cref="NotCondition"/> if the specified element is not a <see cref="NotCondition"/>;
+        /// otherwise, an inner <see cref="ICondition"/> element of the specified element.
+        /// </returns>
+        /// <exception cref="ArgumentNullException"/>
+        public static ICondition Not(ICondition condition)
         {
-            if (condition is ComplementCondition complement)
+            ArgumentNullException.ThrowIfNull(condition);
+            if (condition is NotCondition complement)
             {
                 return complement.Condition;
             }
-            return new ComplementCondition(condition);
+            return new NotCondition(condition);
+        }
+
+        /// <summary>
+        /// Returns a conjunction of the specified <see cref="ICondition"/> elements.
+        /// </summary>
+        /// <param name="conditions"><see cref="ICondition"/> elements.</param>
+        /// <returns>
+        /// <see langword="null"/> if there is no specified element.<br/>
+        /// An <see cref="ICondition"/> element if there is only one specified element.<br/>
+        /// A <see cref="NullCondition"/> if at least one of the specified elements is a <see cref="NullCondition"/>.<br/>
+        /// Otherwise, an <see cref="AndCondition"/> that contains the specified <see cref="ICondition"/> elements.
+        /// </returns>
+        /// <remarks>
+        /// All of the <see langword="null"/> in the <paramref name="conditions"/> will be excluded.
+        /// </remarks>
+        public static ICondition And(params ICondition[] conditions)
+        {
+            var entries = conditions.Where(cond => cond is not null);
+            if (!entries.Any())
+            {
+                return null;
+            }
+            if (entries.Take(2).Count() == 1)
+            {
+                return entries.Single();
+            }
+            if (entries.Contains(Null))
+            {
+                return Null;
+            }
+            return new AndCondition(entries);
+        }
+
+        /// <summary>
+        /// Returns a disjunction of the specified <see cref="ICondition"/> elements.
+        /// </summary>
+        /// <param name="conditions"><see cref="ICondition"/> elements.</param>
+        /// <returns>
+        /// A <see cref="NullCondition"/> if there is no specified element which is not a <see cref="NullCondition"/>.<br/>
+        /// An <see cref="ICondition"/> element if there is only one specified element.<br/>
+        /// Otherwise, an <see cref="OrCondition"/> that contains the specified <see cref="ICondition"/> elements.
+        /// </returns>
+        /// <remarks>
+        /// All of the <see langword="null"/> in the <paramref name="conditions"/> will be excluded.
+        /// </remarks>
+        public static ICondition Or(params ICondition[] conditions)
+        {
+            var entries = conditions.Where(cond => cond is not null);
+            if (!entries.Any(cond => cond != Null))
+            {
+                return Null;
+            }
+            if (entries.Take(2).Count() == 1)
+            {
+                return entries.Single();
+            }
+            return new OrCondition(entries);
         }
 
         public static ICondition CreateInstance(Type type, params object[] args)
@@ -40,31 +107,6 @@ namespace DjmaxRandomSelectorV.Conditions
         public static ICondition CreateInstance(ConditionInfo entry)
         {
             return (ICondition)Activator.CreateInstance(entry.Type, entry.Args);
-        }
-
-        public static UnionCondition CreateUnion(params (bool IsEnabled, Func<ICondition> Generate)[] queries)
-        {
-            var result = queries.Where(query => query.IsEnabled)
-                                .Select(query => Compress(query.Generate()))
-                                .Where(cond => cond is not null);
-            return result.Any() ? new UnionCondition(result) : null;
-        }
-
-        public static IntersectionCondition CreateIntersection(params (bool IsEnabled, Func<ICondition> Generate)[] queries)
-        {
-            var result = queries.Where(query => query.IsEnabled)
-                                .Select(query => Compress(query.Generate()))
-                                .Where(cond => cond is not null);
-            return result.Any() ? new IntersectionCondition(result) : null;
-        }
-
-        private static ICondition Compress(ICondition condition)
-        {
-            if (condition is IMergedCondition merged && merged.Conditions.Take(2).Count() == 1)
-            {
-                return merged.Conditions.Single();
-            }
-            return condition;
         }
     }
 }
