@@ -11,8 +11,8 @@
         public string Category => Info.Category;
         public TrackUserTags UserTags => Info.UserTags;
 
-        public bool IsPlayable => UserTags == TrackUserTags.Playable;
-        public bool IsFavorite => UserTags == TrackUserTags.Favorite;
-        public bool IsBlacklist => UserTags == TrackUserTags.Blacklist;
+        public bool IsPlayable => UserTags.HasFlag(TrackUserTags.Playable);
+        public bool IsFavorite => UserTags.HasFlag(TrackUserTags.Favorite);
+        public bool IsBlacklist => UserTags.HasFlag(TrackUserTags.Blacklist);
     }
 }
