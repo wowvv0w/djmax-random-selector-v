@@ -2,7 +2,7 @@
 
 namespace DjmaxRandomSelectorV.Conditions
 {
-    public interface IMergedCondition : ICondition
+    public interface ICompoundCondition : ICondition
     {
         IEnumerable<ICondition> Conditions { get; }
     }

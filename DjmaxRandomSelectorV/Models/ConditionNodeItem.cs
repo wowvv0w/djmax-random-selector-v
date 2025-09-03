@@ -41,7 +41,7 @@ namespace DjmaxRandomSelectorV.Models
 		{
 			_conditionInfo = new ConditionInfo() { Type = type };
 
-			if (_conditionInfo.IsMergedCondition)
+			if (_conditionInfo.IsCompound)
 			{
 				var conditions = Children
 					.Select(node => node.ToCondition())

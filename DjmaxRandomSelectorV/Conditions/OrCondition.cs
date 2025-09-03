@@ -4,7 +4,7 @@ using DjmaxRandomSelectorV.RandomSelector;
 
 namespace DjmaxRandomSelectorV.Conditions
 {
-    public record OrCondition : IMergedCondition, ICondition
+    public record OrCondition : ICompoundCondition, ICondition
     {
         public IEnumerable<ICondition> Conditions { get; }
 
