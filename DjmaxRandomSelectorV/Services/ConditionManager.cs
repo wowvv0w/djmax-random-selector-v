@@ -1,5 +1,6 @@
 ﻿using System;
 using DjmaxRandomSelectorV.Conditions;
+using DjmaxRandomSelectorV.Services.Internal;
 using DjmaxRandomSelectorV.States;
 
 namespace DjmaxRandomSelectorV.Services

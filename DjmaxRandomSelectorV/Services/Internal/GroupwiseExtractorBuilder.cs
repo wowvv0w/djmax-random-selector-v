@@ -1,7 +1,7 @@
 ﻿using DjmaxRandomSelectorV.Enums;
 using DjmaxRandomSelectorV.Extractors;
 
-namespace DjmaxRandomSelectorV.Services
+namespace DjmaxRandomSelectorV.Services.Internal
 {
     public class GroupwiseExtractorBuilder : IGroupwiseExtractorBuilder
     {

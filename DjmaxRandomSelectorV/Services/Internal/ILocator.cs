@@ -1,6 +1,6 @@
 ﻿using DjmaxRandomSelectorV.RandomSelector;
 
-namespace DjmaxRandomSelectorV.Services
+namespace DjmaxRandomSelectorV.Services.Internal
 {
     public interface ILocator
     {

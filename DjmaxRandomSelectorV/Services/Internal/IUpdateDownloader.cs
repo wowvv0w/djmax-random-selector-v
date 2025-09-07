@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace DjmaxRandomSelectorV.Services
+namespace DjmaxRandomSelectorV.Services.Internal
 {
     public interface IUpdateDownloader
     {

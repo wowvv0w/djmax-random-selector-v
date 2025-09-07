@@ -4,7 +4,7 @@ using DjmaxRandomSelectorV.Conditions;
 using DjmaxRandomSelectorV.Extractors;
 using DjmaxRandomSelectorV.RandomSelector;
 
-namespace DjmaxRandomSelectorV.Services
+namespace DjmaxRandomSelectorV.Services.Internal
 {
     public class RandomSelectorService : IRandomSelector
     {

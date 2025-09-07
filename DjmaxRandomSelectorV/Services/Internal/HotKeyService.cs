@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace DjmaxRandomSelectorV.Services
+namespace DjmaxRandomSelectorV.Services.Internal
 {
     public class HotKeyService
     {

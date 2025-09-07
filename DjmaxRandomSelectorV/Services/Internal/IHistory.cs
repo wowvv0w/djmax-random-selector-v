@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DjmaxRandomSelectorV.Services
+namespace DjmaxRandomSelectorV.Services.Internal
 {
     public interface IHistory : IEnumerable<int>, IReadOnlyCollection<int>
     {

@@ -1,6 +1,6 @@
 ﻿using DjmaxRandomSelectorV.Conditions;
 
-namespace DjmaxRandomSelectorV.Services
+namespace DjmaxRandomSelectorV.Services.Internal
 {
     public interface IConditionBuilder
     {

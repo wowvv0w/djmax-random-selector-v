@@ -1,6 +1,6 @@
 ﻿using DjmaxRandomSelectorV.Extractors;
 
-namespace DjmaxRandomSelectorV.Services
+namespace DjmaxRandomSelectorV.Services.Internal
 {
     public interface IGroupwiseExtractorBuilder
     {

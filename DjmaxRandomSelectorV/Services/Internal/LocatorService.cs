@@ -2,7 +2,7 @@
 using DjmaxRandomSelectorV.Enums;
 using DjmaxRandomSelectorV.RandomSelector;
 
-namespace DjmaxRandomSelectorV.Services
+namespace DjmaxRandomSelectorV.Services.Internal
 {
     public class LocatorService : ILocator
     {

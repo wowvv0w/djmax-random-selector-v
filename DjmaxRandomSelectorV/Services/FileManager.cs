@@ -10,6 +10,7 @@ using DjmaxRandomSelectorV.RandomSelector;
 using DjmaxRandomSelectorV.SerializableObjects;
 using DjmaxRandomSelectorV.SerializableObjects.Deprecated;
 using DjmaxRandomSelectorV.SerializableObjects.VArchiveCompatible;
+using DjmaxRandomSelectorV.Services.Internal;
 
 namespace DjmaxRandomSelectorV.Services
 {

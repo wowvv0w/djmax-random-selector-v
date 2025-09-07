@@ -1,6 +1,6 @@
 ﻿using DjmaxRandomSelectorV.States;
 
-namespace DjmaxRandomSelectorV.Services
+namespace DjmaxRandomSelectorV.Services.Internal
 {
     public interface IVersionInfoStateManager
     {

@@ -9,6 +9,7 @@ using DjmaxRandomSelectorV.Enums;
 using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.SerializableObjects;
 using DjmaxRandomSelectorV.Services;
+using DjmaxRandomSelectorV.Services.Internal;
 using DjmaxRandomSelectorV.ViewModels;
 using DjmaxRandomSelectorV.Views;
 

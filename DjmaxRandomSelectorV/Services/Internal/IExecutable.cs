@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DjmaxRandomSelectorV.Services
+namespace DjmaxRandomSelectorV.Services.Internal
 {
     public interface IExecutable
     {
