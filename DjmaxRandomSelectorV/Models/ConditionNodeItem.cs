@@ -8,10 +8,8 @@ namespace DjmaxRandomSelectorV.Models
 {
     public class ConditionNodeItem : PropertyChangedBase
     {
-		private readonly ConditionInfo _conditionInfo;
-
-		public Type ConditionType => _conditionInfo.Type;
-		public object[] ConditionArgs => _conditionInfo.Args;
+		public Type ConditionType { get; }
+		public ObservableCollection<object> ConditionArgs { get; }
 
 		private bool _isEnabled = true;
 		public bool IsEnabled
@@ -39,18 +37,16 @@ namespace DjmaxRandomSelectorV.Models
 
 		public ConditionNodeItem(Type type, params object[] args)
 		{
-			_conditionInfo = new ConditionInfo() { Type = type };
-
-			if (_conditionInfo.IsCompound)
+			if (type.IsAssignableTo(typeof(ICompoundCondition)))
 			{
 				var conditions = Children
 					.Select(node => node.ToCondition())
 					.Where(cond => cond is not null);
-				_conditionInfo.Args = new[] { conditions };
+				ConditionArgs = new ObservableCollection<object>() { conditions };
 			}
 			else
 			{
-				_conditionInfo.Args = args;
+				ConditionArgs = new ObservableCollection<object>(args);
 			}
 		}
 
@@ -61,12 +57,8 @@ namespace DjmaxRandomSelectorV.Models
 				return null;
 			}
 
-			ICondition result = _conditionInfo.Create();
-			if (IsNegation)
-			{
-				result = Condition.Not(result);
-			}
-			return result;
+			ICondition result = (ICondition)Activator.CreateInstance(ConditionType, ConditionArgs);
+			return IsNegation ? Condition.Not(result) : result;
 		}
 	}
 }

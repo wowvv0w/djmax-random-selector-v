@@ -6,21 +6,6 @@ namespace DjmaxRandomSelectorV.Conditions
     public static class Condition
     {
         public static NullCondition Null => NullCondition.Instance;
-
-        public static void ThrowIfNotCondition(Type type)
-        {
-            if (!type.IsAssignableTo(typeof(ICondition)))
-            {
-                throw new ArgumentException(
-                    $"Type must be an implementation of interface {nameof(ICondition)}",
-                    nameof(type));
-            }
-        }
-
-        public static void ThrowIfNotCondition(object obj)
-        {
-            ThrowIfNotCondition(obj.GetType());
-        }
         
         /// <summary>
         /// Returns a negation of the specified <see cref="ICondition"/> element.
@@ -96,17 +81,6 @@ namespace DjmaxRandomSelectorV.Conditions
                 return entries.Single();
             }
             return new OrCondition(entries);
-        }
-
-        public static ICondition CreateInstance(Type type, params object[] args)
-        {
-            ThrowIfNotCondition(type);
-            return (ICondition)Activator.CreateInstance(type, args);
-        }
-
-        public static ICondition CreateInstance(ConditionInfo entry)
-        {
-            return (ICondition)Activator.CreateInstance(entry.Type, entry.Args);
         }
     }
 }
