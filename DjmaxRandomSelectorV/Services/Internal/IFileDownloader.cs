@@ -2,7 +2,7 @@
 
 namespace DjmaxRandomSelectorV.Services.Internal
 {
-    public interface IUpdateDownloader
+    public interface IFileDownloader
     {
         Task<string[]> CheckUpdatesAsync();
         bool ExistsAppdataFile();

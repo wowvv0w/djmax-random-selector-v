@@ -6,10 +6,10 @@ namespace DjmaxRandomSelectorV.Services.Internal
 {
     public class UpdateManager
     {
-        private readonly IUpdateDownloader _updateDownloader;
+        private readonly IFileDownloader _updateDownloader;
         private readonly IVersionInfoStateManager _versionInfoManager;
 
-        public UpdateManager(IUpdateDownloader updateDownloader, IVersionInfoStateManager versionInfoManager)
+        public UpdateManager(IFileDownloader updateDownloader, IVersionInfoStateManager versionInfoManager)
         {
             _updateDownloader = updateDownloader;
             _versionInfoManager = versionInfoManager;

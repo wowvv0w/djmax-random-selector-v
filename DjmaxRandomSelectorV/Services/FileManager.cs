@@ -14,7 +14,7 @@ using DjmaxRandomSelectorV.Services.Internal;
 
 namespace DjmaxRandomSelectorV.Services
 {
-    public class FileManager : IUpdateDownloader
+    public class FileManager : IFileDownloader
     {
         #region Paths
         private const string AppdataFilePath = @"DMRSV3_Data\appdata.json";
