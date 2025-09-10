@@ -29,12 +29,37 @@ namespace DjmaxRandomSelectorV.Services
             return Find(patternId.TrackId)?.Patterns.FirstOrDefault(p => p.Id == patternId, null);
         }
 
-        public void Initialize(Dmrsv3Appdata appdata, Dictionary<int, Track> allTrack)
+        public void Initialize(Dmrsv3Appdata appdata, VArchiveDBRoot db)
         {
             _basicCategories = appdata.BasicCategories;
             _linkDiscChecker = new LinkDiscChecker(appdata.LinkDisc);
             Categories = new List<Dmrsv3Category>(appdata.Categories);
-            _allTrack = allTrack;
+            _allTrack = db.Select(x =>
+            {
+                var info = new TrackInfo()
+                {
+                    Title = x.Name,
+                    Composer = x.Composer,
+                    Category = x.DlcCode,
+                    UserTags = TrackUserTags.None
+                };
+                return new Track()
+                {
+                    Id = x.Title,
+                    Info = info,
+                    Patterns = x.Patterns
+                        .SelectMany(
+                            bt => bt.Value,
+                            (bt, df) => new Pattern()
+                            {
+                                Id = new PatternId(x.Title, bt.Key.AsButtonTunes(), df.Key.AsDifficulty()),
+                                Info = info,
+                                Level = df.Value.Level
+                            })
+                        .OrderBy(p => p.Id)
+                        .ToArray(),
+                };
+            }).ToDictionary(t => t.Id);
         }
 
         public void SetUserTags(ISettingState setting)

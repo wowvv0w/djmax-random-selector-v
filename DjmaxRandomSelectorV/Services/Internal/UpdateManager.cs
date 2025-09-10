@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DjmaxRandomSelectorV.SerializableObjects;
+using DjmaxRandomSelectorV.SerializableObjects.VArchiveCompatible;
 
 namespace DjmaxRandomSelectorV.Services.Internal
 {
     public class UpdateManager
     {
-        private readonly IFileDownloader _updateDownloader;
+        private readonly IFileManager _fileManager;
         private readonly IVersionInfoStateManager _versionInfoManager;
 
-        public UpdateManager(IFileDownloader updateDownloader, IVersionInfoStateManager versionInfoManager)
+        public UpdateManager(IFileManager fileManager, IVersionInfoStateManager versionInfoManager)
         {
-            _updateDownloader = updateDownloader;
+            _fileManager = fileManager;
             _versionInfoManager = versionInfoManager;
         }
 
@@ -20,7 +22,7 @@ namespace DjmaxRandomSelectorV.Services.Internal
             string[] versions; // [ latest app version, latest appdata version, notice header, notice body ]
             try
             {
-                versions = await _updateDownloader.CheckUpdatesAsync();
+                versions = await _fileManager.CheckUpdatesAsync();
             }
             catch
             {
@@ -33,12 +35,12 @@ namespace DjmaxRandomSelectorV.Services.Internal
             // update all track
             long now = long.Parse(DateTime.Now.ToString("yyMMddHHmm"));
             long past = versionInfo.AllTrackVersion;
-            if (now > past || !_updateDownloader.ExistsAllTrackFile())
+            if (now > past || !_fileManager.Exists<VArchiveDBRoot>())
             {
                 System.Diagnostics.Debug.WriteLine("all track update start");
                 tasks.Add(
-                    _updateDownloader
-                    .DownloadAllTrackAsync()
+                    _fileManager
+                    .DownloadAsync<VArchiveDBRoot>()
                     .ContinueWith(task =>
                     {
                         if (task.IsCompletedSuccessfully)
@@ -49,13 +51,13 @@ namespace DjmaxRandomSelectorV.Services.Internal
             }
 
             // update appdata
-            if (!_updateDownloader.ExistsAppdataFile()
+            if (!_fileManager.Exists<Dmrsv3Appdata>()
                 || versions[1].CompareTo(versionInfo.AppdataVersion) > 0)
             {
                 System.Diagnostics.Debug.WriteLine("appdata update start");
                 tasks.Add(
-                    _updateDownloader
-                    .DownloadAppdataAsync()
+                    _fileManager
+                    .DownloadAsync<Dmrsv3Appdata>()
                     .ContinueWith(task =>
                     {
                         if (task.IsCompletedSuccessfully)

@@ -8,6 +8,7 @@ using Caliburn.Micro;
 using DjmaxRandomSelectorV.Enums;
 using DjmaxRandomSelectorV.Messages;
 using DjmaxRandomSelectorV.SerializableObjects;
+using DjmaxRandomSelectorV.SerializableObjects.VArchiveCompatible;
 using DjmaxRandomSelectorV.Services;
 using DjmaxRandomSelectorV.Services.Internal;
 using DjmaxRandomSelectorV.ViewModels;
@@ -39,7 +40,7 @@ namespace DjmaxRandomSelectorV
         {
             _fileManager = new FileManager();
             Initialize();
-            _config = _fileManager.LoadConfig();
+            _config = _fileManager.Load<Dmrsv3Configuration>();
             _container.Instance(_config); // TODO: delete it (used at ShellVM)
             // Executor Components
             var eventaggregator = IoC.Get<IEventAggregator>();
@@ -92,6 +93,7 @@ namespace DjmaxRandomSelectorV
             // Etc.
             _updateManager = new UpdateManager(_fileManager, _configManager);
             _container
+                .Instance<IFileManager>(_fileManager)
                 .Instance<ITrackDB>(_db)
                 .Instance<IFilterStateManager>(_condManager)
                 .Instance<IFilterOptionStateManager>(_configManager)
@@ -135,7 +137,7 @@ namespace DjmaxRandomSelectorV
             Dmrsv3Appdata appdata;
             try
             {
-                appdata = _fileManager.LoadAppdata();
+                appdata = _fileManager.Load<Dmrsv3Appdata>();
             }
             catch
             {
@@ -146,7 +148,7 @@ namespace DjmaxRandomSelectorV
                 return;
             }
             // Set AllTrack
-            _db.Initialize(appdata, _fileManager.LoadAllTrack());
+            _db.Initialize(appdata, _fileManager.Load<VArchiveDBRoot>());
             _db.SetUserTags(_configManager.GetSetting());
             _loc.SetLocationMap(_db.AllTrack);
             await eventAggregator.PublishOnUIThreadAsync(new LoadingMessage(false, "Initializing application window..."));
@@ -177,7 +179,7 @@ namespace DjmaxRandomSelectorV
         protected override void OnExit(object sender, EventArgs e)
         {
             _config.RecentPlayed = _config.SavesRecents ? _history.ToList() : new List<int>();
-            _fileManager.SaveConfig(_config);
+            _fileManager.Save(_config);
         }
 
         protected override void Configure()
