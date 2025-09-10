@@ -187,7 +187,7 @@ namespace DjmaxRandomSelectorV
             _container
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
-                .Singleton<IFileManager, FileManagerOld>();
+                .Singleton<IFileManagerOld, FileManagerOld>();
             
             foreach (var assembly in SelectAssemblies())
             {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DjmaxRandomSelectorV
 {
-    public interface IFileManager
+    public interface IFileManagerOld
     {
         T Import<T>(string path);
         void Export<T>(T instance, string path);
@@ -14,7 +14,7 @@ namespace DjmaxRandomSelectorV
         void Write(string content, string path);
     }
 
-    public class FileManagerOld : IFileManager
+    public class FileManagerOld : IFileManagerOld
     {
         public T Import<T>(string path)
         {

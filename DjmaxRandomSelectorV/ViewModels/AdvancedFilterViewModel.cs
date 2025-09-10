@@ -22,7 +22,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         private const string PresetPath = @"DMRSV3_Data\Playlist";
 
         private readonly IWindowManager _windowManager;
-        private readonly IFileManager _fileManager;
+        private readonly IFileManagerOld _fileManager;
         private readonly IFilterStateManager _filterManager;
         private readonly ITrackDB _trackDB;
 
@@ -46,7 +46,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public BindableCollection<Pattern> SearchResult { get; }
         public BindableCollection<PlaylistItem> PlaylistItems { get; }
 
-        public AdvancedFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, IFileManager fileManager,
+        public AdvancedFilterViewModel(IEventAggregator eventAggregator, IWindowManager windowManager, IFileManagerOld fileManager,
             ITrackDB trackDB, IFilterStateManager filterManager)
         {
             DisplayName = "FILTER";

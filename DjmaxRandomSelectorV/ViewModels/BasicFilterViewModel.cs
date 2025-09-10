@@ -16,7 +16,7 @@ namespace DjmaxRandomSelectorV.ViewModels
     public class BasicFilterViewModel : Screen
     {
         private readonly IWindowManager _windowManager;
-        private readonly IFileManager _fileManager;
+        private readonly IFileManagerOld _fileManager;
         private readonly IFilterStateManager _filterManager;
         private readonly ISettingStateManager _settingManager;
         private readonly IReadOnlyList<Dmrsv3Category> _categories;
@@ -118,7 +118,7 @@ namespace DjmaxRandomSelectorV.ViewModels
         public BindableCollection<LevelIndicator> ScLevelIndicators { get; set; }
         #endregion
 
-        public BasicFilterViewModel(IWindowManager windowManager, IFileManager fileManager,
+        public BasicFilterViewModel(IWindowManager windowManager, IFileManagerOld fileManager,
             IFilterStateManager filterManager, ISettingStateManager settingManager)
         {
             DisplayName = "FILTER";
