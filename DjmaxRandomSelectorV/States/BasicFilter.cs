@@ -3,12 +3,10 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using DjmaxRandomSelectorV.Conditions;
-using DjmaxRandomSelectorV.SerializableObjects;
-using DjmaxRandomSelectorV.Services;
-using DjmaxRandomSelectorV.States;
 using DjmaxRandomSelectorV.RandomSelector;
+using DjmaxRandomSelectorV.SerializableObjects;
 
-namespace DjmaxRandomSelectorV.Models
+namespace DjmaxRandomSelectorV.States
 {
     public class BasicFilter : IFilterState
     {
@@ -42,14 +40,14 @@ namespace DjmaxRandomSelectorV.Models
             Initialize();
         }
 
-        public BasicFilter(Dmrsv3BasicFilterPreset filter)
+        public BasicFilter(Dmrsv3BasicFilterPreset preset)
         {
-            ButtonTunes = new ObservableCollection<string>(filter.ButtonTunes);
-            Difficulties = new ObservableCollection<string>(filter.Difficulties);
-            Categories = new ObservableCollection<string>(filter.Categories);
-            Levels = new ObservableCollection<int>(filter.Levels);
-            ScLevels = new ObservableCollection<int>(filter.ScLevels);
-            _includesFavorite = filter.IncludesFavorite;
+            ButtonTunes = new ObservableCollection<string>(preset.ButtonTunes);
+            Difficulties = new ObservableCollection<string>(preset.Difficulties);
+            Categories = new ObservableCollection<string>(preset.Categories);
+            Levels = new ObservableCollection<int>(preset.Levels);
+            ScLevels = new ObservableCollection<int>(preset.ScLevels);
+            _includesFavorite = preset.IncludesFavorite;
             Initialize();
         }
 
@@ -82,6 +80,19 @@ namespace DjmaxRandomSelectorV.Models
                 levelCond
             );
             return resultCond;
+        }
+
+        public Dmrsv3BasicFilterPreset ToPreset()
+        {
+            return new Dmrsv3BasicFilterPreset()
+            {
+                ButtonTunes = ButtonTunes.ToArray(),
+                Difficulties = Difficulties.ToArray(),
+                Categories = Categories.ToArray(),
+                Levels = Levels.ToArray(),
+                ScLevels = ScLevels.ToArray(),
+                IncludesFavorite = IncludesFavorite
+            };
         }
     }
 }

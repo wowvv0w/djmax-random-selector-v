@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-
-namespace DjmaxRandomSelectorV.SerializableObjects
+﻿namespace DjmaxRandomSelectorV.SerializableObjects
 {
     public class Dmrsv3BasicFilterPreset
     {
-        public List<string> ButtonTunes { get; set; }
-        public List<string> Difficulties { get; set; }
-        public List<string> Categories { get; set; }
-        public List<int> Levels { get; set; }
-        public List<int> ScLevels { get; set; }
+        public string[] ButtonTunes { get; set; }
+        public string[] Difficulties { get; set; }
+        public string[] Categories { get; set; }
+        public int[] Levels { get; set; }
+        public int[] ScLevels { get; set; }
         public bool IncludesFavorite { get; set; }
     }
 }

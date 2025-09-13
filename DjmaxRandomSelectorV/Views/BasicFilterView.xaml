@@ -69,7 +69,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <ToggleButton x:Name="BtButton"
-                                          IsChecked="{Binding Path=IsValueContained, Mode=TwoWay}"
+                                          IsChecked="{Binding Path=Value, Mode=TwoWay}"
                                           Style="{StaticResource ButtonTunesButton}"/>
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding Name}" Value="4B">
@@ -531,7 +531,7 @@
                         <DataTemplate>
                             <ToggleButton x:Name="Button"
                                           Content="{Binding Name}"
-                                          IsChecked="{Binding Path=IsValueContained, Mode=TwoWay}"
+                                          IsChecked="{Binding Path=Value, Mode=TwoWay}"
                                           Style="{StaticResource CategoryButton}">
                             </ToggleButton>
                             <DataTemplate.Triggers>
@@ -638,7 +638,7 @@
                         <DataTemplate>
                             <ToggleButton x:Name="Button"
                                           Content="{Binding Name}"
-                                          IsChecked="{Binding Path=IsValueContained, Mode=TwoWay}"
+                                          IsChecked="{Binding Path=Value, Mode=TwoWay}"
                                           Style="{StaticResource CollaborationButton}"
                                           Margin="4 0">
                             </ToggleButton>
